@@ -1,5 +1,6 @@
--- local turing_api = {}
-
+-- Turing API - Lua
+-- License: GPL-2.0-only
+-- Authors: Westbot
 
 local function _create_color_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_color_note(note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -19,5 +20,3 @@ global function create_color_note(beat: float32): ColorNote
     local note: ColorNote = { id = id }
     return note
 end
-
--- return turing_api

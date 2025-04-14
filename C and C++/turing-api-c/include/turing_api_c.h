@@ -1,3 +1,7 @@
+// Turing API - C
+// License: GPL-2.0-only
+// Authors: Westbot
+
 #ifndef TURING_API_H
 #define TURING_API_H
 

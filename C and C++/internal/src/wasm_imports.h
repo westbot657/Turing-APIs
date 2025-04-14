@@ -1,3 +1,7 @@
+// Turing API - C/C++
+// License: GPL-2.0-only
+// Authors: Westbot
+
 #ifndef WASM_IMPORTS_H
 #define WASM_IMPORTS_H
 

@@ -1,13 +1,6 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    // const target: std.Target = .{
-    //     .cpu = .{
-    //         .arch = .wasm32,
-    //         .model = ??,
-    //     },
-    //     .os_tag = .freestanding,
-    // };
     const target = b.standardTargetOptions(.{
         .default_target = .{
             .cpu_arch = .wasm32,

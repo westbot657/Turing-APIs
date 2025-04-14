@@ -1,3 +1,6 @@
+// Turing API - C
+// License: GPL-2.0-only
+// Authors: Westbot
 
 #include <turing_api_c.h>
 

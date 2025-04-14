@@ -1,3 +1,6 @@
+// Turing API - C++
+// License: GPL-2.0-only
+// Authors: Westbot
 
 #include <wasm_imports.h>
 #include <turing_api_cpp.hpp>
