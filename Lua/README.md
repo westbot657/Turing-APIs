@@ -2,7 +2,9 @@
 
 The Turing-API and template project for Lua
 
-### Dev notes
+## Getting started
 
-may be possible with pallene (a typed sister language to lua), which compiles to C  
-Idk how to get it working though so...  
+1. Copy BOTH `lua-template` and `turing-api-lua` into a folder of your choice.
+2. start coding in `lua-template/main.nelua`
+
+(you can rename the `lua-template` folder to something else if you want)

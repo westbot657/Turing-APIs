@@ -1,9 +1,7 @@
 #ifndef TURING_API_H
 #define TURING_API_H
 
-#include "wasm_imports.h"
-
-#include <stdint.h>
+#include <wasm_imports.h>
 
 typedef struct {
     int id;

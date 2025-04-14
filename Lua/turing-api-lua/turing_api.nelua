@@ -1,0 +1,23 @@
+-- local turing_api = {}
+
+
+local function _create_color_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_color_note(note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+
+global ColorNote = @record{
+    id: int32
+}
+
+global Beatmap = @record{}
+
+function Beatmap.add_color_note(note: ColorNote)
+    _beatmap_add_color_note(note.id)
+end
+
+global function create_color_note(beat: float32): ColorNote
+    local id: int32 = _create_color_note(beat)
+    local note: ColorNote = { id = id }
+    return note
+end
+
+-- return turing_api

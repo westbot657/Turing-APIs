@@ -1,0 +1,18 @@
+require "../turing-api-lua/turing_api.nelua"
+
+
+local function on_load() <cexport, codename 'on_load'>
+
+end
+
+
+local function on_update(beat: float32) <cexport, codename 'on_update'>
+    local note: ColorNote = create_color_note(beat+2)
+
+    Beatmap.add_color_note(note)
+
+end
+
+local function on_exit() <cexport, codename 'on_exit'>
+
+end

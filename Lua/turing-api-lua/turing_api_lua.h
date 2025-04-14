@@ -8,6 +8,7 @@ extern "C" {
 extern int _create_color_note(float beat);
 extern void _beatmap_add_color_note(int note_id);
 
+
 #ifdef __cplusplus
 }
 #endif
