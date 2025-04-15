@@ -1,7 +1,7 @@
-import { TuringApi, Beatmap } from "../../turing-api-assemblyscript/turing_api_assemblyscript";
+import { TuringApi, Log, Beatmap } from "../../turing-api-assemblyscript/turing_api_assemblyscript";
 
 export function on_load(): void {
-    
+    Log.info("AsmScript on_load!")
 }
 
 export function on_update(beat: f32): void {

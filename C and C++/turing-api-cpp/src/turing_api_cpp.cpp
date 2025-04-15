@@ -5,6 +5,7 @@
 #include <wasm_imports.h>
 #include <turing_api_cpp.hpp>
 
+#include <string>
 
 ColorNote ColorNote::create(float beat) {
     int id = _create_color_note(beat);

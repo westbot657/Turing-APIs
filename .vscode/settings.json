@@ -3,6 +3,8 @@
         "*.dungeon_script": "dungeon_script",
         "*.dat": "json",
         "wasm_imports.h": "c",
-        "turing_api_lua.h": "c"
+        "turing_api_lua.h": "c",
+        "turing_api_c.h": "c",
+        "string": "cpp"
     }
 }

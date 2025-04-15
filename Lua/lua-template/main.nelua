@@ -1,4 +1,4 @@
-require "../turing-api-lua/turing_api.nelua"
+require "../turing-api-lua/turing_api_lua.nelua"
 
 
 local function on_load() <cexport, codename 'on_load'>
@@ -13,6 +13,6 @@ local function on_update(beat: float32) <cexport, codename 'on_update'>
 
 end
 
-local function on_exit() <cexport, codename 'on_exit'>
+local function on_exit(s: cstring) <cexport, codename 'on_exit'>
 
 end

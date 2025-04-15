@@ -1,0 +1,91 @@
+// Hi, indentation in this file is very important in making life easier (simpler parsing)
+// please don't modify the indentation (and only 4-space increments allowed)
+
+#struct-defs
+
+#macro $1
+#pattern # ColorNote # BombNote # Arc # Wall # ChainHeadNote # ChainLinkNote # ChainNote
+#macro apply
+class $1 {
+    ptr: i32
+}
+#macro end
+
+class Log {
+
+    static fn info(msg: str) -> void #mdef.str_to_ptr
+    static fn warn(msg: str) -> void #mdef.str_to_ptr
+    static fn error(msg: str) -> void #mdef.str_to_ptr
+    static fn debug(msg: str) -> void #mdef.str_to_ptr
+
+}
+
+class Beatmap {
+
+    #macro $1 $2
+    #pattern # color_note ColorNote # bomb_note BombNote # arc Arc # wall Wall # chain_head_note ChainHeadNote # chain_link_note ChainLinkNote # chain_note ChainNote
+    #macro apply
+    static fn add_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
+    #macro end
+
+}
+
+
+
+
+#code-defs
+
+#pass_ptr_attr($1) {
+    #C, #C++, #zig, #lua, #ts {
+        ~($1.ptr)
+    }
+}
+
+#str_to_ptr {
+    #C, #lua {
+        ~(msg)
+    }
+    #C++ {
+        ~(msg.c_str())
+    }
+    #zig {
+        ~(@ptrCast([*]const u8, msg.ptr))
+    }
+    #ts {
+        ~(changetype<usize>(String.UTF8.encode(msg)))
+    }
+}
+
+
+#static-defs
+
+#C {
+
+}
+
+#C++ {
+
+}
+
+#zig {
+
+}
+
+#ts {
+
+    export function toCString(str: string): u32 {
+        return <u32>changetype<usize>(String.UTF8.encode(str, true));
+    }
+
+    export function readCString(ptr: u32): void {
+        const str = String.UTF8.decodeUnsafe(ptr, u32.MAX_VALUE, true); // true = null-terminated
+        console.log(str);
+    }
+
+}
+
+#lua {
+
+}
+
+
