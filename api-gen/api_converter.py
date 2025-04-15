@@ -42,6 +42,7 @@ def from_mdef(tp:str, lang:str) -> str:
                 case "str": return "string"
                 case "bool": return "bool"
                 case "void": return "void"
+    return tp
 
 def convert_type(tp:str, lang:str) -> str|None:
     match lang:
@@ -81,8 +82,8 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "*const c_char": return "int32"
                 case "bool": return "boolean"
         
-            
     print(f"\n\n\n\033[38;2;255;20;20mUnprocessed type: {tp} ({lang})\033[0m\n\n\n")
+    return tp
 
 class Ownership(Enum):
     Owned = auto()
@@ -140,6 +141,25 @@ class Fn:
                 ret = convert_type(self.ret_tp, lang)
                 return f"local function {self.name}{args}{"" if ret is None else f": {ret}"} <cimport, nodecl, cinclude '<tuing_api_lua.h>'> end"
 
+    def generate(self, lang:str, body:str) -> str:
+        args = get_args_style(lang, self.args).format_map({"args": build_params(lang, self.args, True)})
+        match lang:
+            case "C":
+                return f"\n{from_mdef(self.ret_tp, lang)} {self.name}{args} {{\n{body}\n}}\n"
+            case "C++":
+                return f"\n{from_mdef(self.ret_tp, lang)} {self.name}{args} {{\n{body}\n}}\n"
+            case "C.h":
+                return f"\n{from_mdef(self.ret_tp, lang)} {self.name}{args};\n"
+            case "C++.h":
+                return f"\n{from_mdef(self.ret_tp, lang)} {self.name}{args};\n"
+            case "lua":
+                return "-- TODO: Lua Fn.generate()"
+            case "zig":
+                return "// TODO: zig Fn.generate()"
+            case "ts":
+                return "// TODO: ts Fn.generate()"
+        return f"ERROR [Fn.generate()] {lang}  {self.name}"
+
 class Attr:
     def __init__(self, name:str, tp:str, ownership:Ownership):
         self.name = name
@@ -156,66 +176,71 @@ class Attr:
                 return f"{self.name}: {from_mdef(self.tp, lang)}"
 
 class Method:
-    def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str):
+    def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str, wasm_name:str = ""):
         self.name = name
         self.params = params
         self.ret_type = ret_type
         self.mref = mref
+        self.wasm_name = wasm_name
     
     def generate(self, classlike, lang:str) -> str: ...
     
 class StaticMethod(Method):
-    def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str):
-        super().__init__(name, params, ret_type, mref)
+    def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str, wasm_name:str = ""):
+        super().__init__(name, params, ret_type, mref, wasm_name)
     
-    def generate(self, classlike, lang: str) -> str:
+    def generate(self, classlike, lang:str, mdef) -> str:
         classlike: Classlike
         args = get_param_def_style(lang, self.params).format_map({"args": build_params(lang, self.params)})
+        body = mdef.process_from_source(self.mref, lang, self.wasm_name)
+        print(f"\n\n\033[38;2;20;200;20mbody from mref '{self.mref}':\033[0m\n{body}\n\n")
         match lang:
             case "C":
-                ...
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args} {{\n    {body}\n}}"
             case "C.h":
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
             case "C++":
-                ...
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body.replace("\n", "\n    ")}\n}}"
             case "C++.h":
-                ...
+                return f"static {convert_type(self.ret_type, lang)} {self.name}{args};"
             case "wasm.h":
-                ...
+                return "// TODO: wasm.h StaticMethod.generate()"
             case "lua":
-                ...
+                return "-- TODO: lua StaticMethod.generate()"
             case "zig":
-                ...
+                return "// TODO: zig StaticMethod.generate()"
             case "ts":
-                ...
+                return "// TODO: ts StaticMethod.generate()"
         return ""
     
 class InstanceMethod(Method):
-    def __init__(self, name:str, self_param:Arg, params:list[Arg], ret_type:str, mref:str):
-        super().__init__(name, params, ret_type, mref)
+    def __init__(self, name:str, self_param:Arg, params:list[Arg], ret_type:str, mref:str, wasm_name:str=""):
+        super().__init__(name, params, ret_type, mref, wasm_name)
         self.self_param = self_param
 
-    def generate(self, classlike, lang: str) -> str:
+    def generate(self, classlike, lang:str, mdef) -> str:
         classlike: Classlike
         params = [Arg("self", classlike.classname, Ownership.MutRef)] + self.params
         args = get_param_def_style(lang, params).format_map({"args": build_params(lang, params)})
+        body = mdef.process_from_source(self.mref, lang, self.wasm_name)
+        print(f"\n\n\033[38;2;20;200;20mbody from mref '{self.mref}':\033[0m\n{body}\n\n")
         match lang:
             case "C":
-                ...
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args} {{\n{body}\n}}"
             case "C.h":
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
             case "C++":
-                ...
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n{body}\n}}"
             case "C++.h":
-                ...
+                return "// TODO: C++.h InstanceMethod.generate()"
             case "wasm.h":
-                ...
+                return "// TODO: wasm.h InstanceMethod.generate()"
             case "lua":
-                ...
+                return "-- TODO: lua InstanceMethod.generate()"
             case "zig":
-                ...
+                return "// TODO: zig InstanceMethod.generate()"
             case "ts":
-                ...
+                return "// TODO: ts InstanceMethod.generate()"
         return ""
     
     
@@ -227,16 +252,24 @@ class Classlike:
         self.instance_methods = instance_methods
         self.friend_types = friend_types
         
-    def generate(self, lang:str) -> str:
+    def generate(self, lang:str, mdef) -> str:
         match lang:
             case "C":
                 print(self.classname, self.attrs, self.static_methods, self.instance_methods, self.friend_types)
                 # <ret_tp> <classname>_<instance_method>
                 # <ret_tp> <classname>_<static_method>
-                return f"// C class '{self.classname}'"
+                out = f"// C class {self.classname}\n"
+                
+                for stat in self.static_methods:
+                    out += f"\n{stat.generate(self, lang, mdef)}\n"
+                
+                for stat in self.instance_methods:
+                    out += f"\n{stat.generate(self, lang, mdef)}\n"
+                
+                return out
             case "C.h":
-                a = [a.as_struct_def(lang) for a in self.attrs]
                 out = ""
+                a = [a.as_struct_def(lang) for a in self.attrs]
                 if a:
                     out += f"typedef struct {{\n    {"\n    ".join(a)}\n}} {self.classname};\n"
                 # typedef struct { <attrs> } <classname>;
@@ -244,49 +277,71 @@ class Classlike:
                 # <ret_tp> <classname>_<static_method>;
                 
                 for stat in self.static_methods:
-                    out += f"\n{stat.generate(self, lang)}\n"
+                    out += f"\n{stat.generate(self, lang, mdef)}\n"
                 
                 for stat in self.instance_methods:
-                    out += f"\n{stat.generate(self, lang)}\n"
+                    out += f"\n{stat.generate(self, lang, mdef)}\n"
                 
                 return out
                 
             case "C++":
-                return f"// C++ class '{self.classname}'"
+                out = f"// C++ class {self.classname}\n"
+            
+                for stat in self.static_methods:
+                    out += f"\n{stat.generate(self, lang, mdef)}\n"
                 
+                for stat in self.instance_methods:
+                    out += f"\n{stat.generate(self, lang, mdef)}\n"
+            
+                return out
             case "C++.h":
                 # class <classname> { public: <static/instance methods> private: <attrs> <frind classes> }
-                return f"// C++.h class '{self.classname}'"
+                out = f"// C++.h class '{self.classname}'\nclass {self.classname} {{\n    public:\n"
+                
+                a = [a.as_struct_def(lang) for a in self.attrs]
+                if a:
+                    out += "        " + ("\n        ".join(a))
+                
+                for stat in self.static_methods:
+                    out += f"\n        {stat.generate(self, lang, mdef)}\n"
+                
+                for stat in self.instance_methods:
+                    out += f"\n        {stat.generate(self, lang, mdef)}\n"
+                
+                out += "\n}\n"
+                
+                return out
                 
             case "zig":
                 # pub const <classname> = struct { <attrs/statics/instance methods> };
-                return f"// zig class '{self.classname}'"
+                return f"// TODO: zig class '{self.classname}'"
                 
             case "ts":
                 # footer TODO: export { <classnames> }
                 # class <classname> { <attrs>  constructor(<attrs>) { <attrs> } <instance/static methods> }
-                return f"// ts class '{self.classname}'"
+                return f"// TODO: ts class '{self.classname}'"
                 
             case "lua":
                 # global <classname> = @record{ <attrs> }
                 # function <classname>.<static/instance method>
-                return f"-- lua class '{self.classname}'"
+                return f"-- TODO: lua class '{self.classname}'"
             case "wasm.h":
                 return "" # no class-gen in wasm.h
         
         print(f"Missing lang: {lang}")
 
 
-def build_params(lang:str, args:list[Arg]) -> str:
+def build_params(lang:str, args:list[Arg], isFromMdef = False) -> str:
+    convert = from_mdef if isFromMdef else convert_type
     out = []
     match lang:
-        case "C" | "C.h" | "C++.h" | "wasm.h":
+        case "C" | "C.h" | "C++" | "C++.h" | "wasm.h":
             for a in args:
-                out.append(f"{convert_type(a.tp, lang)}{"*" if a.ownership in [Ownership.MutRef, Ownership.Ref] else ""} {a.name}")
+                out.append(f"{convert(a.tp, lang)}{"*" if a.ownership in [Ownership.MutRef, Ownership.Ref] else ""} {a.name}")
             return ", ".join(out)
         case "zig" | "ts" | "lua":
             for a in args:
-                out.append(f"{a.name}: {convert_type(a.tp, lang)}")
+                out.append(f"{a.name}: {convert(a.tp, lang)}")
             return ", ".join(out)
 
 def get_param_def_style(lang:str, args:list[Arg]) -> str:
@@ -294,6 +349,9 @@ def get_param_def_style(lang:str, args:list[Arg]) -> str:
         case "C" if len(args) == 0:
             return "(void)"
     
+    return "({args})"
+
+def get_args_style(lang:str, args:list[Arg]) -> str:
     return "({args})"
 
 class IConstruct:
@@ -321,6 +379,12 @@ class FileConstructor:
             case "zig": return "Zig"
             case "lua": return "Lua"
             case "ts": return "AsmScript"
+        
+    def add_functionlike(self, order: int, name: str, src: str):
+        if order not in self.function_like.keys():
+            self.function_like.update({order: {}})
+        
+        self.function_like[order].update({name: src})
         
     def add_classlike(self, order:int, name:str, src:str):
         if order not in self.class_like.keys():
@@ -357,11 +421,11 @@ class FileConstructor:
             case "wasm.h":
                 return "\n#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n"
             case "zig":
-                ...
+                return ""
             case "ts":
-                ...
+                return ""
             case "lua":
-                ...
+                return ""
             
         return ""
     
@@ -571,11 +635,11 @@ class BeatmapConstruct(Construct):
         static_methods = []
         for fn in self.object_adders:
             fn: Fn
-            static_methods.append(StaticMethod(fn.name[9:], fn.args, fn.ret_tp, f"#mdef.pass_ptr_attr({fn.name[9:]})"))
+            static_methods.append(StaticMethod(fn.name[9:], fn.args, fn.ret_tp, f"#mdef.pass_ptr_attr({fn.name[13:]})", fn.name))
         
         cl = Classlike("Beatmap", [], static_methods, [], [])
         
-        out = cl.generate(fstruct.lang)
+        out = cl.generate(fstruct.lang, mdef)
         
         fstruct.add_classlike(1, "Beatmap", re.sub(r"\n+", "\n", out))
 
@@ -584,6 +648,7 @@ class BeatmapConstruct(Construct):
 class GameObjectConstruct(Construct):
     def __init__(self):
         super().__init__("GameObjects")
+        self.constructor_fns: list[Fn] = []
         self.fns: dict[str, dict[str, Fn]] = {
             "color_note": {},
             "bomb_note": {},
@@ -614,6 +679,8 @@ class GameObjectConstruct(Construct):
         for fn in fns:
             if (m := fn.match_name(r"^_(color_note|bomb_note|arc|wall|chain_head_note|chain_link_note|chain_note)_(.*)$")) is not None:
                 self.fns[m.groups()[0]].update({ m.groups()[1]: fn })
+            elif fn.match_name(r"_create_(color_note|bomb_note|arc|wall|chain_head_note|chain_link_note|chain_note)"):
+                self.constructor_fns.append(fn)
 
     def generate(self, fstruct, mdef):
         out = ""
@@ -624,9 +691,25 @@ class GameObjectConstruct(Construct):
         
         fstruct.add_classlike(0, f"{cname}", re.sub(r"\n+", "\n", out))
 
+        for fn in self.constructor_fns:
+            rfn = Fn(fn.name[1:], fn.args, self.tnames[fn.name[8:]])
+            
+            raw = mdef.get_source("constructor_beat", fstruct.lang)
+            
+            body: str = ""
+            if raw:
+                body, macros = raw
+                body = mdef.process_macros(body, macros, [self.tnames[fn.name[8:]]])
+                body = body.replace("~", fn.name)
+                body = "    " + body.replace("\n", "\n    ")
+            
+            src = rfn.generate(fstruct.lang, body)
+            fstruct.add_functionlike(0, fn.name, src)
+
+
     def gen(self, fstruct:FileConstructor, mdef, classlike: Classlike, fns:dict[str, Fn]):
         
-        return classlike.generate(fstruct.lang)
+        return classlike.generate(fstruct.lang, mdef)
         
         # match fstruct.lang:
         #     case "C": ...
@@ -649,11 +732,10 @@ class ExtraClassesConstruct(Construct):
     def generate(self, fstruct, mdef):
         
         for (o, i) in self.include:
-            t = mdef.class_likes.get(i, None)
+            t: Classlike = mdef.class_likes.get(i, None)
             if t:
-                src = t.generate(fstruct.lang)
+                src = t.generate(fstruct.lang, mdef)
                 fstruct.add_classlike(o, i, src)
-        
         
 
 class ClsBuilder:
@@ -722,6 +804,11 @@ class Mdef:
         
         print(f"Loaded sources:\n\nclass-like:\n{self.class_likes}\n\n{json.dumps(self.definitions, indent=4)}")
     
+    def process_macros(self, src:str, macros:list[str], values:list[str]) -> str:
+        for (m, v) in zip(macros, values):
+            src = src.replace(m, v)
+        return src
+    
     def get_class(self, classname: str) -> Classlike|None:
         return self.class_likes.get(classname, None)
     
@@ -734,6 +821,24 @@ class Mdef:
             if src:
                 return (src, self.definition_macros.get(mref, []))
         return None
+    
+    def process_from_source(self, mref:str, lang:str, fname:str) -> str:
+        if mref.startswith("#mdef."):
+            mref = mref[6:]
+        
+        values = []
+        name = mref
+        if (m := re.match(r"([a-zA-Z_][a-zA-Z0-9_]*)(?:\(([^\)]+)\))?", mref)) is not None:
+            m: re.Match
+            g = m.groups()
+            name = g[0]
+            vals = g[1]
+            values = [v.strip() for v in re.split(r" *, *", vals) if v.strip() != ""]
+    
+        raw = self.get_source(name, lang) or ["", []]
+        print(f"got raw source from mref {lang} '{name}' ({mref}): {raw}")
+        src = self.process_macros(raw[0], raw[1], values)
+        return src.replace("~", fname)
     
     def process_lines(self, lines:list[str]):
         macro_cache: list = []

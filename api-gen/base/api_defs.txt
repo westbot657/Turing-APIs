@@ -6,6 +6,9 @@
 
 class Color {
     ptr: i32
+
+    fn get_r(&self) -> f32 #mdef.pass_ptr_attr(self)
+
 }
 
 #macro $1
@@ -14,7 +17,7 @@ class Color {
 class $1 {
     ptr: i32
 
-    fn get_color(&self) -> Color
+    fn get_color(&self) -> Color #mdef.pass_ptr_attr(self)
 
 }
 #macro end
@@ -36,7 +39,6 @@ class Beatmap {
 
     static fn add_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
     static fn remove_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
-    shared $2
 
     #macro end
 
@@ -65,6 +67,31 @@ class Beatmap {
     }
     #ts {
         ~(changetype<usize>(String.UTF8.encode(msg)))
+    }
+}
+
+#constructor_beat($1) {
+    #C {
+        $1 inst;
+        instptr = ~(beat);
+        return inst;
+    }
+    #C++ {
+        $1 inst = $1 {};
+        inst.ptr = ~(beat);
+        return inst;
+    }
+    #zig {
+        return .{ .ptr = ~(beat) };
+    }
+    #lua {
+        local ptr: int32 = ~(beat)
+        local note: $1 = { ptr = ptr }
+        return note
+    }
+    #ts {
+        let ptr = ~(beat);
+        return new $1(ptr);
     }
 }
 

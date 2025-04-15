@@ -11,10 +11,7 @@ class ColorNote {
     public:
         static ColorNote create(float beat);
     
-    private:
         int id;
-
-        friend class Beatmap;
     
 };
 

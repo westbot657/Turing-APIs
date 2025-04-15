@@ -8,9 +8,8 @@
 #include <string>
 
 ColorNote ColorNote::create(float beat) {
-    int id = _create_color_note(beat);
     ColorNote note = ColorNote {};
-    note.id = id;
+    note.id = _create_color_note(beat);
     return note;
 };
 
