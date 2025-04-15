@@ -145,6 +145,15 @@ class Attr:
         self.name = name
         self.tp = tp
         self.ownership = ownership
+    
+    def as_struct_def(self, lang:str) -> str:
+        match lang:
+            case "C" | "C.h" | "C++" | "C++.h" | "wasm.h":
+                return f"{from_mdef(self.tp, lang)} {self.name};"
+            case "zig" | "ts":
+                return f"{self.name}: {from_mdef(self.tp, lang)};"
+            case "lua":
+                return f"{self.name}: {from_mdef(self.tp, lang)}"
 
 class Method:
     def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str):
@@ -153,17 +162,63 @@ class Method:
         self.ret_type = ret_type
         self.mref = mref
     
-    def generate(self, lang:str): ...
+    def generate(self, classlike, lang:str) -> str: ...
     
 class StaticMethod(Method):
     def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str):
         super().__init__(name, params, ret_type, mref)
+    
+    def generate(self, classlike, lang: str) -> str:
+        classlike: Classlike
+        args = get_param_def_style(lang, self.params).format_map({"args": build_params(lang, self.params)})
+        match lang:
+            case "C":
+                ...
+            case "C.h":
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
+            case "C++":
+                ...
+            case "C++.h":
+                ...
+            case "wasm.h":
+                ...
+            case "lua":
+                ...
+            case "zig":
+                ...
+            case "ts":
+                ...
+        return ""
     
 class InstanceMethod(Method):
     def __init__(self, name:str, self_param:Arg, params:list[Arg], ret_type:str, mref:str):
         super().__init__(name, params, ret_type, mref)
         self.self_param = self_param
 
+    def generate(self, classlike, lang: str) -> str:
+        classlike: Classlike
+        params = [Arg("self", classlike.classname, Ownership.MutRef)] + self.params
+        args = get_param_def_style(lang, params).format_map({"args": build_params(lang, params)})
+        match lang:
+            case "C":
+                ...
+            case "C.h":
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
+            case "C++":
+                ...
+            case "C++.h":
+                ...
+            case "wasm.h":
+                ...
+            case "lua":
+                ...
+            case "zig":
+                ...
+            case "ts":
+                ...
+        return ""
+    
+    
 class Classlike:
     def __init__(self, classname: str, attrs: list[Attr], static_methods: list[StaticMethod], instance_methods: list[InstanceMethod], friend_types:list[str]):
         self.classname = classname
@@ -175,14 +230,26 @@ class Classlike:
     def generate(self, lang:str) -> str:
         match lang:
             case "C":
+                print(self.classname, self.attrs, self.static_methods, self.instance_methods, self.friend_types)
                 # <ret_tp> <classname>_<instance_method>
                 # <ret_tp> <classname>_<static_method>
                 return f"// C class '{self.classname}'"
             case "C.h":
+                a = [a.as_struct_def(lang) for a in self.attrs]
+                out = ""
+                if a:
+                    out += f"typedef struct {{\n    {"\n    ".join(a)}\n}} {self.classname};\n"
                 # typedef struct { <attrs> } <classname>;
                 # <ret_tp> <classname>_<instance_method>;
                 # <ret_tp> <classname>_<static_method>;
-                return f"// C.h class '{self.classname}'"
+                
+                for stat in self.static_methods:
+                    out += f"\n{stat.generate(self, lang)}\n"
+                
+                for stat in self.instance_methods:
+                    out += f"\n{stat.generate(self, lang)}\n"
+                
+                return out
                 
             case "C++":
                 return f"// C++ class '{self.classname}'"
@@ -204,7 +271,10 @@ class Classlike:
                 # global <classname> = @record{ <attrs> }
                 # function <classname>.<static/instance method>
                 return f"-- lua class '{self.classname}'"
-                
+            case "wasm.h":
+                return "" # no class-gen in wasm.h
+        
+        print(f"Missing lang: {lang}")
 
 
 def build_params(lang:str, args:list[Arg]) -> str:
@@ -212,7 +282,7 @@ def build_params(lang:str, args:list[Arg]) -> str:
     match lang:
         case "C" | "C.h" | "C++.h" | "wasm.h":
             for a in args:
-                out.append(f"{convert_type(a.tp, lang)} {a.name}")
+                out.append(f"{convert_type(a.tp, lang)}{"*" if a.ownership in [Ownership.MutRef, Ownership.Ref] else ""} {a.name}")
             return ", ".join(out)
         case "zig" | "ts" | "lua":
             for a in args:
@@ -228,10 +298,11 @@ def get_param_def_style(lang:str, args:list[Arg]) -> str:
 
 class IConstruct:
     def reset(self) -> None: ...
-    def attach(self, lang:str, fns: list[Fn]) -> None: ...
-    def link(self, lang:str, structs) -> None: ...
-    def relink(self, lang:str, structs) -> None: ...
-    def generate(self, tps:list[str], fstruct) -> None: ...
+    def attach(self, lang:str, mdef, fns: list[Fn]) -> None: ...
+    def link(self, lang:str, mdef, structs) -> None: ...
+    def relink(self, lang:str, mdef, structs) -> None: ...
+    def generate(self, fstruct, mdef) -> None: ...
+    def owns_fn(self, fn: Fn) -> bool: ...
 
 class FileConstructor:
     def __init__(self, lang:str):
@@ -251,6 +322,11 @@ class FileConstructor:
             case "lua": return "Lua"
             case "ts": return "AsmScript"
         
+    def add_classlike(self, order:int, name:str, src:str):
+        if order not in self.class_like.keys():
+            self.class_like.update({order: {}})
+        
+        self.class_like[order].update({name: src})
     
     def header(self) -> str:
         match self.lang:
@@ -304,6 +380,8 @@ class FileConstructor:
         return ""
     
     def construct(self, fns: list[Fn], mdef, constructs: list[IConstruct], outputs: list[str], build_links: bool = False):
+        mdef: Mdef
+        
         
         if build_links:
             for fn in fns:
@@ -311,16 +389,17 @@ class FileConstructor:
         
         for c in constructs:
             c.reset()
-            c.attach(self.lang, fns)
+            c.attach(self.lang, mdef, fns)
         
         for c in constructs:
-            c.link(self.lang, constructs)
+            c.link(self.lang, mdef, constructs)
         
         for c in constructs:
-            c.relink(self.lang, constructs)
+            c.relink(self.lang, mdef, constructs)
         
         for c in constructs:
-            c.generate(self)
+            c.generate(self, mdef)
+            
     
         data_out = f"// Turing API - {self.lang_group()}\n// License: {LICENSE}\n// Authors: {", ".join(AUTHORS)}\n// <auto-converted from the rust api />\n\n"
         
@@ -446,20 +525,23 @@ class Construct(IConstruct):
         self.struct_id = struct_id
     
     # lets the construct collect whatever methods it wants to add details for
-    def attach(self, lang:str, fns: list[Fn]):
+    def attach(self, lang:str, mdef, fns: list[Fn]):
         print(f"Attach phase for {self.struct_id} - {lang}")
         
-    def generate(self, fstruct: FileConstructor):
+    def generate(self, fstruct: FileConstructor, mdef):
         print(f"Generate phase for {self.struct_id} - {fstruct.lang}")
         
-    def link(self, lang:str, constructs):
+    def link(self, lang:str, mdef, constructs):
         print(f"Link phase for {self.struct_id} - {lang}")
         
-    def relink(self, lang:str, constructs):
+    def relink(self, lang:str, mdef, constructs):
         print(f"Relink phase for {self.struct_id} - {lang}")
         
     def reset(self):
         print(f"Reset phase for {self.struct_id}")
+        
+    def owns_fn(self, fn: Fn) -> bool:
+        return False
         
     @classmethod
     def c(cls, child):
@@ -471,9 +553,12 @@ class BeatmapConstruct(Construct):
     
     def __init__(self):
         super().__init__("Beatmap")
-        self.object_adders = []
-        
-    def attach(self, lang:str, fns:list[Fn]):
+        self.object_adders: list[Fn] = []
+    
+    def owns_fn(self, fn):
+        return fn in self.object_adders
+    
+    def attach(self, lang:str, mdef, fns:list[Fn]):
         for fn in fns:
             if fn.name.startswith("_beatmap_add"):
                 self.object_adders.append(fn)
@@ -481,16 +566,19 @@ class BeatmapConstruct(Construct):
     def reset(self):
         self.object_adders.clear()
     
-    def generate(self, fstruct):
-        match fstruct.lang:
-            case "C": ...
-            case "C.h": ...
-            case "C++": ...
-            case "C++.h": ...
-            case "wasm.h": ...
-            case "zig": ...
-            case "ts": ...
-            case "lua": ...
+    def generate(self, fstruct, mdef):
+        
+        static_methods = []
+        for fn in self.object_adders:
+            fn: Fn
+            static_methods.append(StaticMethod(fn.name[9:], fn.args, fn.ret_tp, f"#mdef.pass_ptr_attr({fn.name[9:]})"))
+        
+        cl = Classlike("Beatmap", [], static_methods, [], [])
+        
+        out = cl.generate(fstruct.lang)
+        
+        fstruct.add_classlike(1, "Beatmap", re.sub(r"\n+", "\n", out))
+
 
 @Construct.c
 class GameObjectConstruct(Construct):
@@ -505,23 +593,68 @@ class GameObjectConstruct(Construct):
             "chain_link_note": {},
             "chain_note": {}
         }
+        
+        self.tnames = {
+            "color_note": "ColorNote",
+            "bomb_note": "BombNote",
+            "arc": "Arc",
+            "wall": "Wall",
+            "chain_head_note": "ChainHeadNote",
+            "chain_link_note": "ChainLinkNote",
+            "chain_note": "ChainNote"
+        }
     
-    def attach(self, lang:str, fns: list[Fn]):
+    def owns_fn(self, fn):
+        for (k, v) in self.fns.vlaues().items():
+            if v is fn:
+                return True
+        return False
+    
+    def attach(self, lang:str, mdef, fns: list[Fn]):
         for fn in fns:
             if (m := fn.match_name(r"^_(color_note|bomb_note|arc|wall|chain_head_note|chain_link_note|chain_note)_(.*)$")) is not None:
                 self.fns[m.groups()[0]].update({ m.groups()[1]: fn })
 
-    def generate(self, fstruct):
-        match fstruct.lang:
-            case "C": ...
-            case "C.h": ...
-            case "C++": ...
-            case "C++.h": ...
-            case "wasm.h": ...
-            case "zig": ...
-            case "ts": ...
-            case "lua": ...
+    def generate(self, fstruct, mdef):
+        out = ""
+        for struct, fns in self.fns.items():
+            cname = self.tnames[struct]
+            print(f"bind class {cname}")
+            out += "\n" + self.gen(fstruct, mdef, mdef.get_class(cname), fns) + "\n"
+        
+        fstruct.add_classlike(0, f"{cname}", re.sub(r"\n+", "\n", out))
 
+    def gen(self, fstruct:FileConstructor, mdef, classlike: Classlike, fns:dict[str, Fn]):
+        
+        return classlike.generate(fstruct.lang)
+        
+        # match fstruct.lang:
+        #     case "C": ...
+        #     case "C.h": ...
+        #     case "C++": ...
+        #     case "C++.h": ...
+        #     case "wasm.h": ...
+        #     case "zig": ...
+        #     case "ts": ...
+        #     case "lua": ...
+
+@Construct.c
+class ExtraClassesConstruct(Construct):
+    def __init__(self):
+        super().__init__("ExtraClasses")
+        self.include = [
+            (0, "Color")
+        ]
+    
+    def generate(self, fstruct, mdef):
+        
+        for (o, i) in self.include:
+            t = mdef.class_likes.get(i, None)
+            if t:
+                src = t.generate(fstruct.lang)
+                fstruct.add_classlike(o, i, src)
+        
+        
 
 class ClsBuilder:
     def __init__(self):
@@ -550,7 +683,7 @@ class ClsBuilder:
         self.friends.append(f)
     
     def build(self) -> Classlike:
-        c = Classlike(self.name, self.attrs, self.static_methods, self.instance_methods)
+        c = Classlike(self.name, self.attrs, self.static_methods, self.instance_methods, self.friends)
         self.name: str|None = None
         self.attrs: list[Attr] = []
         self.static_methods: list[StaticMethod] = []
@@ -586,6 +719,11 @@ class Mdef:
         self.current_src = []
         
         self.process_lines(lines)
+        
+        print(f"Loaded sources:\n\nclass-like:\n{self.class_likes}\n\n{json.dumps(self.definitions, indent=4)}")
+    
+    def get_class(self, classname: str) -> Classlike|None:
+        return self.class_likes.get(classname, None)
     
     def get_source(self, mref:str, lang:str) -> None|tuple[str, list[str]]:
         if mref.startswith("#mdef."):
@@ -649,13 +787,28 @@ class Mdef:
                     continue
                     # print(f"macro re-expanded lines to: {json.dumps(lines, indent=4)}")
 
+                if (m := re.match(r"class *([a-zA-Z_][a-zA-Z0-9_]*) *\{", line)) is not None:
+                    m: re.Match
+                    self.cls_builder.start(m.groups()[0])
+                    continue
+
                 if self.cls_builder.is_building():
                     
                     if re.match(r" *} *", line):
                         self.class_likes.update({self.cls_builder.name: self.cls_builder.build()})
+                        
                         continue
                     
-                    if (m := re.match(r" *static *fn *([a-zA-Z_][a-zA-Z0-9_]*) *\(((?:[a-zA-Z_][a-zA-Z0-9_]* *: *[a-zA-Z_][a-zA-Z0-9_]*,? *)+)\) *-> *([a-zA-Z_][a-zA-Z0-9_]*) *(.*)"), line) is not None:
+                    if (m := re.match(r" *([a-zA-Z_][a-zA-Z0-9_]*) *: *([a-zA-Z_][a-zA-Z0-9_]*)", line)) is not None:
+                        m: re.Match
+                        g = m.groups()
+                        n = g[0]
+                        t = g[1]
+                        a = Attr(n, t, Ownership.Owned)
+                        self.cls_builder.add_attr(a)
+                        continue
+                    
+                    if (m := re.match(r" *static *fn *([a-zA-Z_][a-zA-Z0-9_]*) *\(((?:[a-zA-Z_][a-zA-Z0-9_]* *: *[a-zA-Z_][a-zA-Z0-9_]*,? *)+)\) *-> *([a-zA-Z_][a-zA-Z0-9_]*) *(.*)", line)) is not None:
                         m: re.Match
                         g: tuple[str] = m.groups()
                         f_name = g[0]
@@ -666,7 +819,7 @@ class Mdef:
                         self.cls_builder.add_s_method(StaticMethod(f_name, f_args, ret, mref))
                         continue
 
-                    elif (m := re.match(r" *fn *([a-zA-Z_][a-zA-Z0-9_]*) *\(((?:& *(?:mut *)?)? *self),? *((?:[a-zA-Z_][a-zA-Z0-9_]* *: *[a-zA-Z_][a-zA-Z0-9_]*,? *)+)\) *-> *([a-zA-Z_][a-zA-Z0-9_]*) *(.*)"), line) is not None:
+                    elif (m := re.match(r" *fn *([a-zA-Z_][a-zA-Z0-9_]*) *\(((?:& *(?:mut *)?)? *self),? *((?:[a-zA-Z_][a-zA-Z0-9_]* *: *[a-zA-Z_][a-zA-Z0-9_]*,? *)+)\) *-> *([a-zA-Z_][a-zA-Z0-9_]*) *(.*)", line)) is not None:
                         m: re.Match
                         g: tuple[str] = m.groups()
                         f_name = g[0]

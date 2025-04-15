@@ -3,11 +3,19 @@
 
 #struct-defs
 
+
+class Color {
+    ptr: i32
+}
+
 #macro $1
 #pattern # ColorNote # BombNote # Arc # Wall # ChainHeadNote # ChainLinkNote # ChainNote
 #macro apply
 class $1 {
     ptr: i32
+
+    fn get_color(&self) -> Color
+
 }
 #macro end
 
@@ -25,7 +33,11 @@ class Beatmap {
     #macro $1 $2
     #pattern # color_note ColorNote # bomb_note BombNote # arc Arc # wall Wall # chain_head_note ChainHeadNote # chain_link_note ChainLinkNote # chain_note ChainNote
     #macro apply
+
     static fn add_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
+    static fn remove_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
+    shared $2
+
     #macro end
 
 }
