@@ -588,9 +588,8 @@ class FileConstructor:
         data_out = re.sub(r"\n\n+", "\n\n", data_out)
         
         for o in outputs:
-            ext = o.rsplit(".", 1)[1]
-            print(f"Writing to output: {o}.gen.{ext}")
-            with open(f"{o}.gen.{ext}", "w+", encoding="utf-8") as f:
+            print(f"Writing to output: {o}")
+            with open(f"{o}", "w+", encoding="utf-8") as f:
                 f.write(data_out)
         
     
@@ -1125,8 +1124,7 @@ def main():
             "./Lua/turing-api-lua/turing_api_lua.nelua"
         ]:
             try:
-                ext = f.rsplit(".", 1)[1]
-                os.remove(f"{f}.gen.{ext}")
+                os.remove(f"{f}")
             except:
                 pass
         return
