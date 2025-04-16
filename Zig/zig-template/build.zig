@@ -17,7 +17,7 @@ pub fn build(b: *std.Build) void {
     });
 
     const api_dep = b.dependency("turing_api", .{});
-    exe.root_module.addImport("turing-api", api_dep.module("turing-api"));
+    exe.root_module.addImport("turing-api-zig", api_dep.module("turing-api-zig"));
 
     exe.root_module.export_symbol_names = &[_][]const u8{
         "on_load",

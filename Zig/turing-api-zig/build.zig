@@ -10,7 +10,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     const lib = b.addExecutable(.{
-        .name = "turing-api",
+        .name = "turing-api-zig",
         .root_source_file = b.path("src/root.zig"),
         .target = target,
         .optimize = optimize,
@@ -22,7 +22,7 @@ pub fn build(b: *std.Build) void {
 
     b.installArtifact(lib);
 
-    _ = b.addModule("turing-api", .{
+    _ = b.addModule("turing-api-zig", .{
         .root_source_file = b.path("src/root.zig"),
     });
 }

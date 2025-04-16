@@ -24,10 +24,10 @@ class $1 {
 
 class Log {
 
-    static fn info(msg: str) -> void #mdef.log("info")
-    static fn warn(msg: str) -> void #mdef.log("warn")
-    static fn critical(msg: str) -> void #mdef.log("error")
-    static fn debug(msg: str) -> void #mdef.log("debug")
+    static fn info(msg: str) -> void #mdef.log(info)
+    static fn warn(msg: str) -> void #mdef.log(warn)
+    static fn critical(msg: str) -> void #mdef.log(error)
+    static fn debug(msg: str) -> void #mdef.log(debug)
 
 }
 
@@ -74,27 +74,23 @@ class Beatmap {
 }
 
 #log($1) {
-    #C {
-        char* s = concat_strings($1, msg);
+    #C, #C++ {
+        char* s = concat_strings("$1", msg);
         _log(s);
         free(s);
     }
     #lua {
-        _log($1 .. msg)
-    }
-    #C++ {
-        string s = $1 + msg;
-        _log(s.c_str());
+        _log(string.format("$1%s", msg))
     }
     #zig {
         var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, $1, msg);
+        const s = try concat_strings(allocator, "$1", msg);
         defer allocator.free(s);
         _log(@ptrCast(msg.ptr));
     }
     #ts {
-        _log(changetype<usize>(String.UTF8.encode($1 + msg)));
+        _log(<i32>changetype<usize>(String.UTF8.encode("$1" + msg)));
     }
 }
 
@@ -144,7 +140,18 @@ class Beatmap {
 }
 
 #C++ {
-
+    char* concat_strings(const char* str1, const char* str2) {
+        int len1 = strlen(str1);
+        int len2 = strlen(str2);
+        char* result = (char*) malloc(len1 + len2 + 1); // +1 for null terminator
+        
+        if (result) {
+            strcpy(result, str1);
+            strcat(result, str2);
+        }
+        
+        return result;
+    }
 }
 
 #zig {

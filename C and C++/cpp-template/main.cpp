@@ -3,14 +3,14 @@
 
 
     extern "C" void on_load(void) {
-
+        Log::info("C++ Script loaded!");
     }
 
     extern "C" void on_update(float beat) {
 
-        ColorNote note = ColorNote::create(beat);
+        ColorNote note = create_color_note(beat);
 
-        Beatmap::addColorNote(note);
+        Beatmap::add_color_note(note);
 
     }
 

@@ -5,7 +5,7 @@
 
     .dependencies = .{
         .turing_api = .{
-            .path = "../turing-api",
+            .path = "../turing-api-zig",
         },
     },
 

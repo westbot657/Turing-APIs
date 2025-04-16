@@ -16,12 +16,20 @@ class IMdef:
 
 def from_mdef(tp:str, lang:str) -> str:
     match lang:
-        case "C" | "C++" | "C.h" | "C++.h":
+        case "C" | "C.h":
             match tp:
                 case "i32": return "int"
                 case "u32": return "unsigned int"
                 case "f32": return "float"
-                case "str": return "char*"
+                case "str": return "const char*"
+                case "bool": return "bool"
+                case "void": return "void"
+        case "C++" | "C++.h":
+            match tp:
+                case "i32": return "int"
+                case "u32": return "unsigned int"
+                case "f32": return "float"
+                case "str": return "const char*"
                 case "bool": return "bool"
                 case "void": return "void"
         case "zig":
@@ -42,9 +50,9 @@ def from_mdef(tp:str, lang:str) -> str:
                 case "void": return None
         case "ts":
             match tp:
-                case "i32": return "int"
-                case "u32": return "unsigned int"
-                case "f32": return "float"
+                case "i32": return "i32"
+                case "u32": return "u32"
+                case "f32": return "f32"
                 case "str": return "string"
                 case "bool": return "bool"
                 case "void": return "void"
@@ -58,20 +66,20 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "u32": return "unsigned int"
                 case "f32": return "float"
                 case None: return "void"
-                case "*const c_char": return "char*"
+                case "*const c_char": return "const char*"
                 case "*mut c_char": return "void*"
                 case "bool": return "bool"
-                case "str": return "char*"
+                case "str": return "const char*"
         case "C++" | "C++.h":
             match tp:
                 case "i32": return "int"
                 case "u32": return "unsigned int"
                 case "f32": return "float"
                 case None: return "void"
-                case "*const c_char": return "string"
+                case "*const c_char": return "char*"
                 case "*mut c_char": return "void*"
                 case "bool": return "bool"
-                case "str": return "string"
+                case "str": return "char*"
         case "zig":
             match tp:
                 case "i32": return "i32"
@@ -90,7 +98,8 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "*mut c_char": return "i32"
                 case "*const c_char": return "i32"
                 case "bool": return "bool"
-                case "str": return "cstring"
+                case "str": return "string"
+                case "int": return "i32"
         case "lua":
             match tp:
                 case "i32": return "int32"
@@ -98,7 +107,7 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "f32": return "float32"
                 case None | "void": return None
                 case "*mut c_char": return "int32"
-                case "*const c_char": return "int32"
+                case "*const c_char": return "cstring"
                 case "bool": return "boolean"
                 case "str": return "string"
         
@@ -224,7 +233,7 @@ class StaticMethod(Method):
             case "C.h":
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
             case "C++":
-                return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body.replace("\n", "\n    ")}\n}}"
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body}\n}}"
             case "C++.h":
                 return f"static {convert_type(self.ret_type, lang)} {self.name}{args};"
             case "wasm.h":
@@ -480,13 +489,23 @@ class FileConstructor:
             case "C.h":
                 return "\n#ifndef TURING_API_H\n#define TURING_API_H\n\n#include <wasm_imports.h>\n"
             case "C++.h":
-                return "\n#ifndef TURING_API_HPP\n#define TURING_API_HPP\n\n#include <wasm_imports.h>\n#include <string>\nusing namespace std;\n"
+                return "\n#ifndef TURING_API_HPP\n#define TURING_API_HPP\n\n#include <wasm_imports.h>\n"
             case "C":
-                return "\n#include <turing_api_c.h>\n"
+                
+                with open("./api-gen/base/wasm-std.c", "r+", encoding="utf-8") as f:
+                    data = f.read()
+                
+                return f"\n#include <turing_api_c.h>\n\n{data}\n"
             case "C++":
-                return "\n#include <turing_api_cpp.hpp>\n"
+                
+                with open("./api-gen/base/wasm-std.c", "r+", encoding="utf-8") as f:
+                    data = f.read()
+                
+                return f"\n#include <turing_api_cpp.hpp>\n\n{data}\n"
             case "zig":
                 return "\nconst std = @import(\"std\");\n"
+            case "lua":
+                return "\nlocal string = require('string')\n"
         return ""
 
     def footer(self) -> str:

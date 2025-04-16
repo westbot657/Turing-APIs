@@ -1,4 +1,4 @@
-const turing_api = @import("turing-api");
+const turing_api = @import("turing-api-zig");
 
 pub export fn on_load() void {}
 

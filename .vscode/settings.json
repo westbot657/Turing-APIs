@@ -7,6 +7,7 @@
         "turing_api_c.h": "c",
         "string": "cpp",
         "turing_api_c.h.gen.h": "c",
-        "xstring": "cpp"
+        "xstring": "cpp",
+        "stdlib.h": "c"
     }
 }

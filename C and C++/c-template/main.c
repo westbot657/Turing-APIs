@@ -2,14 +2,14 @@
 #include <turing_api_c.h>
 
 extern void on_load(void) {
-
+    Log_info("Script loaded!");
 }
 
 extern void on_update(float beat) {
 
-    ColorNote note = createColorNote(beat+2);
+    ColorNote note = create_color_note(beat+2);
 
-    Beatmap_addColorNote(note);
+    Beatmap_add_color_note(note);
 
 }
 

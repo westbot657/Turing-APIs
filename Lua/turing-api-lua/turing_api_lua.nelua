@@ -1,24 +1,248 @@
 -- Turing API - Lua
 -- License: GPL-2.0-only
 -- Authors: Westbot
+-- <auto-converted from the rust api />
 
-require 'memory'
-
+local string = require('string')
 local function _create_color_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _beatmap_add_color_note(note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-
+local function _beatmap_add_color_note(color_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_color_note(color_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_note_set_position(color_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_note_get_position(color_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_note_set_orientation(color_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_note_get_orientation(color_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_note_set_color(color_note: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_note_get_color(color_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _create_bomb_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_bomb_note(bomb_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_bomb_note(bomb_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _bomb_note_set_position(bomb_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _bomb_note_get_position(bomb_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _bomb_note_set_orientation(bomb_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _bomb_note_get_orientation(bomb_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _bomb_note_set_color(bomb_note: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _bomb_note_get_color(bomb_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _create_arc(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_arc(arc: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_arc(arc: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _arc_set_position(arc: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _arc_get_position(arc: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _arc_set_orientation(arc: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _arc_get_orientation(arc: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _arc_set_color(arc: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _arc_get_color(arc: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _create_wall(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_wall(wall: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_wall(wall: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _wall_set_position(wall: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _wall_get_position(wall: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _wall_set_orientation(wall: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _wall_get_orientation(wall: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _wall_set_color(wall: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _wall_get_color(wall: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _create_chain_head_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_chain_head_note(chain_head_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_chain_head_note(chain_head_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_head_note_set_position(chain_head_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_head_note_get_position(chain_head_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_head_note_set_orientation(chain_head_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_head_note_get_orientation(chain_head_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_head_note_set_color(chain_head_note: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_head_note_get_color(chain_head_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _create_chain_link_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_chain_link_note(chain_link_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_chain_link_note(chain_link_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_link_note_set_position(chain_link_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_link_note_get_position(chain_link_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_link_note_set_orientation(chain_link_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_link_note_get_orientation(chain_link_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_link_note_set_color(chain_link_note: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_link_note_get_color(chain_link_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _create_chain_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_add_chain_note(chain_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_remove_chain_note(chain_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_note_set_position(chain_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_note_get_position(chain_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_note_set_orientation(chain_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_note_get_orientation(chain_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_note_set_color(chain_note: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _chain_note_get_color(chain_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _saber_set_color(saber: int32, color: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _saber_get_color(saber: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _get_left_saber(): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _get_right_saber(): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _log(message: cstring) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _drop_reference(ptr: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_from_native(x: float32, y: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_from_native(x: float32, y: float32, z: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_from_native(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_from_native(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_rgb(color: int32, r: float32, g: float32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_rgba(color: int32, r: float32, g: float32, b: float32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_get_attr_x(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_set_attr_x(vec2: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_get_attr_y(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_set_attr_y(vec2: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_get_attr_x(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_set_attr_x(vec3: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_get_attr_y(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_set_attr_y(vec3: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_get_attr_z(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_set_attr_z(vec3: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_attr_x(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_attr_x(vec4: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_attr_y(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_attr_y(vec4: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_attr_z(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_attr_z(vec4: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_attr_w(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_attr_w(vec4: int32, w: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_attr_x(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_attr_x(quat: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_attr_y(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_attr_y(quat: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_attr_z(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_attr_z(quat: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_attr_w(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_attr_w(quat: int32, w: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_attr_r(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_attr_r(color: int32, r: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_attr_g(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_attr_g(color: int32, g: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_attr_b(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_attr_b(color: int32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_attr_a(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_attr_a(color: int32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 global ColorNote = @record{
-    id: int32
+    ptr: int32
+}
+global BombNote = @record{
+    ptr: int32
+}
+global Arc = @record{
+    ptr: int32
+}
+global Wall = @record{
+    ptr: int32
+}
+global ChainHeadNote = @record{
+    ptr: int32
+}
+global ChainLinkNote = @record{
+    ptr: int32
+}
+global ChainNote = @record{
+    ptr: int32
 }
 
-global Beatmap = @record{}
+global Color = @record{
+    ptr: int32
+}
 
-function Beatmap.add_color_note(note: ColorNote)
-    _beatmap_add_color_note(note.id)
+global Log = @record{
+
+}
+
+function Log.info(msg: string)
+    _log(string.format("info%s", msg))
+end
+
+function Log.warn(msg: string)
+    _log(string.format("warn%s", msg))
+end
+
+function Log.critical(msg: string)
+    _log(string.format("error%s", msg))
+end
+
+function Log.debug(msg: string)
+    _log(string.format("debug%s", msg))
 end
 
 global function create_color_note(beat: float32): ColorNote
-    local id: int32 = _create_color_note(beat)
-    local note: ColorNote = { id = id }
+    local ptr: int32 = _create_color_note(beat)
+    local note: ColorNote = { ptr = ptr }
     return note
 end
+
+global function create_bomb_note(beat: float32): BombNote
+    local ptr: int32 = _create_bomb_note(beat)
+    local note: BombNote = { ptr = ptr }
+    return note
+end
+
+global function create_arc(beat: float32): Arc
+    local ptr: int32 = _create_arc(beat)
+    local note: Arc = { ptr = ptr }
+    return note
+end
+
+global function create_wall(beat: float32): Wall
+    local ptr: int32 = _create_wall(beat)
+    local note: Wall = { ptr = ptr }
+    return note
+end
+
+global function create_chain_head_note(beat: float32): ChainHeadNote
+    local ptr: int32 = _create_chain_head_note(beat)
+    local note: ChainHeadNote = { ptr = ptr }
+    return note
+end
+
+global function create_chain_link_note(beat: float32): ChainLinkNote
+    local ptr: int32 = _create_chain_link_note(beat)
+    local note: ChainLinkNote = { ptr = ptr }
+    return note
+end
+
+global function create_chain_note(beat: float32): ChainNote
+    local ptr: int32 = _create_chain_note(beat)
+    local note: ChainNote = { ptr = ptr }
+    return note
+end
+
+global Beatmap = @record{
+}
+function Beatmap.add_chain_note(chain_note: ChainNote)
+    _beatmap_add_chain_note(chain_note.ptr)
+end
+function Beatmap.remove_chain_note(chain_note: ChainNote)
+    _beatmap_remove_chain_note(chain_note.ptr)
+end
+function Beatmap.add_chain_link_note(chain_link_note: ChainLinkNote)
+    _beatmap_add_chain_link_note(chain_link_note.ptr)
+end
+function Beatmap.remove_chain_link_note(chain_link_note: ChainLinkNote)
+    _beatmap_remove_chain_link_note(chain_link_note.ptr)
+end
+function Beatmap.add_chain_head_note(chain_head_note: ChainHeadNote)
+    _beatmap_add_chain_head_note(chain_head_note.ptr)
+end
+function Beatmap.remove_chain_head_note(chain_head_note: ChainHeadNote)
+    _beatmap_remove_chain_head_note(chain_head_note.ptr)
+end
+function Beatmap.add_wall(wall: Wall)
+    _beatmap_add_wall(wall.ptr)
+end
+function Beatmap.remove_wall(wall: Wall)
+    _beatmap_remove_wall(wall.ptr)
+end
+function Beatmap.add_arc(arc: Arc)
+    _beatmap_add_arc(arc.ptr)
+end
+function Beatmap.remove_arc(arc: Arc)
+    _beatmap_remove_arc(arc.ptr)
+end
+function Beatmap.add_bomb_note(bomb_note: BombNote)
+    _beatmap_add_bomb_note(bomb_note.ptr)
+end
+function Beatmap.remove_bomb_note(bomb_note: BombNote)
+    _beatmap_remove_bomb_note(bomb_note.ptr)
+end
+function Beatmap.add_color_note(color_note: ColorNote)
+    _beatmap_add_color_note(color_note.ptr)
+end
+function Beatmap.remove_color_note(color_note: ColorNote)
+    _beatmap_remove_color_note(color_note.ptr)
+end
+
