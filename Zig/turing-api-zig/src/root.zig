@@ -133,7 +133,7 @@ pub const Log = struct {  };
 pub fn info(msg: [*:0]const u8) void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "info", msg);
+        const s = try concat_strings(allocator, "info: ", msg);
         defer allocator.free(s);
         _log(@ptrCast(msg.ptr));
 }
@@ -141,7 +141,7 @@ pub fn info(msg: [*:0]const u8) void {
 pub fn warn(msg: [*:0]const u8) void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "warn", msg);
+        const s = try concat_strings(allocator, "warn: ", msg);
         defer allocator.free(s);
         _log(@ptrCast(msg.ptr));
 }
@@ -149,7 +149,7 @@ pub fn warn(msg: [*:0]const u8) void {
 pub fn critical(msg: [*:0]const u8) void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "error", msg);
+        const s = try concat_strings(allocator, "error: ", msg);
         defer allocator.free(s);
         _log(@ptrCast(msg.ptr));
 }
@@ -157,7 +157,7 @@ pub fn critical(msg: [*:0]const u8) void {
 pub fn debug(msg: [*:0]const u8) void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "debug", msg);
+        const s = try concat_strings(allocator, "debug: ", msg);
         defer allocator.free(s);
         _log(@ptrCast(msg.ptr));
 }

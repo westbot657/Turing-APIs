@@ -144,19 +144,19 @@ global Log = @record{
 }
 
 function Log.info(msg: string)
-    _log(string.format("info%s", msg))
+    _log(string.format("info: %s", msg))
 end
 
 function Log.warn(msg: string)
-    _log(string.format("warn%s", msg))
+    _log(string.format("warn: %s", msg))
 end
 
 function Log.critical(msg: string)
-    _log(string.format("error%s", msg))
+    _log(string.format("error: %s", msg))
 end
 
 function Log.debug(msg: string)
-    _log(string.format("debug%s", msg))
+    _log(string.format("debug: %s", msg))
 end
 
 global function create_color_note(beat: float32): ColorNote

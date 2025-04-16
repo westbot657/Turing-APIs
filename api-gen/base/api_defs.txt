@@ -75,22 +75,22 @@ class Beatmap {
 
 #log($1) {
     #C, #C++ {
-        char* s = concat_strings("$1", msg);
+        char* s = concat_strings("$1: ", msg);
         _log(s);
         free(s);
     }
     #lua {
-        _log(string.format("$1%s", msg))
+        _log(string.format("$1: %s", msg))
     }
     #zig {
         var gpa = std.heap.GeneralPurposeAllocator(.{}){};
         const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "$1", msg);
+        const s = try concat_strings(allocator, "$1: ", msg);
         defer allocator.free(s);
         _log(@ptrCast(msg.ptr));
     }
     #ts {
-        _log(<i32>changetype<usize>(String.UTF8.encode("$1" + msg)));
+        _log(<i32>changetype<usize>(String.UTF8.encode("$1: " + msg)));
     }
 }
 

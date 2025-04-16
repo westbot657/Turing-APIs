@@ -287,19 +287,19 @@ class Log {
     }
 
     public static info(msg: string): void {
-        _log(<i32>changetype<usize>(String.UTF8.encode("info" + msg)));
+        _log(<i32>changetype<usize>(String.UTF8.encode("info: " + msg)));
     }
 
     public static warn(msg: string): void {
-        _log(<i32>changetype<usize>(String.UTF8.encode("warn" + msg)));
+        _log(<i32>changetype<usize>(String.UTF8.encode("warn: " + msg)));
     }
 
     public static critical(msg: string): void {
-        _log(<i32>changetype<usize>(String.UTF8.encode("error" + msg)));
+        _log(<i32>changetype<usize>(String.UTF8.encode("error: " + msg)));
     }
 
     public static debug(msg: string): void {
-        _log(<i32>changetype<usize>(String.UTF8.encode("debug" + msg)));
+        _log(<i32>changetype<usize>(String.UTF8.encode("debug: " + msg)));
     }
 
 }

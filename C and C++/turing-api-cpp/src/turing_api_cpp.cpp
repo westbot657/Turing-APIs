@@ -175,29 +175,25 @@ char* concat_strings(const char* str1, const char* str2) {
 // C++ class Log
 
 void Log::info(char* msg) {
-    char* a = "info";
-    char* s = concat_strings(a, msg);
+    char* s = concat_strings("info: ", msg);
     _log(s);
     free(s);
 }
 
 void Log::warn(char* msg) {
-    char* a = "warn";
-    char* s = concat_strings(a, msg);
+    char* s = concat_strings("warn: ", msg);
     _log(s);
     free(s);
 }
 
 void Log::critical(char* msg) {
-    char* a = "error";
-    char* s = concat_strings(a, msg);
+    char* s = concat_strings("error: ", msg);
     _log(s);
     free(s);
 }
 
 void Log::debug(char* msg) {
-    char* a = "debug";
-    char* s = concat_strings(a, msg);
+    char* s = concat_strings("debug: ", msg);
     _log(s);
     free(s);
 }
