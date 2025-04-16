@@ -26,7 +26,7 @@ export function readCString(ptr: u32): void {
 
 
 class ColorNote {
-    id: i32
+    id: i32;
 
     constructor(id: i32) {
         this.id = id;

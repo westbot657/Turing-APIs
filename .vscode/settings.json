@@ -5,6 +5,8 @@
         "wasm_imports.h": "c",
         "turing_api_lua.h": "c",
         "turing_api_c.h": "c",
-        "string": "cpp"
+        "string": "cpp",
+        "turing_api_c.h.gen.h": "c",
+        "xstring": "cpp"
     }
 }

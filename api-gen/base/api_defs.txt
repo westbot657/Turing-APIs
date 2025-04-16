@@ -24,10 +24,10 @@ class $1 {
 
 class Log {
 
-    static fn info(msg: str) -> void #mdef.str_to_ptr
-    static fn warn(msg: str) -> void #mdef.str_to_ptr
-    static fn error(msg: str) -> void #mdef.str_to_ptr
-    static fn debug(msg: str) -> void #mdef.str_to_ptr
+    static fn info(msg: str) -> void #mdef.log("info")
+    static fn warn(msg: str) -> void #mdef.log("warn")
+    static fn critical(msg: str) -> void #mdef.log("error")
+    static fn debug(msg: str) -> void #mdef.log("debug")
 
 }
 
@@ -50,7 +50,10 @@ class Beatmap {
 #code-defs
 
 #pass_ptr_attr($1) {
-    #C, #C++, #zig, #lua, #ts {
+    #C, #C++, #zig, #ts {
+        ~($1.ptr);
+    }
+    #lua {
         ~($1.ptr)
     }
 }
@@ -70,10 +73,35 @@ class Beatmap {
     }
 }
 
+#log($1) {
+    #C {
+        char* s = concat_strings($1, msg);
+        _log(s);
+        free(s);
+    }
+    #lua {
+        _log($1 .. msg)
+    }
+    #C++ {
+        string s = $1 + msg;
+        _log(s.c_str());
+    }
+    #zig {
+        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+        const allocator = gpa.allocator();
+        const s = try concat_strings(allocator, $1, msg);
+        defer allocator.free(s);
+        _log(@ptrCast(msg.ptr));
+    }
+    #ts {
+        _log(changetype<usize>(String.UTF8.encode($1 + msg)));
+    }
+}
+
 #constructor_beat($1) {
     #C {
         $1 inst;
-        instptr = ~(beat);
+        inst.ptr = ~(beat);
         return inst;
     }
     #C++ {
@@ -100,6 +128,19 @@ class Beatmap {
 
 #C {
 
+    char* concat_strings(const char* str1, const char* str2) {
+        int len1 = strlen(str1);
+        int len2 = strlen(str2);
+        char* result = malloc(len1 + len2 + 1); // +1 for null terminator
+        
+        if (result) {
+            strcpy(result, str1);
+            strcat(result, str2);
+        }
+        
+        return result;
+    }
+
 }
 
 #C++ {
@@ -107,6 +148,14 @@ class Beatmap {
 }
 
 #zig {
+
+    pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []const u8) ![]u8 {
+        const new_len = str1.len + str2.len;
+        const result = try allocator.alloc(u8, new_len);
+        std.mem.copy(u8, result[0..str1.len], str1);
+        std.mem.copy(u8, result[str1.len..], str2);
+        return result;
+    }
 
 }
 
