@@ -163,39 +163,114 @@ char* concat_strings(const char* str1, const char* str2) {
     return result;
 }
 // C class ColorNote
+Color ColorNote_get_color(ColorNote* self) {
+    Color inst;
+    inst.ptr = _color_note_get_color(self->ptr);
+    return inst;
+}
 // C class BombNote
+Color BombNote_get_color(BombNote* self) {
+    Color inst;
+    inst.ptr = _bomb_note_get_color(self->ptr);
+    return inst;
+}
 // C class Arc
+Color Arc_get_color(Arc* self) {
+    Color inst;
+    inst.ptr = _arc_get_color(self->ptr);
+    return inst;
+}
 // C class Wall
+Color Wall_get_color(Wall* self) {
+    Color inst;
+    inst.ptr = _wall_get_color(self->ptr);
+    return inst;
+}
 // C class ChainHeadNote
+Color ChainHeadNote_get_color(ChainHeadNote* self) {
+    Color inst;
+    inst.ptr = _chain_head_note_get_color(self->ptr);
+    return inst;
+}
 // C class ChainLinkNote
+Color ChainLinkNote_get_color(ChainLinkNote* self) {
+    Color inst;
+    inst.ptr = _chain_link_note_get_color(self->ptr);
+    return inst;
+}
 // C class ChainNote
+Color ChainNote_get_color(ChainNote* self) {
+    Color inst;
+    inst.ptr = _chain_note_get_color(self->ptr);
+    return inst;
+}
 
 // C class Color
+
+float Color_get_a(Color* self) {
+    return _color_get_a(self->ptr);
+}
+
+void Color_set_a(Color* self, float a) {
+    _color_set_a(self->ptr, a);
+}
+
+float Color_get_b(Color* self) {
+    return _color_get_b(self->ptr);
+}
+
+void Color_set_b(Color* self, float b) {
+    _color_set_b(self->ptr, b);
+}
+
+float Color_get_g(Color* self) {
+    return _color_get_g(self->ptr);
+}
+
+void Color_set_g(Color* self, float g) {
+    _color_set_g(self->ptr, g);
+}
+
+float Color_get_r(Color* self) {
+    return _color_get_r(self->ptr);
+}
+
+void Color_set_r(Color* self, float r) {
+    _color_set_r(self->ptr, r);
+}
+
+void Color_set_rgb(Color* self, float r, float g, float b) {
+    _color_set_rgb(self->ptr, r, g, b);
+}
+
+void Color_set_rgba(Color* self, float r, float g, float b, float a) {
+    _color_set_rgba(self->ptr, r, g, b, a);
+}
 
 // C class Log
 
 void Log_info(const char* msg) {
     char* s = concat_strings("info: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 void Log_warn(const char* msg) {
     char* s = concat_strings("warn: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 void Log_critical(const char* msg) {
     char* s = concat_strings("error: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 void Log_debug(const char* msg) {
     char* s = concat_strings("debug: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 ColorNote create_color_note(float beat) {

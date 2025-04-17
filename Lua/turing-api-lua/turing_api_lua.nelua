@@ -79,65 +79,140 @@ local function _vec4_from_native(x: float32, y: float32, z: float32, w: float32)
 local function _quat_from_native(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_rgb(color: int32, r: float32, g: float32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_rgba(color: int32, r: float32, g: float32, b: float32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec2_get_attr_x(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec2_set_attr_x(vec2: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec2_get_attr_y(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec2_set_attr_y(vec2: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_get_attr_x(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_set_attr_x(vec3: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_get_attr_y(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_set_attr_y(vec3: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_get_attr_z(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_set_attr_z(vec3: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_get_attr_x(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_set_attr_x(vec4: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_get_attr_y(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_set_attr_y(vec4: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_get_attr_z(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_set_attr_z(vec4: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_get_attr_w(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_set_attr_w(vec4: int32, w: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_get_attr_x(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_set_attr_x(quat: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_get_attr_y(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_set_attr_y(quat: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_get_attr_z(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_set_attr_z(quat: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_get_attr_w(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_set_attr_w(quat: int32, w: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_get_attr_r(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_set_attr_r(color: int32, r: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_get_attr_g(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_set_attr_g(color: int32, g: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_get_attr_b(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_set_attr_b(color: int32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_get_attr_a(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _color_set_attr_a(color: int32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_get_x(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_set_x(vec2: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_get_y(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_set_y(vec2: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_get_x(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_set_x(vec3: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_get_y(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_set_y(vec3: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_get_z(vec3: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_set_z(vec3: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_x(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_x(vec4: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_y(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_y(vec4: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_z(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_z(vec4: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_get_w(vec4: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_set_w(vec4: int32, w: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_x(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_x(quat: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_y(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_y(quat: int32, y: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_z(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_z(quat: int32, z: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_get_w(quat: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_set_w(quat: int32, w: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_r(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_r(color: int32, r: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_g(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_g(color: int32, g: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_b(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_b(color: int32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_get_a(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _color_set_a(color: int32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 global ColorNote = @record{
     ptr: int32
 }
+function ColorNote.get_color(self: ColorNote): Color
+    local ptr: int32 = _color_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 global BombNote = @record{
     ptr: int32
 }
+function BombNote.get_color(self: BombNote): Color
+    local ptr: int32 = _bomb_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 global Arc = @record{
     ptr: int32
 }
+function Arc.get_color(self: Arc): Color
+    local ptr: int32 = _arc_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 global Wall = @record{
     ptr: int32
 }
+function Wall.get_color(self: Wall): Color
+    local ptr: int32 = _wall_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 global ChainHeadNote = @record{
     ptr: int32
 }
+function ChainHeadNote.get_color(self: ChainHeadNote): Color
+    local ptr: int32 = _chain_head_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 global ChainLinkNote = @record{
     ptr: int32
 }
+function ChainLinkNote.get_color(self: ChainLinkNote): Color
+    local ptr: int32 = _chain_link_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 global ChainNote = @record{
     ptr: int32
 }
+function ChainNote.get_color(self: ChainNote): Color
+    local ptr: int32 = _chain_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
 
 global Color = @record{
     ptr: int32
 }
+
+function Color.get_a(self: Color): float32
+    return _color_get_a(self.ptr)
+end
+
+function Color.set_a(self: Color, a: float32)
+    _color_set_a(self.ptr, a)
+end
+
+function Color.get_b(self: Color): float32
+    return _color_get_b(self.ptr)
+end
+
+function Color.set_b(self: Color, b: float32)
+    _color_set_b(self.ptr, b)
+end
+
+function Color.get_g(self: Color): float32
+    return _color_get_g(self.ptr)
+end
+
+function Color.set_g(self: Color, g: float32)
+    _color_set_g(self.ptr, g)
+end
+
+function Color.get_r(self: Color): float32
+    return _color_get_r(self.ptr)
+end
+
+function Color.set_r(self: Color, r: float32)
+    _color_set_r(self.ptr, r)
+end
+
+function Color.set_rgb(self: Color, r: float32, g: float32, b: float32)
+    _color_set_rgb(self.ptr, r, g, b)
+end
+
+function Color.set_rgba(self: Color, r: float32, g: float32, b: float32, a: float32)
+    _color_set_rgba(self.ptr, r, g, b, a)
+end
 
 global Log = @record{
 

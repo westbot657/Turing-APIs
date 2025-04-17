@@ -163,39 +163,114 @@ char* concat_strings(const char* str1, const char* str2) {
     return result;
 }
 // C++ class ColorNote
+Color ColorNote::get_color(ColorNote* self) {
+    Color inst = Color {};
+    inst.ptr = _color_note_get_color(self->ptr);
+    return inst;
+}
 // C++ class BombNote
+Color BombNote::get_color(BombNote* self) {
+    Color inst = Color {};
+    inst.ptr = _bomb_note_get_color(self->ptr);
+    return inst;
+}
 // C++ class Arc
+Color Arc::get_color(Arc* self) {
+    Color inst = Color {};
+    inst.ptr = _arc_get_color(self->ptr);
+    return inst;
+}
 // C++ class Wall
+Color Wall::get_color(Wall* self) {
+    Color inst = Color {};
+    inst.ptr = _wall_get_color(self->ptr);
+    return inst;
+}
 // C++ class ChainHeadNote
+Color ChainHeadNote::get_color(ChainHeadNote* self) {
+    Color inst = Color {};
+    inst.ptr = _chain_head_note_get_color(self->ptr);
+    return inst;
+}
 // C++ class ChainLinkNote
+Color ChainLinkNote::get_color(ChainLinkNote* self) {
+    Color inst = Color {};
+    inst.ptr = _chain_link_note_get_color(self->ptr);
+    return inst;
+}
 // C++ class ChainNote
+Color ChainNote::get_color(ChainNote* self) {
+    Color inst = Color {};
+    inst.ptr = _chain_note_get_color(self->ptr);
+    return inst;
+}
 
 // C++ class Color
+
+float Color::get_a(Color* self) {
+    return _color_get_a(self->ptr);
+}
+
+void Color::set_a(Color* self, float a) {
+    _color_set_a(self->ptr, a);
+}
+
+float Color::get_b(Color* self) {
+    return _color_get_b(self->ptr);
+}
+
+void Color::set_b(Color* self, float b) {
+    _color_set_b(self->ptr, b);
+}
+
+float Color::get_g(Color* self) {
+    return _color_get_g(self->ptr);
+}
+
+void Color::set_g(Color* self, float g) {
+    _color_set_g(self->ptr, g);
+}
+
+float Color::get_r(Color* self) {
+    return _color_get_r(self->ptr);
+}
+
+void Color::set_r(Color* self, float r) {
+    _color_set_r(self->ptr, r);
+}
+
+void Color::set_rgb(Color* self, float r, float g, float b) {
+    _color_set_rgb(self->ptr, r, g, b);
+}
+
+void Color::set_rgba(Color* self, float r, float g, float b, float a) {
+    _color_set_rgba(self->ptr, r, g, b, a);
+}
 
 // C++ class Log
 
 void Log::info(char* msg) {
     char* s = concat_strings("info: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 void Log::warn(char* msg) {
     char* s = concat_strings("warn: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 void Log::critical(char* msg) {
     char* s = concat_strings("error: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 void Log::debug(char* msg) {
     char* s = concat_strings("debug: ", msg);
-    _log(s);
-    free(s);
+        _log(s);
+        free(s);
 }
 
 ColorNote create_color_note(float beat) {

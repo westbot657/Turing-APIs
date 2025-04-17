@@ -111,7 +111,7 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "bool": return "boolean"
                 case "str": return "string"
         
-    if tp not in ["void", "ColorNote", "BombNote", "Arc", "Wall", "ChainHeadNote", "ChainLinkNote", "ChainNote"]:
+    if tp not in ["void", "ColorNote", "BombNote", "Arc", "Wall", "ChainHeadNote", "ChainLinkNote", "ChainNote", "Color"]:
         print(f"\n\n\n\033[38;2;255;20;20mUnprocessed type: {tp} ({lang})\033[0m\n\n\n")
     return tp
 
@@ -229,10 +229,12 @@ class StaticMethod(Method):
         body = body.replace("\n", "\n    ")
         match lang:
             case "C":
+                body = body.replace("\n", "\n    ")
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args} {{\n    {body}\n}}"
             case "C.h":
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
             case "C++":
+                body = body.replace("\n", "\n    ")
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body}\n}}"
             case "C++.h":
                 return f"static {convert_type(self.ret_type, lang)} {self.name}{args};"
@@ -266,11 +268,13 @@ class InstanceMethod(Method):
         # print(f"\n\n\033[38;2;20;200;20mbody from mref '{self.mref}':\033[0m\n{body}\n\n")
         match lang:
             case "C":
-                return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args} {{\n{body}\n}}"
+                body = body.replace("\n", "\n    ")
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args} {{\n    {body}\n}}"
             case "C.h":
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
             case "C++":
-                return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n{body}\n}}"
+                body = body.replace("\n", "\n    ")
+                return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body}\n}}"
             case "C++.h":
                 return f"static {convert_type(self.ret_type, lang)} {self.name}{args};"
             case "wasm.h":
@@ -826,28 +830,39 @@ class GameObjectConstruct(Construct):
 
     def gen(self, fstruct:FileConstructor, mdef, classlike: Classlike, fns:dict[str, Fn]):
         
+        for name, fn in fns.items():
+            for m in classlike.instance_methods:
+                if m.name == name:
+                    m.wasm_name = fn.name
+                    
+            for m in classlike.static_methods:
+                if m.name == name:
+                    m.wasm_name = fn.name
+        
         return classlike.generate(fstruct.lang, mdef)
         
-        # match fstruct.lang:
-        #     case "C": ...
-        #     case "C.h": ...
-        #     case "C++": ...
-        #     case "C++.h": ...
-        #     case "wasm.h": ...
-        #     case "zig": ...
-        #     case "ts": ...
-        #     case "lua": ...
 
 @Construct.c
 class ExtraClassesConstruct(Construct):
     def __init__(self):
         super().__init__("ExtraClasses")
+        self.color_methods: dict[str, Fn] = {}
         self.include = [
             (0, "Color"),
             (0, "Log")
         ]
     
+    def attach(self, lang:str, mdef:IMdef, fns:list[Fn]):
+        for fn in fns:
+            if (m := re.match(r"_color_([gs]et_.*)", fn.name)) is not None:
+                m: re.Match
+                self.color_methods.update({m.groups()[0]: fn})
+    
     def generate(self, fstruct, mdef:IMdef):
+        
+        color: Classlike = mdef.get_class("Color")
+        for m in color.instance_methods:
+            m.wasm_name = self.color_methods.get(m.name, Fn("undefined", [], "")).name
         
         for (o, i) in self.include:
             t: Classlike = mdef.class_likes.get(i, None)
@@ -1041,13 +1056,13 @@ class Mdef(IMdef):
                         self.cls_builder.add_s_method(StaticMethod(f_name, f_args, ret, mref))
                         continue
 
-                    elif (m := re.match(r" *fn *([a-zA-Z_][a-zA-Z0-9_]*) *\(((?:& *(?:mut *)?)? *self),? *((?:[a-zA-Z_][a-zA-Z0-9_]* *: *[a-zA-Z_][a-zA-Z0-9_]*,? *)+)\) *-> *([a-zA-Z_][a-zA-Z0-9_]*) *(.*)", line)) is not None:
+                    elif (m := re.match(r" *fn *([a-zA-Z_][a-zA-Z0-9_]*) *\(((?:& *(?:mut *)?)? *self),? *((?:[a-zA-Z_][a-zA-Z0-9_]* *: *[a-zA-Z_][a-zA-Z0-9_]*,? *)*)\) *-> *([a-zA-Z_][a-zA-Z0-9_]*) *(.*)", line)) is not None:
                         m: re.Match
                         g: tuple[str] = m.groups()
                         f_name = g[0]
                         self_ownership_rw = g[1].replace(" ", "")
                         self_param = Arg("self", self.cls_builder.name, (Ownership.Owned if self_ownership_rw == "self" else Ownership.MutRef if self_ownership_rw == "&mutself" else Ownership.Ref))
-                        f_args = [Arg.from_list(re.split(r" *: *", ar)) for ar in re.split(r" *, *", g[2].strip().strip(",").strip())]
+                        f_args = [Arg.from_list(re.split(r" *: *", ar)) for ar in re.split(r" *, *", g[2].strip().strip(",").strip()) if ":" in ar]
                         ret = g[3]
                         mref = g[4]
                         

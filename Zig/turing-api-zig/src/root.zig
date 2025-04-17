@@ -79,40 +79,40 @@ extern "env" fn _vec4_from_native(x: f32, y: f32, z: f32, w: f32) i32;
 extern "env" fn _quat_from_native(x: f32, y: f32, z: f32, w: f32) i32;
 extern "env" fn _color_set_rgb(color: i32, r: f32, g: f32, b: f32) void;
 extern "env" fn _color_set_rgba(color: i32, r: f32, g: f32, b: f32, a: f32) void;
-extern "env" fn _vec2_get_attr_x(vec2: i32) f32;
-extern "env" fn _vec2_set_attr_x(vec2: i32, x: f32) void;
-extern "env" fn _vec2_get_attr_y(vec2: i32) f32;
-extern "env" fn _vec2_set_attr_y(vec2: i32, y: f32) void;
-extern "env" fn _vec3_get_attr_x(vec3: i32) f32;
-extern "env" fn _vec3_set_attr_x(vec3: i32, x: f32) void;
-extern "env" fn _vec3_get_attr_y(vec3: i32) f32;
-extern "env" fn _vec3_set_attr_y(vec3: i32, y: f32) void;
-extern "env" fn _vec3_get_attr_z(vec3: i32) f32;
-extern "env" fn _vec3_set_attr_z(vec3: i32, z: f32) void;
-extern "env" fn _vec4_get_attr_x(vec4: i32) f32;
-extern "env" fn _vec4_set_attr_x(vec4: i32, x: f32) void;
-extern "env" fn _vec4_get_attr_y(vec4: i32) f32;
-extern "env" fn _vec4_set_attr_y(vec4: i32, y: f32) void;
-extern "env" fn _vec4_get_attr_z(vec4: i32) f32;
-extern "env" fn _vec4_set_attr_z(vec4: i32, z: f32) void;
-extern "env" fn _vec4_get_attr_w(vec4: i32) f32;
-extern "env" fn _vec4_set_attr_w(vec4: i32, w: f32) void;
-extern "env" fn _quat_get_attr_x(quat: i32) f32;
-extern "env" fn _quat_set_attr_x(quat: i32, x: f32) void;
-extern "env" fn _quat_get_attr_y(quat: i32) f32;
-extern "env" fn _quat_set_attr_y(quat: i32, y: f32) void;
-extern "env" fn _quat_get_attr_z(quat: i32) f32;
-extern "env" fn _quat_set_attr_z(quat: i32, z: f32) void;
-extern "env" fn _quat_get_attr_w(quat: i32) f32;
-extern "env" fn _quat_set_attr_w(quat: i32, w: f32) void;
-extern "env" fn _color_get_attr_r(color: i32) f32;
-extern "env" fn _color_set_attr_r(color: i32, r: f32) void;
-extern "env" fn _color_get_attr_g(color: i32) f32;
-extern "env" fn _color_set_attr_g(color: i32, g: f32) void;
-extern "env" fn _color_get_attr_b(color: i32) f32;
-extern "env" fn _color_set_attr_b(color: i32, b: f32) void;
-extern "env" fn _color_get_attr_a(color: i32) f32;
-extern "env" fn _color_set_attr_a(color: i32, a: f32) void;pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []const u8) ![]u8 {
+extern "env" fn _vec2_get_x(vec2: i32) f32;
+extern "env" fn _vec2_set_x(vec2: i32, x: f32) void;
+extern "env" fn _vec2_get_y(vec2: i32) f32;
+extern "env" fn _vec2_set_y(vec2: i32, y: f32) void;
+extern "env" fn _vec3_get_x(vec3: i32) f32;
+extern "env" fn _vec3_set_x(vec3: i32, x: f32) void;
+extern "env" fn _vec3_get_y(vec3: i32) f32;
+extern "env" fn _vec3_set_y(vec3: i32, y: f32) void;
+extern "env" fn _vec3_get_z(vec3: i32) f32;
+extern "env" fn _vec3_set_z(vec3: i32, z: f32) void;
+extern "env" fn _vec4_get_x(vec4: i32) f32;
+extern "env" fn _vec4_set_x(vec4: i32, x: f32) void;
+extern "env" fn _vec4_get_y(vec4: i32) f32;
+extern "env" fn _vec4_set_y(vec4: i32, y: f32) void;
+extern "env" fn _vec4_get_z(vec4: i32) f32;
+extern "env" fn _vec4_set_z(vec4: i32, z: f32) void;
+extern "env" fn _vec4_get_w(vec4: i32) f32;
+extern "env" fn _vec4_set_w(vec4: i32, w: f32) void;
+extern "env" fn _quat_get_x(quat: i32) f32;
+extern "env" fn _quat_set_x(quat: i32, x: f32) void;
+extern "env" fn _quat_get_y(quat: i32) f32;
+extern "env" fn _quat_set_y(quat: i32, y: f32) void;
+extern "env" fn _quat_get_z(quat: i32) f32;
+extern "env" fn _quat_set_z(quat: i32, z: f32) void;
+extern "env" fn _quat_get_w(quat: i32) f32;
+extern "env" fn _quat_set_w(quat: i32, w: f32) void;
+extern "env" fn _color_get_r(color: i32) f32;
+extern "env" fn _color_set_r(color: i32, r: f32) void;
+extern "env" fn _color_get_g(color: i32) f32;
+extern "env" fn _color_set_g(color: i32, g: f32) void;
+extern "env" fn _color_get_b(color: i32) f32;
+extern "env" fn _color_set_b(color: i32, b: f32) void;
+extern "env" fn _color_get_a(color: i32) f32;
+extern "env" fn _color_set_a(color: i32, a: f32) void;pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []const u8) ![]u8 {
     const new_len = str1.len + str2.len;
     const result = try allocator.alloc(u8, new_len);
     std.mem.copy(u8, result[0..str1.len], str1);
@@ -120,14 +120,74 @@ extern "env" fn _color_set_attr_a(color: i32, a: f32) void;pub fn concat_strings
     return result;
 }
 pub const ColorNote = struct { ptr: i32 };
+pub fn get_color(self: ColorNote) Color {
+    return .{ .ptr = _color_note_get_color(self.ptr) };
+}
 pub const BombNote = struct { ptr: i32 };
+pub fn get_color(self: BombNote) Color {
+    return .{ .ptr = _bomb_note_get_color(self.ptr) };
+}
 pub const Arc = struct { ptr: i32 };
+pub fn get_color(self: Arc) Color {
+    return .{ .ptr = _arc_get_color(self.ptr) };
+}
 pub const Wall = struct { ptr: i32 };
+pub fn get_color(self: Wall) Color {
+    return .{ .ptr = _wall_get_color(self.ptr) };
+}
 pub const ChainHeadNote = struct { ptr: i32 };
+pub fn get_color(self: ChainHeadNote) Color {
+    return .{ .ptr = _chain_head_note_get_color(self.ptr) };
+}
 pub const ChainLinkNote = struct { ptr: i32 };
+pub fn get_color(self: ChainLinkNote) Color {
+    return .{ .ptr = _chain_link_note_get_color(self.ptr) };
+}
 pub const ChainNote = struct { ptr: i32 };
+pub fn get_color(self: ChainNote) Color {
+    return .{ .ptr = _chain_note_get_color(self.ptr) };
+}
 
 pub const Color = struct { ptr: i32 };
+pub fn get_a(self: Color) f32 {
+    return _color_get_a(self.ptr);
+}
+
+pub fn set_a(self: Color, a: f32) void {
+    _color_set_a(self.ptr, a);
+}
+
+pub fn get_b(self: Color) f32 {
+    return _color_get_b(self.ptr);
+}
+
+pub fn set_b(self: Color, b: f32) void {
+    _color_set_b(self.ptr, b);
+}
+
+pub fn get_g(self: Color) f32 {
+    return _color_get_g(self.ptr);
+}
+
+pub fn set_g(self: Color, g: f32) void {
+    _color_set_g(self.ptr, g);
+}
+
+pub fn get_r(self: Color) f32 {
+    return _color_get_r(self.ptr);
+}
+
+pub fn set_r(self: Color, r: f32) void {
+    _color_set_r(self.ptr, r);
+}
+
+pub fn set_rgb(self: Color, r: f32, g: f32, b: f32) void {
+    _color_set_rgb(self.ptr, r, g, b);
+}
+
+pub fn set_rgba(self: Color, r: f32, g: f32, b: f32, a: f32) void {
+    _color_set_rgba(self.ptr, r, g, b, a);
+}
 
 pub const Log = struct {  };
 pub fn info(msg: [*:0]const u8) void {

@@ -12,42 +12,69 @@
 class ColorNote {
     public:
         int ptr;
+        static Color get_color(ColorNote* self);
 };
 // C++.h class 'BombNote'
 class BombNote {
     public:
         int ptr;
+        static Color get_color(BombNote* self);
 };
 // C++.h class 'Arc'
 class Arc {
     public:
         int ptr;
+        static Color get_color(Arc* self);
 };
 // C++.h class 'Wall'
 class Wall {
     public:
         int ptr;
+        static Color get_color(Wall* self);
 };
 // C++.h class 'ChainHeadNote'
 class ChainHeadNote {
     public:
         int ptr;
+        static Color get_color(ChainHeadNote* self);
 };
 // C++.h class 'ChainLinkNote'
 class ChainLinkNote {
     public:
         int ptr;
+        static Color get_color(ChainLinkNote* self);
 };
 // C++.h class 'ChainNote'
 class ChainNote {
     public:
         int ptr;
+        static Color get_color(ChainNote* self);
 };
 
 // C++.h class 'Color'
 class Color {
     public:
         int ptr;
+        static float get_a(Color* self);
+
+        static void set_a(Color* self, float a);
+
+        static float get_b(Color* self);
+
+        static void set_b(Color* self, float b);
+
+        static float get_g(Color* self);
+
+        static void set_g(Color* self, float g);
+
+        static float get_r(Color* self);
+
+        static void set_r(Color* self, float r);
+
+        static void set_rgb(Color* self, float r, float g, float b);
+
+        static void set_rgba(Color* self, float r, float g, float b, float a);
+
 };
 
 // C++.h class 'Log'

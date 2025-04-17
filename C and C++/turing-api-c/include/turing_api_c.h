@@ -11,28 +11,55 @@
 typedef struct {
     int ptr;
 } ColorNote;
+Color ColorNote_get_color(ColorNote* self);
 typedef struct {
     int ptr;
 } BombNote;
+Color BombNote_get_color(BombNote* self);
 typedef struct {
     int ptr;
 } Arc;
+Color Arc_get_color(Arc* self);
 typedef struct {
     int ptr;
 } Wall;
+Color Wall_get_color(Wall* self);
 typedef struct {
     int ptr;
 } ChainHeadNote;
+Color ChainHeadNote_get_color(ChainHeadNote* self);
 typedef struct {
     int ptr;
 } ChainLinkNote;
+Color ChainLinkNote_get_color(ChainLinkNote* self);
 typedef struct {
     int ptr;
 } ChainNote;
+Color ChainNote_get_color(ChainNote* self);
 
 typedef struct {
     int ptr;
 } Color;
+
+float Color_get_a(Color* self);
+
+void Color_set_a(Color* self, float a);
+
+float Color_get_b(Color* self);
+
+void Color_set_b(Color* self, float b);
+
+float Color_get_g(Color* self);
+
+void Color_set_g(Color* self, float g);
+
+float Color_get_r(Color* self);
+
+void Color_set_r(Color* self, float r);
+
+void Color_set_rgb(Color* self, float r, float g, float b);
+
+void Color_set_rgba(Color* self, float r, float g, float b, float a);
 
 void Log_info(const char* msg);
 

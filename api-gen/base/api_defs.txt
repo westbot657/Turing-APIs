@@ -7,7 +7,16 @@
 class Color {
     ptr: i32
 
-    fn get_r(&self) -> f32 #mdef.pass_ptr_attr(self)
+    #macro $1
+    #pattern # r # g # b # a
+    #macro apply
+    fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self, $1: f32) -> void #mdef.pass_ptr_ref_ret_attr(self, $1)
+    #macro end
+
+    fn set_rgb(&self, r: f32, g: f32, b: f32) -> void #mdef.call_self_attr_3_ref(self, ptr, r, g, b)
+    fn set_rgba(&self, r: f32, g: f32, b: f32, a: f32) -> void #mdef.call_self_attr_4_ref(self, ptr, r, g, b, a)
+
 
 }
 
@@ -17,7 +26,7 @@ class Color {
 class $1 {
     ptr: i32
 
-    fn get_color(&self) -> Color #mdef.pass_ptr_attr(self)
+    fn get_color(&self) -> Color #mdef.getter_args_1(Color, self)
 
 }
 #macro end
@@ -37,8 +46,8 @@ class Beatmap {
     #pattern # color_note ColorNote # bomb_note BombNote # arc Arc # wall Wall # chain_head_note ChainHeadNote # chain_link_note ChainLinkNote # chain_note ChainNote
     #macro apply
 
-    static fn add_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
-    static fn remove_$1($1: $2) -> void #mdef.pass_ptr_attr($1)
+    static fn add_$1($1: $2) -> void #mdef.pass_ptr_attr_owned($1)
+    static fn remove_$1($1: $2) -> void #mdef.pass_ptr_attr_owned($1)
 
     #macro end
 
@@ -49,12 +58,36 @@ class Beatmap {
 
 #code-defs
 
-#pass_ptr_attr($1) {
+#pass_ptr_attr_owned($1) {
     #C, #C++, #zig, #ts {
         ~($1.ptr);
     }
     #lua {
         ~($1.ptr)
+    }
+}
+
+#pass_ptr_attr_ref($1) {
+    #zig, #ts {
+        return ~($1.ptr);
+    }
+    #C, #C++ {
+        return ~($1->ptr);
+    }
+    #lua {
+        return ~($1.ptr)
+    }
+}
+
+#pass_ptr_ref_ret_attr($1,$2) {
+    #zig, #ts {
+        ~($1.ptr, $2);
+    }
+    #C, #C++ {
+        ~($1->ptr, $2);
+    }
+    #lua {
+        ~($1.ptr, $2)
     }
 }
 
@@ -116,6 +149,55 @@ class Beatmap {
     #ts {
         let ptr = ~(beat);
         return new $1(ptr);
+    }
+}
+
+#getter_args_1($type,$1) {
+    #C {
+        $type inst;
+        inst.ptr = ~($1->ptr);
+        return inst;
+    }
+    #C++ {
+        $type inst = $type {};
+        inst.ptr = ~($1->ptr);
+        return inst;
+    }
+    #zig {
+        return .{ .ptr = ~($1.ptr) };
+    }
+    #lua {
+        local ptr: int32 = ~($1.ptr)
+        local note: $type = { ptr = ptr }
+        return note
+    }
+    #ts {
+        let ptr = ~($1.ptr);
+        return new $type(ptr);
+    }
+}
+
+#call_self_attr_3_ref($self,$attr,$1,$2,$3) {
+    #zig, #ts {
+        ~($self.$attr, $1, $2, $3);
+    }
+    #lua {
+        ~($self.$attr, $1, $2, $3)
+    }
+    #C, #C++ {
+        ~($self->$attr, $1, $2, $3);
+    }
+}
+
+#call_self_attr_4_ref($self,$attr,$1,$2,$3,$4) {
+    #zig, #ts {
+        ~($self.$attr, $1, $2, $3, $4);
+    }
+    #lua {
+        ~($self.$attr, $1, $2, $3, $4)
+    }
+    #C, #C++ {
+        ~($self->$attr, $1, $2, $3, $4);
     }
 }
 

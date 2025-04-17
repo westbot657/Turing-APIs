@@ -364,159 +364,159 @@ pub struct Color {
     _inner: _Color,
 }
 extern "C" {
-    fn _vec2_get_attr_x(vec2: _Vec2) -> f32;
-    fn _vec2_set_attr_x(vec2: _Vec2, x: f32);
-    fn _vec2_get_attr_y(vec2: _Vec2) -> f32;
-    fn _vec2_set_attr_y(vec2: _Vec2, y: f32);
+    fn _vec2_get_x(vec2: _Vec2) -> f32;
+    fn _vec2_set_x(vec2: _Vec2, x: f32);
+    fn _vec2_get_y(vec2: _Vec2) -> f32;
+    fn _vec2_set_y(vec2: _Vec2, y: f32);
 }
 impl Vec2 {
     pub fn get_x(&self) -> f32 {
-        unsafe { _vec2_get_attr_x(self._inner) }
+        unsafe { _vec2_get_x(self._inner) }
     }
     pub fn set_x(&self, x: f32) {
-        unsafe { _vec2_set_attr_x(self._inner, x) }
+        unsafe { _vec2_set_x(self._inner, x) }
     }
     pub fn get_y(&self) -> f32 {
-        unsafe { _vec2_get_attr_y(self._inner) }
+        unsafe { _vec2_get_y(self._inner) }
     }
     pub fn set_y(&self, y: f32) {
-        unsafe { _vec2_set_attr_y(self._inner, y) }
+        unsafe { _vec2_set_y(self._inner, y) }
     }
 }
 extern "C" {
-    fn _vec3_get_attr_x(vec3: _Vec3) -> f32;
-    fn _vec3_set_attr_x(vec3: _Vec3, x: f32);
-    fn _vec3_get_attr_y(vec3: _Vec3) -> f32;
-    fn _vec3_set_attr_y(vec3: _Vec3, y: f32);
-    fn _vec3_get_attr_z(vec3: _Vec3) -> f32;
-    fn _vec3_set_attr_z(vec3: _Vec3, z: f32);
+    fn _vec3_get_x(vec3: _Vec3) -> f32;
+    fn _vec3_set_x(vec3: _Vec3, x: f32);
+    fn _vec3_get_y(vec3: _Vec3) -> f32;
+    fn _vec3_set_y(vec3: _Vec3, y: f32);
+    fn _vec3_get_z(vec3: _Vec3) -> f32;
+    fn _vec3_set_z(vec3: _Vec3, z: f32);
 }
 impl Vec3 {
     pub fn get_x(&self) -> f32 {
-        unsafe { _vec3_get_attr_x(self._inner) }
+        unsafe { _vec3_get_x(self._inner) }
     }
     pub fn set_x(&self, x: f32) {
-        unsafe { _vec3_set_attr_x(self._inner, x) }
+        unsafe { _vec3_set_x(self._inner, x) }
     }
     pub fn get_y(&self) -> f32 {
-        unsafe { _vec3_get_attr_y(self._inner) }
+        unsafe { _vec3_get_y(self._inner) }
     }
     pub fn set_y(&self, y: f32) {
-        unsafe { _vec3_set_attr_y(self._inner, y) }
+        unsafe { _vec3_set_y(self._inner, y) }
     }
     pub fn get_z(&self) -> f32 {
-        unsafe { _vec3_get_attr_z(self._inner) }
+        unsafe { _vec3_get_z(self._inner) }
     }
     pub fn set_z(&self, z: f32) {
-        unsafe { _vec3_set_attr_z(self._inner, z) }
+        unsafe { _vec3_set_z(self._inner, z) }
     }
 }
 extern "C" {
-    fn _vec4_get_attr_x(vec4: _Vec4) -> f32;
-    fn _vec4_set_attr_x(vec4: _Vec4, x: f32);
-    fn _vec4_get_attr_y(vec4: _Vec4) -> f32;
-    fn _vec4_set_attr_y(vec4: _Vec4, y: f32);
-    fn _vec4_get_attr_z(vec4: _Vec4) -> f32;
-    fn _vec4_set_attr_z(vec4: _Vec4, z: f32);
-    fn _vec4_get_attr_w(vec4: _Vec4) -> f32;
-    fn _vec4_set_attr_w(vec4: _Vec4, w: f32);
+    fn _vec4_get_x(vec4: _Vec4) -> f32;
+    fn _vec4_set_x(vec4: _Vec4, x: f32);
+    fn _vec4_get_y(vec4: _Vec4) -> f32;
+    fn _vec4_set_y(vec4: _Vec4, y: f32);
+    fn _vec4_get_z(vec4: _Vec4) -> f32;
+    fn _vec4_set_z(vec4: _Vec4, z: f32);
+    fn _vec4_get_w(vec4: _Vec4) -> f32;
+    fn _vec4_set_w(vec4: _Vec4, w: f32);
 }
 impl Vec4 {
     pub fn get_x(&self) -> f32 {
-        unsafe { _vec4_get_attr_x(self._inner) }
+        unsafe { _vec4_get_x(self._inner) }
     }
     pub fn set_x(&self, x: f32) {
-        unsafe { _vec4_set_attr_x(self._inner, x) }
+        unsafe { _vec4_set_x(self._inner, x) }
     }
     pub fn get_y(&self) -> f32 {
-        unsafe { _vec4_get_attr_y(self._inner) }
+        unsafe { _vec4_get_y(self._inner) }
     }
     pub fn set_y(&self, y: f32) {
-        unsafe { _vec4_set_attr_y(self._inner, y) }
+        unsafe { _vec4_set_y(self._inner, y) }
     }
     pub fn get_z(&self) -> f32 {
-        unsafe { _vec4_get_attr_z(self._inner) }
+        unsafe { _vec4_get_z(self._inner) }
     }
     pub fn set_z(&self, z: f32) {
-        unsafe { _vec4_set_attr_z(self._inner, z) }
+        unsafe { _vec4_set_z(self._inner, z) }
     }
     pub fn get_w(&self) -> f32 {
-        unsafe { _vec4_get_attr_w(self._inner) }
+        unsafe { _vec4_get_w(self._inner) }
     }
     pub fn set_w(&self, w: f32) {
-        unsafe { _vec4_set_attr_w(self._inner, w) }
+        unsafe { _vec4_set_w(self._inner, w) }
     }
 }
 extern "C" {
-    fn _quat_get_attr_x(quat: _Quat) -> f32;
-    fn _quat_set_attr_x(quat: _Quat, x: f32);
-    fn _quat_get_attr_y(quat: _Quat) -> f32;
-    fn _quat_set_attr_y(quat: _Quat, y: f32);
-    fn _quat_get_attr_z(quat: _Quat) -> f32;
-    fn _quat_set_attr_z(quat: _Quat, z: f32);
-    fn _quat_get_attr_w(quat: _Quat) -> f32;
-    fn _quat_set_attr_w(quat: _Quat, w: f32);
+    fn _quat_get_x(quat: _Quat) -> f32;
+    fn _quat_set_x(quat: _Quat, x: f32);
+    fn _quat_get_y(quat: _Quat) -> f32;
+    fn _quat_set_y(quat: _Quat, y: f32);
+    fn _quat_get_z(quat: _Quat) -> f32;
+    fn _quat_set_z(quat: _Quat, z: f32);
+    fn _quat_get_w(quat: _Quat) -> f32;
+    fn _quat_set_w(quat: _Quat, w: f32);
 }
 impl Quat {
     pub fn get_x(&self) -> f32 {
-        unsafe { _quat_get_attr_x(self._inner) }
+        unsafe { _quat_get_x(self._inner) }
     }
     pub fn set_x(&self, x: f32) {
-        unsafe { _quat_set_attr_x(self._inner, x) }
+        unsafe { _quat_set_x(self._inner, x) }
     }
     pub fn get_y(&self) -> f32 {
-        unsafe { _quat_get_attr_y(self._inner) }
+        unsafe { _quat_get_y(self._inner) }
     }
     pub fn set_y(&self, y: f32) {
-        unsafe { _quat_set_attr_y(self._inner, y) }
+        unsafe { _quat_set_y(self._inner, y) }
     }
     pub fn get_z(&self) -> f32 {
-        unsafe { _quat_get_attr_z(self._inner) }
+        unsafe { _quat_get_z(self._inner) }
     }
     pub fn set_z(&self, z: f32) {
-        unsafe { _quat_set_attr_z(self._inner, z) }
+        unsafe { _quat_set_z(self._inner, z) }
     }
     pub fn get_w(&self) -> f32 {
-        unsafe { _quat_get_attr_w(self._inner) }
+        unsafe { _quat_get_w(self._inner) }
     }
     pub fn set_w(&self, w: f32) {
-        unsafe { _quat_set_attr_w(self._inner, w) }
+        unsafe { _quat_set_w(self._inner, w) }
     }
 }
 extern "C" {
-    fn _color_get_attr_r(color: _Color) -> f32;
-    fn _color_set_attr_r(color: _Color, r: f32);
-    fn _color_get_attr_g(color: _Color) -> f32;
-    fn _color_set_attr_g(color: _Color, g: f32);
-    fn _color_get_attr_b(color: _Color) -> f32;
-    fn _color_set_attr_b(color: _Color, b: f32);
-    fn _color_get_attr_a(color: _Color) -> f32;
-    fn _color_set_attr_a(color: _Color, a: f32);
+    fn _color_get_r(color: _Color) -> f32;
+    fn _color_set_r(color: _Color, r: f32);
+    fn _color_get_g(color: _Color) -> f32;
+    fn _color_set_g(color: _Color, g: f32);
+    fn _color_get_b(color: _Color) -> f32;
+    fn _color_set_b(color: _Color, b: f32);
+    fn _color_get_a(color: _Color) -> f32;
+    fn _color_set_a(color: _Color, a: f32);
 }
 impl Color {
     pub fn get_r(&self) -> f32 {
-        unsafe { _color_get_attr_r(self._inner) }
+        unsafe { _color_get_r(self._inner) }
     }
     pub fn set_r(&self, r: f32) {
-        unsafe { _color_set_attr_r(self._inner, r) }
+        unsafe { _color_set_r(self._inner, r) }
     }
     pub fn get_g(&self) -> f32 {
-        unsafe { _color_get_attr_g(self._inner) }
+        unsafe { _color_get_g(self._inner) }
     }
     pub fn set_g(&self, g: f32) {
-        unsafe { _color_set_attr_g(self._inner, g) }
+        unsafe { _color_set_g(self._inner, g) }
     }
     pub fn get_b(&self) -> f32 {
-        unsafe { _color_get_attr_b(self._inner) }
+        unsafe { _color_get_b(self._inner) }
     }
     pub fn set_b(&self, b: f32) {
-        unsafe { _color_set_attr_b(self._inner, b) }
+        unsafe { _color_set_b(self._inner, b) }
     }
     pub fn get_a(&self) -> f32 {
-        unsafe { _color_get_attr_a(self._inner) }
+        unsafe { _color_get_a(self._inner) }
     }
     pub fn set_a(&self, a: f32) {
-        unsafe { _color_set_attr_a(self._inner, a) }
+        unsafe { _color_set_a(self._inner, a) }
     }
 }
 pub trait UnityConvertible {

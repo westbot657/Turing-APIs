@@ -153,74 +153,74 @@ export declare function _quat_from_native(x: f32, y: f32, z: f32, w: f32): i32;
 export declare function _color_set_rgb(color: i32, r: f32, g: f32, b: f32): void;
 @external("env", "_color_set_rgba")
 export declare function _color_set_rgba(color: i32, r: f32, g: f32, b: f32, a: f32): void;
-@external("env", "_vec2_get_attr_x")
-export declare function _vec2_get_attr_x(vec2: i32): f32;
-@external("env", "_vec2_set_attr_x")
-export declare function _vec2_set_attr_x(vec2: i32, x: f32): void;
-@external("env", "_vec2_get_attr_y")
-export declare function _vec2_get_attr_y(vec2: i32): f32;
-@external("env", "_vec2_set_attr_y")
-export declare function _vec2_set_attr_y(vec2: i32, y: f32): void;
-@external("env", "_vec3_get_attr_x")
-export declare function _vec3_get_attr_x(vec3: i32): f32;
-@external("env", "_vec3_set_attr_x")
-export declare function _vec3_set_attr_x(vec3: i32, x: f32): void;
-@external("env", "_vec3_get_attr_y")
-export declare function _vec3_get_attr_y(vec3: i32): f32;
-@external("env", "_vec3_set_attr_y")
-export declare function _vec3_set_attr_y(vec3: i32, y: f32): void;
-@external("env", "_vec3_get_attr_z")
-export declare function _vec3_get_attr_z(vec3: i32): f32;
-@external("env", "_vec3_set_attr_z")
-export declare function _vec3_set_attr_z(vec3: i32, z: f32): void;
-@external("env", "_vec4_get_attr_x")
-export declare function _vec4_get_attr_x(vec4: i32): f32;
-@external("env", "_vec4_set_attr_x")
-export declare function _vec4_set_attr_x(vec4: i32, x: f32): void;
-@external("env", "_vec4_get_attr_y")
-export declare function _vec4_get_attr_y(vec4: i32): f32;
-@external("env", "_vec4_set_attr_y")
-export declare function _vec4_set_attr_y(vec4: i32, y: f32): void;
-@external("env", "_vec4_get_attr_z")
-export declare function _vec4_get_attr_z(vec4: i32): f32;
-@external("env", "_vec4_set_attr_z")
-export declare function _vec4_set_attr_z(vec4: i32, z: f32): void;
-@external("env", "_vec4_get_attr_w")
-export declare function _vec4_get_attr_w(vec4: i32): f32;
-@external("env", "_vec4_set_attr_w")
-export declare function _vec4_set_attr_w(vec4: i32, w: f32): void;
-@external("env", "_quat_get_attr_x")
-export declare function _quat_get_attr_x(quat: i32): f32;
-@external("env", "_quat_set_attr_x")
-export declare function _quat_set_attr_x(quat: i32, x: f32): void;
-@external("env", "_quat_get_attr_y")
-export declare function _quat_get_attr_y(quat: i32): f32;
-@external("env", "_quat_set_attr_y")
-export declare function _quat_set_attr_y(quat: i32, y: f32): void;
-@external("env", "_quat_get_attr_z")
-export declare function _quat_get_attr_z(quat: i32): f32;
-@external("env", "_quat_set_attr_z")
-export declare function _quat_set_attr_z(quat: i32, z: f32): void;
-@external("env", "_quat_get_attr_w")
-export declare function _quat_get_attr_w(quat: i32): f32;
-@external("env", "_quat_set_attr_w")
-export declare function _quat_set_attr_w(quat: i32, w: f32): void;
-@external("env", "_color_get_attr_r")
-export declare function _color_get_attr_r(color: i32): f32;
-@external("env", "_color_set_attr_r")
-export declare function _color_set_attr_r(color: i32, r: f32): void;
-@external("env", "_color_get_attr_g")
-export declare function _color_get_attr_g(color: i32): f32;
-@external("env", "_color_set_attr_g")
-export declare function _color_set_attr_g(color: i32, g: f32): void;
-@external("env", "_color_get_attr_b")
-export declare function _color_get_attr_b(color: i32): f32;
-@external("env", "_color_set_attr_b")
-export declare function _color_set_attr_b(color: i32, b: f32): void;
-@external("env", "_color_get_attr_a")
-export declare function _color_get_attr_a(color: i32): f32;
-@external("env", "_color_set_attr_a")
-export declare function _color_set_attr_a(color: i32, a: f32): void;export function toCString(str: string): u32 {
+@external("env", "_vec2_get_x")
+export declare function _vec2_get_x(vec2: i32): f32;
+@external("env", "_vec2_set_x")
+export declare function _vec2_set_x(vec2: i32, x: f32): void;
+@external("env", "_vec2_get_y")
+export declare function _vec2_get_y(vec2: i32): f32;
+@external("env", "_vec2_set_y")
+export declare function _vec2_set_y(vec2: i32, y: f32): void;
+@external("env", "_vec3_get_x")
+export declare function _vec3_get_x(vec3: i32): f32;
+@external("env", "_vec3_set_x")
+export declare function _vec3_set_x(vec3: i32, x: f32): void;
+@external("env", "_vec3_get_y")
+export declare function _vec3_get_y(vec3: i32): f32;
+@external("env", "_vec3_set_y")
+export declare function _vec3_set_y(vec3: i32, y: f32): void;
+@external("env", "_vec3_get_z")
+export declare function _vec3_get_z(vec3: i32): f32;
+@external("env", "_vec3_set_z")
+export declare function _vec3_set_z(vec3: i32, z: f32): void;
+@external("env", "_vec4_get_x")
+export declare function _vec4_get_x(vec4: i32): f32;
+@external("env", "_vec4_set_x")
+export declare function _vec4_set_x(vec4: i32, x: f32): void;
+@external("env", "_vec4_get_y")
+export declare function _vec4_get_y(vec4: i32): f32;
+@external("env", "_vec4_set_y")
+export declare function _vec4_set_y(vec4: i32, y: f32): void;
+@external("env", "_vec4_get_z")
+export declare function _vec4_get_z(vec4: i32): f32;
+@external("env", "_vec4_set_z")
+export declare function _vec4_set_z(vec4: i32, z: f32): void;
+@external("env", "_vec4_get_w")
+export declare function _vec4_get_w(vec4: i32): f32;
+@external("env", "_vec4_set_w")
+export declare function _vec4_set_w(vec4: i32, w: f32): void;
+@external("env", "_quat_get_x")
+export declare function _quat_get_x(quat: i32): f32;
+@external("env", "_quat_set_x")
+export declare function _quat_set_x(quat: i32, x: f32): void;
+@external("env", "_quat_get_y")
+export declare function _quat_get_y(quat: i32): f32;
+@external("env", "_quat_set_y")
+export declare function _quat_set_y(quat: i32, y: f32): void;
+@external("env", "_quat_get_z")
+export declare function _quat_get_z(quat: i32): f32;
+@external("env", "_quat_set_z")
+export declare function _quat_set_z(quat: i32, z: f32): void;
+@external("env", "_quat_get_w")
+export declare function _quat_get_w(quat: i32): f32;
+@external("env", "_quat_set_w")
+export declare function _quat_set_w(quat: i32, w: f32): void;
+@external("env", "_color_get_r")
+export declare function _color_get_r(color: i32): f32;
+@external("env", "_color_set_r")
+export declare function _color_set_r(color: i32, r: f32): void;
+@external("env", "_color_get_g")
+export declare function _color_get_g(color: i32): f32;
+@external("env", "_color_set_g")
+export declare function _color_set_g(color: i32, g: f32): void;
+@external("env", "_color_get_b")
+export declare function _color_get_b(color: i32): f32;
+@external("env", "_color_set_b")
+export declare function _color_set_b(color: i32, b: f32): void;
+@external("env", "_color_get_a")
+export declare function _color_get_a(color: i32): f32;
+@external("env", "_color_set_a")
+export declare function _color_set_a(color: i32, a: f32): void;export function toCString(str: string): u32 {
     return <u32>changetype<usize>(String.UTF8.encode(str, true));
 }
 export function readCString(ptr: u32): void {
@@ -232,11 +232,19 @@ class ColorNote {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
+    public static get_color(self: ColorNote): Color {
+        let ptr = _color_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
 }
 class BombNote {
     ptr: i32;
     constructor(ptr: i32) {
         this.ptr = ptr;
+    }
+    public static get_color(self: BombNote): Color {
+        let ptr = _bomb_note_get_color(self.ptr);
+    return new Color(ptr);
     }
 }
 class Arc {
@@ -244,11 +252,19 @@ class Arc {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
+    public static get_color(self: Arc): Color {
+        let ptr = _arc_get_color(self.ptr);
+    return new Color(ptr);
+    }
 }
 class Wall {
     ptr: i32;
     constructor(ptr: i32) {
         this.ptr = ptr;
+    }
+    public static get_color(self: Wall): Color {
+        let ptr = _wall_get_color(self.ptr);
+    return new Color(ptr);
     }
 }
 class ChainHeadNote {
@@ -256,17 +272,29 @@ class ChainHeadNote {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
+    public static get_color(self: ChainHeadNote): Color {
+        let ptr = _chain_head_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
 }
 class ChainLinkNote {
     ptr: i32;
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
+    public static get_color(self: ChainLinkNote): Color {
+        let ptr = _chain_link_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
 }
 class ChainNote {
     ptr: i32;
     constructor(ptr: i32) {
         this.ptr = ptr;
+    }
+    public static get_color(self: ChainNote): Color {
+        let ptr = _chain_note_get_color(self.ptr);
+    return new Color(ptr);
     }
 }
 
@@ -276,6 +304,46 @@ class Color {
     constructor(ptr: i32) {
         this.ptr = ptr;
 
+    }
+
+    public static get_a(self: Color): f32 {
+        return _color_get_a(self.ptr);
+    }
+
+    public static set_a(self: Color, a: f32): void {
+        _color_set_a(self.ptr, a);
+    }
+
+    public static get_b(self: Color): f32 {
+        return _color_get_b(self.ptr);
+    }
+
+    public static set_b(self: Color, b: f32): void {
+        _color_set_b(self.ptr, b);
+    }
+
+    public static get_g(self: Color): f32 {
+        return _color_get_g(self.ptr);
+    }
+
+    public static set_g(self: Color, g: f32): void {
+        _color_set_g(self.ptr, g);
+    }
+
+    public static get_r(self: Color): f32 {
+        return _color_get_r(self.ptr);
+    }
+
+    public static set_r(self: Color, r: f32): void {
+        _color_set_r(self.ptr, r);
+    }
+
+    public static set_rgb(self: Color, r: f32, g: f32, b: f32): void {
+        _color_set_rgb(self.ptr, r, g, b);
+    }
+
+    public static set_rgba(self: Color, r: f32, g: f32, b: f32, a: f32): void {
+        _color_set_rgba(self.ptr, r, g, b, a);
     }
 
 }
