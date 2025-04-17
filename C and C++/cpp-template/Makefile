@@ -27,7 +27,7 @@ CPP_API_LIB = $(CPP_API_LIB_DIR)/libturing-api-cpp.a
 INCLUDES = -I$(CPP_API_INCLUDE_DIR) -I$(INTERNAL_DIR)
 
 # Output file
-WASM_FILE = script.wasm
+WASM_FILE = build/script.wasm
 
 # Targets
 .PHONY: all clean cpp_api

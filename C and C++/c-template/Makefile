@@ -10,9 +10,9 @@ LDFLAGS = --no-entry --export=on_load --export=on_update --export=on_exit --allo
 
 # Directories
 API_DIR = ../turing-api-c
-API_INCLUDE_DIR = $(API_DIR)/include
-API_LIB_DIR = $(API_DIR)/build
-INTERNAL_DIR = ../internal/src
+API_INCLUDE_DIR = $(API_DIR)/include/
+API_LIB_DIR = $(API_DIR)/build/
+INTERNAL_DIR = ../internal/src/
 BUILD_DIR = build
 
 # Source files
@@ -26,7 +26,7 @@ API_LIB = $(API_LIB_DIR)/libturing-api-c.a
 INCLUDES = -I$(API_INCLUDE_DIR) -I$(INTERNAL_DIR)
 
 # Output file
-WASM_FILE = script.wasm
+WASM_FILE = build/script.wasm
 
 # Targets
 .PHONY: all clean api
