@@ -2,10 +2,14 @@
 
 set -e  # Exit on error
 
-# Step 1: Generate C code from Nelua
-echo "Generating C code from Nelua..."
+if ! command -v zig >/dev/null 2>&1; then
+  echo "Please install zig."
+  exit 1
+fi
+
+mkdir build
 nelua main.nelua --cflags="-m32" -o build/script.c
 
-# Step 2: Build with Makefile
-echo "Building with make..."
-make
+
+zig cc build/script.c -target wasm32-unknown-unknown -O2 -o build/script.wasm
+
