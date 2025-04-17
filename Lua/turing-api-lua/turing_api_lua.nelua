@@ -113,6 +113,7 @@ local function _color_get_b(color: int32): float32 <cimport, nodecl, cinclude '<
 local function _color_set_b(color: int32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_get_a(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_a(color: int32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+
 global ColorNote = @record{
     ptr: int32
 }

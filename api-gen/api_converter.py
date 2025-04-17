@@ -245,8 +245,8 @@ class StaticMethod(Method):
                 return f"function {classlike.classname}.{self.name}{args}{f": {ret}" if ret else ""}\n    {body}\nend\n"
             case "zig":
                 ret = convert_type(self.ret_type, lang)
-                body = body.replace("\n", "\n    ")
-                return f"pub fn {self.name}{args} {ret} {{\n    {body}\n}}"
+                body = body.replace("\n", "\n        ")
+                return f"    pub fn {self.name}{args} {ret} {{\n        {body}\n    }}"
             case "ts":
                 ret = convert_type(self.ret_type, lang)
                 body = body.replace("\n", "\n    ")
@@ -284,8 +284,8 @@ class InstanceMethod(Method):
                 return f"function {classlike.classname}.{self.name}{args}{f": {ret}" if ret else ""}\n    {body}\nend\n"
             case "zig":
                 ret = convert_type(self.ret_type, lang)
-                body = body.replace("\n", "\n    ")
-                return f"pub fn {self.name}{args} {ret} {{\n    {body}\n}}"
+                body = body.replace("\n", "\n        ")
+                return f"    pub fn {self.name}{args} {ret} {{\n        {body}\n    }}"
             case "ts":
                 ret = convert_type(self.ret_type, lang)
                 body = body.replace("\n", "\n    ")
@@ -366,9 +366,9 @@ class Classlike:
             case "zig":
                 # pub const <classname> = struct { <attrs/statics/instance methods> };
                 
-                a = [a.as_struct_def(lang) for a in self.attrs]
+                a = [a.as_struct_def(lang)  + "," for a in self.attrs]
                 
-                out = f"pub const {self.classname} = struct {{ {", ".join(a)} }};"
+                out = f"pub const {self.classname} = struct {{\n    {"\n    ".join(a)}"
                 
                 for stat in self.static_methods:
                     out += f"\n{stat.generate(self, lang, mdef)}\n"
@@ -376,6 +376,7 @@ class Classlike:
                 for stat in self.instance_methods:
                     out += f"\n{stat.generate(self, lang, mdef)}\n"
                 
+                out += "};"
                 
                 return out
                 
@@ -580,7 +581,7 @@ class FileConstructor:
         
         if build_links:
             data_out += self.prelink()
-            data_out += "\n".join(self.linkages)
+            data_out += "\n".join(self.linkages) + "\n"
             data_out += self.postlink()
         
         for imp in self.imports.values():

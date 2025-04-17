@@ -112,115 +112,134 @@ extern "env" fn _color_set_g(color: i32, g: f32) void;
 extern "env" fn _color_get_b(color: i32) f32;
 extern "env" fn _color_set_b(color: i32, b: f32) void;
 extern "env" fn _color_get_a(color: i32) f32;
-extern "env" fn _color_set_a(color: i32, a: f32) void;pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []const u8) ![]u8 {
+extern "env" fn _color_set_a(color: i32, a: f32) void;
+pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []const u8) ![]u8 {
     const new_len = str1.len + str2.len;
     const result = try allocator.alloc(u8, new_len);
     std.mem.copy(u8, result[0..str1.len], str1);
     std.mem.copy(u8, result[str1.len..], str2);
     return result;
 }
-pub const ColorNote = struct { ptr: i32 };
-pub fn get_color(self: ColorNote) Color {
-    return .{ .ptr = _color_note_get_color(self.ptr) };
-}
-pub const BombNote = struct { ptr: i32 };
-pub fn get_color(self: BombNote) Color {
-    return .{ .ptr = _bomb_note_get_color(self.ptr) };
-}
-pub const Arc = struct { ptr: i32 };
-pub fn get_color(self: Arc) Color {
-    return .{ .ptr = _arc_get_color(self.ptr) };
-}
-pub const Wall = struct { ptr: i32 };
-pub fn get_color(self: Wall) Color {
-    return .{ .ptr = _wall_get_color(self.ptr) };
-}
-pub const ChainHeadNote = struct { ptr: i32 };
-pub fn get_color(self: ChainHeadNote) Color {
-    return .{ .ptr = _chain_head_note_get_color(self.ptr) };
-}
-pub const ChainLinkNote = struct { ptr: i32 };
-pub fn get_color(self: ChainLinkNote) Color {
-    return .{ .ptr = _chain_link_note_get_color(self.ptr) };
-}
-pub const ChainNote = struct { ptr: i32 };
-pub fn get_color(self: ChainNote) Color {
-    return .{ .ptr = _chain_note_get_color(self.ptr) };
-}
+pub const ColorNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ColorNote) Color {
+        return .{ .ptr = _color_note_get_color(self.ptr) };
+    }
+};
+pub const BombNote = struct {
+    ptr: i32,
+    pub fn get_color(self: BombNote) Color {
+        return .{ .ptr = _bomb_note_get_color(self.ptr) };
+    }
+};
+pub const Arc = struct {
+    ptr: i32,
+    pub fn get_color(self: Arc) Color {
+        return .{ .ptr = _arc_get_color(self.ptr) };
+    }
+};
+pub const Wall = struct {
+    ptr: i32,
+    pub fn get_color(self: Wall) Color {
+        return .{ .ptr = _wall_get_color(self.ptr) };
+    }
+};
+pub const ChainHeadNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ChainHeadNote) Color {
+        return .{ .ptr = _chain_head_note_get_color(self.ptr) };
+    }
+};
+pub const ChainLinkNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ChainLinkNote) Color {
+        return .{ .ptr = _chain_link_note_get_color(self.ptr) };
+    }
+};
+pub const ChainNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ChainNote) Color {
+        return .{ .ptr = _chain_note_get_color(self.ptr) };
+    }
+};
 
-pub const Color = struct { ptr: i32 };
-pub fn get_a(self: Color) f32 {
-    return _color_get_a(self.ptr);
-}
+pub const Color = struct {
+    ptr: i32,
+    pub fn get_a(self: Color) f32 {
+        return _color_get_a(self.ptr);
+    }
 
-pub fn set_a(self: Color, a: f32) void {
-    _color_set_a(self.ptr, a);
-}
+    pub fn set_a(self: Color, a: f32) void {
+        _color_set_a(self.ptr, a);
+    }
 
-pub fn get_b(self: Color) f32 {
-    return _color_get_b(self.ptr);
-}
+    pub fn get_b(self: Color) f32 {
+        return _color_get_b(self.ptr);
+    }
 
-pub fn set_b(self: Color, b: f32) void {
-    _color_set_b(self.ptr, b);
-}
+    pub fn set_b(self: Color, b: f32) void {
+        _color_set_b(self.ptr, b);
+    }
 
-pub fn get_g(self: Color) f32 {
-    return _color_get_g(self.ptr);
-}
+    pub fn get_g(self: Color) f32 {
+        return _color_get_g(self.ptr);
+    }
 
-pub fn set_g(self: Color, g: f32) void {
-    _color_set_g(self.ptr, g);
-}
+    pub fn set_g(self: Color, g: f32) void {
+        _color_set_g(self.ptr, g);
+    }
 
-pub fn get_r(self: Color) f32 {
-    return _color_get_r(self.ptr);
-}
+    pub fn get_r(self: Color) f32 {
+        return _color_get_r(self.ptr);
+    }
 
-pub fn set_r(self: Color, r: f32) void {
-    _color_set_r(self.ptr, r);
-}
+    pub fn set_r(self: Color, r: f32) void {
+        _color_set_r(self.ptr, r);
+    }
 
-pub fn set_rgb(self: Color, r: f32, g: f32, b: f32) void {
-    _color_set_rgb(self.ptr, r, g, b);
-}
+    pub fn set_rgb(self: Color, r: f32, g: f32, b: f32) void {
+        _color_set_rgb(self.ptr, r, g, b);
+    }
 
-pub fn set_rgba(self: Color, r: f32, g: f32, b: f32, a: f32) void {
-    _color_set_rgba(self.ptr, r, g, b, a);
-}
+    pub fn set_rgba(self: Color, r: f32, g: f32, b: f32, a: f32) void {
+        _color_set_rgba(self.ptr, r, g, b, a);
+    }
+};
 
-pub const Log = struct {  };
-pub fn info(msg: [*:0]const u8) void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-        const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "info: ", msg);
-        defer allocator.free(s);
-        _log(@ptrCast(msg.ptr));
-}
+pub const Log = struct {
+    
+    pub fn info(msg: [*:0]const u8) void {
+        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+            const allocator = gpa.allocator();
+            const s = try concat_strings(allocator, "info: ", msg);
+            defer allocator.free(s);
+            _log(@ptrCast(msg.ptr));
+    }
 
-pub fn warn(msg: [*:0]const u8) void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-        const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "warn: ", msg);
-        defer allocator.free(s);
-        _log(@ptrCast(msg.ptr));
-}
+    pub fn warn(msg: [*:0]const u8) void {
+        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+            const allocator = gpa.allocator();
+            const s = try concat_strings(allocator, "warn: ", msg);
+            defer allocator.free(s);
+            _log(@ptrCast(msg.ptr));
+    }
 
-pub fn critical(msg: [*:0]const u8) void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-        const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "error: ", msg);
-        defer allocator.free(s);
-        _log(@ptrCast(msg.ptr));
-}
+    pub fn critical(msg: [*:0]const u8) void {
+        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+            const allocator = gpa.allocator();
+            const s = try concat_strings(allocator, "error: ", msg);
+            defer allocator.free(s);
+            _log(@ptrCast(msg.ptr));
+    }
 
-pub fn debug(msg: [*:0]const u8) void {
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-        const allocator = gpa.allocator();
-        const s = try concat_strings(allocator, "debug: ", msg);
-        defer allocator.free(s);
-        _log(@ptrCast(msg.ptr));
-}
+    pub fn debug(msg: [*:0]const u8) void {
+        var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+            const allocator = gpa.allocator();
+            const s = try concat_strings(allocator, "debug: ", msg);
+            defer allocator.free(s);
+            _log(@ptrCast(msg.ptr));
+    }
+};
 
 pub fn create_color_note(beat: f32) ColorNote {
     return .{ .ptr = _create_color_note(beat) };
@@ -250,47 +269,49 @@ pub fn create_chain_note(beat: f32) ChainNote {
     return .{ .ptr = _create_chain_note(beat) };
 }
 
-pub const Beatmap = struct {  };
-pub fn add_chain_note(chain_note: ChainNote) void {
-    _beatmap_add_chain_note(chain_note.ptr);
-}
-pub fn remove_chain_note(chain_note: ChainNote) void {
-    _beatmap_remove_chain_note(chain_note.ptr);
-}
-pub fn add_chain_link_note(chain_link_note: ChainLinkNote) void {
-    _beatmap_add_chain_link_note(chain_link_note.ptr);
-}
-pub fn remove_chain_link_note(chain_link_note: ChainLinkNote) void {
-    _beatmap_remove_chain_link_note(chain_link_note.ptr);
-}
-pub fn add_chain_head_note(chain_head_note: ChainHeadNote) void {
-    _beatmap_add_chain_head_note(chain_head_note.ptr);
-}
-pub fn remove_chain_head_note(chain_head_note: ChainHeadNote) void {
-    _beatmap_remove_chain_head_note(chain_head_note.ptr);
-}
-pub fn add_wall(wall: Wall) void {
-    _beatmap_add_wall(wall.ptr);
-}
-pub fn remove_wall(wall: Wall) void {
-    _beatmap_remove_wall(wall.ptr);
-}
-pub fn add_arc(arc: Arc) void {
-    _beatmap_add_arc(arc.ptr);
-}
-pub fn remove_arc(arc: Arc) void {
-    _beatmap_remove_arc(arc.ptr);
-}
-pub fn add_bomb_note(bomb_note: BombNote) void {
-    _beatmap_add_bomb_note(bomb_note.ptr);
-}
-pub fn remove_bomb_note(bomb_note: BombNote) void {
-    _beatmap_remove_bomb_note(bomb_note.ptr);
-}
-pub fn add_color_note(color_note: ColorNote) void {
-    _beatmap_add_color_note(color_note.ptr);
-}
-pub fn remove_color_note(color_note: ColorNote) void {
-    _beatmap_remove_color_note(color_note.ptr);
-}
+pub const Beatmap = struct {
+    
+    pub fn add_chain_note(chain_note: ChainNote) void {
+        _beatmap_add_chain_note(chain_note.ptr);
+    }
+    pub fn remove_chain_note(chain_note: ChainNote) void {
+        _beatmap_remove_chain_note(chain_note.ptr);
+    }
+    pub fn add_chain_link_note(chain_link_note: ChainLinkNote) void {
+        _beatmap_add_chain_link_note(chain_link_note.ptr);
+    }
+    pub fn remove_chain_link_note(chain_link_note: ChainLinkNote) void {
+        _beatmap_remove_chain_link_note(chain_link_note.ptr);
+    }
+    pub fn add_chain_head_note(chain_head_note: ChainHeadNote) void {
+        _beatmap_add_chain_head_note(chain_head_note.ptr);
+    }
+    pub fn remove_chain_head_note(chain_head_note: ChainHeadNote) void {
+        _beatmap_remove_chain_head_note(chain_head_note.ptr);
+    }
+    pub fn add_wall(wall: Wall) void {
+        _beatmap_add_wall(wall.ptr);
+    }
+    pub fn remove_wall(wall: Wall) void {
+        _beatmap_remove_wall(wall.ptr);
+    }
+    pub fn add_arc(arc: Arc) void {
+        _beatmap_add_arc(arc.ptr);
+    }
+    pub fn remove_arc(arc: Arc) void {
+        _beatmap_remove_arc(arc.ptr);
+    }
+    pub fn add_bomb_note(bomb_note: BombNote) void {
+        _beatmap_add_bomb_note(bomb_note.ptr);
+    }
+    pub fn remove_bomb_note(bomb_note: BombNote) void {
+        _beatmap_remove_bomb_note(bomb_note.ptr);
+    }
+    pub fn add_color_note(color_note: ColorNote) void {
+        _beatmap_add_color_note(color_note.ptr);
+    }
+    pub fn remove_color_note(color_note: ColorNote) void {
+        _beatmap_remove_color_note(color_note.ptr);
+    }
+};
 
