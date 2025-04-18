@@ -1019,7 +1019,7 @@ class Mdef(IMdef):
                 macro_cache.append(line)
                 continue
             elif macro_cache:
-                print(f"prepending macro expansion:\n\n{"\n".join(macro_cache)}\n\n/////////////")
+                # print(f"prepending macro expansion:\n\n{"\n".join(macro_cache)}\n\n/////////////")
                 full = "\n".join(macro_cache)
                 macro_cache.clear()
                 keys = self._macro_memory[0]
@@ -1027,7 +1027,7 @@ class Mdef(IMdef):
                     f = full
                     for (k, v) in zip(keys, vals):
                         f = f.replace(k, v)
-                    print(f"inserted macro expansion:\n\n{f}\n\n")
+                    # print(f"inserted macro expansion:\n\n{f}\n\n")
                     lines = f.split("\n") + lines
                 self._macro_memory = []
                 continue
@@ -1088,7 +1088,7 @@ class Mdef(IMdef):
                             self.cls_builder.add_friend(f)
 
             elif self.parser_state == 1:
-                if (m := re.match(r"^#([^ \{]+) *\{", line)) is not None:
+                if (m := re.match(r"^#([^\{]+) *\{", line)) is not None:
                     self.current_mdef = m.groups()[0]
                     self.current_mdef_langs.clear()
                     self.mdef_src_builder.clear()

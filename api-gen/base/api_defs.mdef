@@ -136,7 +136,7 @@ class Quat {
     }
 }
 
-#pass_ptr_ref_ret_attr($1,$2) {
+#pass_ptr_ref_ret_attr($1, $2) {
     #zig, #ts {
         ~($1.ptr, $2);
     }
@@ -209,7 +209,7 @@ class Quat {
     }
 }
 
-#getter_args_1($type,$1) {
+#getter_args_1($type, $1) {
     #C {
         $type inst;
         inst.ptr = ~($1->ptr);
@@ -238,7 +238,7 @@ class Quat {
 
 
 
-#call_self_attr_2_ref($self,$attr,$1,$2) {
+#call_self_attr_2_ref($self, $attr, $1, $2) {
     #zig, #ts {
         ~($self.$attr, $1, $2);
     }
@@ -249,7 +249,7 @@ class Quat {
         ~($self->$attr, $1, $2);
     }
 }
-#call_self_attr_3_ref($self,$attr,$1,$2,$3) {
+#call_self_attr_3_ref($self, $attr, $1, $2, $3) {
     #zig, #ts {
         ~($self.$attr, $1, $2, $3);
     }
@@ -260,7 +260,7 @@ class Quat {
         ~($self->$attr, $1, $2, $3);
     }
 }
-#call_self_attr_4_ref($self,$attr,$1,$2,$3,$4) {
+#call_self_attr_4_ref($self, $attr, $1, $2, $3, $4) {
     #zig, #ts {
         ~($self.$attr, $1, $2, $3, $4);
     }
