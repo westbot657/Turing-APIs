@@ -141,14 +141,14 @@ export declare function _get_right_saber(): i32;
 export declare function _log(message: i32): void;
 @external("env", "_drop_reference")
 export declare function _drop_reference(ptr: i32): void;
-@external("env", "_vec2_from_native")
-export declare function _vec2_from_native(x: f32, y: f32): i32;
-@external("env", "_vec3_from_native")
-export declare function _vec3_from_native(x: f32, y: f32, z: f32): i32;
-@external("env", "_vec4_from_native")
-export declare function _vec4_from_native(x: f32, y: f32, z: f32, w: f32): i32;
-@external("env", "_quat_from_native")
-export declare function _quat_from_native(x: f32, y: f32, z: f32, w: f32): i32;
+@external("env", "_vec2_from_xy")
+export declare function _vec2_from_xy(x: f32, y: f32): i32;
+@external("env", "_vec3_from_xyz")
+export declare function _vec3_from_xyz(x: f32, y: f32, z: f32): i32;
+@external("env", "_vec4_from_xyzw")
+export declare function _vec4_from_xyzw(x: f32, y: f32, z: f32, w: f32): i32;
+@external("env", "_quat_from_xyzw")
+export declare function _quat_from_xyzw(x: f32, y: f32, z: f32, w: f32): i32;
 @external("env", "_color_set_rgb")
 export declare function _color_set_rgb(color: i32, r: f32, g: f32, b: f32): void;
 @external("env", "_color_set_rgba")

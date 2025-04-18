@@ -73,10 +73,10 @@ local function _get_left_saber(): int32 <cimport, nodecl, cinclude '<turing_api_
 local function _get_right_saber(): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _log(message: cstring) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _drop_reference(ptr: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec2_from_native(x: float32, y: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec3_from_native(x: float32, y: float32, z: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _vec4_from_native(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-local function _quat_from_native(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec2_from_xy(x: float32, y: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec3_from_xyz(x: float32, y: float32, z: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _vec4_from_xyzw(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _quat_from_xyzw(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_rgb(color: int32, r: float32, g: float32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_rgba(color: int32, r: float32, g: float32, b: float32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _vec2_get_x(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end

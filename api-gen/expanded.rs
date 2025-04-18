@@ -142,10 +142,10 @@ extern "C" {
     fn _get_right_saber() -> _Saber;
     fn _log(message: *const c_char);
     fn _drop_reference(ptr: *mut c_char);
-    fn _vec2_from_native(x: f32, y: f32) -> _Vec2;
-    fn _vec3_from_native(x: f32, y: f32, z: f32) -> _Vec3;
-    fn _vec4_from_native(x: f32, y: f32, z: f32, w: f32) -> _Vec4;
-    fn _quat_from_native(x: f32, y: f32, z: f32, w: f32) -> _Quat;
+    fn _vec2_from_xy(x: f32, y: f32) -> _Vec2;
+    fn _vec3_from_xyz(x: f32, y: f32, z: f32) -> _Vec3;
+    fn _vec4_from_xyzw(x: f32, y: f32, z: f32, w: f32) -> _Vec4;
+    fn _quat_from_xyzw(x: f32, y: f32, z: f32, w: f32) -> _Quat;
     fn _color_set_rgb(color: _Color, r: f32, g: f32, b: f32);
     fn _color_set_rgba(color: _Color, r: f32, g: f32, b: f32, a: f32);
 }
