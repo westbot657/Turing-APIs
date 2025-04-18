@@ -113,64 +113,6 @@ local function _color_get_b(color: int32): float32 <cimport, nodecl, cinclude '<
 local function _color_set_b(color: int32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_get_a(color: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_a(color: int32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
-
-global ColorNote = @record{
-    ptr: int32
-}
-function ColorNote.get_color(self: ColorNote): Color
-    local ptr: int32 = _color_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-global BombNote = @record{
-    ptr: int32
-}
-function BombNote.get_color(self: BombNote): Color
-    local ptr: int32 = _bomb_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-global Arc = @record{
-    ptr: int32
-}
-function Arc.get_color(self: Arc): Color
-    local ptr: int32 = _arc_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-global Wall = @record{
-    ptr: int32
-}
-function Wall.get_color(self: Wall): Color
-    local ptr: int32 = _wall_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-global ChainHeadNote = @record{
-    ptr: int32
-}
-function ChainHeadNote.get_color(self: ChainHeadNote): Color
-    local ptr: int32 = _chain_head_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-global ChainLinkNote = @record{
-    ptr: int32
-}
-function ChainLinkNote.get_color(self: ChainLinkNote): Color
-    local ptr: int32 = _chain_link_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-global ChainNote = @record{
-    ptr: int32
-}
-function ChainNote.get_color(self: ChainNote): Color
-    local ptr: int32 = _chain_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
-end
-
 global Color = @record{
     ptr: int32
 }
@@ -233,6 +175,63 @@ end
 
 function Log.debug(msg: string)
     _log(string.format("debug: %s", msg))
+end
+
+global ColorNote = @record{
+    ptr: int32
+}
+function ColorNote.get_color(self: ColorNote): Color
+    local ptr: int32 = _color_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
+global BombNote = @record{
+    ptr: int32
+}
+function BombNote.get_color(self: BombNote): Color
+    local ptr: int32 = _bomb_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
+global Arc = @record{
+    ptr: int32
+}
+function Arc.get_color(self: Arc): Color
+    local ptr: int32 = _arc_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
+global Wall = @record{
+    ptr: int32
+}
+function Wall.get_color(self: Wall): Color
+    local ptr: int32 = _wall_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
+global ChainHeadNote = @record{
+    ptr: int32
+}
+function ChainHeadNote.get_color(self: ChainHeadNote): Color
+    local ptr: int32 = _chain_head_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
+global ChainLinkNote = @record{
+    ptr: int32
+}
+function ChainLinkNote.get_color(self: ChainLinkNote): Color
+    local ptr: int32 = _chain_link_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
+end
+global ChainNote = @record{
+    ptr: int32
+}
+function ChainNote.get_color(self: ChainNote): Color
+    local ptr: int32 = _chain_note_get_color(self.ptr)
+local note: Color = { ptr = ptr }
+return note
 end
 
 global function create_color_note(beat: float32): ColorNote

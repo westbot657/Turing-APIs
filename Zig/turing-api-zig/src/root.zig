@@ -119,51 +119,7 @@ pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []co
     std.mem.copy(u8, result[0..str1.len], str1);
     std.mem.copy(u8, result[str1.len..], str2);
     return result;
-}
-pub const ColorNote = struct {
-    ptr: i32,
-    pub fn get_color(self: ColorNote) Color {
-        return .{ .ptr = _color_note_get_color(self.ptr) };
-    }
-};
-pub const BombNote = struct {
-    ptr: i32,
-    pub fn get_color(self: BombNote) Color {
-        return .{ .ptr = _bomb_note_get_color(self.ptr) };
-    }
-};
-pub const Arc = struct {
-    ptr: i32,
-    pub fn get_color(self: Arc) Color {
-        return .{ .ptr = _arc_get_color(self.ptr) };
-    }
-};
-pub const Wall = struct {
-    ptr: i32,
-    pub fn get_color(self: Wall) Color {
-        return .{ .ptr = _wall_get_color(self.ptr) };
-    }
-};
-pub const ChainHeadNote = struct {
-    ptr: i32,
-    pub fn get_color(self: ChainHeadNote) Color {
-        return .{ .ptr = _chain_head_note_get_color(self.ptr) };
-    }
-};
-pub const ChainLinkNote = struct {
-    ptr: i32,
-    pub fn get_color(self: ChainLinkNote) Color {
-        return .{ .ptr = _chain_link_note_get_color(self.ptr) };
-    }
-};
-pub const ChainNote = struct {
-    ptr: i32,
-    pub fn get_color(self: ChainNote) Color {
-        return .{ .ptr = _chain_note_get_color(self.ptr) };
-    }
-};
-
-pub const Color = struct {
+}pub const Color = struct {
     ptr: i32,
     pub fn get_r(self: Color) f32 {
         return _color_get_r(self.ptr);
@@ -238,6 +194,49 @@ pub const Log = struct {
             const s = try concat_strings(allocator, "debug: ", msg);
             defer allocator.free(s);
             _log(@ptrCast(msg.ptr));
+    }
+};
+
+pub const ColorNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ColorNote) Color {
+        return .{ .ptr = _color_note_get_color(self.ptr) };
+    }
+};
+pub const BombNote = struct {
+    ptr: i32,
+    pub fn get_color(self: BombNote) Color {
+        return .{ .ptr = _bomb_note_get_color(self.ptr) };
+    }
+};
+pub const Arc = struct {
+    ptr: i32,
+    pub fn get_color(self: Arc) Color {
+        return .{ .ptr = _arc_get_color(self.ptr) };
+    }
+};
+pub const Wall = struct {
+    ptr: i32,
+    pub fn get_color(self: Wall) Color {
+        return .{ .ptr = _wall_get_color(self.ptr) };
+    }
+};
+pub const ChainHeadNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ChainHeadNote) Color {
+        return .{ .ptr = _chain_head_note_get_color(self.ptr) };
+    }
+};
+pub const ChainLinkNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ChainLinkNote) Color {
+        return .{ .ptr = _chain_link_note_get_color(self.ptr) };
+    }
+};
+pub const ChainNote = struct {
+    ptr: i32,
+    pub fn get_color(self: ChainNote) Color {
+        return .{ .ptr = _chain_note_get_color(self.ptr) };
     }
 };
 

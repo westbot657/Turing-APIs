@@ -849,8 +849,8 @@ class ExtraClassesConstruct(Construct):
         super().__init__("ExtraClasses")
         self.color_methods: dict[str, Fn] = {}
         self.include = [
-            (0, "Color"),
-            (0, "Log")
+            (-1, "Color"),
+            (-1, "Log")
         ]
     
     def attach(self, lang:str, mdef:IMdef, fns:list[Fn]):

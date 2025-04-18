@@ -7,6 +7,45 @@
 #define TURING_API_HPP
 
 #include <wasm_imports.h>
+// C++.h class 'Color'
+class Color {
+    public:
+        int ptr;
+        static float get_r(Color* self);
+
+        static void set_r(Color* self, float r);
+
+        static float get_g(Color* self);
+
+        static void set_g(Color* self, float g);
+
+        static float get_b(Color* self);
+
+        static void set_b(Color* self, float b);
+
+        static float get_a(Color* self);
+
+        static void set_a(Color* self, float a);
+
+        static void set_rgb(Color* self, float r, float g, float b);
+
+        static void set_rgba(Color* self, float r, float g, float b, float a);
+
+};
+
+// C++.h class 'Log'
+class Log {
+    public:
+
+        static void info(char* msg);
+
+        static void warn(char* msg);
+
+        static void critical(char* msg);
+
+        static void debug(char* msg);
+
+};
 
 // C++.h class 'ColorNote'
 class ColorNote {
@@ -49,46 +88,6 @@ class ChainNote {
     public:
         int ptr;
         static Color get_color(ChainNote* self);
-};
-
-// C++.h class 'Color'
-class Color {
-    public:
-        int ptr;
-        static float get_r(Color* self);
-
-        static void set_r(Color* self, float r);
-
-        static float get_g(Color* self);
-
-        static void set_g(Color* self, float g);
-
-        static float get_b(Color* self);
-
-        static void set_b(Color* self, float b);
-
-        static float get_a(Color* self);
-
-        static void set_a(Color* self, float a);
-
-        static void set_rgb(Color* self, float r, float g, float b);
-
-        static void set_rgba(Color* self, float r, float g, float b, float a);
-
-};
-
-// C++.h class 'Log'
-class Log {
-    public:
-
-        static void info(char* msg);
-
-        static void warn(char* msg);
-
-        static void critical(char* msg);
-
-        static void debug(char* msg);
-
 };
 
 ColorNote create_color_note(float beat);

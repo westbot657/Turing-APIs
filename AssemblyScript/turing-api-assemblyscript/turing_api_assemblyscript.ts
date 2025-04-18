@@ -227,79 +227,7 @@ export function toCString(str: string): u32 {
 export function readCString(ptr: u32): void {
     const str = String.UTF8.decodeUnsafe(ptr, u32.MAX_VALUE, true); // true = null-terminated
     console.log(str);
-}
-class ColorNote {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: ColorNote): Color {
-        let ptr = _color_note_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-class BombNote {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: BombNote): Color {
-        let ptr = _bomb_note_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-class Arc {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: Arc): Color {
-        let ptr = _arc_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-class Wall {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: Wall): Color {
-        let ptr = _wall_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-class ChainHeadNote {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: ChainHeadNote): Color {
-        let ptr = _chain_head_note_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-class ChainLinkNote {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: ChainLinkNote): Color {
-        let ptr = _chain_link_note_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-class ChainNote {
-    ptr: i32;
-    constructor(ptr: i32) {
-        this.ptr = ptr;
-    }
-    public static get_color(self: ChainNote): Color {
-        let ptr = _chain_note_get_color(self.ptr);
-    return new Color(ptr);
-    }
-}
-
-class Color {
+}class Color {
     ptr: i32;
 
     constructor(ptr: i32) {
@@ -371,6 +299,77 @@ class Log {
         _log(<i32>changetype<usize>(String.UTF8.encode("debug: " + msg)));
     }
 
+}
+
+class ColorNote {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: ColorNote): Color {
+        let ptr = _color_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
+}
+class BombNote {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: BombNote): Color {
+        let ptr = _bomb_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
+}
+class Arc {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: Arc): Color {
+        let ptr = _arc_get_color(self.ptr);
+    return new Color(ptr);
+    }
+}
+class Wall {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: Wall): Color {
+        let ptr = _wall_get_color(self.ptr);
+    return new Color(ptr);
+    }
+}
+class ChainHeadNote {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: ChainHeadNote): Color {
+        let ptr = _chain_head_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
+}
+class ChainLinkNote {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: ChainLinkNote): Color {
+        let ptr = _chain_link_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
+}
+class ChainNote {
+    ptr: i32;
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+    }
+    public static get_color(self: ChainNote): Color {
+        let ptr = _chain_note_get_color(self.ptr);
+    return new Color(ptr);
+    }
 }
 
 export function create_color_note(beat: f32): ColorNote {

@@ -7,36 +7,6 @@
 #define TURING_API_H
 
 #include <wasm_imports.h>
-
-typedef struct {
-    int ptr;
-} ColorNote;
-Color ColorNote_get_color(ColorNote* self);
-typedef struct {
-    int ptr;
-} BombNote;
-Color BombNote_get_color(BombNote* self);
-typedef struct {
-    int ptr;
-} Arc;
-Color Arc_get_color(Arc* self);
-typedef struct {
-    int ptr;
-} Wall;
-Color Wall_get_color(Wall* self);
-typedef struct {
-    int ptr;
-} ChainHeadNote;
-Color ChainHeadNote_get_color(ChainHeadNote* self);
-typedef struct {
-    int ptr;
-} ChainLinkNote;
-Color ChainLinkNote_get_color(ChainLinkNote* self);
-typedef struct {
-    int ptr;
-} ChainNote;
-Color ChainNote_get_color(ChainNote* self);
-
 typedef struct {
     int ptr;
 } Color;
@@ -68,6 +38,35 @@ void Log_warn(const char* msg);
 void Log_critical(const char* msg);
 
 void Log_debug(const char* msg);
+
+typedef struct {
+    int ptr;
+} ColorNote;
+Color ColorNote_get_color(ColorNote* self);
+typedef struct {
+    int ptr;
+} BombNote;
+Color BombNote_get_color(BombNote* self);
+typedef struct {
+    int ptr;
+} Arc;
+Color Arc_get_color(Arc* self);
+typedef struct {
+    int ptr;
+} Wall;
+Color Wall_get_color(Wall* self);
+typedef struct {
+    int ptr;
+} ChainHeadNote;
+Color ChainHeadNote_get_color(ChainHeadNote* self);
+typedef struct {
+    int ptr;
+} ChainLinkNote;
+Color ChainLinkNote_get_color(ChainLinkNote* self);
+typedef struct {
+    int ptr;
+} ChainNote;
+Color ChainNote_get_color(ChainNote* self);
 
 ColorNote create_color_note(float beat);
 
