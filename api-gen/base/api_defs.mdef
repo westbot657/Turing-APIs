@@ -53,6 +53,63 @@ class Beatmap {
 
 }
 
+class Vec2 {
+    ptr: i32
+
+    static fn from_xy(x: f32, y: f32) -> Vec2 #mdef.call_self_attr_2_ref(self, ptr, x, y)
+
+    #macro $1
+    #pattern # x # y
+    #macro apply
+    fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    #macro end
+
+}
+
+class Vec3 {
+    ptr: i32
+
+    static fn from_xyz(x: f32, y: f32, z: f32) -> Vec2 #mdef.call_self_attr_3_ref(self, ptr, x, y, z)
+
+    #macro $1
+    #pattern # x # y # z
+    #macro apply
+    fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    #macro end
+
+}
+
+class Vec4 {
+    ptr: i32
+
+    static fn from_xyzw(x: f32, y: f32, z: f32, w: f32) -> Vec2 #mdef.call_self_attr_4_ref(self, ptr, x, y, z, w)
+
+    #macro $1
+    #pattern # x # y # z # w
+    #macro apply
+    fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    #macro end
+
+}
+
+class Quat {
+    ptr: i32
+
+    static fn from_xyzw(x: f32, y: f32, z: f32, w: f32) -> Vec2 #mdef.call_self_attr_4_ref(self, ptr, x, y, z, w)
+
+    #macro $1
+    #pattern # x # y # z # w
+    #macro apply
+    fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    #macro end
+
+}
+
+
 
 
 
@@ -177,6 +234,21 @@ class Beatmap {
     }
 }
 
+
+
+
+
+#call_self_attr_2_ref($self,$attr,$1,$2) {
+    #zig, #ts {
+        ~($self.$attr, $1, $2);
+    }
+    #lua {
+        ~($self.$attr, $1, $2)
+    }
+    #C, #C++ {
+        ~($self->$attr, $1, $2);
+    }
+}
 #call_self_attr_3_ref($self,$attr,$1,$2,$3) {
     #zig, #ts {
         ~($self.$attr, $1, $2, $3);
@@ -188,7 +260,6 @@ class Beatmap {
         ~($self->$attr, $1, $2, $3);
     }
 }
-
 #call_self_attr_4_ref($self,$attr,$1,$2,$3,$4) {
     #zig, #ts {
         ~($self.$attr, $1, $2, $3, $4);

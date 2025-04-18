@@ -1200,7 +1200,7 @@ def main():
 
     function_defs = [Fn.from_rust(f, types, types2) for f in functions]
 
-    with open("./api-gen/base/api_defs.txt", "r+", encoding="utf-8") as f:
+    with open("./api-gen/base/api_defs.mdef", "r+", encoding="utf-8") as f:
         mdef = Mdef(f.read())
 
 
