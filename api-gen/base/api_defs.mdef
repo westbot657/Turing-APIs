@@ -62,7 +62,7 @@ class Vec2 {
     #pattern # x # y
     #macro apply
     fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
-    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_ref_ret_attr(self)
     #macro end
 
 }
@@ -76,7 +76,7 @@ class Vec3 {
     #pattern # x # y # z
     #macro apply
     fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
-    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_ref_ret_attr(self)
     #macro end
 
 }
@@ -90,7 +90,7 @@ class Vec4 {
     #pattern # x # y # z # w
     #macro apply
     fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
-    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_ref_ret_attr(self)
     #macro end
 
 }
@@ -104,7 +104,7 @@ class Quat {
     #pattern # x # y # z # w
     #macro apply
     fn get_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
-    fn set_$1(&self) -> f32 #mdef.pass_ptr_attr_ref(self)
+    fn set_$1(&self) -> f32 #mdef.pass_ptr_ref_ret_attr(self)
     #macro end
 
 }
