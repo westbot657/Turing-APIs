@@ -919,6 +919,7 @@ class Mdef(IMdef):
         # (macro names, patterns)
         # patterns: list of groups of tokens. each group fills each macro name, recursively
         self._macro_memory: list[ list[str], list[list[str]] ] = []
+        self._macro_depth = 0
 
         lines = src.split("\n")
         
@@ -991,39 +992,48 @@ class Mdef(IMdef):
                 self.parser_state = 2
                 continue
             
-            if self.parser_state == 0:
-                if (m := re.match(r" *#macro *((?:\$\d+ *)+)", line)) is not None:
+            if (m := re.match(r" *#macro *((?:\$\d+ *)+)", line)) is not None:
+                self._macro_depth += 1
+                if (self._macro_depth == 1):
                     mframe = [re.split(r" +", m.groups()[0]), []]
                     self._macro_memory = mframe
                     continue
-                
-                if (m := re.match(r" *#pattern *((# *([^ #]+ *)+)+)", line)) is not None:
+            
+            if (m := re.match(r" *#pattern *((# *([^ #]+ *)+)+)", line)) is not None:
+                if (self._macro_depth == 1):
                     patterns = [[s2.strip() for s2 in re.split(r" +", s)] for s in re.split(r" *# *", m.groups()[0]) if s.strip() != ""]
                     self._macro_memory[1] += patterns
                     continue
-                
-                if re.match(r" *#macro apply", line):
+            
+            if re.match(r" *#macro apply", line):
+                if (self._macro_depth == 1):
                     self.applying_macro = True
                     continue
+            
+            if re.match(r" *#macro end", line):
+                self._macro_depth = max(0, self._macro_depth-1)
+                self.applying_macro = self._macro_depth > 0
+                # if self.applying_macro: continue
+            
+            if self.applying_macro:
+                macro_cache.append(line)
+                continue
+            elif macro_cache:
+                print(f"prepending macro expansion:\n\n{"\n".join(macro_cache)}\n\n/////////////")
+                full = "\n".join(macro_cache)
+                macro_cache.clear()
+                keys = self._macro_memory[0]
+                for vals in self._macro_memory[1][::-1]:
+                    f = full
+                    for (k, v) in zip(keys, vals):
+                        f = f.replace(k, v)
+                    print(f"inserted macro expansion:\n\n{f}\n\n")
+                    lines = f.split("\n") + lines
+                self._macro_memory = []
+                continue
+                # print(f"macro re-expanded lines to: {json.dumps(lines, indent=4)}")
                 
-                if re.match(r" *#macro end", line):
-                    self.applying_macro = False
-                
-                if self.applying_macro:
-                    macro_cache.append(line)
-                    continue
-                elif macro_cache:
-                    full = "\n".join(macro_cache)
-                    macro_cache.clear()
-                    keys = self._macro_memory[0]
-                    for vals in self._macro_memory[1]:
-                        f = full
-                        for (k, v) in zip(keys, vals):
-                            f = f.replace(k, v)
-                        lines = f.split("\n") + lines
-                    self._macro_memory = []
-                    continue
-                    # print(f"macro re-expanded lines to: {json.dumps(lines, indent=4)}")
+            if self.parser_state == 0:
 
                 if (m := re.match(r"class *([a-zA-Z_][a-zA-Z0-9_]*) *\{", line)) is not None:
                     m: re.Match

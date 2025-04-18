@@ -175,20 +175,12 @@ global Color = @record{
     ptr: int32
 }
 
-function Color.get_a(self: Color): float32
-    return _color_get_a(self.ptr)
+function Color.get_r(self: Color): float32
+    return _color_get_r(self.ptr)
 end
 
-function Color.set_a(self: Color, a: float32)
-    _color_set_a(self.ptr, a)
-end
-
-function Color.get_b(self: Color): float32
-    return _color_get_b(self.ptr)
-end
-
-function Color.set_b(self: Color, b: float32)
-    _color_set_b(self.ptr, b)
+function Color.set_r(self: Color, r: float32)
+    _color_set_r(self.ptr, r)
 end
 
 function Color.get_g(self: Color): float32
@@ -199,12 +191,20 @@ function Color.set_g(self: Color, g: float32)
     _color_set_g(self.ptr, g)
 end
 
-function Color.get_r(self: Color): float32
-    return _color_get_r(self.ptr)
+function Color.get_b(self: Color): float32
+    return _color_get_b(self.ptr)
 end
 
-function Color.set_r(self: Color, r: float32)
-    _color_set_r(self.ptr, r)
+function Color.set_b(self: Color, b: float32)
+    _color_set_b(self.ptr, b)
+end
+
+function Color.get_a(self: Color): float32
+    return _color_get_a(self.ptr)
+end
+
+function Color.set_a(self: Color, a: float32)
+    _color_set_a(self.ptr, a)
 end
 
 function Color.set_rgb(self: Color, r: float32, g: float32, b: float32)
@@ -279,35 +279,11 @@ end
 
 global Beatmap = @record{
 }
-function Beatmap.add_chain_note(chain_note: ChainNote)
-    _beatmap_add_chain_note(chain_note.ptr)
+function Beatmap.add_color_note(color_note: ColorNote)
+    _beatmap_add_color_note(color_note.ptr)
 end
-function Beatmap.remove_chain_note(chain_note: ChainNote)
-    _beatmap_remove_chain_note(chain_note.ptr)
-end
-function Beatmap.add_chain_link_note(chain_link_note: ChainLinkNote)
-    _beatmap_add_chain_link_note(chain_link_note.ptr)
-end
-function Beatmap.remove_chain_link_note(chain_link_note: ChainLinkNote)
-    _beatmap_remove_chain_link_note(chain_link_note.ptr)
-end
-function Beatmap.add_chain_head_note(chain_head_note: ChainHeadNote)
-    _beatmap_add_chain_head_note(chain_head_note.ptr)
-end
-function Beatmap.remove_chain_head_note(chain_head_note: ChainHeadNote)
-    _beatmap_remove_chain_head_note(chain_head_note.ptr)
-end
-function Beatmap.add_wall(wall: Wall)
-    _beatmap_add_wall(wall.ptr)
-end
-function Beatmap.remove_wall(wall: Wall)
-    _beatmap_remove_wall(wall.ptr)
-end
-function Beatmap.add_arc(arc: Arc)
-    _beatmap_add_arc(arc.ptr)
-end
-function Beatmap.remove_arc(arc: Arc)
-    _beatmap_remove_arc(arc.ptr)
+function Beatmap.remove_color_note(color_note: ColorNote)
+    _beatmap_remove_color_note(color_note.ptr)
 end
 function Beatmap.add_bomb_note(bomb_note: BombNote)
     _beatmap_add_bomb_note(bomb_note.ptr)
@@ -315,10 +291,34 @@ end
 function Beatmap.remove_bomb_note(bomb_note: BombNote)
     _beatmap_remove_bomb_note(bomb_note.ptr)
 end
-function Beatmap.add_color_note(color_note: ColorNote)
-    _beatmap_add_color_note(color_note.ptr)
+function Beatmap.add_arc(arc: Arc)
+    _beatmap_add_arc(arc.ptr)
 end
-function Beatmap.remove_color_note(color_note: ColorNote)
-    _beatmap_remove_color_note(color_note.ptr)
+function Beatmap.remove_arc(arc: Arc)
+    _beatmap_remove_arc(arc.ptr)
+end
+function Beatmap.add_wall(wall: Wall)
+    _beatmap_add_wall(wall.ptr)
+end
+function Beatmap.remove_wall(wall: Wall)
+    _beatmap_remove_wall(wall.ptr)
+end
+function Beatmap.add_chain_head_note(chain_head_note: ChainHeadNote)
+    _beatmap_add_chain_head_note(chain_head_note.ptr)
+end
+function Beatmap.remove_chain_head_note(chain_head_note: ChainHeadNote)
+    _beatmap_remove_chain_head_note(chain_head_note.ptr)
+end
+function Beatmap.add_chain_link_note(chain_link_note: ChainLinkNote)
+    _beatmap_add_chain_link_note(chain_link_note.ptr)
+end
+function Beatmap.remove_chain_link_note(chain_link_note: ChainLinkNote)
+    _beatmap_remove_chain_link_note(chain_link_note.ptr)
+end
+function Beatmap.add_chain_note(chain_note: ChainNote)
+    _beatmap_add_chain_note(chain_note.ptr)
+end
+function Beatmap.remove_chain_note(chain_note: ChainNote)
+    _beatmap_remove_chain_note(chain_note.ptr)
 end
 

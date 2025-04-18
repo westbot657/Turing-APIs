@@ -165,20 +165,12 @@ pub const ChainNote = struct {
 
 pub const Color = struct {
     ptr: i32,
-    pub fn get_a(self: Color) f32 {
-        return _color_get_a(self.ptr);
+    pub fn get_r(self: Color) f32 {
+        return _color_get_r(self.ptr);
     }
 
-    pub fn set_a(self: Color, a: f32) void {
-        _color_set_a(self.ptr, a);
-    }
-
-    pub fn get_b(self: Color) f32 {
-        return _color_get_b(self.ptr);
-    }
-
-    pub fn set_b(self: Color, b: f32) void {
-        _color_set_b(self.ptr, b);
+    pub fn set_r(self: Color, r: f32) void {
+        _color_set_r(self.ptr, r);
     }
 
     pub fn get_g(self: Color) f32 {
@@ -189,12 +181,20 @@ pub const Color = struct {
         _color_set_g(self.ptr, g);
     }
 
-    pub fn get_r(self: Color) f32 {
-        return _color_get_r(self.ptr);
+    pub fn get_b(self: Color) f32 {
+        return _color_get_b(self.ptr);
     }
 
-    pub fn set_r(self: Color, r: f32) void {
-        _color_set_r(self.ptr, r);
+    pub fn set_b(self: Color, b: f32) void {
+        _color_set_b(self.ptr, b);
+    }
+
+    pub fn get_a(self: Color) f32 {
+        return _color_get_a(self.ptr);
+    }
+
+    pub fn set_a(self: Color, a: f32) void {
+        _color_set_a(self.ptr, a);
     }
 
     pub fn set_rgb(self: Color, r: f32, g: f32, b: f32) void {
@@ -271,35 +271,11 @@ pub fn create_chain_note(beat: f32) ChainNote {
 
 pub const Beatmap = struct {
     
-    pub fn add_chain_note(chain_note: ChainNote) void {
-        _beatmap_add_chain_note(chain_note.ptr);
+    pub fn add_color_note(color_note: ColorNote) void {
+        _beatmap_add_color_note(color_note.ptr);
     }
-    pub fn remove_chain_note(chain_note: ChainNote) void {
-        _beatmap_remove_chain_note(chain_note.ptr);
-    }
-    pub fn add_chain_link_note(chain_link_note: ChainLinkNote) void {
-        _beatmap_add_chain_link_note(chain_link_note.ptr);
-    }
-    pub fn remove_chain_link_note(chain_link_note: ChainLinkNote) void {
-        _beatmap_remove_chain_link_note(chain_link_note.ptr);
-    }
-    pub fn add_chain_head_note(chain_head_note: ChainHeadNote) void {
-        _beatmap_add_chain_head_note(chain_head_note.ptr);
-    }
-    pub fn remove_chain_head_note(chain_head_note: ChainHeadNote) void {
-        _beatmap_remove_chain_head_note(chain_head_note.ptr);
-    }
-    pub fn add_wall(wall: Wall) void {
-        _beatmap_add_wall(wall.ptr);
-    }
-    pub fn remove_wall(wall: Wall) void {
-        _beatmap_remove_wall(wall.ptr);
-    }
-    pub fn add_arc(arc: Arc) void {
-        _beatmap_add_arc(arc.ptr);
-    }
-    pub fn remove_arc(arc: Arc) void {
-        _beatmap_remove_arc(arc.ptr);
+    pub fn remove_color_note(color_note: ColorNote) void {
+        _beatmap_remove_color_note(color_note.ptr);
     }
     pub fn add_bomb_note(bomb_note: BombNote) void {
         _beatmap_add_bomb_note(bomb_note.ptr);
@@ -307,11 +283,35 @@ pub const Beatmap = struct {
     pub fn remove_bomb_note(bomb_note: BombNote) void {
         _beatmap_remove_bomb_note(bomb_note.ptr);
     }
-    pub fn add_color_note(color_note: ColorNote) void {
-        _beatmap_add_color_note(color_note.ptr);
+    pub fn add_arc(arc: Arc) void {
+        _beatmap_add_arc(arc.ptr);
     }
-    pub fn remove_color_note(color_note: ColorNote) void {
-        _beatmap_remove_color_note(color_note.ptr);
+    pub fn remove_arc(arc: Arc) void {
+        _beatmap_remove_arc(arc.ptr);
+    }
+    pub fn add_wall(wall: Wall) void {
+        _beatmap_add_wall(wall.ptr);
+    }
+    pub fn remove_wall(wall: Wall) void {
+        _beatmap_remove_wall(wall.ptr);
+    }
+    pub fn add_chain_head_note(chain_head_note: ChainHeadNote) void {
+        _beatmap_add_chain_head_note(chain_head_note.ptr);
+    }
+    pub fn remove_chain_head_note(chain_head_note: ChainHeadNote) void {
+        _beatmap_remove_chain_head_note(chain_head_note.ptr);
+    }
+    pub fn add_chain_link_note(chain_link_note: ChainLinkNote) void {
+        _beatmap_add_chain_link_note(chain_link_note.ptr);
+    }
+    pub fn remove_chain_link_note(chain_link_note: ChainLinkNote) void {
+        _beatmap_remove_chain_link_note(chain_link_note.ptr);
+    }
+    pub fn add_chain_note(chain_note: ChainNote) void {
+        _beatmap_add_chain_note(chain_note.ptr);
+    }
+    pub fn remove_chain_note(chain_note: ChainNote) void {
+        _beatmap_remove_chain_note(chain_note.ptr);
     }
 };
 

@@ -307,20 +307,12 @@ class Color {
 
     }
 
-    public static get_a(self: Color): f32 {
-        return _color_get_a(self.ptr);
+    public static get_r(self: Color): f32 {
+        return _color_get_r(self.ptr);
     }
 
-    public static set_a(self: Color, a: f32): void {
-        _color_set_a(self.ptr, a);
-    }
-
-    public static get_b(self: Color): f32 {
-        return _color_get_b(self.ptr);
-    }
-
-    public static set_b(self: Color, b: f32): void {
-        _color_set_b(self.ptr, b);
+    public static set_r(self: Color, r: f32): void {
+        _color_set_r(self.ptr, r);
     }
 
     public static get_g(self: Color): f32 {
@@ -331,12 +323,20 @@ class Color {
         _color_set_g(self.ptr, g);
     }
 
-    public static get_r(self: Color): f32 {
-        return _color_get_r(self.ptr);
+    public static get_b(self: Color): f32 {
+        return _color_get_b(self.ptr);
     }
 
-    public static set_r(self: Color, r: f32): void {
-        _color_set_r(self.ptr, r);
+    public static set_b(self: Color, b: f32): void {
+        _color_set_b(self.ptr, b);
+    }
+
+    public static get_a(self: Color): f32 {
+        return _color_get_a(self.ptr);
+    }
+
+    public static set_a(self: Color, a: f32): void {
+        _color_set_a(self.ptr, a);
     }
 
     public static set_rgb(self: Color, r: f32, g: f32, b: f32): void {
@@ -411,35 +411,11 @@ export function create_chain_note(beat: f32): ChainNote {
 class Beatmap {
     constructor() {
     }
-    public static add_chain_note(chain_note: ChainNote): void {
-        _beatmap_add_chain_note(chain_note.ptr);
+    public static add_color_note(color_note: ColorNote): void {
+        _beatmap_add_color_note(color_note.ptr);
     }
-    public static remove_chain_note(chain_note: ChainNote): void {
-        _beatmap_remove_chain_note(chain_note.ptr);
-    }
-    public static add_chain_link_note(chain_link_note: ChainLinkNote): void {
-        _beatmap_add_chain_link_note(chain_link_note.ptr);
-    }
-    public static remove_chain_link_note(chain_link_note: ChainLinkNote): void {
-        _beatmap_remove_chain_link_note(chain_link_note.ptr);
-    }
-    public static add_chain_head_note(chain_head_note: ChainHeadNote): void {
-        _beatmap_add_chain_head_note(chain_head_note.ptr);
-    }
-    public static remove_chain_head_note(chain_head_note: ChainHeadNote): void {
-        _beatmap_remove_chain_head_note(chain_head_note.ptr);
-    }
-    public static add_wall(wall: Wall): void {
-        _beatmap_add_wall(wall.ptr);
-    }
-    public static remove_wall(wall: Wall): void {
-        _beatmap_remove_wall(wall.ptr);
-    }
-    public static add_arc(arc: Arc): void {
-        _beatmap_add_arc(arc.ptr);
-    }
-    public static remove_arc(arc: Arc): void {
-        _beatmap_remove_arc(arc.ptr);
+    public static remove_color_note(color_note: ColorNote): void {
+        _beatmap_remove_color_note(color_note.ptr);
     }
     public static add_bomb_note(bomb_note: BombNote): void {
         _beatmap_add_bomb_note(bomb_note.ptr);
@@ -447,11 +423,35 @@ class Beatmap {
     public static remove_bomb_note(bomb_note: BombNote): void {
         _beatmap_remove_bomb_note(bomb_note.ptr);
     }
-    public static add_color_note(color_note: ColorNote): void {
-        _beatmap_add_color_note(color_note.ptr);
+    public static add_arc(arc: Arc): void {
+        _beatmap_add_arc(arc.ptr);
     }
-    public static remove_color_note(color_note: ColorNote): void {
-        _beatmap_remove_color_note(color_note.ptr);
+    public static remove_arc(arc: Arc): void {
+        _beatmap_remove_arc(arc.ptr);
+    }
+    public static add_wall(wall: Wall): void {
+        _beatmap_add_wall(wall.ptr);
+    }
+    public static remove_wall(wall: Wall): void {
+        _beatmap_remove_wall(wall.ptr);
+    }
+    public static add_chain_head_note(chain_head_note: ChainHeadNote): void {
+        _beatmap_add_chain_head_note(chain_head_note.ptr);
+    }
+    public static remove_chain_head_note(chain_head_note: ChainHeadNote): void {
+        _beatmap_remove_chain_head_note(chain_head_note.ptr);
+    }
+    public static add_chain_link_note(chain_link_note: ChainLinkNote): void {
+        _beatmap_add_chain_link_note(chain_link_note.ptr);
+    }
+    public static remove_chain_link_note(chain_link_note: ChainLinkNote): void {
+        _beatmap_remove_chain_link_note(chain_link_note.ptr);
+    }
+    public static add_chain_note(chain_note: ChainNote): void {
+        _beatmap_add_chain_note(chain_note.ptr);
+    }
+    public static remove_chain_note(chain_note: ChainNote): void {
+        _beatmap_remove_chain_note(chain_note.ptr);
     }
 }
 

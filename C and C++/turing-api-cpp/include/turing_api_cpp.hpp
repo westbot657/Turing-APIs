@@ -55,21 +55,21 @@ class ChainNote {
 class Color {
     public:
         int ptr;
-        static float get_a(Color* self);
+        static float get_r(Color* self);
 
-        static void set_a(Color* self, float a);
-
-        static float get_b(Color* self);
-
-        static void set_b(Color* self, float b);
+        static void set_r(Color* self, float r);
 
         static float get_g(Color* self);
 
         static void set_g(Color* self, float g);
 
-        static float get_r(Color* self);
+        static float get_b(Color* self);
 
-        static void set_r(Color* self, float r);
+        static void set_b(Color* self, float b);
+
+        static float get_a(Color* self);
+
+        static void set_a(Color* self, float a);
 
         static void set_rgb(Color* self, float r, float g, float b);
 
@@ -108,20 +108,20 @@ ChainNote create_chain_note(float beat);
 // C++.h class 'Beatmap'
 class Beatmap {
     public:
-        static void add_chain_note(ChainNote chain_note);
-        static void remove_chain_note(ChainNote chain_note);
-        static void add_chain_link_note(ChainLinkNote chain_link_note);
-        static void remove_chain_link_note(ChainLinkNote chain_link_note);
-        static void add_chain_head_note(ChainHeadNote chain_head_note);
-        static void remove_chain_head_note(ChainHeadNote chain_head_note);
-        static void add_wall(Wall wall);
-        static void remove_wall(Wall wall);
-        static void add_arc(Arc arc);
-        static void remove_arc(Arc arc);
-        static void add_bomb_note(BombNote bomb_note);
-        static void remove_bomb_note(BombNote bomb_note);
         static void add_color_note(ColorNote color_note);
         static void remove_color_note(ColorNote color_note);
+        static void add_bomb_note(BombNote bomb_note);
+        static void remove_bomb_note(BombNote bomb_note);
+        static void add_arc(Arc arc);
+        static void remove_arc(Arc arc);
+        static void add_wall(Wall wall);
+        static void remove_wall(Wall wall);
+        static void add_chain_head_note(ChainHeadNote chain_head_note);
+        static void remove_chain_head_note(ChainHeadNote chain_head_note);
+        static void add_chain_link_note(ChainLinkNote chain_link_note);
+        static void remove_chain_link_note(ChainLinkNote chain_link_note);
+        static void add_chain_note(ChainNote chain_note);
+        static void remove_chain_note(ChainNote chain_note);
 };
 
 #endif // TURING_API_HPP

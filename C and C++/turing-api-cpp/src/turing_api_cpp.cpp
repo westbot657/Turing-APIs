@@ -207,20 +207,12 @@ Color ChainNote::get_color(ChainNote* self) {
 
 // C++ class Color
 
-float Color::get_a(Color* self) {
-    return _color_get_a(self->ptr);
+float Color::get_r(Color* self) {
+    return _color_get_r(self->ptr);
 }
 
-void Color::set_a(Color* self, float a) {
-    _color_set_a(self->ptr, a);
-}
-
-float Color::get_b(Color* self) {
-    return _color_get_b(self->ptr);
-}
-
-void Color::set_b(Color* self, float b) {
-    _color_set_b(self->ptr, b);
+void Color::set_r(Color* self, float r) {
+    _color_set_r(self->ptr, r);
 }
 
 float Color::get_g(Color* self) {
@@ -231,12 +223,20 @@ void Color::set_g(Color* self, float g) {
     _color_set_g(self->ptr, g);
 }
 
-float Color::get_r(Color* self) {
-    return _color_get_r(self->ptr);
+float Color::get_b(Color* self) {
+    return _color_get_b(self->ptr);
 }
 
-void Color::set_r(Color* self, float r) {
-    _color_set_r(self->ptr, r);
+void Color::set_b(Color* self, float b) {
+    _color_set_b(self->ptr, b);
+}
+
+float Color::get_a(Color* self) {
+    return _color_get_a(self->ptr);
+}
+
+void Color::set_a(Color* self, float a) {
+    _color_set_a(self->ptr, a);
 }
 
 void Color::set_rgb(Color* self, float r, float g, float b) {
@@ -316,35 +316,11 @@ ChainNote create_chain_note(float beat) {
 }
 
 // C++ class Beatmap
-void Beatmap::add_chain_note(ChainNote chain_note) {
-    _beatmap_add_chain_note(chain_note.ptr);
+void Beatmap::add_color_note(ColorNote color_note) {
+    _beatmap_add_color_note(color_note.ptr);
 }
-void Beatmap::remove_chain_note(ChainNote chain_note) {
-    _beatmap_remove_chain_note(chain_note.ptr);
-}
-void Beatmap::add_chain_link_note(ChainLinkNote chain_link_note) {
-    _beatmap_add_chain_link_note(chain_link_note.ptr);
-}
-void Beatmap::remove_chain_link_note(ChainLinkNote chain_link_note) {
-    _beatmap_remove_chain_link_note(chain_link_note.ptr);
-}
-void Beatmap::add_chain_head_note(ChainHeadNote chain_head_note) {
-    _beatmap_add_chain_head_note(chain_head_note.ptr);
-}
-void Beatmap::remove_chain_head_note(ChainHeadNote chain_head_note) {
-    _beatmap_remove_chain_head_note(chain_head_note.ptr);
-}
-void Beatmap::add_wall(Wall wall) {
-    _beatmap_add_wall(wall.ptr);
-}
-void Beatmap::remove_wall(Wall wall) {
-    _beatmap_remove_wall(wall.ptr);
-}
-void Beatmap::add_arc(Arc arc) {
-    _beatmap_add_arc(arc.ptr);
-}
-void Beatmap::remove_arc(Arc arc) {
-    _beatmap_remove_arc(arc.ptr);
+void Beatmap::remove_color_note(ColorNote color_note) {
+    _beatmap_remove_color_note(color_note.ptr);
 }
 void Beatmap::add_bomb_note(BombNote bomb_note) {
     _beatmap_add_bomb_note(bomb_note.ptr);
@@ -352,10 +328,34 @@ void Beatmap::add_bomb_note(BombNote bomb_note) {
 void Beatmap::remove_bomb_note(BombNote bomb_note) {
     _beatmap_remove_bomb_note(bomb_note.ptr);
 }
-void Beatmap::add_color_note(ColorNote color_note) {
-    _beatmap_add_color_note(color_note.ptr);
+void Beatmap::add_arc(Arc arc) {
+    _beatmap_add_arc(arc.ptr);
 }
-void Beatmap::remove_color_note(ColorNote color_note) {
-    _beatmap_remove_color_note(color_note.ptr);
+void Beatmap::remove_arc(Arc arc) {
+    _beatmap_remove_arc(arc.ptr);
+}
+void Beatmap::add_wall(Wall wall) {
+    _beatmap_add_wall(wall.ptr);
+}
+void Beatmap::remove_wall(Wall wall) {
+    _beatmap_remove_wall(wall.ptr);
+}
+void Beatmap::add_chain_head_note(ChainHeadNote chain_head_note) {
+    _beatmap_add_chain_head_note(chain_head_note.ptr);
+}
+void Beatmap::remove_chain_head_note(ChainHeadNote chain_head_note) {
+    _beatmap_remove_chain_head_note(chain_head_note.ptr);
+}
+void Beatmap::add_chain_link_note(ChainLinkNote chain_link_note) {
+    _beatmap_add_chain_link_note(chain_link_note.ptr);
+}
+void Beatmap::remove_chain_link_note(ChainLinkNote chain_link_note) {
+    _beatmap_remove_chain_link_note(chain_link_note.ptr);
+}
+void Beatmap::add_chain_note(ChainNote chain_note) {
+    _beatmap_add_chain_note(chain_note.ptr);
+}
+void Beatmap::remove_chain_note(ChainNote chain_note) {
+    _beatmap_remove_chain_note(chain_note.ptr);
 }
 
