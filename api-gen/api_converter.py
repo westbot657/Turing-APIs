@@ -590,7 +590,7 @@ class FileConstructor:
         for bind in self.wasm_bindings:
             data_out += bind + "\n"
             
-        data_out += mdef.static_defs.get(self.lang, "") 
+        data_out += mdef.static_defs.get(self.lang, "")  + "\n\n"
         
         passes = set()
         

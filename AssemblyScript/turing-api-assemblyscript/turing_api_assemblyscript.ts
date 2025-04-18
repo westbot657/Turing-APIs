@@ -224,10 +224,12 @@ export declare function _color_set_a(color: i32, a: f32): void;
 export function toCString(str: string): u32 {
     return <u32>changetype<usize>(String.UTF8.encode(str, true));
 }
-export function readCString(ptr: u32): void {
+export function readCString(ptr: u32): string {
     const str = String.UTF8.decodeUnsafe(ptr, u32.MAX_VALUE, true); // true = null-terminated
-    console.log(str);
-}class Color {
+    return str;
+}
+
+class Color {
     ptr: i32;
 
     constructor(ptr: i32) {

@@ -119,7 +119,9 @@ pub fn concat_strings(allocator: std.mem.Allocator, str1: []const u8, str2: []co
     std.mem.copy(u8, result[0..str1.len], str1);
     std.mem.copy(u8, result[str1.len..], str2);
     return result;
-}pub const Color = struct {
+}
+
+pub const Color = struct {
     ptr: i32,
     pub fn get_r(self: Color) f32 {
         return _color_get_r(self.ptr);

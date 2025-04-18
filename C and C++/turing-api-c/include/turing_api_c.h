@@ -7,6 +7,7 @@
 #define TURING_API_H
 
 #include <wasm_imports.h>
+
 typedef struct {
     int ptr;
 } Color;

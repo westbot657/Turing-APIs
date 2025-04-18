@@ -7,6 +7,7 @@
 #define TURING_API_HPP
 
 #include <wasm_imports.h>
+
 // C++.h class 'Color'
 class Color {
     public:

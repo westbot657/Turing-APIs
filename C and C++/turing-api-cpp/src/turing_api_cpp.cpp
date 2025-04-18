@@ -167,7 +167,9 @@ char* concat_strings(const char* str1, const char* str2) {
         strcat(result, str2);
     }
     return result;
-}// C++ class Color
+}
+
+// C++ class Color
 
 float Color::get_r(Color* self) {
     return _color_get_r(self->ptr);
