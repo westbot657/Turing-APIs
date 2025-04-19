@@ -14,6 +14,9 @@ class IMdef:
     def get_source(self, mref:str, lang:str) -> None|tuple[str, list[str]]: ...
     def process_from_source(self, mref:str, lang:str, fname:str) -> str: ...
 
+#######################
+### Type converters ###
+#######################
 def from_mdef(tp:str, lang:str) -> str:
     match lang:
         case "C" | "C.h":
@@ -130,6 +133,9 @@ class Arg:
     def from_list(cls, data):
         return cls(data[0], data[1], Ownership.Owned)
 
+############################
+### Function definitions ###
+############################
 class Fn:
     def __init__(self, name:str, args:list[Arg], ret_tp:str):
         self.name = name
@@ -208,6 +214,9 @@ class Attr:
             case "lua" | "zig":
                 return f"{self.name}: {from_mdef(self.tp, lang)}"
 
+################################
+### Method generation system ###
+################################
 class Method:
     def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str, wasm_name:str = ""):
         self.name = name
@@ -217,7 +226,7 @@ class Method:
         self.wasm_name = wasm_name
     
     def generate(self, classlike, lang:str) -> str: ...
-    
+
 class StaticMethod(Method):
     def __init__(self, name:str, params:list[Arg], ret_type:str, mref:str, wasm_name:str = ""):
         super().__init__(name, params, ret_type, mref, wasm_name)
@@ -293,8 +302,10 @@ class InstanceMethod(Method):
                 
                 return out
         return ""
-    
-    
+
+###############################
+### Class generation system ###
+###############################
 class Classlike:
     def __init__(self, classname: str, attrs: list[Attr], static_methods: list[StaticMethod], instance_methods: list[InstanceMethod], friend_types:list[str]):
         self.classname = classname
@@ -726,6 +737,9 @@ class Construct(IConstruct):
         cls._structs.append(child())
         return child
 
+########################
+### Function linkers ###
+########################
 @Construct.c
 class BeatmapConstruct(Construct):
     
@@ -763,7 +777,6 @@ class BeatmapConstruct(Construct):
         out = cl.generate(fstruct.lang, mdef)
         
         fstruct.add_classlike(1, "Beatmap", re.sub(r"\n+", "\n", out))
-
 
 @Construct.c
 class GameObjectConstruct(Construct):
@@ -841,7 +854,6 @@ class GameObjectConstruct(Construct):
                     m.wasm_name = fn.name
         
         return classlike.generate(fstruct.lang, mdef)
-        
 
 @Construct.c
 class ExtraClassesConstruct(Construct):
@@ -870,8 +882,10 @@ class ExtraClassesConstruct(Construct):
             if t:
                 src = t.generate(fstruct.lang, mdef)
                 fstruct.add_classlike(o, i, src)
-        
 
+##########################
+### Mdef parser system ###
+##########################
 class ClsBuilder:
     def __init__(self):
         self.name: str|None = None
