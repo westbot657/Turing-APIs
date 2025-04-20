@@ -90,7 +90,7 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "f32": return "f32"
                 case None: return "void"
                 case "*mut c_char" | "*const c_char": return "i32"
-                case "bool": "bool"
+                case "bool": return "bool"
                 case "str": return "[*:0]const u8"
         case "ts":
             match tp:
@@ -114,7 +114,7 @@ def convert_type(tp:str, lang:str) -> str|None:
                 case "bool": return "boolean"
                 case "str": return "string"
         
-    if tp not in ["void", "ColorNote", "BombNote", "Arc", "Wall", "ChainHeadNote", "ChainLinkNote", "ChainNote", "Color"]:
+    if tp not in ["void", "ColorNote", "BombNote", "Arc", "Wall", "ChainHeadNote", "ChainLinkNote", "ChainNote", "Color", "Vec2", "Vec3", "Vec4", "Quat"]:
         print(f"\n\n\n\033[38;2;255;20;20mUnprocessed type: {tp} ({lang})\033[0m\n\n\n")
     return tp
 
@@ -243,7 +243,6 @@ class StaticMethod(Method):
             case "C.h":
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}_{self.name}{args};"
             case "C++":
-                body = body.replace("\n", "\n    ")
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body}\n}}"
             case "C++.h":
                 return f"static {convert_type(self.ret_type, lang)} {self.name}{args};"
@@ -271,7 +270,10 @@ class InstanceMethod(Method):
 
     def generate(self, classlike, lang:str, mdef:IMdef) -> str:
         classlike: Classlike
-        params = [Arg("self", classlike.classname, Ownership.MutRef)] + self.params
+        if lang in ["C", "C.h", "lua", "zig"]:
+            params = [Arg("self", classlike.classname, Ownership.MutRef)] + self.params
+        else:
+            params = self.params
         args = get_param_def_style(lang, params).format_map({"args": build_params(lang, params)})
         body = mdef.process_from_source(self.mref, lang, self.wasm_name)
         # print(f"\n\n\033[38;2;20;200;20mbody from mref '{self.mref}':\033[0m\n{body}\n\n")
@@ -285,7 +287,7 @@ class InstanceMethod(Method):
                 body = body.replace("\n", "\n    ")
                 return f"{convert_type(self.ret_type, lang)} {classlike.classname}::{self.name}{args} {{\n    {body}\n}}"
             case "C++.h":
-                return f"static {convert_type(self.ret_type, lang)} {self.name}{args};"
+                return f"{convert_type(self.ret_type, lang)} {self.name}{args};"
             case "wasm.h":
                 return "" # no class-related methods in wasm bindings
             case "lua":
@@ -501,7 +503,7 @@ class FileConstructor:
     def header(self) -> str:
         match self.lang:
             case "wasm.h":
-                return "\n#ifndef WASM_IMPORTS_H\n#define WASM_IMPORTS_H\n\n"
+                return "\n#ifndef WASM_IMPORTS_H\n#define WASM_IMPORTS_H\n\n#define bool int\n#define true 1\n#define false 0\n"
             case "C.h":
                 return "\n#ifndef TURING_API_H\n#define TURING_API_H\n\n#include <wasm_imports.h>\n"
             case "C++.h":
@@ -747,6 +749,7 @@ class BeatmapConstruct(Construct):
         super().__init__("Beatmap")
         self.object_adders: list[Fn] = []
         self.object_removers: list[Fn] = []
+        self.object_getters: list[Fn] = []
     
     def owns_fn(self, fn):
         return fn in self.object_adders
@@ -757,6 +760,8 @@ class BeatmapConstruct(Construct):
                 self.object_adders.append(fn)
             if fn.name.startswith("_beatmap_remove"):
                 self.object_removers.append(fn)
+            if fn.name.startswith("_beatmap_get"):
+                self.object_getters.append(fn)
     
     def reset(self):
         self.object_adders.clear()
@@ -770,6 +775,10 @@ class BeatmapConstruct(Construct):
                     sm.wasm_name = fn.name
             
             for fn in self.object_removers:
+                if fn.name == f"_beatmap_{sm.name}":
+                    sm.wasm_name = fn.name
+            
+            for fn in self.object_getters:
                 if fn.name == f"_beatmap_{sm.name}":
                     sm.wasm_name = fn.name
         
@@ -860,9 +869,19 @@ class ExtraClassesConstruct(Construct):
     def __init__(self):
         super().__init__("ExtraClasses")
         self.color_methods: dict[str, Fn] = {}
+        self.math_methods: dict[str, dict[str. Fn]] = {
+            "Vec2": {},
+            "Vec3": {},
+            "Vec4": {},
+            "Quat": {}
+        }
         self.include = [
             (-1, "Color"),
-            (-1, "Log")
+            (-1, "Log"),
+            (-1, "Vec2"),
+            (-1, "Vec3"),
+            (-1, "Vec4"),
+            (-1, "Quat"),
         ]
     
     def attach(self, lang:str, mdef:IMdef, fns:list[Fn]):
@@ -870,12 +889,25 @@ class ExtraClassesConstruct(Construct):
             if (m := re.match(r"_color_([gs]et_.*)", fn.name)) is not None:
                 m: re.Match
                 self.color_methods.update({m.groups()[0]: fn})
+            elif (m := re.match(r"_(vec2|vec3|vec4|quat)_((?:[gs]et|from)_.*)", fn.name)) is not None:
+                m: re.Match
+                n: str = m.groups()[0]
+                n = n[0].upper() + n[1:]
+                self.math_methods[n].update({m.groups()[1]: fn})
     
     def generate(self, fstruct, mdef:IMdef):
         
         color: Classlike = mdef.get_class("Color")
         for m in color.instance_methods:
             m.wasm_name = self.color_methods.get(m.name, Fn("undefined", [], "")).name
+        
+        for s in self.math_methods.keys():
+            l = s.lower()
+            clazz: Classlike = mdef.get_class(s)
+            for m in clazz.instance_methods:
+                m.wasm_name = self.math_methods[s].get(m.name, Fn("undefined", [], "")).name
+            for m in clazz.static_methods:
+                m.wasm_name = self.math_methods[s].get(m.name, Fn("undefined", [], "")).name
         
         for (o, i) in self.include:
             t: Classlike = mdef.class_likes.get(i, None)

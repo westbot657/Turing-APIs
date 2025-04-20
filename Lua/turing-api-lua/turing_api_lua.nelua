@@ -7,6 +7,7 @@ local string = require('string')
 local function _create_color_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_color_note(color_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_color_note(color_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_color_note_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_note_set_position(color_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_note_get_position(color_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_note_set_orientation(color_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -16,6 +17,7 @@ local function _color_note_get_color(color_note: int32): int32 <cimport, nodecl,
 local function _create_bomb_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_bomb_note(bomb_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_bomb_note(bomb_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_bomb_note_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _bomb_note_set_position(bomb_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _bomb_note_get_position(bomb_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _bomb_note_set_orientation(bomb_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -25,6 +27,7 @@ local function _bomb_note_get_color(bomb_note: int32): int32 <cimport, nodecl, c
 local function _create_arc(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_arc(arc: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_arc(arc: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_arc_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _arc_set_position(arc: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _arc_get_position(arc: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _arc_set_orientation(arc: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -34,6 +37,7 @@ local function _arc_get_color(arc: int32): int32 <cimport, nodecl, cinclude '<tu
 local function _create_wall(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_wall(wall: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_wall(wall: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_wall_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _wall_set_position(wall: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _wall_get_position(wall: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _wall_set_orientation(wall: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -43,6 +47,7 @@ local function _wall_get_color(wall: int32): int32 <cimport, nodecl, cinclude '<
 local function _create_chain_head_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_chain_head_note(chain_head_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_chain_head_note(chain_head_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_chain_head_note_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_head_note_set_position(chain_head_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_head_note_get_position(chain_head_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_head_note_set_orientation(chain_head_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -52,6 +57,7 @@ local function _chain_head_note_get_color(chain_head_note: int32): int32 <cimpor
 local function _create_chain_link_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_chain_link_note(chain_link_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_chain_link_note(chain_link_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_chain_link_note_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_link_note_set_position(chain_link_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_link_note_get_position(chain_link_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_link_note_set_orientation(chain_link_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -61,6 +67,7 @@ local function _chain_link_note_get_color(chain_link_note: int32): int32 <cimpor
 local function _create_chain_note(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_add_chain_note(chain_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _beatmap_remove_chain_note(chain_note: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _beatmap_get_chain_note_at_beat(beat: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_note_set_position(chain_note: int32, pos: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_note_get_position(chain_note: int32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _chain_note_set_orientation(chain_note: int32, orientation: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -79,6 +86,18 @@ local function _vec4_from_xyzw(x: float32, y: float32, z: float32, w: float32): 
 local function _quat_from_xyzw(x: float32, y: float32, z: float32, w: float32): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_rgb(color: int32, r: float32, g: float32, b: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _color_set_rgba(color: int32, r: float32, g: float32, b: float32, a: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_contains_persistent_i32(key: cstring): boolean <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_contains_persistent_f32(key: cstring): boolean <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_contains_persistent_str(key: cstring): boolean <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_store_persistent_i32(key: cstring, value: int32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_store_persistent_f32(key: cstring, value: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_store_persistent_str(key: cstring, value: cstring) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_access_persistent_i32(key: cstring): int32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_access_persistent_f32(key: cstring): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_access_persistent_str(key: cstring): cstring <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_remove_persistent_i32(key: cstring) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_remove_persistent_f32(key: cstring) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
+local function _data_remove_persistent_str(key: cstring) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _vec2_get_x(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _vec2_set_x(vec2: int32, x: float32) <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
 local function _vec2_get_y(vec2: int32): float32 <cimport, nodecl, cinclude '<turing_api_lua.h>'> end
@@ -178,61 +197,286 @@ function Log.debug(msg: string)
     _log(string.format("debug: %s", msg))
 end
 
+global Vec2 = @record{
+    ptr: int32
+}
+
+function Vec2.from_xy(x: float32, y: float32): Vec2
+    local ptr: int32 = _vec2_from_xy(x, y)
+    local inst: Vec2 = { ptr = ptr }
+    return inst
+end
+
+function Vec2.get_x(self: Vec2): float32
+    return _vec2_get_x(self.ptr)
+end
+
+function Vec2.get_y(self: Vec2): float32
+    return _vec2_get_y(self.ptr)
+end
+
+global Vec3 = @record{
+    ptr: int32
+}
+
+function Vec3.from_xyz(x: float32, y: float32, z: float32): Vec3
+    local ptr: int32 = _vec3_from_xyz(x, y, z)
+    local inst: Vec3 = { ptr = ptr }
+    return inst
+end
+
+function Vec3.get_x(self: Vec3): float32
+    return _vec3_get_x(self.ptr)
+end
+
+function Vec3.get_y(self: Vec3): float32
+    return _vec3_get_y(self.ptr)
+end
+
+function Vec3.get_z(self: Vec3): float32
+    return _vec3_get_z(self.ptr)
+end
+
+global Vec4 = @record{
+    ptr: int32
+}
+
+function Vec4.from_xyzw(x: float32, y: float32, z: float32, w: float32): Vec4
+    local ptr: int32 = _vec4_from_xyzw(x, y, z, w)
+    local inst: Vec4 = { ptr = ptr }
+    return inst
+end
+
+function Vec4.get_x(self: Vec4): float32
+    return _vec4_get_x(self.ptr)
+end
+
+function Vec4.get_y(self: Vec4): float32
+    return _vec4_get_y(self.ptr)
+end
+
+function Vec4.get_z(self: Vec4): float32
+    return _vec4_get_z(self.ptr)
+end
+
+function Vec4.get_w(self: Vec4): float32
+    return _vec4_get_w(self.ptr)
+end
+
+global Quat = @record{
+    ptr: int32
+}
+
+function Quat.from_xyzw(x: float32, y: float32, z: float32, w: float32): Quat
+    local ptr: int32 = _quat_from_xyzw(x, y, z, w)
+    local inst: Quat = { ptr = ptr }
+    return inst
+end
+
+function Quat.get_x(self: Quat): float32
+    return _quat_get_x(self.ptr)
+end
+
+function Quat.get_y(self: Quat): float32
+    return _quat_get_y(self.ptr)
+end
+
+function Quat.get_z(self: Quat): float32
+    return _quat_get_z(self.ptr)
+end
+
+function Quat.get_w(self: Quat): float32
+    return _quat_get_w(self.ptr)
+end
+
 global ColorNote = @record{
     ptr: int32
 }
 function ColorNote.get_color(self: ColorNote): Color
     local ptr: int32 = _color_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function ColorNote.set_color(self: ColorNote, color: Color)
+    _color_note_set_color(self.ptr, color.ptr)
+end
+function ColorNote.get_position(self: ColorNote): Vec3
+    local ptr: int32 = _color_note_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function ColorNote.set_position(self: ColorNote, position: Vec3)
+    _color_note_set_position(self.ptr, position.ptr)
+end
+function ColorNote.get_orientation(self: ColorNote): Quat
+    local ptr: int32 = _color_note_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function ColorNote.set_orientation(self: ColorNote, orientation: Quat)
+    _color_note_set_orientation(self.ptr, orientation.ptr)
 end
 global BombNote = @record{
     ptr: int32
 }
 function BombNote.get_color(self: BombNote): Color
     local ptr: int32 = _bomb_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function BombNote.set_color(self: BombNote, color: Color)
+    _bomb_note_set_color(self.ptr, color.ptr)
+end
+function BombNote.get_position(self: BombNote): Vec3
+    local ptr: int32 = _bomb_note_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function BombNote.set_position(self: BombNote, position: Vec3)
+    _bomb_note_set_position(self.ptr, position.ptr)
+end
+function BombNote.get_orientation(self: BombNote): Quat
+    local ptr: int32 = _bomb_note_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function BombNote.set_orientation(self: BombNote, orientation: Quat)
+    _bomb_note_set_orientation(self.ptr, orientation.ptr)
 end
 global Arc = @record{
     ptr: int32
 }
 function Arc.get_color(self: Arc): Color
     local ptr: int32 = _arc_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function Arc.set_color(self: Arc, color: Color)
+    _arc_set_color(self.ptr, color.ptr)
+end
+function Arc.get_position(self: Arc): Vec3
+    local ptr: int32 = _arc_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function Arc.set_position(self: Arc, position: Vec3)
+    _arc_set_position(self.ptr, position.ptr)
+end
+function Arc.get_orientation(self: Arc): Quat
+    local ptr: int32 = _arc_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function Arc.set_orientation(self: Arc, orientation: Quat)
+    _arc_set_orientation(self.ptr, orientation.ptr)
 end
 global Wall = @record{
     ptr: int32
 }
 function Wall.get_color(self: Wall): Color
     local ptr: int32 = _wall_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function Wall.set_color(self: Wall, color: Color)
+    _wall_set_color(self.ptr, color.ptr)
+end
+function Wall.get_position(self: Wall): Vec3
+    local ptr: int32 = _wall_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function Wall.set_position(self: Wall, position: Vec3)
+    _wall_set_position(self.ptr, position.ptr)
+end
+function Wall.get_orientation(self: Wall): Quat
+    local ptr: int32 = _wall_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function Wall.set_orientation(self: Wall, orientation: Quat)
+    _wall_set_orientation(self.ptr, orientation.ptr)
 end
 global ChainHeadNote = @record{
     ptr: int32
 }
 function ChainHeadNote.get_color(self: ChainHeadNote): Color
     local ptr: int32 = _chain_head_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function ChainHeadNote.set_color(self: ChainHeadNote, color: Color)
+    _chain_head_note_set_color(self.ptr, color.ptr)
+end
+function ChainHeadNote.get_position(self: ChainHeadNote): Vec3
+    local ptr: int32 = _chain_head_note_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function ChainHeadNote.set_position(self: ChainHeadNote, position: Vec3)
+    _chain_head_note_set_position(self.ptr, position.ptr)
+end
+function ChainHeadNote.get_orientation(self: ChainHeadNote): Quat
+    local ptr: int32 = _chain_head_note_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function ChainHeadNote.set_orientation(self: ChainHeadNote, orientation: Quat)
+    _chain_head_note_set_orientation(self.ptr, orientation.ptr)
 end
 global ChainLinkNote = @record{
     ptr: int32
 }
 function ChainLinkNote.get_color(self: ChainLinkNote): Color
     local ptr: int32 = _chain_link_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function ChainLinkNote.set_color(self: ChainLinkNote, color: Color)
+    _chain_link_note_set_color(self.ptr, color.ptr)
+end
+function ChainLinkNote.get_position(self: ChainLinkNote): Vec3
+    local ptr: int32 = _chain_link_note_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function ChainLinkNote.set_position(self: ChainLinkNote, position: Vec3)
+    _chain_link_note_set_position(self.ptr, position.ptr)
+end
+function ChainLinkNote.get_orientation(self: ChainLinkNote): Quat
+    local ptr: int32 = _chain_link_note_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function ChainLinkNote.set_orientation(self: ChainLinkNote, orientation: Quat)
+    _chain_link_note_set_orientation(self.ptr, orientation.ptr)
 end
 global ChainNote = @record{
     ptr: int32
 }
 function ChainNote.get_color(self: ChainNote): Color
     local ptr: int32 = _chain_note_get_color(self.ptr)
-local note: Color = { ptr = ptr }
-return note
+local inst: Color = { ptr = ptr }
+return inst
+end
+function ChainNote.set_color(self: ChainNote, color: Color)
+    _chain_note_set_color(self.ptr, color.ptr)
+end
+function ChainNote.get_position(self: ChainNote): Vec3
+    local ptr: int32 = _chain_note_get_position(self.ptr)
+local inst: Vec3 = { ptr = ptr }
+return inst
+end
+function ChainNote.set_position(self: ChainNote, position: Vec3)
+    _chain_note_set_position(self.ptr, position.ptr)
+end
+function ChainNote.get_orientation(self: ChainNote): Quat
+    local ptr: int32 = _chain_note_get_orientation(self.ptr)
+local inst: Quat = { ptr = ptr }
+return inst
+end
+function ChainNote.set_orientation(self: ChainNote, orientation: Quat)
+    _chain_note_set_orientation(self.ptr, orientation.ptr)
 end
 
 global function create_color_note(beat: float32): ColorNote
@@ -285,11 +529,17 @@ end
 function Beatmap.remove_color_note(color_note: ColorNote)
     _beatmap_remove_color_note(color_note.ptr)
 end
+function Beatmap.get_color_note_at_beat(beat: float32): ColorNote
+    _beatmap_get_color_note_at_beat(beat)
+end
 function Beatmap.add_bomb_note(bomb_note: BombNote)
     _beatmap_add_bomb_note(bomb_note.ptr)
 end
 function Beatmap.remove_bomb_note(bomb_note: BombNote)
     _beatmap_remove_bomb_note(bomb_note.ptr)
+end
+function Beatmap.get_bomb_note_at_beat(beat: float32): BombNote
+    _beatmap_get_bomb_note_at_beat(beat)
 end
 function Beatmap.add_arc(arc: Arc)
     _beatmap_add_arc(arc.ptr)
@@ -297,11 +547,17 @@ end
 function Beatmap.remove_arc(arc: Arc)
     _beatmap_remove_arc(arc.ptr)
 end
+function Beatmap.get_arc_at_beat(beat: float32): Arc
+    _beatmap_get_arc_at_beat(beat)
+end
 function Beatmap.add_wall(wall: Wall)
     _beatmap_add_wall(wall.ptr)
 end
 function Beatmap.remove_wall(wall: Wall)
     _beatmap_remove_wall(wall.ptr)
+end
+function Beatmap.get_wall_at_beat(beat: float32): Wall
+    _beatmap_get_wall_at_beat(beat)
 end
 function Beatmap.add_chain_head_note(chain_head_note: ChainHeadNote)
     _beatmap_add_chain_head_note(chain_head_note.ptr)
@@ -309,16 +565,25 @@ end
 function Beatmap.remove_chain_head_note(chain_head_note: ChainHeadNote)
     _beatmap_remove_chain_head_note(chain_head_note.ptr)
 end
+function Beatmap.get_chain_head_note_at_beat(beat: float32): ChainHeadNote
+    _beatmap_get_chain_head_note_at_beat(beat)
+end
 function Beatmap.add_chain_link_note(chain_link_note: ChainLinkNote)
     _beatmap_add_chain_link_note(chain_link_note.ptr)
 end
 function Beatmap.remove_chain_link_note(chain_link_note: ChainLinkNote)
     _beatmap_remove_chain_link_note(chain_link_note.ptr)
 end
+function Beatmap.get_chain_link_note_at_beat(beat: float32): ChainLinkNote
+    _beatmap_get_chain_link_note_at_beat(beat)
+end
 function Beatmap.add_chain_note(chain_note: ChainNote)
     _beatmap_add_chain_note(chain_note.ptr)
 end
 function Beatmap.remove_chain_note(chain_note: ChainNote)
     _beatmap_remove_chain_note(chain_note.ptr)
+end
+function Beatmap.get_chain_note_at_beat(beat: float32): ChainNote
+    _beatmap_get_chain_note_at_beat(beat)
 end
 

@@ -21,7 +21,7 @@ static block_header_t* free_list = (block_header_t*)heap;
 void init_heap() {
     free_list->size = HEAP_SIZE - sizeof(block_header_t);
     free_list->used = 0;
-    free_list->next = NULL;
+    free_list->next = (block_header_t*) NULL;
 }
 
 // Function to find a free block of sufficient size
@@ -40,7 +40,7 @@ static block_header_t* find_free_block(int size) {
         current = current->next;
     }
     
-    return NULL; // No suitable block found
+    return (block_header_t*) NULL; // No suitable block found
 }
 
 // Function to split a block if it's much larger than needed

@@ -9,6 +9,8 @@ export declare function _create_color_note(beat: f32): i32;
 export declare function _beatmap_add_color_note(color_note: i32): void;
 @external("env", "_beatmap_remove_color_note")
 export declare function _beatmap_remove_color_note(color_note: i32): void;
+@external("env", "_beatmap_get_color_note_at_beat")
+export declare function _beatmap_get_color_note_at_beat(beat: f32): i32;
 @external("env", "_color_note_set_position")
 export declare function _color_note_set_position(color_note: i32, pos: i32): void;
 @external("env", "_color_note_get_position")
@@ -27,6 +29,8 @@ export declare function _create_bomb_note(beat: f32): i32;
 export declare function _beatmap_add_bomb_note(bomb_note: i32): void;
 @external("env", "_beatmap_remove_bomb_note")
 export declare function _beatmap_remove_bomb_note(bomb_note: i32): void;
+@external("env", "_beatmap_get_bomb_note_at_beat")
+export declare function _beatmap_get_bomb_note_at_beat(beat: f32): i32;
 @external("env", "_bomb_note_set_position")
 export declare function _bomb_note_set_position(bomb_note: i32, pos: i32): void;
 @external("env", "_bomb_note_get_position")
@@ -45,6 +49,8 @@ export declare function _create_arc(beat: f32): i32;
 export declare function _beatmap_add_arc(arc: i32): void;
 @external("env", "_beatmap_remove_arc")
 export declare function _beatmap_remove_arc(arc: i32): void;
+@external("env", "_beatmap_get_arc_at_beat")
+export declare function _beatmap_get_arc_at_beat(beat: f32): i32;
 @external("env", "_arc_set_position")
 export declare function _arc_set_position(arc: i32, pos: i32): void;
 @external("env", "_arc_get_position")
@@ -63,6 +69,8 @@ export declare function _create_wall(beat: f32): i32;
 export declare function _beatmap_add_wall(wall: i32): void;
 @external("env", "_beatmap_remove_wall")
 export declare function _beatmap_remove_wall(wall: i32): void;
+@external("env", "_beatmap_get_wall_at_beat")
+export declare function _beatmap_get_wall_at_beat(beat: f32): i32;
 @external("env", "_wall_set_position")
 export declare function _wall_set_position(wall: i32, pos: i32): void;
 @external("env", "_wall_get_position")
@@ -81,6 +89,8 @@ export declare function _create_chain_head_note(beat: f32): i32;
 export declare function _beatmap_add_chain_head_note(chain_head_note: i32): void;
 @external("env", "_beatmap_remove_chain_head_note")
 export declare function _beatmap_remove_chain_head_note(chain_head_note: i32): void;
+@external("env", "_beatmap_get_chain_head_note_at_beat")
+export declare function _beatmap_get_chain_head_note_at_beat(beat: f32): i32;
 @external("env", "_chain_head_note_set_position")
 export declare function _chain_head_note_set_position(chain_head_note: i32, pos: i32): void;
 @external("env", "_chain_head_note_get_position")
@@ -99,6 +109,8 @@ export declare function _create_chain_link_note(beat: f32): i32;
 export declare function _beatmap_add_chain_link_note(chain_link_note: i32): void;
 @external("env", "_beatmap_remove_chain_link_note")
 export declare function _beatmap_remove_chain_link_note(chain_link_note: i32): void;
+@external("env", "_beatmap_get_chain_link_note_at_beat")
+export declare function _beatmap_get_chain_link_note_at_beat(beat: f32): i32;
 @external("env", "_chain_link_note_set_position")
 export declare function _chain_link_note_set_position(chain_link_note: i32, pos: i32): void;
 @external("env", "_chain_link_note_get_position")
@@ -117,6 +129,8 @@ export declare function _create_chain_note(beat: f32): i32;
 export declare function _beatmap_add_chain_note(chain_note: i32): void;
 @external("env", "_beatmap_remove_chain_note")
 export declare function _beatmap_remove_chain_note(chain_note: i32): void;
+@external("env", "_beatmap_get_chain_note_at_beat")
+export declare function _beatmap_get_chain_note_at_beat(beat: f32): i32;
 @external("env", "_chain_note_set_position")
 export declare function _chain_note_set_position(chain_note: i32, pos: i32): void;
 @external("env", "_chain_note_get_position")
@@ -153,6 +167,30 @@ export declare function _quat_from_xyzw(x: f32, y: f32, z: f32, w: f32): i32;
 export declare function _color_set_rgb(color: i32, r: f32, g: f32, b: f32): void;
 @external("env", "_color_set_rgba")
 export declare function _color_set_rgba(color: i32, r: f32, g: f32, b: f32, a: f32): void;
+@external("env", "_data_contains_persistent_i32")
+export declare function _data_contains_persistent_i32(key: i32): bool;
+@external("env", "_data_contains_persistent_f32")
+export declare function _data_contains_persistent_f32(key: i32): bool;
+@external("env", "_data_contains_persistent_str")
+export declare function _data_contains_persistent_str(key: i32): bool;
+@external("env", "_data_store_persistent_i32")
+export declare function _data_store_persistent_i32(key: i32, value: i32): void;
+@external("env", "_data_store_persistent_f32")
+export declare function _data_store_persistent_f32(key: i32, value: f32): void;
+@external("env", "_data_store_persistent_str")
+export declare function _data_store_persistent_str(key: i32, value: i32): void;
+@external("env", "_data_access_persistent_i32")
+export declare function _data_access_persistent_i32(key: i32): i32;
+@external("env", "_data_access_persistent_f32")
+export declare function _data_access_persistent_f32(key: i32): f32;
+@external("env", "_data_access_persistent_str")
+export declare function _data_access_persistent_str(key: i32): i32;
+@external("env", "_data_remove_persistent_i32")
+export declare function _data_remove_persistent_i32(key: i32): void;
+@external("env", "_data_remove_persistent_f32")
+export declare function _data_remove_persistent_f32(key: i32): void;
+@external("env", "_data_remove_persistent_str")
+export declare function _data_remove_persistent_str(key: i32): void;
 @external("env", "_vec2_get_x")
 export declare function _vec2_get_x(vec2: i32): f32;
 @external("env", "_vec2_set_x")
@@ -237,44 +275,44 @@ class Color {
 
     }
 
-    public static get_r(self: Color): f32 {
-        return _color_get_r(self.ptr);
+    public static get_r(): f32 {
+        return _color_get_r(this.ptr);
     }
 
-    public static set_r(self: Color, r: f32): void {
-        _color_set_r(self.ptr, r);
+    public static set_r(r: f32): void {
+        _color_set_r(this.ptr, r);
     }
 
-    public static get_g(self: Color): f32 {
-        return _color_get_g(self.ptr);
+    public static get_g(): f32 {
+        return _color_get_g(this.ptr);
     }
 
-    public static set_g(self: Color, g: f32): void {
-        _color_set_g(self.ptr, g);
+    public static set_g(g: f32): void {
+        _color_set_g(this.ptr, g);
     }
 
-    public static get_b(self: Color): f32 {
-        return _color_get_b(self.ptr);
+    public static get_b(): f32 {
+        return _color_get_b(this.ptr);
     }
 
-    public static set_b(self: Color, b: f32): void {
-        _color_set_b(self.ptr, b);
+    public static set_b(b: f32): void {
+        _color_set_b(this.ptr, b);
     }
 
-    public static get_a(self: Color): f32 {
-        return _color_get_a(self.ptr);
+    public static get_a(): f32 {
+        return _color_get_a(this.ptr);
     }
 
-    public static set_a(self: Color, a: f32): void {
-        _color_set_a(self.ptr, a);
+    public static set_a(a: f32): void {
+        _color_set_a(this.ptr, a);
     }
 
-    public static set_rgb(self: Color, r: f32, g: f32, b: f32): void {
-        _color_set_rgb(self.ptr, r, g, b);
+    public static set_rgb(r: f32, g: f32, b: f32): void {
+        _color_set_rgb(this.ptr, r, g, b);
     }
 
-    public static set_rgba(self: Color, r: f32, g: f32, b: f32, a: f32): void {
-        _color_set_rgba(self.ptr, r, g, b, a);
+    public static set_rgba(r: f32, g: f32, b: f32, a: f32): void {
+        _color_set_rgba(this.ptr, r, g, b, a);
     }
 
 }
@@ -303,14 +341,139 @@ class Log {
 
 }
 
+class Vec2 {
+    ptr: i32;
+
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+
+    }
+
+    public static from_xy(x: f32, y: f32): Vec2 {
+        return new Vec2(_vec2_from_xy(x, y));
+    }
+
+    public static get_x(): f32 {
+        return _vec2_get_x(this.ptr);
+    }
+
+    public static get_y(): f32 {
+        return _vec2_get_y(this.ptr);
+    }
+
+}
+
+class Vec3 {
+    ptr: i32;
+
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+
+    }
+
+    public static from_xyz(x: f32, y: f32, z: f32): Vec3 {
+        return new Vec3(_vec3_from_xyz(x, y, z));
+    }
+
+    public static get_x(): f32 {
+        return _vec3_get_x(this.ptr);
+    }
+
+    public static get_y(): f32 {
+        return _vec3_get_y(this.ptr);
+    }
+
+    public static get_z(): f32 {
+        return _vec3_get_z(this.ptr);
+    }
+
+}
+
+class Vec4 {
+    ptr: i32;
+
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+
+    }
+
+    public static from_xyzw(x: f32, y: f32, z: f32, w: f32): Vec4 {
+        return new Vec4(_vec4_from_xyzw(x, y, z, w));
+    }
+
+    public static get_x(): f32 {
+        return _vec4_get_x(this.ptr);
+    }
+
+    public static get_y(): f32 {
+        return _vec4_get_y(this.ptr);
+    }
+
+    public static get_z(): f32 {
+        return _vec4_get_z(this.ptr);
+    }
+
+    public static get_w(): f32 {
+        return _vec4_get_w(this.ptr);
+    }
+
+}
+
+class Quat {
+    ptr: i32;
+
+    constructor(ptr: i32) {
+        this.ptr = ptr;
+
+    }
+
+    public static from_xyzw(x: f32, y: f32, z: f32, w: f32): Quat {
+        return new Quat(_quat_from_xyzw(x, y, z, w));
+    }
+
+    public static get_x(): f32 {
+        return _quat_get_x(this.ptr);
+    }
+
+    public static get_y(): f32 {
+        return _quat_get_y(this.ptr);
+    }
+
+    public static get_z(): f32 {
+        return _quat_get_z(this.ptr);
+    }
+
+    public static get_w(): f32 {
+        return _quat_get_w(this.ptr);
+    }
+
+}
+
 class ColorNote {
     ptr: i32;
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: ColorNote): Color {
-        let ptr = _color_note_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _color_note_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _color_note_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _color_note_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _color_note_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _color_note_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _color_note_set_orientation(this.ptr, orientation.ptr);
     }
 }
 class BombNote {
@@ -318,9 +481,26 @@ class BombNote {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: BombNote): Color {
-        let ptr = _bomb_note_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _bomb_note_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _bomb_note_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _bomb_note_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _bomb_note_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _bomb_note_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _bomb_note_set_orientation(this.ptr, orientation.ptr);
     }
 }
 class Arc {
@@ -328,9 +508,26 @@ class Arc {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: Arc): Color {
-        let ptr = _arc_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _arc_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _arc_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _arc_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _arc_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _arc_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _arc_set_orientation(this.ptr, orientation.ptr);
     }
 }
 class Wall {
@@ -338,9 +535,26 @@ class Wall {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: Wall): Color {
-        let ptr = _wall_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _wall_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _wall_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _wall_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _wall_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _wall_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _wall_set_orientation(this.ptr, orientation.ptr);
     }
 }
 class ChainHeadNote {
@@ -348,9 +562,26 @@ class ChainHeadNote {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: ChainHeadNote): Color {
-        let ptr = _chain_head_note_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _chain_head_note_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _chain_head_note_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _chain_head_note_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _chain_head_note_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _chain_head_note_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _chain_head_note_set_orientation(this.ptr, orientation.ptr);
     }
 }
 class ChainLinkNote {
@@ -358,9 +589,26 @@ class ChainLinkNote {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: ChainLinkNote): Color {
-        let ptr = _chain_link_note_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _chain_link_note_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _chain_link_note_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _chain_link_note_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _chain_link_note_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _chain_link_note_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _chain_link_note_set_orientation(this.ptr, orientation.ptr);
     }
 }
 class ChainNote {
@@ -368,9 +616,26 @@ class ChainNote {
     constructor(ptr: i32) {
         this.ptr = ptr;
     }
-    public static get_color(self: ChainNote): Color {
-        let ptr = _chain_note_get_color(self.ptr);
+    public static get_color(): Color {
+        let ptr = _chain_note_get_color(this.ptr);
     return new Color(ptr);
+    }
+    public static set_color(color: Color): void {
+        _chain_note_set_color(this.ptr, color.ptr);
+    }
+    public static get_position(): Vec3 {
+        let ptr = _chain_note_get_position(this.ptr);
+    return new Vec3(ptr);
+    }
+    public static set_position(position: Vec3): void {
+        _chain_note_set_position(this.ptr, position.ptr);
+    }
+    public static get_orientation(): Quat {
+        let ptr = _chain_note_get_orientation(this.ptr);
+    return new Quat(ptr);
+    }
+    public static set_orientation(orientation: Quat): void {
+        _chain_note_set_orientation(this.ptr, orientation.ptr);
     }
 }
 
@@ -418,11 +683,17 @@ class Beatmap {
     public static remove_color_note(color_note: ColorNote): void {
         _beatmap_remove_color_note(color_note.ptr);
     }
+    public static get_color_note_at_beat(beat: f32): ColorNote {
+        _beatmap_get_color_note_at_beat(beat);
+    }
     public static add_bomb_note(bomb_note: BombNote): void {
         _beatmap_add_bomb_note(bomb_note.ptr);
     }
     public static remove_bomb_note(bomb_note: BombNote): void {
         _beatmap_remove_bomb_note(bomb_note.ptr);
+    }
+    public static get_bomb_note_at_beat(beat: f32): BombNote {
+        _beatmap_get_bomb_note_at_beat(beat);
     }
     public static add_arc(arc: Arc): void {
         _beatmap_add_arc(arc.ptr);
@@ -430,11 +701,17 @@ class Beatmap {
     public static remove_arc(arc: Arc): void {
         _beatmap_remove_arc(arc.ptr);
     }
+    public static get_arc_at_beat(beat: f32): Arc {
+        _beatmap_get_arc_at_beat(beat);
+    }
     public static add_wall(wall: Wall): void {
         _beatmap_add_wall(wall.ptr);
     }
     public static remove_wall(wall: Wall): void {
         _beatmap_remove_wall(wall.ptr);
+    }
+    public static get_wall_at_beat(beat: f32): Wall {
+        _beatmap_get_wall_at_beat(beat);
     }
     public static add_chain_head_note(chain_head_note: ChainHeadNote): void {
         _beatmap_add_chain_head_note(chain_head_note.ptr);
@@ -442,17 +719,26 @@ class Beatmap {
     public static remove_chain_head_note(chain_head_note: ChainHeadNote): void {
         _beatmap_remove_chain_head_note(chain_head_note.ptr);
     }
+    public static get_chain_head_note_at_beat(beat: f32): ChainHeadNote {
+        _beatmap_get_chain_head_note_at_beat(beat);
+    }
     public static add_chain_link_note(chain_link_note: ChainLinkNote): void {
         _beatmap_add_chain_link_note(chain_link_note.ptr);
     }
     public static remove_chain_link_note(chain_link_note: ChainLinkNote): void {
         _beatmap_remove_chain_link_note(chain_link_note.ptr);
     }
+    public static get_chain_link_note_at_beat(beat: f32): ChainLinkNote {
+        _beatmap_get_chain_link_note_at_beat(beat);
+    }
     public static add_chain_note(chain_note: ChainNote): void {
         _beatmap_add_chain_note(chain_note.ptr);
     }
     public static remove_chain_note(chain_note: ChainNote): void {
         _beatmap_remove_chain_note(chain_note.ptr);
+    }
+    public static get_chain_note_at_beat(beat: f32): ChainNote {
+        _beatmap_get_chain_note_at_beat(beat);
     }
 }
 

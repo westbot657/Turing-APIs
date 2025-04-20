@@ -12,25 +12,25 @@
 class Color {
     public:
         int ptr;
-        static float get_r(Color* self);
+        float get_r();
 
-        static void set_r(Color* self, float r);
+        void set_r(float r);
 
-        static float get_g(Color* self);
+        float get_g();
 
-        static void set_g(Color* self, float g);
+        void set_g(float g);
 
-        static float get_b(Color* self);
+        float get_b();
 
-        static void set_b(Color* self, float b);
+        void set_b(float b);
 
-        static float get_a(Color* self);
+        float get_a();
 
-        static void set_a(Color* self, float a);
+        void set_a(float a);
 
-        static void set_rgb(Color* self, float r, float g, float b);
+        void set_rgb(float r, float g, float b);
 
-        static void set_rgba(Color* self, float r, float g, float b, float a);
+        void set_rgba(float r, float g, float b, float a);
 
 };
 
@@ -48,47 +48,140 @@ class Log {
 
 };
 
+// C++.h class 'Vec2'
+class Vec2 {
+    public:
+        int ptr;
+        static Vec2 from_xy(float x, float y);
+
+        float get_x();
+
+        float get_y();
+
+};
+
+// C++.h class 'Vec3'
+class Vec3 {
+    public:
+        int ptr;
+        static Vec3 from_xyz(float x, float y, float z);
+
+        float get_x();
+
+        float get_y();
+
+        float get_z();
+
+};
+
+// C++.h class 'Vec4'
+class Vec4 {
+    public:
+        int ptr;
+        static Vec4 from_xyzw(float x, float y, float z, float w);
+
+        float get_x();
+
+        float get_y();
+
+        float get_z();
+
+        float get_w();
+
+};
+
+// C++.h class 'Quat'
+class Quat {
+    public:
+        int ptr;
+        static Quat from_xyzw(float x, float y, float z, float w);
+
+        float get_x();
+
+        float get_y();
+
+        float get_z();
+
+        float get_w();
+
+};
+
 // C++.h class 'ColorNote'
 class ColorNote {
     public:
         int ptr;
-        static Color get_color(ColorNote* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 // C++.h class 'BombNote'
 class BombNote {
     public:
         int ptr;
-        static Color get_color(BombNote* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 // C++.h class 'Arc'
 class Arc {
     public:
         int ptr;
-        static Color get_color(Arc* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 // C++.h class 'Wall'
 class Wall {
     public:
         int ptr;
-        static Color get_color(Wall* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 // C++.h class 'ChainHeadNote'
 class ChainHeadNote {
     public:
         int ptr;
-        static Color get_color(ChainHeadNote* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 // C++.h class 'ChainLinkNote'
 class ChainLinkNote {
     public:
         int ptr;
-        static Color get_color(ChainLinkNote* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 // C++.h class 'ChainNote'
 class ChainNote {
     public:
         int ptr;
-        static Color get_color(ChainNote* self);
+        Color get_color();
+        void set_color(Color color);
+        Vec3 get_position();
+        void set_position(Vec3 position);
+        Quat get_orientation();
+        void set_orientation(Quat orientation);
 };
 
 ColorNote create_color_note(float beat);
@@ -110,18 +203,25 @@ class Beatmap {
     public:
         static void add_color_note(ColorNote color_note);
         static void remove_color_note(ColorNote color_note);
+        static ColorNote get_color_note_at_beat(float beat);
         static void add_bomb_note(BombNote bomb_note);
         static void remove_bomb_note(BombNote bomb_note);
+        static BombNote get_bomb_note_at_beat(float beat);
         static void add_arc(Arc arc);
         static void remove_arc(Arc arc);
+        static Arc get_arc_at_beat(float beat);
         static void add_wall(Wall wall);
         static void remove_wall(Wall wall);
+        static Wall get_wall_at_beat(float beat);
         static void add_chain_head_note(ChainHeadNote chain_head_note);
         static void remove_chain_head_note(ChainHeadNote chain_head_note);
+        static ChainHeadNote get_chain_head_note_at_beat(float beat);
         static void add_chain_link_note(ChainLinkNote chain_link_note);
         static void remove_chain_link_note(ChainLinkNote chain_link_note);
+        static ChainLinkNote get_chain_link_note_at_beat(float beat);
         static void add_chain_note(ChainNote chain_note);
         static void remove_chain_note(ChainNote chain_note);
+        static ChainNote get_chain_note_at_beat(float beat);
 };
 
 #endif // TURING_API_HPP

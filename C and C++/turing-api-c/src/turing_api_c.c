@@ -28,7 +28,7 @@ static block_header_t* free_list = (block_header_t*)heap;
 void init_heap() {
     free_list->size = HEAP_SIZE - sizeof(block_header_t);
     free_list->used = 0;
-    free_list->next = NULL;
+    free_list->next = (block_header_t*) NULL;
 }
 
 // Function to find a free block of sufficient size
@@ -47,7 +47,7 @@ static block_header_t* find_free_block(int size) {
         current = current->next;
     }
     
-    return NULL; // No suitable block found
+    return (block_header_t*) NULL; // No suitable block found
 }
 
 // Function to split a block if it's much larger than needed
@@ -237,11 +237,114 @@ void Log_debug(const char* msg) {
         free(s);
 }
 
+// C class Vec2
+
+Vec2 Vec2_from_xy(float x, float y) {
+    Vec2 inst;
+        inst.ptr = _vec2_from_xy(x, y);
+        return inst;
+}
+
+float Vec2_get_x(Vec2* self) {
+    return _vec2_get_x(self->ptr);
+}
+
+float Vec2_get_y(Vec2* self) {
+    return _vec2_get_y(self->ptr);
+}
+
+// C class Vec3
+
+Vec3 Vec3_from_xyz(float x, float y, float z) {
+    Vec3 inst;
+        inst.ptr = _vec3_from_xyz(x, y, z);
+        return inst;
+}
+
+float Vec3_get_x(Vec3* self) {
+    return _vec3_get_x(self->ptr);
+}
+
+float Vec3_get_y(Vec3* self) {
+    return _vec3_get_y(self->ptr);
+}
+
+float Vec3_get_z(Vec3* self) {
+    return _vec3_get_z(self->ptr);
+}
+
+// C class Vec4
+
+Vec4 Vec4_from_xyzw(float x, float y, float z, float w) {
+    Vec4 inst;
+        inst.ptr = _vec4_from_xyzw(x, y, z, w);
+        return inst;
+}
+
+float Vec4_get_x(Vec4* self) {
+    return _vec4_get_x(self->ptr);
+}
+
+float Vec4_get_y(Vec4* self) {
+    return _vec4_get_y(self->ptr);
+}
+
+float Vec4_get_z(Vec4* self) {
+    return _vec4_get_z(self->ptr);
+}
+
+float Vec4_get_w(Vec4* self) {
+    return _vec4_get_w(self->ptr);
+}
+
+// C class Quat
+
+Quat Quat_from_xyzw(float x, float y, float z, float w) {
+    Quat inst;
+        inst.ptr = _quat_from_xyzw(x, y, z, w);
+        return inst;
+}
+
+float Quat_get_x(Quat* self) {
+    return _quat_get_x(self->ptr);
+}
+
+float Quat_get_y(Quat* self) {
+    return _quat_get_y(self->ptr);
+}
+
+float Quat_get_z(Quat* self) {
+    return _quat_get_z(self->ptr);
+}
+
+float Quat_get_w(Quat* self) {
+    return _quat_get_w(self->ptr);
+}
+
 // C class ColorNote
 Color ColorNote_get_color(ColorNote* self) {
     Color inst;
     inst.ptr = _color_note_get_color(self->ptr);
     return inst;
+}
+void ColorNote_set_color(ColorNote* self, Color color) {
+    _color_note_set_color(self->ptr, color.ptr);
+}
+Vec3 ColorNote_get_position(ColorNote* self) {
+    Vec3 inst;
+    inst.ptr = _color_note_get_position(self->ptr);
+    return inst;
+}
+void ColorNote_set_position(ColorNote* self, Vec3 position) {
+    _color_note_set_position(self->ptr, position.ptr);
+}
+Quat ColorNote_get_orientation(ColorNote* self) {
+    Quat inst;
+    inst.ptr = _color_note_get_orientation(self->ptr);
+    return inst;
+}
+void ColorNote_set_orientation(ColorNote* self, Quat orientation) {
+    _color_note_set_orientation(self->ptr, orientation.ptr);
 }
 // C class BombNote
 Color BombNote_get_color(BombNote* self) {
@@ -249,11 +352,49 @@ Color BombNote_get_color(BombNote* self) {
     inst.ptr = _bomb_note_get_color(self->ptr);
     return inst;
 }
+void BombNote_set_color(BombNote* self, Color color) {
+    _bomb_note_set_color(self->ptr, color.ptr);
+}
+Vec3 BombNote_get_position(BombNote* self) {
+    Vec3 inst;
+    inst.ptr = _bomb_note_get_position(self->ptr);
+    return inst;
+}
+void BombNote_set_position(BombNote* self, Vec3 position) {
+    _bomb_note_set_position(self->ptr, position.ptr);
+}
+Quat BombNote_get_orientation(BombNote* self) {
+    Quat inst;
+    inst.ptr = _bomb_note_get_orientation(self->ptr);
+    return inst;
+}
+void BombNote_set_orientation(BombNote* self, Quat orientation) {
+    _bomb_note_set_orientation(self->ptr, orientation.ptr);
+}
 // C class Arc
 Color Arc_get_color(Arc* self) {
     Color inst;
     inst.ptr = _arc_get_color(self->ptr);
     return inst;
+}
+void Arc_set_color(Arc* self, Color color) {
+    _arc_set_color(self->ptr, color.ptr);
+}
+Vec3 Arc_get_position(Arc* self) {
+    Vec3 inst;
+    inst.ptr = _arc_get_position(self->ptr);
+    return inst;
+}
+void Arc_set_position(Arc* self, Vec3 position) {
+    _arc_set_position(self->ptr, position.ptr);
+}
+Quat Arc_get_orientation(Arc* self) {
+    Quat inst;
+    inst.ptr = _arc_get_orientation(self->ptr);
+    return inst;
+}
+void Arc_set_orientation(Arc* self, Quat orientation) {
+    _arc_set_orientation(self->ptr, orientation.ptr);
 }
 // C class Wall
 Color Wall_get_color(Wall* self) {
@@ -261,11 +402,49 @@ Color Wall_get_color(Wall* self) {
     inst.ptr = _wall_get_color(self->ptr);
     return inst;
 }
+void Wall_set_color(Wall* self, Color color) {
+    _wall_set_color(self->ptr, color.ptr);
+}
+Vec3 Wall_get_position(Wall* self) {
+    Vec3 inst;
+    inst.ptr = _wall_get_position(self->ptr);
+    return inst;
+}
+void Wall_set_position(Wall* self, Vec3 position) {
+    _wall_set_position(self->ptr, position.ptr);
+}
+Quat Wall_get_orientation(Wall* self) {
+    Quat inst;
+    inst.ptr = _wall_get_orientation(self->ptr);
+    return inst;
+}
+void Wall_set_orientation(Wall* self, Quat orientation) {
+    _wall_set_orientation(self->ptr, orientation.ptr);
+}
 // C class ChainHeadNote
 Color ChainHeadNote_get_color(ChainHeadNote* self) {
     Color inst;
     inst.ptr = _chain_head_note_get_color(self->ptr);
     return inst;
+}
+void ChainHeadNote_set_color(ChainHeadNote* self, Color color) {
+    _chain_head_note_set_color(self->ptr, color.ptr);
+}
+Vec3 ChainHeadNote_get_position(ChainHeadNote* self) {
+    Vec3 inst;
+    inst.ptr = _chain_head_note_get_position(self->ptr);
+    return inst;
+}
+void ChainHeadNote_set_position(ChainHeadNote* self, Vec3 position) {
+    _chain_head_note_set_position(self->ptr, position.ptr);
+}
+Quat ChainHeadNote_get_orientation(ChainHeadNote* self) {
+    Quat inst;
+    inst.ptr = _chain_head_note_get_orientation(self->ptr);
+    return inst;
+}
+void ChainHeadNote_set_orientation(ChainHeadNote* self, Quat orientation) {
+    _chain_head_note_set_orientation(self->ptr, orientation.ptr);
 }
 // C class ChainLinkNote
 Color ChainLinkNote_get_color(ChainLinkNote* self) {
@@ -273,11 +452,49 @@ Color ChainLinkNote_get_color(ChainLinkNote* self) {
     inst.ptr = _chain_link_note_get_color(self->ptr);
     return inst;
 }
+void ChainLinkNote_set_color(ChainLinkNote* self, Color color) {
+    _chain_link_note_set_color(self->ptr, color.ptr);
+}
+Vec3 ChainLinkNote_get_position(ChainLinkNote* self) {
+    Vec3 inst;
+    inst.ptr = _chain_link_note_get_position(self->ptr);
+    return inst;
+}
+void ChainLinkNote_set_position(ChainLinkNote* self, Vec3 position) {
+    _chain_link_note_set_position(self->ptr, position.ptr);
+}
+Quat ChainLinkNote_get_orientation(ChainLinkNote* self) {
+    Quat inst;
+    inst.ptr = _chain_link_note_get_orientation(self->ptr);
+    return inst;
+}
+void ChainLinkNote_set_orientation(ChainLinkNote* self, Quat orientation) {
+    _chain_link_note_set_orientation(self->ptr, orientation.ptr);
+}
 // C class ChainNote
 Color ChainNote_get_color(ChainNote* self) {
     Color inst;
     inst.ptr = _chain_note_get_color(self->ptr);
     return inst;
+}
+void ChainNote_set_color(ChainNote* self, Color color) {
+    _chain_note_set_color(self->ptr, color.ptr);
+}
+Vec3 ChainNote_get_position(ChainNote* self) {
+    Vec3 inst;
+    inst.ptr = _chain_note_get_position(self->ptr);
+    return inst;
+}
+void ChainNote_set_position(ChainNote* self, Vec3 position) {
+    _chain_note_set_position(self->ptr, position.ptr);
+}
+Quat ChainNote_get_orientation(ChainNote* self) {
+    Quat inst;
+    inst.ptr = _chain_note_get_orientation(self->ptr);
+    return inst;
+}
+void ChainNote_set_orientation(ChainNote* self, Quat orientation) {
+    _chain_note_set_orientation(self->ptr, orientation.ptr);
 }
 
 ColorNote create_color_note(float beat) {
@@ -329,11 +546,17 @@ void Beatmap_add_color_note(ColorNote color_note) {
 void Beatmap_remove_color_note(ColorNote color_note) {
     _beatmap_remove_color_note(color_note.ptr);
 }
+ColorNote Beatmap_get_color_note_at_beat(float beat) {
+    _beatmap_get_color_note_at_beat(beat);
+}
 void Beatmap_add_bomb_note(BombNote bomb_note) {
     _beatmap_add_bomb_note(bomb_note.ptr);
 }
 void Beatmap_remove_bomb_note(BombNote bomb_note) {
     _beatmap_remove_bomb_note(bomb_note.ptr);
+}
+BombNote Beatmap_get_bomb_note_at_beat(float beat) {
+    _beatmap_get_bomb_note_at_beat(beat);
 }
 void Beatmap_add_arc(Arc arc) {
     _beatmap_add_arc(arc.ptr);
@@ -341,11 +564,17 @@ void Beatmap_add_arc(Arc arc) {
 void Beatmap_remove_arc(Arc arc) {
     _beatmap_remove_arc(arc.ptr);
 }
+Arc Beatmap_get_arc_at_beat(float beat) {
+    _beatmap_get_arc_at_beat(beat);
+}
 void Beatmap_add_wall(Wall wall) {
     _beatmap_add_wall(wall.ptr);
 }
 void Beatmap_remove_wall(Wall wall) {
     _beatmap_remove_wall(wall.ptr);
+}
+Wall Beatmap_get_wall_at_beat(float beat) {
+    _beatmap_get_wall_at_beat(beat);
 }
 void Beatmap_add_chain_head_note(ChainHeadNote chain_head_note) {
     _beatmap_add_chain_head_note(chain_head_note.ptr);
@@ -353,16 +582,25 @@ void Beatmap_add_chain_head_note(ChainHeadNote chain_head_note) {
 void Beatmap_remove_chain_head_note(ChainHeadNote chain_head_note) {
     _beatmap_remove_chain_head_note(chain_head_note.ptr);
 }
+ChainHeadNote Beatmap_get_chain_head_note_at_beat(float beat) {
+    _beatmap_get_chain_head_note_at_beat(beat);
+}
 void Beatmap_add_chain_link_note(ChainLinkNote chain_link_note) {
     _beatmap_add_chain_link_note(chain_link_note.ptr);
 }
 void Beatmap_remove_chain_link_note(ChainLinkNote chain_link_note) {
     _beatmap_remove_chain_link_note(chain_link_note.ptr);
 }
+ChainLinkNote Beatmap_get_chain_link_note_at_beat(float beat) {
+    _beatmap_get_chain_link_note_at_beat(beat);
+}
 void Beatmap_add_chain_note(ChainNote chain_note) {
     _beatmap_add_chain_note(chain_note.ptr);
 }
 void Beatmap_remove_chain_note(ChainNote chain_note) {
     _beatmap_remove_chain_note(chain_note.ptr);
+}
+ChainNote Beatmap_get_chain_note_at_beat(float beat) {
+    _beatmap_get_chain_note_at_beat(beat);
 }
 

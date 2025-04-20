@@ -6,6 +6,10 @@
 #ifndef WASM_IMPORTS_H
 #define WASM_IMPORTS_H
 
+#define bool int
+#define true 1
+#define false 0
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -13,6 +17,7 @@ extern "C" {
 extern int _create_color_note(float beat);
 extern void _beatmap_add_color_note(int color_note);
 extern void _beatmap_remove_color_note(int color_note);
+extern int _beatmap_get_color_note_at_beat(float beat);
 extern void _color_note_set_position(int color_note, int pos);
 extern int _color_note_get_position(int color_note);
 extern void _color_note_set_orientation(int color_note, int orientation);
@@ -22,6 +27,7 @@ extern int _color_note_get_color(int color_note);
 extern int _create_bomb_note(float beat);
 extern void _beatmap_add_bomb_note(int bomb_note);
 extern void _beatmap_remove_bomb_note(int bomb_note);
+extern int _beatmap_get_bomb_note_at_beat(float beat);
 extern void _bomb_note_set_position(int bomb_note, int pos);
 extern int _bomb_note_get_position(int bomb_note);
 extern void _bomb_note_set_orientation(int bomb_note, int orientation);
@@ -31,6 +37,7 @@ extern int _bomb_note_get_color(int bomb_note);
 extern int _create_arc(float beat);
 extern void _beatmap_add_arc(int arc);
 extern void _beatmap_remove_arc(int arc);
+extern int _beatmap_get_arc_at_beat(float beat);
 extern void _arc_set_position(int arc, int pos);
 extern int _arc_get_position(int arc);
 extern void _arc_set_orientation(int arc, int orientation);
@@ -40,6 +47,7 @@ extern int _arc_get_color(int arc);
 extern int _create_wall(float beat);
 extern void _beatmap_add_wall(int wall);
 extern void _beatmap_remove_wall(int wall);
+extern int _beatmap_get_wall_at_beat(float beat);
 extern void _wall_set_position(int wall, int pos);
 extern int _wall_get_position(int wall);
 extern void _wall_set_orientation(int wall, int orientation);
@@ -49,6 +57,7 @@ extern int _wall_get_color(int wall);
 extern int _create_chain_head_note(float beat);
 extern void _beatmap_add_chain_head_note(int chain_head_note);
 extern void _beatmap_remove_chain_head_note(int chain_head_note);
+extern int _beatmap_get_chain_head_note_at_beat(float beat);
 extern void _chain_head_note_set_position(int chain_head_note, int pos);
 extern int _chain_head_note_get_position(int chain_head_note);
 extern void _chain_head_note_set_orientation(int chain_head_note, int orientation);
@@ -58,6 +67,7 @@ extern int _chain_head_note_get_color(int chain_head_note);
 extern int _create_chain_link_note(float beat);
 extern void _beatmap_add_chain_link_note(int chain_link_note);
 extern void _beatmap_remove_chain_link_note(int chain_link_note);
+extern int _beatmap_get_chain_link_note_at_beat(float beat);
 extern void _chain_link_note_set_position(int chain_link_note, int pos);
 extern int _chain_link_note_get_position(int chain_link_note);
 extern void _chain_link_note_set_orientation(int chain_link_note, int orientation);
@@ -67,6 +77,7 @@ extern int _chain_link_note_get_color(int chain_link_note);
 extern int _create_chain_note(float beat);
 extern void _beatmap_add_chain_note(int chain_note);
 extern void _beatmap_remove_chain_note(int chain_note);
+extern int _beatmap_get_chain_note_at_beat(float beat);
 extern void _chain_note_set_position(int chain_note, int pos);
 extern int _chain_note_get_position(int chain_note);
 extern void _chain_note_set_orientation(int chain_note, int orientation);
@@ -85,6 +96,18 @@ extern int _vec4_from_xyzw(float x, float y, float z, float w);
 extern int _quat_from_xyzw(float x, float y, float z, float w);
 extern void _color_set_rgb(int color, float r, float g, float b);
 extern void _color_set_rgba(int color, float r, float g, float b, float a);
+extern bool _data_contains_persistent_i32(const char* key);
+extern bool _data_contains_persistent_f32(const char* key);
+extern bool _data_contains_persistent_str(const char* key);
+extern void _data_store_persistent_i32(const char* key, int value);
+extern void _data_store_persistent_f32(const char* key, float value);
+extern void _data_store_persistent_str(const char* key, const char* value);
+extern int _data_access_persistent_i32(const char* key);
+extern float _data_access_persistent_f32(const char* key);
+extern const char* _data_access_persistent_str(const char* key);
+extern void _data_remove_persistent_i32(const char* key);
+extern void _data_remove_persistent_f32(const char* key);
+extern void _data_remove_persistent_str(const char* key);
 extern float _vec2_get_x(int vec2);
 extern void _vec2_set_x(int vec2, float x);
 extern float _vec2_get_y(int vec2);

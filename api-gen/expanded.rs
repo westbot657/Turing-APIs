@@ -3,10 +3,11 @@
 use std::prelude::rust_2021::*;
 #[macro_use]
 extern crate std;
+use std::alloc::Layout;
 use std::any::Any;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::ffi::{c_char, CString};
+use std::ffi::{c_char, c_void, CStr, CString};
 use once_cell::unsync::Lazy;
 use paste::paste;
 type _Color = i32;
@@ -26,6 +27,7 @@ extern "C" {
     fn _create_color_note(beat: f32) -> _ColorNote;
     fn _beatmap_add_color_note(color_note: _ColorNote);
     fn _beatmap_remove_color_note(color_note: _ColorNote);
+    fn _beatmap_get_color_note_at_beat(beat: f32) -> _ColorNote;
 }
 extern "C" {
     fn _color_note_set_position(color_note: _ColorNote, pos: _Vec3);
@@ -41,6 +43,7 @@ extern "C" {
     fn _create_bomb_note(beat: f32) -> _BombNote;
     fn _beatmap_add_bomb_note(bomb_note: _BombNote);
     fn _beatmap_remove_bomb_note(bomb_note: _BombNote);
+    fn _beatmap_get_bomb_note_at_beat(beat: f32) -> _BombNote;
 }
 extern "C" {
     fn _bomb_note_set_position(bomb_note: _BombNote, pos: _Vec3);
@@ -56,6 +59,7 @@ extern "C" {
     fn _create_arc(beat: f32) -> _Arc;
     fn _beatmap_add_arc(arc: _Arc);
     fn _beatmap_remove_arc(arc: _Arc);
+    fn _beatmap_get_arc_at_beat(beat: f32) -> _Arc;
 }
 extern "C" {
     fn _arc_set_position(arc: _Arc, pos: _Vec3);
@@ -71,6 +75,7 @@ extern "C" {
     fn _create_wall(beat: f32) -> _Wall;
     fn _beatmap_add_wall(wall: _Wall);
     fn _beatmap_remove_wall(wall: _Wall);
+    fn _beatmap_get_wall_at_beat(beat: f32) -> _Wall;
 }
 extern "C" {
     fn _wall_set_position(wall: _Wall, pos: _Vec3);
@@ -86,6 +91,7 @@ extern "C" {
     fn _create_chain_head_note(beat: f32) -> _ChainHeadNote;
     fn _beatmap_add_chain_head_note(chain_head_note: _ChainHeadNote);
     fn _beatmap_remove_chain_head_note(chain_head_note: _ChainHeadNote);
+    fn _beatmap_get_chain_head_note_at_beat(beat: f32) -> _ChainHeadNote;
 }
 extern "C" {
     fn _chain_head_note_set_position(chain_head_note: _ChainHeadNote, pos: _Vec3);
@@ -104,6 +110,7 @@ extern "C" {
     fn _create_chain_link_note(beat: f32) -> _ChainLinkNote;
     fn _beatmap_add_chain_link_note(chain_link_note: _ChainLinkNote);
     fn _beatmap_remove_chain_link_note(chain_link_note: _ChainLinkNote);
+    fn _beatmap_get_chain_link_note_at_beat(beat: f32) -> _ChainLinkNote;
 }
 extern "C" {
     fn _chain_link_note_set_position(chain_link_note: _ChainLinkNote, pos: _Vec3);
@@ -122,6 +129,7 @@ extern "C" {
     fn _create_chain_note(beat: f32) -> _ChainNote;
     fn _beatmap_add_chain_note(chain_note: _ChainNote);
     fn _beatmap_remove_chain_note(chain_note: _ChainNote);
+    fn _beatmap_get_chain_note_at_beat(beat: f32) -> _ChainNote;
 }
 extern "C" {
     fn _chain_note_set_position(chain_note: _ChainNote, pos: _Vec3);
@@ -137,6 +145,22 @@ extern "C" {
     fn _saber_set_color(saber: _Saber, color: _Color);
     fn _saber_get_color(saber: _Saber) -> _Color;
 }
+/// Required for the wasm host to be able to reliably allocate memory for any language
+extern "C" fn _malloc(size: i32) -> *const c_void {
+    unsafe {
+        std::alloc::alloc(Layout::from_size_align(size as usize, 8).unwrap())
+            as *const c_void
+    }
+}
+/// Required for the wasm host to be able to reliably deallocate memory for any language
+extern "C" fn _free(ptr: *mut c_void, size: i32) {
+    unsafe {
+        std::alloc::dealloc(
+            ptr as *mut u8,
+            Layout::from_size_align(size as usize, 8).unwrap(),
+        );
+    }
+}
 extern "C" {
     fn _get_left_saber() -> _Saber;
     fn _get_right_saber() -> _Saber;
@@ -148,6 +172,18 @@ extern "C" {
     fn _quat_from_xyzw(x: f32, y: f32, z: f32, w: f32) -> _Quat;
     fn _color_set_rgb(color: _Color, r: f32, g: f32, b: f32);
     fn _color_set_rgba(color: _Color, r: f32, g: f32, b: f32, a: f32);
+    fn _data_contains_persistent_i32(key: *const c_char) -> bool;
+    fn _data_contains_persistent_f32(key: *const c_char) -> bool;
+    fn _data_contains_persistent_str(key: *const c_char) -> bool;
+    fn _data_store_persistent_i32(key: *const c_char, value: i32);
+    fn _data_store_persistent_f32(key: *const c_char, value: f32);
+    fn _data_store_persistent_str(key: *const c_char, value: *const c_char);
+    fn _data_access_persistent_i32(key: *const c_char) -> i32;
+    fn _data_access_persistent_f32(key: *const c_char) -> f32;
+    fn _data_access_persistent_str(key: *const c_char) -> *const c_char;
+    fn _data_remove_persistent_i32(key: *const c_char);
+    fn _data_remove_persistent_f32(key: *const c_char);
+    fn _data_remove_persistent_str(key: *const c_char);
 }
 pub struct Log {}
 impl Log {
@@ -236,6 +272,38 @@ impl Data {
                 map.borrow_mut().remove(key);
             })
     }
+    pub fn get_persistent_i32(key: &str) -> Option<i32> {
+        let c_str = CString::new(key).unwrap();
+        unsafe {
+            if _data_contains_persistent_i32(c_str.as_ptr()) {
+                Some(_data_access_persistent_i32(c_str.as_ptr()))
+            } else {
+                None
+            }
+        }
+    }
+    pub fn get_persistent_f32(key: &str) -> Option<f32> {
+        let c_str = CString::new(key).unwrap();
+        unsafe {
+            if _data_contains_persistent_f32(c_str.as_ptr()) {
+                Some(_data_access_persistent_f32(c_str.as_ptr()))
+            } else {
+                None
+            }
+        }
+    }
+    pub fn get_persistent_str(key: &str) -> Option<String> {
+        let c_str = CString::new(key).unwrap();
+        unsafe {
+            if _data_contains_persistent_str(c_str.as_ptr()) {
+                let ptr = _data_access_persistent_str(c_str.as_ptr());
+                let cstr = CString::from_raw(ptr as *mut c_char);
+                Some(cstr.to_string_lossy().to_string())
+            } else {
+                None
+            }
+        }
+    }
 }
 pub struct ColorNote {
     _inner: _ColorNote,
@@ -251,6 +319,16 @@ impl Beatmap {
     pub fn add_color_note(color_note: ColorNote) {
         unsafe {
             _beatmap_add_color_note(color_note._inner);
+        }
+    }
+    pub fn remove_color_note(color_note: ColorNote) {
+        unsafe {
+            _beatmap_remove_color_note(color_note._inner);
+        }
+    }
+    pub fn get_color_note_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_color_note_at_beat(beat);
         }
     }
 }
@@ -270,6 +348,16 @@ impl Beatmap {
             _beatmap_add_bomb_note(bomb_note._inner);
         }
     }
+    pub fn remove_bomb_note(bomb_note: BombNote) {
+        unsafe {
+            _beatmap_remove_bomb_note(bomb_note._inner);
+        }
+    }
+    pub fn get_bomb_note_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_bomb_note_at_beat(beat);
+        }
+    }
 }
 pub struct ChainHeadNote {
     _inner: _ChainHeadNote,
@@ -285,6 +373,16 @@ impl Beatmap {
     pub fn add_chain_head_note(chain_head_note: ChainHeadNote) {
         unsafe {
             _beatmap_add_chain_head_note(chain_head_note._inner);
+        }
+    }
+    pub fn remove_chain_head_note(chain_head_note: ChainHeadNote) {
+        unsafe {
+            _beatmap_remove_chain_head_note(chain_head_note._inner);
+        }
+    }
+    pub fn get_chain_head_note_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_chain_head_note_at_beat(beat);
         }
     }
 }
@@ -304,6 +402,16 @@ impl Beatmap {
             _beatmap_add_chain_link_note(chain_link_note._inner);
         }
     }
+    pub fn remove_chain_link_note(chain_link_note: ChainLinkNote) {
+        unsafe {
+            _beatmap_remove_chain_link_note(chain_link_note._inner);
+        }
+    }
+    pub fn get_chain_link_note_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_chain_link_note_at_beat(beat);
+        }
+    }
 }
 pub struct ChainNote {
     _inner: _ChainNote,
@@ -321,6 +429,16 @@ impl Beatmap {
             _beatmap_add_chain_note(chain_note._inner);
         }
     }
+    pub fn remove_chain_note(chain_note: ChainNote) {
+        unsafe {
+            _beatmap_remove_chain_note(chain_note._inner);
+        }
+    }
+    pub fn get_chain_note_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_chain_note_at_beat(beat);
+        }
+    }
 }
 pub struct Arc {
     _inner: _Arc,
@@ -334,6 +452,16 @@ impl Beatmap {
             _beatmap_add_arc(arc._inner);
         }
     }
+    pub fn remove_arc(arc: Arc) {
+        unsafe {
+            _beatmap_remove_arc(arc._inner);
+        }
+    }
+    pub fn get_arc_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_arc_at_beat(beat);
+        }
+    }
 }
 pub struct Wall {
     _inner: _Wall,
@@ -345,6 +473,16 @@ impl Beatmap {
     pub fn add_wall(wall: Wall) {
         unsafe {
             _beatmap_add_wall(wall._inner);
+        }
+    }
+    pub fn remove_wall(wall: Wall) {
+        unsafe {
+            _beatmap_remove_wall(wall._inner);
+        }
+    }
+    pub fn get_wall_at_beat(beat: f32) {
+        unsafe {
+            _beatmap_get_wall_at_beat(beat);
         }
     }
 }
