@@ -9,3 +9,9 @@ build/
 # Zig
 .zig-cache/
 zig-out/
+
+# Rust
+target/
+Cargo.lock
+
+
