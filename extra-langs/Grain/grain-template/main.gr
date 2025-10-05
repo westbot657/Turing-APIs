@@ -1,0 +1,18 @@
+
+import { log } from "turing_api_grain"
+
+export func on_load(): Void {
+
+}
+
+export func on_update(beat: Float32): Void {
+
+}
+
+export func on_exit(): Void {
+
+}
+
+
+
+

@@ -11,7 +11,7 @@ Currently supported languages:
 - TypeScript (via AssmeblyScript) [website](https://www.assemblyscript.org/)
 - Go (via TinyGo)                 [website](https://tinygo.org/)
 
-Currently supportable, but not a priority:
+Currently supportable, but not a priority (reach out if you want one of these languages to be given proper support):
 - Grain [website](https://grain-lang.org/) targets wasm32-unknown-unknown directly
 - Nim   [website](https://nim-lang.org/)   targets standalone C
 - V     [website](https://vlang.io/)       targets wasm32-unknown-unknown directly. Experimental, may be buggy.

@@ -1,0 +1,9 @@
+
+
+import { _log } from "env"
+
+export func log(msg: String): Void {
+    _log(msg)
+}
+
+
