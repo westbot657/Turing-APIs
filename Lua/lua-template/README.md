@@ -1,7 +1,5 @@
 # COMPILING
 
-On linux/wsl:
+install [nelua](https://nelua.io/installing/)
 
-1. install clang, llvm, wasm, wabt, make, and lld
-2. install [nelua](https://nelua.io/installing/)
-3. run build.sh to build the project to `build/script.wasm`
+TODO: finish instructions
