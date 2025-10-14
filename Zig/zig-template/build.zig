@@ -1,32 +1,29 @@
+
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
-    const target = b.standardTargetOptions(.{
-        .default_target = .{
-            .cpu_arch = .wasm32,
-            .os_tag = .freestanding,
-        },
+    const target = b.resolveTargetQuery(.{
+        .cpu_arch = .wasm32,
+        .os_tag = .wasi,
     });
+
     const optimize = b.standardOptimizeOption(.{});
 
+    const api_module = b.addModule("turing_api", .{
+        .root_source_file = b.path("../turing-api-zig/src/root.zig"),
+    });
+
     const exe = b.addExecutable(.{
-        .name = "script",
+        .name = "output",
         .root_source_file = b.path("src/main.zig"),
         .target = target,
         .optimize = optimize,
     });
 
-    const api_dep = b.dependency("turing_api", .{});
-    exe.root_module.addImport("turing-api-zig", api_dep.module("turing-api-zig"));
-
-    exe.root_module.export_symbol_names = &[_][]const u8{
-        "on_load",
-        "on_update",
-        "on_exit",
-    };
-
+    exe.root_module.addImport("turing_api", api_module);
+    exe.rdynamic = true;
     exe.entry = .disabled;
-    exe.linkage = .static;
 
     b.installArtifact(exe);
 }
+

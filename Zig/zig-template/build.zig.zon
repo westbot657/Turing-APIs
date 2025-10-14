@@ -1,14 +1,6 @@
 .{
-    .name = .Zig,
-    .version = "0.0.1",
-    .fingerprint = 0xf9835661c06b0d0f,
-
-    .dependencies = .{
-        .turing_api = .{
-            .path = "../turing-api-zig",
-        },
-    },
-
+    .name = "zig-template",
+    .version = "0.1.0",
     .paths = .{
         "build.zig",
         "build.zig.zon",
