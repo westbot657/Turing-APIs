@@ -2,7 +2,8 @@
 
 ## Language support
 
-You can use this table to pick a language to use for writing scripts
+### You can use this table to pick a language to use for writing scripts  
+If your preferred language isn't on this list, you can still use it as long as it compiles to wasm32-wasip1 (wasi preview 1) but if you want full API support, make an issue (or write it yourself and make a PR)  
 
 | Language               | Coding complexity | Build complexity | Notes                                |
 |------------------------|-------------------|------------------|--------------------------------------|
