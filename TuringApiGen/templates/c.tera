@@ -1,0 +1,61 @@
+
+// ===== Generated C API =====
+
+{%- for class_name, class in api.classes %}
+/* ===============================
+ *  Class: {{ class_name | case(style="pascal") }}
+ * =============================== */
+
+typedef struct {
+{%- for var_name, var_type in class.variables %}
+    {{ types.c[var_type] | default(var_type) }} {{ var_name | case(style="snake") }};
+{%- else %}
+    // (no fields)
+{%- endfor %}
+} {{ class_name | case(style="pascal") }};
+
+/* Methods Wrappers */
+{%- for method_name, method in class.methods %}
+{%- if method.from is defined and method.from %}
+/* C equivalent of rust: #[unsafe(no_mangle)] extern "C" fn {{ method.from }}({% for pname, ptype in method.params %}{{ types.c[ptype] | default(ptype) }}{% if not loop.last %}, {% endif %}{% endfor %}) */
+{{ class_name | case(style="pascal") }}_{{ method_name | case(style="camel") }}(
+{%- for param_name, param_type in method.params %}
+    {{ types.c[param_type] | default(param_type) }} {{ param_name | case(style="snake") }}{% if not loop.last %}, {% endif %}
+{%- endfor %}
+) {
+    {{ method.from }}(
+    {%- for param_name, param_type in method.params %}
+        {{ param_name | case(style="snake") }}{% if not loop.last %}, {% endif %}
+    {%- endfor %}
+    );
+}
+{%- else %}
+// No Rust binding defined for {{ method_name }}
+{%- endif %}
+{%- endfor %}
+
+{%- endfor %}
+
+/* ===============================
+ *  Global Functions
+ * =============================== */
+
+{%- for func_name, func in api.functions %}
+{%- if func.from is defined and func.from %}
+/* C equivalent of rust: #[unsafe(no_mangle)] extern "C" fn {{ func.from }}({% for pname, ptype in func.params %}{{ types.c[ptype] | default(ptype) }}{% if not loop.last %}, {% endif %}{% endfor %}) */
+{{ func_name | case(style="camel") }}(
+{%- for param_name, param_type in func.params %}
+    {{ types.c[param_type] | default(param_type) }} {{ param_name | case(style="snake") }}{% if not loop.last %}, {% endif %}
+{%- endfor %}
+) {
+    {{ func.from }}(
+    {%- for param_name, param_type in func.params %}
+        {{ param_name | case(style="snake") }}{% if not loop.last %}, {% endif %}
+    {%- endfor %}
+    );
+}
+{%- else %}
+// No Rust binding defined for {{ func_name }}
+{%- endif %}
+{%- endfor %}
+

@@ -1,0 +1,9 @@
+:Global:
+
+void test_global(name: string)
+i32 global_2_test()
+string my_test(a: i8, b: i16)
+
+:My_Class:
+
+void object_func(a: i16) from _my_class_object_func
