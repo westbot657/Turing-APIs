@@ -132,7 +132,6 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
         "pascal" => input.to_case(Case::Pascal),
         "snake" => input.to_case(Case::Snake),
         "screaming" | "upper_snake" => input.to_case(Case::UpperSnake),
-        "kebab" => input.to_case(Case::Kebab),
         _ => input, // fallback: unchanged
     };
 
