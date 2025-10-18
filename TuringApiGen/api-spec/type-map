@@ -1,4 +1,4 @@
-| Type    | rust          | c           | c++         | zig         | asmscript | nelua   | go      |
+| Type    | rs            | c           | c++         | zig         | asmscript | nelua   | go      |
 |---------|---------------|-------------|-------------|-------------|-----------|---------|---------|
 | i8      | i8            | int8_t      | int8_t      | i8          | i8        | int8    | int8    |
 | i16     | i16           | int16_t     | int16_t     | i16         | i16       | int16   | int16   |
@@ -16,3 +16,4 @@
 | CString | *const c_char | const char* | const char* | [*]const u8 | u32       | cstring | *byte   |
 | Cstr    | *const c_char | const char* | const char* | [*]const u8 | u32       | cstring | uint32  |
 | op*     | *const c_void | const void* | const void* | *c_void     | u32       | uint32  | uint32  |
+| void    | ()            | void        | void        | void        | void      | void    | void    |
