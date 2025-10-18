@@ -5,7 +5,7 @@ use std::ffi::{CString, CStr, c_char, c_void};
 unsafe extern "C" {
     fn _host_strcpy(location: *const c_char, size: u32);
 
-    //// Generated bindings ////
+    //// Wasm Bindings ////
     {% for func in api.functions -%}
     {%- if func.from is defined and func.from -%}
     fn {{ func.from }}(

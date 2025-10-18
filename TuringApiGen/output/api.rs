@@ -5,7 +5,7 @@ use std::ffi::{CString, CStr, c_char, c_void};
 unsafe extern "C" {
     fn _host_strcpy(location: *const c_char, size: u32);
 
-    //// Generated bindings ////
+    //// Wasm Bindings ////
     fn _test_global(name: *const c_char);
     fn _global_2_test() -> i32;
     fn _my_test(a: i8, b: i16) -> u32;

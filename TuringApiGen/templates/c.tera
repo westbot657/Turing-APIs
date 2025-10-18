@@ -1,31 +1,74 @@
 
 ///// Generated C API /////
+#include <stdlib.h>
 #include <stdint.h>
+
+//// Wasm Bindings ////
+void _host_strcpy(const char* location, uint32_t size);
+{% for func in api.functions %}
+{%- if func.from is defined and func.from -%}
+{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
+    {%- for param in func.params -%}
+    {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+);
+{% endif -%}
+{%- endfor %}
+
+{% for class in api.classes %}
+{%- for func in class.functions -%}
+{%- if func.from is defined and func.from -%}
+{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
+    {%- for param in func.params -%}
+    {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+);
+{% endif -%}
+{%- endfor -%}
+{%- for func in class.methods -%}
+{% if func.from is defined and func.from %}
+{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}({% if class.is_opaque %}const void* {% else %}{{ class.name | case(style="pascal") }} {% endif %}opaque
+    {%- for param in func.params -%}
+    , {% if param.type == "&str" %}const char*{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
+    {%- endfor -%}
+);
+{% endif -%}
+{%- endfor -%}
+
+{%- endfor %}
+
+
 
 //// Functions ////
 {% for func in api.functions %}
-{%- if func.from is defined and func.from -%}
+{%- if func.from is defined and func.from %}
 {{ types.c[func.type] }} {{ func.name | case(style="camel") }}(
     {%- for param in func.params -%}
     {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
     {%- if not loop.last %}, {% endif -%}
     {%- endfor -%}
 ) {
-    {%- if func.type != "void" -%}return {% endif -%}
+    {% if func.type == "String" -%}uint32_t _res = {% elif func.type in api.opaque_classes %}{{ func.type | case(style="pascal") }} _res = {% elif func.type != "void" -%}return {% endif -%}
     {{ func.from }}(
         {%- for param in func.params -%}
         {{ param.name | case(style="snake") }}
         {%- if not loop.last %}, {% endif -%}
         {%- endfor -%}
     );
+    {% if func.type == "String" -%}
+    void* _str = malloc(_res);
+    _host_strcpy(_str, _res);
+    return _str;
+    {%- elif func.type in api.opaque_classes -%}
+    return {{ func.type | case(style="pascal") }} { .opaque: _res };
+    {%- endif %}
 }
-
 {%- else %}
-// FIXME: No wasm binding defined for {{ func.name }}
+// FIXME: No wasm binding defined for {{ func.name | case(style="camel") }}
 {%- endif %}
-
 {%- endfor %}
-
 
 //// Classes ////
 {%- for class in api.classes %}
@@ -37,53 +80,62 @@ typedef struct {
     // No fields
 {% endfor -%}
 } {{ class.name | case(style="pascal") }};
-{% if class.functions -%}
-// {{ class.name | case(style="pascal") }} functions
-{%- endif %}
+
+{% if class.functions %}// {{ class.name | case(style="pascal") }} Functions{% endif %}
 {% for func in class.functions %}
-{%-if func.from is defined and func.from %}
-{{ func.type }} {{ func.name }}(
+{%- if func.from is defined and func.from %}
+{{ types.c[func.type] }} {{ class.name | case(style="pascal") }}_{{ func.name | case(style="camel") }}(
     {%- for param in func.params -%}
     {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
     {%- if not loop.last %}, {% endif -%}
     {%- endfor -%}
 ) {
-    {% if func.type != "void" -%}return {% endif -%}
+    {% if func.type == "String" -%}uint32_t _res = {% elif func.type in api.opaque_classes %}{{ func.type | case(style="pascal") }} _res = {% elif func.type != "void" -%}return {% endif -%}
     {{ func.from }}(
         {%- for param in func.params -%}
         {{ param.name | case(style="snake") }}
         {%- if not loop.last %}, {% endif -%}
         {%- endfor -%}
     );
+    {% if func.type == "String" -%}
+    void* _str = malloc(_res);
+    _host_strcpy(_str, _res);
+    return _str;
+    {%- elif func.type in api.opaque_classes -%}
+    return {{ func.type | case(style="pascal") }} { .opaque: _res };
+    {%- endif %}
 }
-{% else -%}
-// FIXME: No wasm binding defined for {{ func.name }}
-{%- endif -%}
+{%- else %}
+// FIXME: No wasm binding defined for {{ func.name | case(style="camel") }}
+{%- endif %}
 {%- endfor -%}
 
-{%- if class.methods -%}
-// {{ class.name | case(style="pascal") }} methods
-{%- endif %}
+{% if class.methods %}// {{ class.name | case(style="pascal") }} Methods{% endif%}
 {% for func in class.methods %}
-{%-if func.from is defined and func.from %}
-{{ func.type }} {{ func.name }}({{ class.name | case(style="pascal") }}* self
+{%- if func.from is defined and func.from %}
+{{ types.c[func.type] }} {{ func.name | case(style="camel") }}({{ class.name | case(style="pascal") }}* self
     {%- for param in func.params -%}
     , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
     {%- endfor -%}
 ) {
-    {% if func.type != "void" -%}return {% endif -%}
+    {% if func.type == "String" -%}uint32_t _res = {% elif func.type in api.opaque_classes %}{{ func.type | case(style="pascal") }} _res = {% elif func.type != "void" -%}return {% endif -%}
     {{ func.from }}(self{% if class.is_opaque %}->opaque{% endif %}
         {%- for param in func.params -%}
         , {{ param.name | case(style="snake") }}
         {%- endfor -%}
     );
+    {% if func.type == "String" -%}
+    void* _str = malloc(_res);
+    _host_strcpy(_str, _res);
+    return _str;
+    {%- elif func.type in api.opaque_classes -%}
+    return {{ func.type | case(style="pascal") }} { .opaque: _res };
+    {%- endif %}
 }
-{%- else -%}
-// FIXME: No wasm binding defined for {{ func.name }}
-{%- endif -%}
+{%- else %}
+// FIXME: No wasm binding defined for {{ func.name | case(style="camel") }}
+{%- endif %}
 {%- endfor -%}
 
-
-{%- endfor %}
-
+{%- endfor -%}
 
