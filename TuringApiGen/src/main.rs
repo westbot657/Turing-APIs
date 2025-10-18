@@ -14,18 +14,20 @@ use regex::Regex;
 pub struct ApiModel {
     pub classes: Vec<ClassDef>,
     pub functions: Vec<FunctionDef>,
+    pub opaque_classes: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClassDef {
     pub name: String,
-    pub variables: Vec<VarDef>,
+    pub variables: Vec<VariableDef>,
     pub methods: Vec<FunctionDef>,
     pub functions: Vec<FunctionDef>,
+    pub is_opaque: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct VarDef {
+pub struct VariableDef {
     pub name: String,
     #[serde(rename = "type")]
     pub typ: String,
@@ -34,12 +36,16 @@ pub struct VarDef {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FunctionDef {
     pub name: String,
-    pub returns: String,
     pub params: Vec<ParamDef>,
+    #[serde(rename = "type")]
+    pub returns: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<String>,
-    #[serde(default)]
     pub is_static: bool,
+
+    // new field
+    #[serde(default)]
+    pub returns_opaque: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -56,32 +62,43 @@ pub fn parse_api(input: &str) -> ApiModel {
 
     let func_re = Regex::new(
         r#"(?x)
-        (?P<prefix>::)?             # optional '::' for class functions
-        (?P<ret>\w+)\s+             # return type
-        (?P<name>\w+)               # function name
-        \s*\((?P<params>[^)]*)\)    # params
-        (?:\s+from\s+(?P<from>\S+))? # optional 'from' source
+        (?P<prefix>::)?             # optional '::' for static
+        (?P<name>\w+)\s*            # function name
+        \((?P<params>[^)]*)\)\s*    # parameters
+        ->\s*(?P<ret>\w+)           # return type
+        (?:\s*:\s*(?P<from>\S+))?   # optional source after colon
         "#
     ).unwrap();
 
-    for line in input.lines().map(|l| l.trim()) {
-        if line.is_empty() {
-            continue;
-        }
+    let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
 
+    for line in input.lines().map(|l| l.trim()).filter(|l| !l.is_empty()) {
         // Section header like ":My_Class:"
         if line.starts_with(':') && line.ends_with(':') {
-            let name = line.trim_matches(':').to_string();
+            let header = line.trim_matches(':').trim();
+            let (name, is_opaque) = if let Some((name, flags)) = header.split_once(' ') {
+                (name.trim().to_string(), flags.contains("[opaque]"))
+            } else {
+                (header.to_string(), false)
+            };
+
             if name == "Global" {
                 current_class = None;
             } else {
-                // Ensure the class exists in our vector
                 if !classes.iter().any(|c| c.name == name) {
+                    let mut vars = Vec::new();
+                    if is_opaque {
+                        vars.push(VariableDef {
+                            name: "opaque".to_string(),
+                            typ: "op*".to_string(),
+                        });
+                    }
                     classes.push(ClassDef {
                         name: name.clone(),
-                        variables: Vec::new(),
+                        variables: vars,
                         methods: Vec::new(),
                         functions: Vec::new(),
+                        is_opaque,
                     });
                 }
                 current_class = Some(name);
@@ -89,14 +106,37 @@ pub fn parse_api(input: &str) -> ApiModel {
             continue;
         }
 
+
+        // Variable definition line like ".attr: i32"
+        if let Some(caps) = var_re.captures(line) {
+            let var = VariableDef {
+                name: caps["name"].to_string(),
+                typ: caps["typ"].to_string(),
+            };
+            if let Some(class_name) = &current_class {
+                let class = classes
+                    .iter_mut()
+                    .find(|c| &c.name == class_name)
+                    .expect("Class should exist");
+                class.variables.push(var);
+            } else {
+                panic!("Variables are only allowed inside classes");
+            }
+            continue;
+        }
+
         // Function definition line
         if let Some(caps) = func_re.captures(line) {
             let is_static = caps.name("prefix").is_some();
-            let returns = caps["ret"].to_string();
             let name = caps["name"].to_string();
-            let from = caps.name("from").map(|m| m.as_str().to_string());
+            let returns = caps["ret"].to_string();
+            let mut from = caps.name("from").map(|m| m.as_str().to_string());
 
-            // Parse params
+            if from.is_none() {
+                from = Some(format!("_{}", name));
+            }
+
+            // Parse parameters
             let mut params = Vec::new();
             let params_text = caps["params"].trim();
             if !params_text.is_empty() {
@@ -117,6 +157,7 @@ pub fn parse_api(input: &str) -> ApiModel {
                 params,
                 from,
                 is_static,
+                returns_opaque: false,
             };
 
             if let Some(class_name) = &current_class {
@@ -124,7 +165,6 @@ pub fn parse_api(input: &str) -> ApiModel {
                     .iter_mut()
                     .find(|c| &c.name == class_name)
                     .expect("Class should exist");
-
                 if is_static {
                     class.functions.push(func);
                 } else {
@@ -133,13 +173,52 @@ pub fn parse_api(input: &str) -> ApiModel {
             } else {
                 functions.push(func);
             }
+
+            continue;
         }
+
+        panic!("Unrecognized line: {}", line);
     }
 
-    ApiModel { classes, functions }
+    ApiModel { classes, functions, opaque_classes: Vec::new() }
 }
 
 
+pub fn finalize_opaque_returns(mut api: ApiModel) -> ApiModel {
+    // Collect all opaque class names
+    let opaque_classes: Vec<String> = api
+        .classes
+        .iter()
+        .filter(|c| c.is_opaque)
+        .map(|c| c.name.clone())
+        .collect();
+
+    api.opaque_classes = opaque_classes.clone();
+
+    // Helper to mark a function as returning opaque if needed
+    let mark_opaque = |func: &mut FunctionDef| {
+        if opaque_classes.contains(&func.returns) {
+            func.returns_opaque = true;
+        }
+    };
+
+    // Global functions
+    for func in &mut api.functions {
+        mark_opaque(func);
+    }
+
+    // Class methods and static functions
+    for class in &mut api.classes {
+        for func in &mut class.methods {
+            mark_opaque(func);
+        }
+        for func in &mut class.functions {
+            mark_opaque(func);
+        }
+    }
+
+    api
+}
 
 
 #[derive(Parser, Debug)]
@@ -236,7 +315,7 @@ fn main() {
 
     let s = fs::read(input).expect("Failed to read input file");
     let s = String::from_utf8(s).expect("input contained invalid UTF-8");
-    let api_model = parse_api(&s);
+    let api_model = finalize_opaque_returns(parse_api(&s));
     let type_map = parse_typemap();
 
     println!("API model: {:#?}\n\nType map: {:#?}", api_model, type_map);

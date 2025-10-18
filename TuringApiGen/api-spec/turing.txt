@@ -1,16 +1,15 @@
 :Global:
+test_global(name: &str) -> void
+global_2_test() -> i32
+my_test(a: i8, b: i16) -> String
 
-void test_global(name: string)
-i32 global_2_test()
-string my_test(a: i8, b: i16)
+:My_Class [opaque] :
 
-:My_Class:
-
-void object_func(a: i16) from _my_class_object_func
+object_func(a: i16) -> void : _my_class_object_func
 
 :Log:
-::void info(msg: &str) from _log_info
-::void warn(msg: &str) from _log_warn
-::void critical(msg: &str) from _log_critical
-::void debug(msg: &str) from _log_debug
+::info(msg: &str) -> void : _log_info
+::warn(msg: &str) -> void : _log_warn
+::critical(msg: &str) -> void : _log_critical
+::debug(msg: &str) -> void : _log_debug
 

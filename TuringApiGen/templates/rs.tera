@@ -1,16 +1,98 @@
 
 ///// Generated Rust API /////
+use std::ffi::{CString, CStr, c_char, c_void};
+
+unsafe extern "C" {
+    fn _host_strcpy(location: *const c_char, size: u32);
+
+    //// Generated bindings ////
+    {% for func in api.functions -%}
+    {%- if func.from is defined and func.from -%}
+    fn {{ func.from }}(
+        {%- for param in func.params -%}
+        {{ param.name | case(style="snake") }}: {% if param.type == "&str" %}*const c_char{% else %}{{ types.rs[param.type] }}{% endif %}
+        {%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+    ){% if func.type == "void" %}{% elif func.type == "String" %} -> u32{% else %} -> {{ types.rs[func.type] }}{% endif %};
+    {% endif -%}
+    {%- endfor %}
+
+    {% for class in api.classes -%}
+    {%- for func in class.functions -%}
+    {%- if func.from is defined and func.from -%}
+    fn {{ func.from }}(
+        {%- for param in func.params -%}
+        {{ param.name | case(style="snake") }}: {% if param.type == "&str" %}*const c_char{% else %}{{ types.rs[param.type] }}{% endif %}
+        {%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+    ){% if func.type == "void" %}{% elif func.type == "String" %} -> u32{% else %} -> {{ types.rs[func.type] }}{% endif %};
+    {% endif -%}
+    {%- endfor -%}
+    {%- for func in class.methods -%}
+    {% if func.from is defined and func.from %}
+    fn {{ func.from }}(opaque: {% if class.is_opaque %}*const c_void{% else %}{{ class.name | case(style="pascal") }}{% endif %}
+        {%- for param in func.params -%}
+        , {{ param.name | case(style="snake") }}: {% if param.type == "&str" %}*const c_char{% else %}{{ types.rs[param.type] }}{% endif %}
+        {%- endfor -%}
+    ){% if func.type == "void" %}{% elif func.type == "String" %} -> u32{% else %} -> {{ types.rs[func.type] }}{% endif %};
+    {% endif %}
+    {%- endfor -%}
+    {%- endfor %}
+
+}
+
+//// Functions ////
+{% for func in api.functions %}
+{%- if func.from is defined and func.from %}
+pub fn {{ func.name }}(
+    {%- for param in func.params -%}
+    {{ param.name | case(style="snake") }}: {{ types.rs[param.type] }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+)
+{%- if func.type != "void" %} -> {{ types.rs[func.type] }} {% else %} {% endif -%}
+{
+    {%- for param in func.params %}
+    {%- if param.type == "&str" %}
+    let _internal_{{ param.name | case(style="snake") }} = CString::new({{ param.name | case(style="snake") }}).unwrap();
+    let {{ param.name | case(style="snake") }} = _internal_{{ param.name | case(style="snake") }}.as_ptr();
+    {%- endif -%}
+    {%- endfor %}
+    {% if func.type != "void" -%}let _res = {% endif -%}
+    unsafe { {{ func.from }}(
+        {%- for param in func.params -%}
+        {{ param.name | case(style="snake") }}
+        {%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+    ) }{% if func.type != "void" %};
+    {% if func.type == "String" -%}
+    let _str: Vec<u8> = vec![0; _res];
+    unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
+    let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
+    _str.to_string_lossy().into_owned()
+    {%- elif func.type in api.opaque_classes -%}
+    {{ func.type | case(style="pascal") }} { opaque: _res }
+    {%- else -%}
+    _res
+    {%- endif -%}
+    {%- endif %}
+}
+{%- else %}
+// FIXME: No wasm binding defined for {{ func.name | case(style="snake") }}
+{%- endif %}
+
+{%- endfor %}
+
 
 //// Classes ////
-
-{% for class in api.classes %}
+{%- for class in api.classes %}
 
 struct {{ class.name | case(style="pascal") }} {
-{%- for var in class.variables -%}
+{%- for var in class.variables %}
     {{ var.name | case(style="snake") }}: {{ types.rs[var.type] }},
-{%- else -%}
-    // (no fields)
-{%- endfor -%}
+{%- else %}
+    // No fields
+{% endfor -%}
 }
 impl {{ class.name | case(style="pascal") }} {
     {%- for func in class.functions %}
@@ -21,66 +103,78 @@ impl {{ class.name | case(style="pascal") }} {
         {%- if not loop.last %}, {% endif -%}
         {%- endfor -%}
     )
-    {%- if func.returns != "void" -%} -> {{ types.rs[func.returns] }} {%- endif -%}
+    {%- if func.type != "void" %} -> {{ types.rs[func.type] }} {% else %} {% endif -%}
     {
-        {{ func.from }}(
+        {%- for param in func.params %}
+        {%- if param.type == "&str" %}
+        let _internal_{{ param.name | case(style="snake") }} = CString::new({{ param.name | case(style="snake") }}).unwrap();
+        let {{ param.name | case(style="snake") }} = _internal_{{ param.name | case(style="snake") }}.as_ptr();
+        {%- endif -%}
+        {%- endfor %}
+        {% if func.type != "void" -%}let _res = {% endif -%}
+        unsafe { {{ func.from }}(
             {%- for param in func.params -%}
             {{ param.name | case(style="snake") }}
             {%- if not loop.last %}, {% endif -%}
             {%- endfor -%}
-        )
+        ) }{% if func.type != "void" %};
+        {% if func.type == "String" -%}
+        let _str: Vec<u8> = vec![0; _res];
+        unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
+        let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
+        _str.to_string_lossy().into_owned()
+        {%- elif func.type in api.opaque_classes -%}
+        {{ func.type | case(style="pascal") }} { opaque: _res }
+        {%- else -%}
+        _res
+        {%- endif -%}
+        {%- endif %}
+
     }
     {%- else -%}
-    // FIXME: No wasm binding defined for {{ func_name }}
+    // FIXME: No wasm binding defined for {{ func.name | case(style="snake") }}
     {%- endif -%}
     {%- endfor -%}
 
 
-    {%- for method in class.methods %}
-    {% if method.from is defined and method.from -%}
-    pub fn {{ method.name | case(style="snake") }}(&self
-    {%- for param in method.params -%}
+    {%- for func in class.methods %}
+    {% if func.from is defined and func.from -%}
+    pub fn {{ func.name | case(style="snake") }}(&self
+    {%- for param in func.params -%}
     , {{ param.name | case(style="snake") }}: {{ types.rs[param.type] }}
     {%- endfor -%}
     )
-    {%- if method.returns != "void" -%} -> {{ types.rs[method.returns] }} {%- endif -%}
+    {%- if func.type != "void" %} -> {{ types.rs[func.type] }} {% else %} {% endif -%}
     {
-        {{ method.from }}(self
-            {%- for param in method.params -%}
+        {%- for param in func.params %}
+        {%- if param.type == "&str" %}
+        let _internal_{{ param.name | case(style="snake") }} = CString::new({{ param.name | case(style="snake") }}).unwrap();
+        let {{ param.name | case(style="snake") }} = _internal_{{ param.name | case(style="snake") }}.as_ptr();
+        {%- endif -%}
+        {%- endfor %}
+        {% if func.type != "void" -%}let _res = {% endif -%}
+        unsafe { {{ func.from }}(self{% if class.is_opaque %}.opaque{% endif %}
+            {%- for param in func.params -%}
             , {{ param.name | case(style="snake") }}
             {%- endfor -%}
-        )
+        ) }{% if func.type != "void" %};
+        {% if func.type == "String" -%}
+        let _str: Vec<u8> = vec![0; _res];
+        unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
+        let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
+        _str.to_string_lossy().into_owned()
+        {%- elif func.type in api.opaque_classes -%}
+        {{ func.type | case(style="pascal") }} { opaque: _res }
+        {%- else -%}
+        _res
+        {%- endif -%}
+        {%- endif %}
     }
     {%- else -%}
-    // FIXME: No wasm binding defined for {{ method.name }}
+    // FIXME: No wasm binding defined for {{ func.name | case(style="snake") }}
     {%- endif -%}
     {%- endfor %}
 }
 
 {%- endfor %}
-
-//// Functions ////
-{% for func in api.functions %}
-{%- if func.from is defined and func.from %}
-pub fn {{ func.name | case(style="snake") }}(
-    {%- for param in func.params -%}
-    {{ param.name | case(style="snake") }}: {{ types.rs[param.type] }}
-    {%- if not loop.last %}, {% endif -%}
-    {%- endfor -%}
-)
-{%- if func.returns != "void" -%} -> {{ types.rs[func.returns] }} {%- endif -%}
-{
-    {{ func.from }}(
-        {%- for param in func.params -%}
-        {{ param.name | case(style="snake") }}
-        {%- if not loop.last %}, {% endif -%}
-        {%- endfor -%}
-    )
-}
-{%- else %}
-// FIXME: No wasm binding defined for {{ func.name }}
-{%- endif %}
-
-{%- endfor -%}
-
 
