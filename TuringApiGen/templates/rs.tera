@@ -66,7 +66,7 @@ pub fn {{ func.name }}(
         {%- endfor -%}
     ) }{% if func.type != "void" %};
     {% if func.type == "String" -%}
-    let _str: Vec<u8> = vec![0; _res];
+    let mut _str: Vec<u8> = vec![0; _res as usize];
     unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
     let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
     _str.to_string_lossy().into_owned()
@@ -119,7 +119,7 @@ impl {{ class.name | case(style="pascal") }} {
             {%- endfor -%}
         ) }{% if func.type != "void" %};
         {% if func.type == "String" -%}
-        let _str: Vec<u8> = vec![0; _res];
+        let mut _str: Vec<u8> = vec![0; _res as usize];
         unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
         let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
         _str.to_string_lossy().into_owned()
@@ -159,7 +159,7 @@ impl {{ class.name | case(style="pascal") }} {
             {%- endfor -%}
         ) }{% if func.type != "void" %};
         {% if func.type == "String" -%}
-        let _str: Vec<u8> = vec![0; _res];
+        let mut _str: Vec<u8> = vec![0; _res as usize];
         unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
         let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
         _str.to_string_lossy().into_owned()

@@ -34,7 +34,7 @@ pub fn global_2_test() -> i32 {
 }
 pub fn my_test(a: i8, b: i16) -> String {
     let _res = unsafe { _my_test(a, b) };
-    let _str: Vec<u8> = vec![0; _res];
+    let mut _str: Vec<u8> = vec![0; _res as usize];
     unsafe { _host_strcpy(_str.as_mut_ptr() as *mut c_char, _res); }
     let _str = unsafe { CStr::from_ptr(_str.as_ptr() as *const c_char) };
     _str.to_string_lossy().into_owned()
