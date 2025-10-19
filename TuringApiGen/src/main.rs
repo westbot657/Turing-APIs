@@ -384,6 +384,8 @@ fn main() {
     let api_model = finalize_opaque_returns(parse_api(&s, &reserved));
     let type_map = parse_typemap();
 
+    println!("API: {:#?}\n\nTypeMap: {:#?}", api_model, type_map);
+
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);
     ctx.insert("types", &type_map);

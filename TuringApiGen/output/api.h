@@ -1,5 +1,5 @@
 
-///// Generated C API Header /////
+///// Generated C API Headers /////
 #pragma once
 #include <stdint.h>
 

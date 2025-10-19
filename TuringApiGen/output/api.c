@@ -1,24 +1,8 @@
 
 ///// Generated C API /////
-#include <stdlib.h>
-#include <stdint.h>
-
-//// Wasm Bindings ////
-void _host_strcpy(const char* location, uint32_t size);
-void _test_global(const char* name);
-int32_t _global_2_test();
-uint32_t _my_test(int8_t a, int16_t b);
-
-
-
-void _my_class_object_func(const void* opaque, int16_t a);
-void _log_info(const char* msg);
-void _log_warn(const char* msg);
-void _log_critical(const char* msg);
-void _log_debug(const char* msg);
-
-
-
+#include <stdlib>
+#include <stdint>
+#include "api.wasm.h"
 
 //// Functions ////
 
@@ -47,7 +31,7 @@ typedef struct {
 // MyClass Methods
 
 void objectFunc(MyClass* self, int16_t a) {
-    _my_class_object_func(self->opaque, a);
+    _my_class_object_func(self->opaqu, a);
     
 }
 
