@@ -1,0 +1,60 @@
+
+///// Generated C API Header /////
+#pragma once
+#include <stdint.h>
+
+//// Public Functions ////
+{% for func in api.functions %}
+{%- if func.from is defined and func.from %}
+{{ types.c[func.type] }} {{ func.name | case(style="camel") }}(
+    {%- for param in func.params -%}
+    {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+);
+{%- else %}
+// FIXME: No wasm binding defined for {{ func.name | case(style="camel") }}
+{%- endif %}
+{% endfor %}
+
+
+//// Classes ////
+{%- for class in api.classes %}
+
+typedef struct {
+{%- for var in class.variables %}
+    {{ types.c[var.type] }} {{ var.name | case(style="snake") }};
+{%- else %}
+    // No fields
+{%- endfor %}
+} {{ class.name | case(style="pascal") }};
+
+{% if class.functions %}// {{ class.name | case(style="pascal") }} Functions{% endif %}
+{% for func in class.functions %}
+{%- if func.from is defined and func.from %}
+{{ types.c[func.type] }} {{ class.name | case(style="pascal") }}_{{ func.name | case(style="camel") }}(
+    {%- for param in func.params -%}
+    {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+);
+{%- else %}
+// FIXME: No wasm binding defined for {{ func.name | case(style="camel") }}
+{%- endif %}
+{% endfor %}
+
+{% if class.methods %}// {{ class.name | case(style="pascal") }} Methods{% endif %}
+{% for func in class.methods %}
+{%- if func.from is defined and func.from %}
+{{ types.c[func.type] }} {{ func.name | case(style="camel") }}({{ class.name | case(style="pascal") }}* self
+    {%- for param in func.params -%}
+    , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {%- endfor -%}
+);
+{%- else %}
+// FIXME: No wasm binding defined for {{ func.name | case(style="camel") }}
+{%- endif %}
+{% endfor %}
+
+{%- endfor %}
+

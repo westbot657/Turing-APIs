@@ -40,7 +40,7 @@ char* myTest(int8_t a, int16_t b) {
 //// Classes ////
 
 typedef struct {
-    const void* opaque;
+    const void* opaqu;
 } MyClass;
 
 

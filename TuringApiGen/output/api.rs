@@ -44,7 +44,7 @@ pub fn my_test(a: i8, b: i16) -> String {
 //// Classes ////
 
 struct MyClass {
-    opaque: *const c_void,
+    opaqu: *const c_void,
 }
 impl MyClass {
     pub fn object_func(&self, a: i16) {

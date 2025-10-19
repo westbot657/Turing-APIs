@@ -55,10 +55,11 @@ pub struct ParamDef {
     pub typ: String,
 }
 
-pub fn parse_api(input: &str) -> ApiModel {
+pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiModel {
     let mut classes: Vec<ClassDef> = Vec::new();
     let mut functions: Vec<FunctionDef> = Vec::new();
     let mut current_class: Option<String> = None;
+    let mut invalid_name = false;
 
     let func_re = Regex::new(
         r#"(?x)
@@ -73,6 +74,7 @@ pub fn parse_api(input: &str) -> ApiModel {
     let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
 
     for line in input.lines().map(|l| l.trim()).filter(|l| !l.is_empty()) {
+        if line.starts_with("//") { continue }
         // Section header like ":My_Class:"
         if line.starts_with(':') && line.ends_with(':') {
             let header = line.trim_matches(':').trim();
@@ -84,12 +86,15 @@ pub fn parse_api(input: &str) -> ApiModel {
 
             if name == "Global" {
                 current_class = None;
+            } else if let Some(langs) = reserved.get(&name) {
+                eprintln!("Invalid class name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
+                invalid_name = true;
             } else {
                 if !classes.iter().any(|c| c.name == name) {
                     let mut vars = Vec::new();
                     if is_opaque {
                         vars.push(VariableDef {
-                            name: "opaque".to_string(),
+                            name: "opaqu".to_string(),
                             typ: "op*".to_string(),
                         });
                     }
@@ -109,8 +114,16 @@ pub fn parse_api(input: &str) -> ApiModel {
 
         // Variable definition line like ".attr: i32"
         if let Some(caps) = var_re.captures(line) {
+
+            let name = caps["name"].to_string();
+
+            if let Some(langs) = reserved.get(&name) {
+                eprintln!("Invalid variable name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
+                invalid_name = true;
+            }
+
             let var = VariableDef {
-                name: caps["name"].to_string(),
+                name,
                 typ: caps["typ"].to_string(),
             };
             if let Some(class_name) = &current_class {
@@ -131,9 +144,20 @@ pub fn parse_api(input: &str) -> ApiModel {
             let name = caps["name"].to_string();
             let returns = caps["ret"].to_string();
             let mut from = caps.name("from").map(|m| m.as_str().to_string());
-
             if from.is_none() {
                 from = Some(format!("_{}", name));
+            }
+
+            if let Some(langs) = reserved.get(&name) {
+                eprintln!("Invalid function name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
+                invalid_name = true;
+            }
+
+            if let Some(ref from) = from {
+                if let Some(langs) = reserved.get(from) {
+                    eprintln!("Invalid wasm function name '{}' cannot be used, it is a keyword in language(s): {}", from, langs.join(", "));
+                    invalid_name = true;
+                }
             }
 
             // Parse parameters
@@ -143,8 +167,14 @@ pub fn parse_api(input: &str) -> ApiModel {
                 for param in params_text.split(',') {
                     let param = param.trim();
                     if let Some((n, t)) = param.split_once(':') {
+                        let n = n.trim().to_string();
+                        if let Some(langs) = reserved.get(&n) {
+                            eprintln!("Invalid param name '{}' cannot be used, it is a keyword in language(s): {}", n, langs.join(", "));
+                            invalid_name = true;
+                        }
+
                         params.push(ParamDef {
-                            name: n.trim().to_string(),
+                            name: n,
                             typ: t.trim().to_string(),
                         });
                     }
@@ -307,6 +337,33 @@ pub fn parse_typemap() -> Value {
     to_value(tm).expect("Hashmap failed to convert to serde Value")
 }
 
+fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
+
+    let s2 = fs::read_to_string("./api-spec/dissallowed").expect("Failed to open dissallowed words list");
+    let s: Vec<&str> = s2
+        .split("\n")
+        .map(|l| l.trim())
+        .filter(|l| !(l.starts_with("//") || l.is_empty()))
+        .collect();
+
+    let mut words: HashMap<String, Vec<String>> = HashMap::new();
+    let mut current_lang = "All";
+
+    for line in s {
+        if let Some(line) = line.strip_prefix("#") {
+            current_lang = line;
+        } else {
+            if let Some(langs) = &mut words.get_mut(line) {
+                langs.push(current_lang.to_string());
+            } else {
+                words.insert(line.to_string(), vec![current_lang.to_string()]);
+            }
+        }
+    }
+
+    words
+}
+
 fn main() {
     let args = Args::parse();
 
@@ -315,11 +372,11 @@ fn main() {
 
     let s = fs::read(input).expect("Failed to read input file");
     let s = String::from_utf8(s).expect("input contained invalid UTF-8");
-    let api_model = finalize_opaque_returns(parse_api(&s));
+
+    let reserved = load_reserved_word_map();
+
+    let api_model = finalize_opaque_returns(parse_api(&s, &reserved));
     let type_map = parse_typemap();
-
-    println!("API model: {:#?}\n\nType map: {:#?}", api_model, type_map);
-
 
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);
@@ -333,7 +390,7 @@ fn main() {
         let extension = name.replace(".tera", "");
         let file_name = format!("{}/api.{}", output.display(), extension);
 
-        println!("will try to save to {}", file_name);
+        println!("Generating {} template...", extension);
 
         let render = tera.render(name, &ctx).expect(&format!("Failed to render API model to {}", extension));
 
