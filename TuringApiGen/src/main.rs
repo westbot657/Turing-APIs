@@ -6,6 +6,7 @@ use std::collections::{HashMap, VecDeque};
 use std::fs;
 use std::io::{self, Write};
 use std::path::PathBuf;
+use std::process::exit;
 use tera::{from_value, to_value, Context, Tera, Value, Result as TeraResult};
 
 use regex::Regex;
@@ -208,6 +209,11 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
         }
 
         panic!("Unrecognized line: {}", line);
+    }
+
+    if invalid_name {
+        eprintln!("Generating API failed due to previous errors.");
+        ::std::process::exit(1);
     }
 
     ApiModel { classes, functions, opaque_classes: Vec::new() }

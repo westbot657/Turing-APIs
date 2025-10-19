@@ -13,4 +13,3 @@ object_func(a: i16) -> void : _my_class_object_func
 ::warn(msg: &str) -> void : _log_warn
 ::critical(msg: &str) -> void : _log_critical
 ::debug(msg: &str) -> void : _log_debug
-
