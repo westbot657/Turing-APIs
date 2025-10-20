@@ -13,7 +13,7 @@
 | bool    | bool          | bool        | bool         | bool             | bool      | boolean | bool    |
 | String  | String        | char*       | std::string  | []u8             | string    | string  | string  |
 | &str    | &str          | const char* | std::string& | []const u8       | string    | string  | string  |
-| CString | *const c_char | const char* | const char*  | [*:0]const u8    | u32       | cstring | *byte   |
-| Cstr    | *const c_char | const char* | const char*  | [*:0]const u8    | u32       | cstring | uint32  |
+| CString | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | *byte   |
+| Cstr    | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | uint32  |
 | op*     | *const c_void | const void* | const void*  | *const anyopaque | u32       | uint32  | uint32  |
 | void    | ()            | void        | void         | void             | void      | void    | void    |
