@@ -395,14 +395,17 @@ fn main() {
     tera.register_filter("case", case_filter);
 
     for name in tera.get_template_names() {
-        let extension = name.replace(".tera", "");
-        let file_name = format!("{}/{}", output.display(), extension);
+        let nm = name.replace(".tera", "").replace("\\", "/").replace("__", "/");
+        let file_name = format!("{}/{}", output.display(), nm);
 
-        println!("Generating {} template...", extension);
+        println!("Generating {} template...", nm);
 
-        let render = tera.render(name, &ctx).expect(&format!("Failed to render API model to {}", extension));
+        let render = tera.render(name, &ctx).expect(&format!("Failed to render API model to {}", nm));
 
-        fs::write(file_name, render).expect(&format!("Failed to write render of {} to output", extension))
+        if let Some(sep) = file_name.rsplit_once("/") {
+            fs::create_dir_all(sep.0);
+        }
+        fs::write(file_name, render).expect(&format!("Failed to write render of {} to output", nm))
 
     }
 
