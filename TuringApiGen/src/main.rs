@@ -390,7 +390,7 @@ fn main() {
     ctx.insert("api", &api_model);
     ctx.insert("types", &type_map);
 
-    let mut tera = Tera::new("./templates/*.tera").unwrap();
+    let mut tera = Tera::new("./templates/**/*.tera").unwrap();
 
     tera.register_filter("case", case_filter);
 
