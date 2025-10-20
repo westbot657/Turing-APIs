@@ -41,7 +41,7 @@ pub struct MyClass {
 }
 impl MyClass {
     pub fn object_func(&self, a: i16) {
-        unsafe { _my_class_object_func(a) }
+        unsafe { _my_class_object_func(self.opaqu, a) }
     }
 }
 
