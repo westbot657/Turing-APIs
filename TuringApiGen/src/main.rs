@@ -384,8 +384,6 @@ fn main() {
     let api_model = finalize_opaque_returns(parse_api(&s, &reserved));
     let type_map = parse_typemap();
 
-    println!("API: {:#?}\n\nTypeMap: {:#?}", api_model, type_map);
-
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);
     ctx.insert("types", &type_map);
@@ -393,6 +391,10 @@ fn main() {
     let mut tera = Tera::new("./templates/**/*.tera").unwrap();
 
     tera.register_filter("case", case_filter);
+
+    println!("Clearing output directory");
+    fs::remove_dir_all("./output/");
+    fs::create_dir("./output/");
 
     for name in tera.get_template_names() {
         let nm = name.replace(".tera", "").replace("\\", "/").replace("__", "/");
