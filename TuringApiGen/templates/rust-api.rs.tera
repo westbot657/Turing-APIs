@@ -90,7 +90,7 @@
 {{ indent }}pub fn {{ func.name | case(style="snake") }}(
     {{- self::rs_params(params=func.params, is_method=is_method, class=class) -}}
 ){%- if func.type != "void" %} -> {{ types.rs[func.type] }}{% endif %} {
-{{- self::func_impl(func=func, indent=indent) }}
+{{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
 {{ indent -}} }
 {%- endfor %}
 {%- endmacro -%}

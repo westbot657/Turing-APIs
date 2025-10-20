@@ -396,7 +396,7 @@ fn main() {
 
     for name in tera.get_template_names() {
         let extension = name.replace(".tera", "");
-        let file_name = format!("{}/api.{}", output.display(), extension);
+        let file_name = format!("{}/{}", output.display(), extension);
 
         println!("Generating {} template...", extension);
 
