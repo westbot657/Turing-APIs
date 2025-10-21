@@ -102,3 +102,35 @@ types { // derived from .api-spec/type-map at runtime
 ```
 
 
+# Templating checklist:
+- [x] rust api
+- [x] rust template
+- [x] shared C bindings (used for C, C++, nelua)
+- [ ] C api
+- [ ] C template
+- [ ] C++ api
+- [ ] C++ template
+- [ ] Zig api
+- [ ] Zig template
+- [ ] TinyGo api
+- [ ] TinyGo template
+- [ ] Nelua api
+- [ ] Nelua template
+- [ ] Kotlin api
+- [ ] Kotlin template
+- [ ] AsmScript api
+- [ ] AsmScript template
+- [ ] Nim api
+- [ ] Nim template
+- [ ] Grain api
+- [ ] Grain template
+- [ ] Odin api
+- [ ] Odin template
+- [ ] V api
+- [ ] V template
+- [ ] D api
+- [ ] D template
+
+
+
+
