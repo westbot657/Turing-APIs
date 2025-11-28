@@ -1,3 +1,0 @@
-headers = turing_api_c.h
-compilerOpts = -I${projectDir}/include
-package = turingapi
