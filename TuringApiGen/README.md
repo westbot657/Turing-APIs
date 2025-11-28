@@ -4,9 +4,9 @@
 Run the executable for your platform in the command line, with TuringApiGen as the current working directory  
 
 The script will also read these files that are requried for generating the APIs:  
-- ./api-spec/dissallowed  
-- ./api-spec/type-map  
-- ./templates/*.tera  
+- `./api-spec/dissallowed`  
+- `./api-spec/type-map`  
+- `./templates/**/*.tera`  
 
 The script when run with no args will prompt you for the input file and output directory  
 to run the script without user intervention, you can pass them in via the command line args:  
