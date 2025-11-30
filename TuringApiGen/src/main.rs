@@ -300,7 +300,7 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
     Ok(to_value(converted)?)
 }
 
-pub fn parse_typemap() -> Value {
+pub fn parse_typemap(passthrough: &Vec<String>) -> Value {
     let mut tm = HashMap::new();
 
     let table = fs::read_to_string("./api-spec/type-map").expect("Failed to read type-map file");
@@ -337,6 +337,13 @@ pub fn parse_typemap() -> Value {
             tm.get_mut(lang).unwrap().insert(base_type.to_string(), typ.to_string());
         }
 
+    }
+
+    for lang in &names {
+        let mut mm = tm.get_mut(lang).unwrap();
+        for ps in passthrough {
+            mm.insert(ps.clone(), ps.clone());
+        }
     }
 
 
@@ -382,7 +389,7 @@ fn main() {
     let reserved = load_reserved_word_map();
 
     let api_model = finalize_opaque_returns(parse_api(&s, &reserved));
-    let type_map = parse_typemap();
+    let type_map = parse_typemap(&api_model.opaque_classes);
 
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);
