@@ -32,7 +32,6 @@ external fun {{ func.from }}({% if class.is_opaque %}opaqu: Int{% else %}self: {
 
 //// Functions ////
 {% for func in api.functions %}
-@WasmExport("{{ func.name | case(style="camel") }}")
 fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
     val hostResult = {{ func.from }}({% for param in func.params %}{% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %})
     {% if func.type == "String" -%}
@@ -52,7 +51,6 @@ data class {{ class.name | case(style="pascal") }}(val opaqu: Int)
 
 object {{ class.name | case(style="pascal") }}Api {
     {% for func in class.functions %}
-    @WasmExport("{{ func.name | case(style="camel") }}")
     fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
         val hostResult = {{ func.from }}({% for param in func.params %}{% if param.type == "&str" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %})
         {% if func.type == "String" -%}
@@ -67,7 +65,6 @@ object {{ class.name | case(style="pascal") }}Api {
     {% endfor -%}
 
     {% for func in class.methods %}
-    @WasmExport("{{ func.name | case(style="camel") }}")
     fun {{ func.name | case(style="camel") }}({% if class.is_opaque %}opaqu: Int{% else %}self: {{ class.name | case(style="pascal") }}{% endif %}{% for param in func.params %}, {{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
         val hostResult = {{ func.from }}({% if class.is_opaque %}opaqu{% else %}self{% endif %}{% for param in func.params %}, {% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% endfor %})
         {% if func.type == "String" -%}
