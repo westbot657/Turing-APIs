@@ -9,25 +9,25 @@ import kotlinx.cinterop.*
 import kotlin.native.concurrent.*
 
 // host helper to copy string bytes from host memory into guest buffer
-@WasmImport("turing_api", "_host_strcpy")
+@WasmImport("env", "_host_strcpy")
 external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
 
 // FFI imports for global functions
 {% for func in api.functions %}
-@WasmImport("turing_api", "{{ func.from }}")
+@WasmImport("env", "{{ func.from }}")
 external fun {{ func.from }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {% if param.type == "&str" or param.type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[param.type] }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type == "void" %}{% elif func.type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[func.type] }}{% endif %}
 {% endfor %}
 
 // FFI imports for classes
 {% for class in api.classes -%}
 {% for func in class.functions -%}
-@WasmImport("turing_api", "{{ func.from }}")
+@WasmImport("env", "{{ func.from }}")
 external fun {{ func.from }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {% if param.type == "&str" or param.type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[param.type] }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type == "void" %}{% elif func.type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[func.type] }}{% endif %}
-{%- endfor -%}
+{% endfor -%}
 {% for func in class.methods -%}
-@WasmImport("turing_api", "{{ func.from }}")
+@WasmImport("env", "{{ func.from }}")
 external fun {{ func.from }}({% if class.is_opaque %}opaqu: Int{% else %}self: {{ class.name | case(style="pascal") }}{% endif %}{% for param in func.params %}, {{ param.name | case(style="camel") }}: {% if param.type == "&str" or param.type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[param.type] }}{% endif %}{% endfor %}){% if func.type == "void" %}{% elif func.type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[func.type] }}{% endif %}
-{%- endfor -%}
+{% endfor -%}
 {%- endfor %}
 
 //// Functions ////
