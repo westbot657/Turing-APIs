@@ -1,19 +1,19 @@
-| Type    | rs            | c           | cpp          | zig              | asmscript | nelua   | go      |
-|---------|---------------|-------------|--------------|------------------|-----------|---------|---------|
-| i8      | i8            | int8_t      | int8_t       | i8               | i8        | int8    | int8    |
-| i16     | i16           | int16_t     | int16_t      | i16              | i16       | int16   | int16   |
-| i32     | i32           | int32_t     | int32_t      | i32              | i32       | int32   | int32   |
-| i64     | i64           | int64_t     | int64_t      | i64              | i64       | int64   | int64   |
-| u8      | u8            | uint8_t     | uint8_t      | u8               | u8        | uint8   | uint8   |
-| u16     | u16           | uint16_t    | uint16_t     | u16              | u16       | uint16  | uint16  |
-| u32     | u32           | uint32_t    | uint32_t     | u32              | u32       | uint32  | uint32  |
-| u64     | u64           | uint64_t    | uint64_t     | u64              | u64       | uint64  | uint64  |
-| f32     | f32           | float       | float        | f32              | f32       | float32 | float32 |
-| f64     | f64           | double      | double       | f64              | f64       | float64 | float64 |
-| bool    | bool          | bool        | bool         | bool             | bool      | boolean | bool    |
-| String  | String        | char*       | std::string  | []u8             | string    | string  | string  |
-| &str    | &str          | const char* | std::string& | []const u8       | string    | string  | string  |
-| CString | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | *byte   |
-| Cstr    | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | uint32  |
-| op*     | *const c_void | const void* | const void*  | *const anyopaque | u32       | uint32  | uint32  |
-| void    | ()            | void        | void         | void             | void      | void    | void    |
+| Type    | rs            | c           | cpp          | zig              | asmscript | nelua   | go      | kotlin   |
+|---------|---------------|-------------|--------------|------------------|-----------|---------|---------|----------|
+| i8      | i8            | int8_t      | int8_t       | i8               | i8        | int8    | int8    | Byte     |
+| i16     | i16           | int16_t     | int16_t      | i16              | i16       | int16   | int16   | Short    |
+| i32     | i32           | int32_t     | int32_t      | i32              | i32       | int32   | int32   | Int      |
+| i64     | i64           | int64_t     | int64_t      | i64              | i64       | int64   | int64   | Long     |
+| u8      | u8            | uint8_t     | uint8_t      | u8               | u8        | uint8   | uint8   | UByte    |
+| u16     | u16           | uint16_t    | uint16_t     | u16              | u16       | uint16  | uint16  | UShort   |
+| u32     | u32           | uint32_t    | uint32_t     | u32              | u32       | uint32  | uint32  | UInt     |
+| u64     | u64           | uint64_t    | uint64_t     | u64              | u64       | uint64  | uint64  | ULong    |
+| f32     | f32           | float       | float        | f32              | f32       | float32 | float32 | Float    |
+| f64     | f64           | double      | double       | f64              | f64       | float64 | float64 | Double   |
+| bool    | bool          | bool        | bool         | bool             | bool      | boolean | bool    | Boolean  |
+| String  | String        | char*       | std::string  | []u8             | string    | string  | string  | String   |
+| &str    | &str          | const char* | std::string& | []const u8       | string    | string  | string  | String   |
+| CString | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | *byte   | CPointer<ByteVar>? |
+| Cstr    | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | uint32  | UInt     |
+| op*     | *const c_void | const void* | const void*  | *const anyopaque | u32       | uint32  | uint32  | Int      |
+| void    | ()            | void        | void         | void             | void      | void    | void    | Unit     |
