@@ -37,7 +37,7 @@ fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param
     {% if func.type == "String" -%}
     val useMe = hostResult?.toKString() ?: error("null pointer returned")
     useMe
-    {% elif (api.opaque_classes is defined) and (func.type in api.opaque_classes) -%}
+    {% elif func.type in api.opaque_classes -%}
     {{ func.type | case(style="pascal") }}(opaqu = hostResult)
     {% elif func.type != "void" -%}
     hostResult
@@ -47,16 +47,18 @@ fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param
 
 //// Classes ////
 {% for class in api.classes -%}
-data class {{ class.name | case(style="pascal") }}(val opaqu: Int)
-
-object {{ class.name | case(style="pascal") }}Api {
+{% if class.is_opaque -%}
+data class {{ class.name | case(style="pascal") }}(val opaqu: Int) {
+{%- else -%}
+object {{ class.name | case(style="pascal") }} {
+{%- endif %}
     {% for func in class.functions %}
     fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
         val hostResult = {{ func.from }}({% for param in func.params %}{% if param.type == "&str" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %})
         {% if func.type == "String" -%}
         val useMe = hostResult?.toKString() ?: error("null pointer returned")
         useMe
-        {% elif (api.opaque_classes is defined) and (func.type in api.opaque_classes) -%}
+        {% elif func.type in api.opaque_classes -%}
         {{ func.type | case(style="pascal") }}(opaqu = hostResult)
         {% elif func.type != "void" -%}
         hostResult
@@ -65,12 +67,12 @@ object {{ class.name | case(style="pascal") }}Api {
     {% endfor -%}
 
     {% for func in class.methods %}
-    fun {{ func.name | case(style="camel") }}({% if class.is_opaque %}opaqu: Int{% else %}self: {{ class.name | case(style="pascal") }}{% endif %}{% for param in func.params %}, {{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
-        val hostResult = {{ func.from }}({% if class.is_opaque %}opaqu{% else %}self{% endif %}{% for param in func.params %}, {% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% endfor %})
+    fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
+        val hostResult = {{ func.from }}({% if class.is_opaque %}this.opaqu{% for param in func.params %}, {% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% endfor %}{% else %}{% for param in func.params %}{% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %})
         {% if func.type == "String" -%}
         val useMe = hostResult?.toKString() ?: error("null pointer returned")
         useMe
-        {% elif (api.opaque_classes is defined) and (func.type in api.opaque_classes) -%}
+        {% elif func.type in api.opaque_classes -%}
         {{ func.type | case(style="pascal") }}(opaqu = hostResult)
         {% elif func.type != "void" -%}
         hostResult

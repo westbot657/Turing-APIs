@@ -34,19 +34,16 @@ external fun _log_debug(msg: CPointer<ByteVar>?)
 
 //// Functions ////
 
-@WasmExport("testGlobal")
 fun testGlobal(name: String) {
     val hostResult = _test_global(name.cstr)
     
 }
 
-@WasmExport("global2Test")
 fun global2Test() : Int {
     val hostResult = _global_2_test()
     hostResult
 }
 
-@WasmExport("myTest")
 fun myTest(a: Byte, b: Short) : String {
     val hostResult = _my_test(a, b)
     val useMe = hostResult?.toKString() ?: error("null pointer returned")
@@ -56,40 +53,31 @@ fun myTest(a: Byte, b: Short) : String {
 
 
 //// Classes ////
-data class MyClass(val opaqu: Int)
-
-object MyClassApi {
+data class MyClass(val opaqu: Int) {
     
-    @WasmExport("objectFunc")
-    fun objectFunc(opaqu: Int, a: Short) {
-        val hostResult = _my_class_object_func(opaqu, a)
+    fun objectFunc(a: Short) {
+        val hostResult = _my_class_object_func(this.opaqu, a)
         
     }
     
 }
-data class Log(val opaqu: Int)
-
-object LogApi {
+object Log {
     
-    @WasmExport("info")
     fun info(msg: String) {
         val hostResult = _log_info(msg.cstr)
         
     }
     
-    @WasmExport("warn")
     fun warn(msg: String) {
         val hostResult = _log_warn(msg.cstr)
         
     }
     
-    @WasmExport("critical")
     fun critical(msg: String) {
         val hostResult = _log_critical(msg.cstr)
         
     }
     
-    @WasmExport("debug")
     fun debug(msg: String) {
         val hostResult = _log_debug(msg.cstr)
         
