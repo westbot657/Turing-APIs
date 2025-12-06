@@ -1,0 +1,145 @@
+@file:OptIn(
+    kotlin.wasm.ExperimentalWasmInterop::class,
+)
+@file:Suppress("Unused")
+
+// Generated Kotlin WASI template (Tera)
+// NOTE: This file is a Tera template. Render it with a Tera-compatible renderer
+// providing `api` and `types.kotlin` in the context to produce valid Kotlin .kt files.
+// If your Kotlin toolchain uses different experimental annotation names, adjust the
+// OptIn list above accordingly.
+
+{% macro converter(param, indent="") %}
+{% if param.type == "&str" %}
+{{ indent }}// prepare Kotlin ByteArray and pinned pointer for C interop
+{{ indent }}val turing_handle_{{ param.name | snake_case }} = {{ param.name | snake_case }}.encodeToByteArray()
+{{ indent }}val turing_ptr_{{ param.name | snake_case }} = turing_handle_{{ param.name | snake_case }}.usePinned { it.addressOf(0) }
+{{ indent }}val {{ param.name | snake_case }} = turing_ptr_{{ param.name | snake_case }}
+{% endif %}
+{% endmacro %}
+
+{% macro convert_arg(param) %}
+{{ param.name | snake_case }}
+{% endmacro %}
+
+{% macro c_arg(type) %}
+{% if type == "&str" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[type] }}{% endif %}
+{% endmacro %}
+
+{% macro c_params(params, is_method=false, class=false) %}
+{% if is_method %}
+opaqu: {% if class.is_opaque %}Int{% else %}{{ class.name | pascal_case }}{% endif %}
+{% for param in params %}
+, {{ param.name | snake_case }}: {{ c_arg(type=param.type) }}
+{% endfor %}
+{% else %}
+{% for param in params %}
+{{ param.name | snake_case }}: {{ c_arg(type=param.type) }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro rs_params(params, is_method=false, class=false) %}
+{% if is_method %}
+{%- if class.is_opaque -%}
+opaqu: Int
+{%- else -%}
+self: {{ class.name | pascal_case }}
+{%- endif -%}
+{% for param in params %}
+, {{ param.name | snake_case }}: {{ types.kotlin[param.type] }}
+{% endfor %}
+{% else %}
+{% for param in params %}
+{{ param.name | snake_case }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro c_ret(type) %}
+{% if type == "void" %}{% elif type == "String" %}: Int{% else %}: {{ types.kotlin[type] }}{% endif %}
+{% endmacro %}
+
+{% macro convert_args(params, is_method=false, class=false) %}
+{% if is_method %}
+{%- if class.is_opaque -%}opaqu{%- else -%}self{%- endif -%}
+{% for param in params %}
+, {{ convert_arg(param=param) }}
+{% endfor %}
+{% else %}
+{% for param in params %}
+{{ convert_arg(param=param) }}{% if not loop.last %}, {% endif %}
+{% endfor %}
+{% endif %}
+{% endmacro %}
+
+{% macro func_impl(func, is_method=false, class=false, indent="") %}
+{% for param in func.params %}
+{{ converter(param=param, indent=indent) }}
+{% endfor %}
+{{ indent }}{% if func.type == "String" or (api.opaque_classes is defined and func.type in api.opaque_classes) %}val turing_result = {% endif %}
+{{ indent }}// call the host function
+{{ indent }}val hostResult = {{ func.from }}(
+    {{ convert_args(params=func.params, is_method=is_method, class=class) }}
+)
+{% if func.type == "String" %}
+{{ indent }}// hostResult is expected to be the size (number of bytes)
+{{ indent }}val size = hostResult
+{{ indent }}val buffer = ByteArray(size)
+{{ indent }}buffer.usePinned { pinned ->
+{{ indent }}    _host_strcpy(pinned.addressOf(0), size)
+{{ indent }}}
+{{ indent }}val result = buffer.takeWhile { it != 0.toByte() }.toByteArray().toString(Charsets.UTF_8)
+{{ indent }}result
+{% elif (api.opaque_classes is defined) and (func.type in api.opaque_classes) %}
+{{ indent }}// opaque handle returned as Int
+{{ indent }}{{ func.type | pascal_case }}(opaqu = hostResult)
+{% elif func.type != "void" %}
+{{ indent }}hostResult
+{% endif %}
+{% endmacro %}
+
+{% macro ffi_funcs(funcs, is_method=false, class=false) %}
+{% for func in funcs %}
+@WasmImport("turing_api", "{{ func.from }}")
+external fun {{ func.from }}({{ c_params(params=func.params, is_method=is_method, class=class) }}){{ c_ret(type=func.type) }}
+{% endfor %}
+{% endmacro %}
+
+{% macro func_impls(funcs, is_method=false, class=false, indent="") %}
+{% for func in funcs %}
+@WasmExport("{{ func.name | snake_case }}")
+{{ indent }}fun {{ func.name | snake_case }}(
+{{ rs_params(params=func.params, is_method=is_method, class=class) }}
+){{ " : " + types.kotlin[func.type] if func.type != "void" else "" }} {
+    {{ func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
+}
+{% endfor %}
+{% endmacro %}
+
+//// Kotlin WASI Bindings (generated) ////
+import kotlinx.cinterop.*
+import kotlin.native.concurrent.*
+
+// host helper to copy string bytes from host memory into guest buffer
+@WasmImport("turing_api", "_host_strcpy")
+external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
+
+{{ ffi_funcs(funcs=api.functions) }}
+{% for class in api.classes %}
+{{ ffi_funcs(funcs=class.functions, class=class) }}
+{{ ffi_funcs(funcs=class.methods, is_method=true, class=class) }}
+{% endfor %}
+
+//// Functions ////
+{{ func_impls(funcs=api.functions) }}
+
+//// Classes ////
+{% for class in api.classes %}
+data class {{ class.name | pascal_case }}(val opaqu: Int)
+
+object {{ class.name | pascal_case }}Api {
+    {{ func_impls(funcs=class.functions, class=class, indent="    ") }}
+    {{ func_impls(funcs=class.methods, is_method=true, class=class, indent="    ") }}
+}
+{% endfor %}
