@@ -69,7 +69,7 @@ if the class is opaque, attributes are all *after* the opaque pointer attribute
 
 # Language template
 
-Language template files (`.tera`) are written in a format called `tera`, a slightly less advanced version of the `twig` format  
+Language template files (`.tera`) are written in a format called `tera`, a templating system based on `jinja2`  
 all templates operate over the following data structures:
 ```js
 api {
