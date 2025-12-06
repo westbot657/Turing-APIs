@@ -1,12 +1,10 @@
 use clap::Parser;
 use convert_case::{Case, Casing};
-use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
 use std::collections::{HashMap, VecDeque};
 use std::fs;
 use std::io::{self, Write};
 use std::path::PathBuf;
-use std::process::exit;
 use tera::{from_value, to_value, Context, Result as TeraResult, Tera, Value};
 
 use regex::Regex;
@@ -306,7 +304,7 @@ pub fn parse_typemap(passthrough: &Vec<String>) -> Value {
 
     let table = fs::read_to_string("./api-spec/type-map").expect("Failed to read type-map file");
 
-    let mut table: VecDeque<&str> = table.split("\n").collect::<VecDeque<&str>>().into();
+    let mut table: VecDeque<&str> = table.split("\n").collect::<VecDeque<&str>>();
 
     let mut names = Vec::new();
 
@@ -314,7 +312,7 @@ pub fn parse_typemap(passthrough: &Vec<String>) -> Value {
         let header = table.pop_front().expect("File ended before table was found").trim();
         if !header.starts_with("|") { continue }
 
-        let mut columns: VecDeque<&str> = header.split("|").map(|x| x.trim()).filter(|x| !x.is_empty()).collect::<VecDeque<&str>>().into();
+        let mut columns: VecDeque<&str> = header.split("|").map(|x| x.trim()).filter(|x| !x.is_empty()).collect::<VecDeque<&str>>();
 
         let _ = columns.pop_front().expect("Expected something after '|'");
 
@@ -330,7 +328,7 @@ pub fn parse_typemap(passthrough: &Vec<String>) -> Value {
     for line in table {
         if !line.starts_with("|") { continue }
 
-        let mut types: VecDeque<&str> = line.split("|").map(|x| x.trim()).filter(|x| !x.is_empty()).collect::<VecDeque<&str>>().into();
+        let mut types: VecDeque<&str> = line.split("|").map(|x| x.trim()).filter(|x| !x.is_empty()).collect::<VecDeque<&str>>();
 
         let base_type = types.pop_front().expect("Expected base type");
 
@@ -341,7 +339,7 @@ pub fn parse_typemap(passthrough: &Vec<String>) -> Value {
     }
 
     for lang in &names {
-        let mut mm = tm.get_mut(lang).unwrap();
+        let mm = tm.get_mut(lang).unwrap();
         for ps in passthrough {
             mm.insert(ps.clone(), ps.clone());
         }
@@ -366,12 +364,10 @@ fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
     for line in s {
         if let Some(line) = line.strip_prefix("#") {
             current_lang = line;
+        } else if let Some(langs) = &mut words.get_mut(line) {
+            langs.push(current_lang.to_string());
         } else {
-            if let Some(langs) = &mut words.get_mut(line) {
-                langs.push(current_lang.to_string());
-            } else {
-                words.insert(line.to_string(), vec![current_lang.to_string()]);
-            }
+            words.insert(line.to_string(), vec![current_lang.to_string()]);
         }
     }
 
@@ -477,11 +473,11 @@ fn main() {
 
         let render = tera
             .render(name, &ctx)
-            .expect(&format!("Failed to render API model to {}", nm));
+            .unwrap_or_else(|_| panic!("Failed to render API model to {}", nm));
 
         if let Some(sep) = file_name.rsplit_once("/") {
-            fs::create_dir_all(sep.0).expect(&format!("Unable to create directory {}", sep.0));
+            fs::create_dir_all(sep.0).unwrap_or_else(|_| panic!("Unable to create directory {}", sep.0));
         }
-        fs::write(file_name, render).expect(&format!("Failed to write render of {} to output", nm))
+        fs::write(file_name, render).unwrap_or_else(|_| panic!("Failed to write render of {} to output", nm))
     }
 }
