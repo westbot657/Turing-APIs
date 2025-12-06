@@ -7,7 +7,7 @@ use std::fs;
 use std::io::{self, Write};
 use std::path::PathBuf;
 use std::process::exit;
-use tera::{from_value, to_value, Context, Tera, Value, Result as TeraResult};
+use tera::{from_value, to_value, Context, Result as TeraResult, Tera, Value};
 
 use regex::Regex;
 
@@ -40,8 +40,7 @@ pub struct FunctionDef {
     pub params: Vec<ParamDef>,
     #[serde(rename = "type")]
     pub returns: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub from: Option<String>,
+    pub from: String,
     pub is_static: bool,
 
     // new field
@@ -144,21 +143,23 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
             let is_static = caps.name("prefix").is_some();
             let name = caps["name"].to_string();
             let returns = caps["ret"].to_string();
-            let mut from = caps.name("from").map(|m| m.as_str().to_string());
-            if from.is_none() {
-                from = Some(format!("_{}", name));
-            }
+            let from = caps
+                .name("from")
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_else(|| format!("_{}", name));
 
             if let Some(langs) = reserved.get(&name) {
-                eprintln!("Invalid function name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
+                eprintln!(
+                    "Invalid function name '{}' cannot be used, it is a keyword in language(s): {}",
+                    name,
+                    langs.join(", ")
+                );
                 invalid_name = true;
             }
 
-            if let Some(ref from) = from {
-                if let Some(langs) = reserved.get(from) {
-                    eprintln!("Invalid wasm function name '{}' cannot be used, it is a keyword in language(s): {}", from, langs.join(", "));
-                    invalid_name = true;
-                }
+            if let Some(langs) = reserved.get(&from) {
+                eprintln!("Invalid wasm function name '{}' cannot be used, it is a keyword in language(s): {}", from, langs.join(", "));
+                invalid_name = true;
             }
 
             // Parse parameters
@@ -377,11 +378,49 @@ fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
     words
 }
 
+// TODO: rewrite with walkdir crate?
+fn copy_non_template_files(
+    base: &std::path::Path,
+    current: &std::path::Path,
+    dst_root: &std::path::Path,
+) -> std::io::Result<()> {
+    for entry in fs::read_dir(current)? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.is_dir() {
+            copy_non_template_files(base, &path, dst_root)?;
+            continue;
+        }
+
+        if !path.is_file() {
+            continue;
+        }
+
+        let file_name = path.file_name().unwrap().to_string_lossy();
+        if file_name.ends_with(".tera") {
+            continue;
+        }
+
+        let rel = path.strip_prefix(base).unwrap_or(&path);
+        let dest = dst_root.join(rel);
+        if let Some(parent) = dest.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::copy(&path, &dest)?;
+    }
+
+    Ok(())
+}
+
 fn main() {
     let args = Args::parse();
 
-    let input = args.input.unwrap_or_else(|| get_input("Enter path to API spec file"));
-    let output = args.output.unwrap_or_else(|| get_input("Enter output folder for API bindings"));
+    let input = args
+        .input
+        .unwrap_or_else(|| get_input("Enter path to API spec file"));
+    let output = args
+        .output
+        .unwrap_or_else(|| get_input("Enter output folder for API bindings"));
 
     let s = fs::read(input).expect("Failed to read input file");
     let s = String::from_utf8(s).expect("input contained invalid UTF-8");
@@ -398,24 +437,51 @@ fn main() {
     let mut tera = Tera::new("./templates/**/*.tera").unwrap();
 
     tera.register_filter("case", case_filter);
+    // Convenience filters used by templates
+    pub fn snake_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
+        let mut a = HashMap::new();
+        a.insert("style".to_string(), to_value("snake").unwrap());
+        case_filter(value, &a)
+    }
+
+    pub fn pascal_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
+        let mut a = HashMap::new();
+        a.insert("style".to_string(), to_value("pascal").unwrap());
+        case_filter(value, &a)
+    }
+
+    tera.register_filter("snake_case", snake_case_filter);
+    tera.register_filter("pascal_case", pascal_case_filter);
 
     println!("Clearing output directory");
-    fs::remove_dir_all("./output/");
-    fs::create_dir("./output/");
+    fs::remove_dir_all("./output/").expect("Unable to clear output");
+    fs::create_dir("./output/").expect("Unable to create output");
 
+    // copy non-template files from ./templates to ./output (recursive)
+    let templates_dir = std::path::PathBuf::from("./templates/");
+    let out_dir_path = std::path::PathBuf::from("./output/");
+    if let Err(e) = copy_non_template_files(&templates_dir, &templates_dir, &out_dir_path) {
+        eprintln!("Failed to copy non-template files: {}", e);
+        std::process::exit(1);
+    }
+
+    // Generate files from templates
     for name in tera.get_template_names() {
-        let nm = name.replace(".tera", "").replace("\\", "/").replace("__", "/");
+        let nm = name
+            .replace(".tera", "")
+            .replace("\\", "/")
+            .replace("__", "/");
         let file_name = format!("{}/{}", output.display(), nm);
 
         println!("Generating {} template...", nm);
 
-        let render = tera.render(name, &ctx).expect(&format!("Failed to render API model to {}", nm));
+        let render = tera
+            .render(name, &ctx)
+            .expect(&format!("Failed to render API model to {}", nm));
 
         if let Some(sep) = file_name.rsplit_once("/") {
-            fs::create_dir_all(sep.0);
+            fs::create_dir_all(sep.0).expect(&format!("Unable to create directory {}", sep.0));
         }
         fs::write(file_name, render).expect(&format!("Failed to write render of {} to output", nm))
-
     }
-
 }
