@@ -147,8 +147,8 @@ types { // derived from .api-spec/type-map at runtime
 - [ ] TinyGo template
 - [ ] Nelua api
 - [ ] Nelua template
-- [ ] Kotlin api
-- [ ] Kotlin template
+- [x] Kotlin api
+- [x] Kotlin template
 - [ ] AsmScript api
 - [ ] AsmScript template
 - [ ] Nim api
