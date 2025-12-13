@@ -1,40 +1,49 @@
 # Turing
 
-## Language support
+## Supported languages
 
 ### You can use this table to pick a language to use for writing scripts  
-If your preferred language isn't on this list, you can still use it as long as it compiles to wasm32-wasip1 (wasi preview 1) but if you want full API support, make an issue (or write it yourself and make a PR)  
+If your preferred language isn't on this list, you can still use it as long as it compiles to wasm32-wasip1 (wasi preview 1)
+but if you want full API support, make an issue (or write it yourself and make a PR)  
 
-| Language               | Coding complexity | Build complexity | Notes                                |
-|------------------------|-------------------|------------------|--------------------------------------|
-| Rust                   | Moderate          | Very easy        |                                      |
-| C                      | Moderate          | Hard             | build complexity is better on linux  |
-| C++                    | Easier ish than C | Hard             | also easier on linux                 |
-| Zig                    | Easy              | Easy             |                                      |
-| Lua (nelua)            | Easy              | Hard             | easier on linux due to C             |
-| Go (tinyGo)            | Easy              | Easy             |                                      |
-| TypeScript (AsmScript) | Very easy         | Very easy        |                                      |
-| Kotlin                 | Very easy         | Moderate         |                                      |
-| Nim*                   | Unknown           | Unknown          | API is low priority                  |
-| Odin*                  | Unknown           | Unknown          | API is low priority                  |
-| D*                     | Unknown           | Unknown          | API is low priority                  |
-| V*                     | Unknown           | Unknown          | API is low priority                  |
-| Grain*                 | Unknown           | Unknown          | API is low priority                  |
+| Language       | Coding complexity | Build complexity | Notes                                                                                                                     |
+|----------------|-------------------|------------------|---------------------------------------------------------------------------------------------------------------------------|
+| Rust           | Hard              | Easy             | Natively supports compilation to wasm32-wasip1.                                                                           |
+| C              | Hard              | Hard             | Build complexity is better on linux or with the zig compiler.                                                             |
+| C++            | Hard              | Hard             | Also easier on linux or with the zig compiler.                                                                            |
+| C3             | Moderate          | Moderate         | Similar to C but with some quality of life features                                                                       |
+| Zig            | Moderate          | Easy             | Quite verbose but has very good compatibility for compiling to wasm.                                                      |
+| Python         | Easy              | Hard             | Only works via an embedded runtime, file sizes may be very large due to this embedded runtime and code will be very slow. | 
+| Nelua          | Easy              | Hard             | Easier on linux due to C, will be smaller and run faster than the plain lua option.                                       |
+| Lua            | Easy              | Hard             | Easier to write than Nelua, but will result in a larger script file and slower runtime due to using an embedded runtime.  |
+| Go/TinyGo      | Easy              | Easy             | TinyGo is a Go compiler that skips out on features that wasm can't support, such as OS threads.                           |
+| AssemblyScript | Easy              | Easy             | Has some quirks compared to js/ts but is maybe the most friendly if you're coming from js/ts.                             |
+| Kotlin         | Easy              | Moderate         | Probably best for those familiar with C# or java.                                                                         |
+| Nim*           | Unknown           | Unknown          | API is low priority.                                                                                                      |
+| Odin*          | Unknown           | Unknown          | API is low priority.                                                                                                      |
+| D*             | Unknown           | Unknown          | API is low priority.                                                                                                      |
+| V*             | Unknown           | Unknown          | API is low priority.                                                                                                      |
+| Grain*         | Unknown           | Unknown          | API is low priority.                                                                                                      |
 
-*These languages haven't been thoroughly evaluated.
+*These languages haven't been thoroughly evaluated, as they aren't as well known.
 
 
+## Unsupported languages
+These languages are not supportable, if you find a way to get one of these languages to properly compile to wasm32-wasip1,
+open an issue, and it'll be moved to the table above.  
 
-
-
-
+| Language              | Closest alternatives | Reason it's not supported                                                                          |
+|-----------------------|----------------------|----------------------------------------------------------------------------------------------------|
+| TypeScript/JavaScript | AssemblyScript       | Can't properly target wasm32-wasip1.                                                               |
+| Java                  | Kotlin               | Java's wasm ecosystem is built primarily around js runtimes and emscripten, which don't work here. |
+| C#                    | Kotlin               | C# also heavily relies on emscripten and a js runtime which don't work.                            |
 
 
 # Turing API generator usage
 
 Run the executable for your platform in the command line, with TuringApiGen as the current working directory  
 
-The script will also read these files that are requried for generating the APIs:  
+The script will also read these files that are required for generating the APIs:  
 - `./api-spec/dissallowed`  
 - `./api-spec/type-map`  
 - `./templates/**/*.tera`  
@@ -142,7 +151,7 @@ types { // derived from .api-spec/type-map at runtime
 # Templating checklist:
 - [x] rust api
 - [x] rust template
-- [x] shared C bindings (used for C, C++, nelua)
+- [x] shared C bindings (used for C, C++, Nelua)
 - [ ] C api
 - [ ] C template
 - [ ] C++ api
@@ -151,8 +160,12 @@ types { // derived from .api-spec/type-map at runtime
 - [ ] Zig template
 - [ ] TinyGo api
 - [ ] TinyGo template
+- [ ] Python api
+- [ ] Python template
 - [ ] Nelua api
 - [ ] Nelua template
+- [ ] Lua api
+- [ ] Lua template
 - [x] Kotlin api
 - [x] Kotlin template
 - [ ] AsmScript api
