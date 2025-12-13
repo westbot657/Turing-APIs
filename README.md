@@ -13,7 +13,6 @@ but if you want full API support, make an issue (or write it yourself and make a
 | C++            | Hard              | Hard             | Also easier on linux or with the zig compiler.                                                                            |
 | C3             | Moderate          | Moderate         | Similar to C but with some quality of life features                                                                       |
 | Zig            | Moderate          | Easy             | Quite verbose but has very good compatibility for compiling to wasm.                                                      |
-| Python         | Easy              | Hard             | Only works via an embedded runtime, file sizes may be very large due to this embedded runtime and code will be very slow. | 
 | Nelua          | Easy              | Hard             | Easier on linux due to C, will be smaller and run faster than the plain lua option.                                       |
 | Lua            | Easy              | Hard             | Easier to write than Nelua, but will result in a larger script file and slower runtime due to using an embedded runtime.  |
 | Go/TinyGo      | Easy              | Easy             | TinyGo is a Go compiler that skips out on features that wasm can't support, such as OS threads.                           |
@@ -32,11 +31,12 @@ but if you want full API support, make an issue (or write it yourself and make a
 These languages are not supportable, if you find a way to get one of these languages to properly compile to wasm32-wasip1,
 open an issue, and it'll be moved to the table above.  
 
-| Language              | Closest alternatives | Reason it's not supported                                                                          |
-|-----------------------|----------------------|----------------------------------------------------------------------------------------------------|
-| TypeScript/JavaScript | AssemblyScript       | Can't properly target wasm32-wasip1.                                                               |
-| Java                  | Kotlin               | Java's wasm ecosystem is built primarily around js runtimes and emscripten, which don't work here. |
-| C#                    | Kotlin               | C# also heavily relies on emscripten and a js runtime which don't work.                            |
+| Language              | Closest alternatives | Reason it's not supported                                                                           |
+|-----------------------|----------------------|-----------------------------------------------------------------------------------------------------|
+| TypeScript/JavaScript | AssemblyScript       | Can't properly target wasm32-wasip1.                                                                |
+| Java                  | Kotlin               | Java's wasm ecosystem is built primarily around js runtimes and emscripten, which don't work here.  |
+| C#                    | Kotlin               | C# also heavily relies on emscripten and a js runtime which don't work.                             |
+| Python                | Lua/Nelua            | Technically possible, but I can't be bothered to write the very complex build system needed for it. |
 
 
 # Turing API generator usage
