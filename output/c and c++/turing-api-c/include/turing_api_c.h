@@ -16,7 +16,7 @@ char* myTest(int8_t a, int16_t b);
 //// Classes ////
 
 typedef struct {
-    const void* opaqu;
+    uint64_t opaqu;
 } MyClass;
 
 

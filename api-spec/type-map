@@ -15,5 +15,5 @@
 | &str    | &str          | const char* | std::string& | []const u8       | string    | string  | string  | String   |
 | CString | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | *byte   | CPointer<ByteVar>? |
 | Cstr    | *const c_char | const char* | const char*  | [*c]const u8     | u32       | cstring | uint32  | UInt     |
-| op*     | *const c_void | const void* | const void*  | *const anyopaque | u32       | uint32  | uint32  | Int      |
+| op*     | u64           | uint64_t    | uint64_t     | u64              | u64       | uint64  | uint64  | ULong    |
 | void    | ()            | void        | void         | void             | void      | void    | void    | Unit     |

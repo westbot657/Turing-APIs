@@ -1,3 +1,4 @@
+#version 0.0.1
 
 :Global:
 test_global(name: &str) -> void

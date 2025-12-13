@@ -12,7 +12,7 @@ uint32_t _my_test(int8_t a, int16_t b);
 
 
 
-void _my_class_object_func(const void* opaqu, int16_t a);
+void _my_class_object_func(uint64_t opaqu, int16_t a);
 void _log_info(const char* msg);
 void _log_warn(const char* msg);
 void _log_critical(const char* msg);

@@ -30,7 +30,7 @@ void _host_strcpy(const char* location, uint32_t size);
 {%- endfor -%}
 {%- for func in class.methods -%}
 {% if func.from is defined and func.from %}
-{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}({% if class.is_opaque %}const void* {% else %}{{ class.name | case(style="pascal") }} {% endif %}opaqu
+{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}({% if class.is_opaque %}uint64_t {% else %}{{ class.name | case(style="pascal") }} {% endif %}opaqu
     {%- for param in func.params -%}
     , {% if param.type == "&str" %}const char*{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
     {%- endfor -%}

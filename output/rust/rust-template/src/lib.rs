@@ -1,7 +1,7 @@
 
 
 // This crate can either be installed locally by copying the
-// turing-api-rust directory form github,
+// turing-api-rust directory form GitHub,
 // or from crates.io with cargo (turing-api)
 use turing_api::*;
 

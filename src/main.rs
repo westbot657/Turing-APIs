@@ -14,6 +14,7 @@ pub struct ApiModel {
     pub classes: Vec<ClassDef>,
     pub functions: Vec<FunctionDef>,
     pub opaque_classes: Vec<String>,
+    pub version: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -71,8 +72,14 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
 
     let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
 
+    let mut version = "0".to_string();
+
     for line in input.lines().map(|l| l.trim()).filter(|l| !l.is_empty()) {
         if line.starts_with("//") { continue }
+        if let Some(ver) = line.strip_prefix("#version ") {
+            version = ver.trim().to_string();
+            continue;
+        }
         // Section header like ":My_Class:"
         if line.starts_with(':') && line.ends_with(':') {
             let header = line.trim_matches(':').trim();
@@ -215,7 +222,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
         ::std::process::exit(1);
     }
 
-    ApiModel { classes, functions, opaque_classes: Vec::new() }
+    ApiModel { classes, functions, opaque_classes: Vec::new(), version }
 }
 
 
@@ -299,7 +306,7 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
     Ok(to_value(converted)?)
 }
 
-pub fn parse_typemap(passthrough: &Vec<String>) -> Value {
+pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
     let mut tm = HashMap::new();
 
     let table = fs::read_to_string("./api-spec/type-map").expect("Failed to read type-map file");
@@ -379,7 +386,7 @@ fn copy_non_template_files(
     base: &std::path::Path,
     current: &std::path::Path,
     dst_root: &std::path::Path,
-) -> std::io::Result<()> {
+) -> io::Result<()> {
     for entry in fs::read_dir(current)? {
         let entry = entry?;
         let path = entry.path();
@@ -424,7 +431,7 @@ fn main() {
     let reserved = load_reserved_word_map();
 
     let api_model = finalize_opaque_returns(parse_api(&s, &reserved));
-    let type_map = parse_typemap(&api_model.opaque_classes);
+    let type_map = parse_type_map(&api_model.opaque_classes);
 
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);

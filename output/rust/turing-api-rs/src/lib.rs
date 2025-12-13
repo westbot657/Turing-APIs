@@ -9,7 +9,7 @@ unsafe extern "C" {
     fn _test_global(name: *const c_char);
     fn _global_2_test() -> i32;
     fn _my_test(a: i8, b: i16) -> u32;
-    fn _my_class_object_func(opaqu: *const c_void, a: i16);
+    fn _my_class_object_func(opaqu: u64, a: i16);
     fn _log_info(msg: *const c_char);
     fn _log_warn(msg: *const c_char);
     fn _log_critical(msg: *const c_char);
@@ -28,7 +28,7 @@ pub fn global_2_test() -> i32 {
 }
 pub fn my_test(a: i8, b: i16) -> String {
     let turing_result = unsafe { _my_test(a, b) };
-    let turing_str: Vec<u8> = vec![0; turing_result as usize];
+    let mut turing_str: Vec<u8> = vec![0; turing_result as usize];
     unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
     let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
     turing_str.to_string_lossy().into_owned()
@@ -37,7 +37,7 @@ pub fn my_test(a: i8, b: i16) -> String {
 
 //// Classes ////
 pub struct MyClass {
-    opaqu: *const c_void,
+    opaqu: u64,
 }
 impl MyClass {
     pub fn object_func(&self, a: i16) {

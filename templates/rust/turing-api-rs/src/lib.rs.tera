@@ -16,7 +16,7 @@
 
 {%- macro c_params(params, is_method=false, class=false) -%}
     {%- if is_method -%}
-    opaqu: {% if class.is_opaque %}*const c_void{% else %}{{ class.name | case(style="pascal") }}{% endif %}
+    opaqu: {% if class.is_opaque %}u64{% else %}{{ class.name | case(style="pascal") }}{% endif %}
     {%- for param in params -%}
     , {{ param.name | case(style="snake") }}: {{ self::c_arg(type=param.type) }}
     {%- endfor -%}
@@ -69,7 +69,7 @@
     unsafe { {{ func.from }}(
         {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
     ) }{% if func.type == "String" %};
-    {{ indent }}let turing_str: Vec<u8> = vec![0; turing_result as usize];
+    {{ indent }}let mut turing_str: Vec<u8> = vec![0; turing_result as usize];
     {{ indent }}unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
     {{ indent }}let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
     {{ indent }}turing_str.to_string_lossy().into_owned()
