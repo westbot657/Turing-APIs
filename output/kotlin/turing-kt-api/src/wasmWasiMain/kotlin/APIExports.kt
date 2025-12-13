@@ -58,7 +58,7 @@ fun myTest(a: Byte, b: Short) : String {
 
 
 //// Classes ////
-data class MyClass(val opaqu: Long) {
+data class MyClass(val opaqu: ULong) {
     
     fun objectFunc(a: Short) {
         val hostResult = _my_class_object_func(this.opaqu, a)

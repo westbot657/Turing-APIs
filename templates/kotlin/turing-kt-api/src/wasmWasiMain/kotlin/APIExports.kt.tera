@@ -48,7 +48,7 @@ fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param
 //// Classes ////
 {% for class in api.classes -%}
 {% if class.is_opaque -%}
-data class {{ class.name | case(style="pascal") }}(val opaqu: ULong) {
+data class {{ class.name | case(style="pascal") }}(val opaqu: {{ types.kotlin["op*"] }}) {
 {%- else -%}
 object {{ class.name | case(style="pascal") }} {
 {%- endif %}

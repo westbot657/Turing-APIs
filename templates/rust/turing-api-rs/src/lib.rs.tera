@@ -16,7 +16,7 @@
 
 {%- macro c_params(params, is_method=false, class=false) -%}
     {%- if is_method -%}
-    opaqu: {% if class.is_opaque %}u64{% else %}{{ class.name | case(style="pascal") }}{% endif %}
+    opaqu: {% if class.is_opaque %}{{ types.rs["op*"] }}{% else %}{{ class.name | case(style="pascal") }}{% endif %}
     {%- for param in params -%}
     , {{ param.name | case(style="snake") }}: {{ self::c_arg(type=param.type) }}
     {%- endfor -%}
