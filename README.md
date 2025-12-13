@@ -47,11 +47,16 @@ to run the script without user intervention, you can pass them in via the comman
 
 # API spec format
 
+### Version:
+`#version <version>`  
+i.e. `#version 0.1.0-alpha`
+the last line in the spec that specifies a version is the version used in the generated API code
+
 ### Classes:
 marked as `:Class:`  
 `:Global:` is a special case that puts any functions after it into the top-level scope of code
 
-Yout can also add `[opaque]` into the label to mark the class as a typed pointer referring to a C# class  
+You can also add `[opaque]` into the label to mark the class as a typed pointer referring to a C# class  
 i.e.: `:ColorNote [opaque]:`  
 
 ### Methods and Functions:
@@ -73,6 +78,7 @@ Language template files (`.tera`) are written in a format called `tera`, a templ
 all templates operate over the following data structures:
 ```js
 api {
+    version: "0.0.1-semver",
     opaque_classes: ["class_name"],
     functions: [
         {
