@@ -87,7 +87,12 @@ Language template files (`.tera`) are written in a format called `tera`, a templ
 all templates operate over the following data structures:
 ```js
 api {
-    version: "0.0.1-semver",
+    version: "0.0.1",
+    semver: {
+        major: 0,
+        minor: 0,
+        patch: 1
+    },
     opaque_classes: ["class_name"],
     functions: [
         {

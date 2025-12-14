@@ -15,6 +15,13 @@ pub struct ApiModel {
     pub functions: Vec<FunctionDef>,
     pub opaque_classes: Vec<String>,
     pub version: String,
+    pub semver: Semver
+}
+#[derive(Debug, Default, Serialize, Deserialize)]
+pub struct Semver {
+    pub major: u32,
+    pub minor: u16,
+    pub patch: u16
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -25,6 +32,7 @@ pub struct ClassDef {
     pub functions: Vec<FunctionDef>,
     pub is_opaque: bool,
 }
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct VariableDef {
@@ -73,11 +81,18 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
     let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
 
     let mut version = "0".to_string();
+    let mut semver = Semver::default();
 
     for line in input.lines().map(|l| l.trim()).filter(|l| !l.is_empty()) {
         if line.starts_with("//") { continue }
         if let Some(ver) = line.strip_prefix("#version ") {
             version = ver.trim().to_string();
+
+            let ver: Vec<u32> = version.splitn(2, ".").map(|x| x.parse::<u32>().expect("Invalid semver format for version")).collect();
+            semver.major = ver[0];
+            semver.minor = u16::try_from(ver[1]).expect("minor version number cannot exceed 2^16");
+            semver.patch = u16::try_from(ver[2]).expect("patch version number cannot exceed 2^16");
+
             continue;
         }
         // Section header like ":My_Class:"
@@ -222,7 +237,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
         ::std::process::exit(1);
     }
 
-    ApiModel { classes, functions, opaque_classes: Vec::new(), version }
+    ApiModel { classes, functions, opaque_classes: Vec::new(), version, semver }
 }
 
 
