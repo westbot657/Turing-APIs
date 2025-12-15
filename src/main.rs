@@ -88,7 +88,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
         if let Some(ver) = line.strip_prefix("#version ") {
             version = ver.trim().to_string();
 
-            let ver: Vec<u32> = version.splitn(2, ".").map(|x| x.parse::<u32>().expect("Invalid semver format for version")).collect();
+            let ver: Vec<u32> = version.splitn(3, ".").map(|x| x.trim().parse::<u32>().expect(&format!("Invalid semver format for version: {}", x))).collect();
             semver.major = ver[0];
             semver.minor = u16::try_from(ver[1]).expect("minor version number cannot exceed 2^16");
             semver.patch = u16::try_from(ver[2]).expect("patch version number cannot exceed 2^16");

@@ -3,11 +3,12 @@
 )
 @file:Suppress("Unused")
 
-// Generated Kotlin API
+///// Generated Kotlin API /////
 
 import kotlinx.cinterop.*
 import kotlin.native.concurrent.*
 
+//// Wasm Bindings ////
 // host helper to copy string bytes from host memory into guest buffer
 @WasmImport("env", "_host_strcpy")
 external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
