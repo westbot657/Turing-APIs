@@ -157,16 +157,14 @@ types { // derived from .api-spec/type-map at runtime
 - [x] rust api
 - [x] rust template
 - [x] shared C bindings (used for C, C++, Nelua)
-- [ ] C api
-- [ ] C template
-- [ ] C++ api
-- [ ] C++ template
+- [x] C api
+- [x] C template
+- [x] C++ api
+- [x] C++ template
 - [ ] Zig api
 - [ ] Zig template
 - [ ] TinyGo api
 - [ ] TinyGo template
-- [ ] Python api
-- [ ] Python template
 - [ ] Nelua api
 - [ ] Nelua template
 - [ ] Lua api

@@ -1,0 +1,55 @@
+
+
+{% macro c_params(params, is_method=false, class=false) -%}
+    {%- if is_method -%}
+    {% if class.is_opaque %}{{ types.c["op*"] }}{% else %}{{ class.name | case(style="pascal") }}* {% endif %}self
+    {%- for param in params -%}
+    , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {%- endfor -%}
+    {%- else -%}
+    {%- if params is empty -%}
+    void
+    {%- else -%}
+    {%- for param in params -%}
+    {{ types.c[param.type] }} {{ param.name | case(style = "snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro func_decls(funcs, class=false, is_method=false) -%}
+{%- for func in funcs %}
+{{ types.c[func.type] }} {% if class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}({{ self::c_params(params=func.params, is_method=is_method, class=class) }});
+{%- endfor %}
+{%- endmacro -%}
+
+
+///// Generated C API Header /////
+#ifndef TURING_API_H
+#define TURING_API_H
+#include <stdint.h>
+// skip ffi imports as they're included from wasm.h
+#define TURING_API_C_SEMVER "{{ api.version }}"
+
+uint64_t _turing_api_semver(void);
+
+//// Functions ////
+{{ self::func_decls(funcs=api.functions) }}
+//// Classes ////
+{%- for class in api.classes %}
+
+// class {{ class.name | case(style="pascal") }}
+{%- if class.is_opaque %}
+typedef struct {
+    {{ types.c["op*"] }} opaqu;
+} {{ class.name | case(style="pascal") }};
+{%- else %}
+typedef struct {{ class.name | case(style="pascal") }} {{ class.name | case(style="pascal") }};
+{%- endif %}
+
+{{ self::func_decls(funcs=class.functions, class=class) }}
+{{ self::func_decls(funcs=class.methods, class=class, is_method=true) }}
+{%- endfor %}
+
+#endif // TURING_API_H

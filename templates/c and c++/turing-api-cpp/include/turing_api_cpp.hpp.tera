@@ -1,0 +1,57 @@
+
+
+{% macro cpp_params(params, is_method=false) -%}
+    {%- if is_method -%}
+    {%- for param in params -%}
+    {{ types.cpp[param.type] }} {{ param.name | case(style="snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    {%- else -%}
+    {%- for param in params -%}
+    {{ types.cpp[param.type] }} {{ param.name | case(style = "snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro func_decls(funcs, class=false, is_method=false) -%}
+{%- for func in funcs %}
+    {{ types.cpp[func.type] }} {{ func.name | case(style="camel") }}({{ self::cpp_params(params=func.params, is_method=is_method) }});
+{%- endfor %}
+{%- endmacro -%}
+
+
+///// Generated C++ API Header /////
+#ifndef TURING_API_HPP
+#define TURING_API_HPP
+#include <stdint.h>
+#include <string>
+// skip ffi imports as they're included from wasm.h
+#define TURING_API_CPP_SEMVER "{{ api.version }}"
+
+namespace turing_api_cpp {
+
+uint64_t _turing_api_semver();
+
+//// Functions ////
+{{ self::func_decls(funcs=api.functions) }}
+//// Classes ////
+{%- for class in api.classes %}
+
+class {{ class.name | case(style="pascal") }} {
+{%- if class.is_opaque %}
+private:
+    {{ types.cpp["op*"] }} opaqu;
+{% endif %}
+public:
+{%- if class.is_opaque %}
+    {{ class.name | case(style="pascal") }}({{ types.cpp["op*"] }} ptr);
+{% endif %}
+{{ self::func_decls(funcs=class.functions, class=class) }}
+{{ self::func_decls(funcs=class.methods, class=class, is_method=true) }}
+};
+{%- endfor %}
+
+} // namespace turing_api_cpp
+
+#endif // TURING_API_HPP
