@@ -495,7 +495,7 @@ fn main() {
 
         let render = tera
             .render(name, &ctx)
-            .unwrap_or_else(|_| panic!("Failed to render API model to {}", nm));
+            .unwrap_or_else(|e| panic!("Failed to render API model to {}: {:?}", nm, e));
 
         if let Some(sep) = file_name.rsplit_once("/") {
             fs::create_dir_all(sep.0).unwrap_or_else(|_| panic!("Unable to create directory {}", sep.0));

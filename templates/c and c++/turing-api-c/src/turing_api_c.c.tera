@@ -1,16 +1,17 @@
 
+
 {% macro convert_arg(param) -%}
     {{ param.name | case(style="snake") }}
 {%- endmacro -%}
 
 {%- macro c_params(params, is_method=false, class=false) -%}
     {%- if is_method -%}
-    {% if class.is_opaque %}{{ types.c["op*"] }}{% else %}{{ class.name | case(style="pascal") }}* {% endif %}
+    {% if class.is_opaque %}{{ class.name | case(style="pascal") }}* {% else %}{{ types.c["op*"] }} {% endif %}self
     {%- for param in params -%}
     , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
     {%- endfor -%}
     {%- else -%}
-    {%- if params is empty -%}
+    {%- if params | length == 0 -%}
     void
     {%- else -%}
     {%- for param in params -%}
@@ -38,7 +39,7 @@
 {%- macro func_impl(func, is_method=false, class=false, indent="") -%}
     {{ indent }}{%- if func.type == "String" -%}uint32_t turing_size = {% elif func.type in api.opaque_classes %}{{ func.type | case(style="pascal") }} turing_result = {% else %}return {% endif -%}
     {{ func.from }}(
-        {{- self::convert_args(params=func.params, is_method=is_method, class=class -}}
+        {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
     );{% if func.type == "String" %}
     {{ indent }}if (turing_size == 0) {
     {{ indent }}    return NULL;
@@ -50,8 +51,7 @@
     {{ indent }}_host_strcpy(turing_buf, turing_size);
     {{ indent }}return turing_buf;
     {% elif func.type in api.opaque_classes %}
-    {{ func.type | case(style="pascal") }}
-    {{ indent }}turing_ret = { .opaqu = turing_result };
+    {{ indent }}{{ func.type | case(style="pascal") }} turing_ret = { .opaqu = turing_result };
     {{ indent }}return turing_ret;
     {% endif %}
 
@@ -62,7 +62,7 @@
 {{ types.c[func.type] }} {% if class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}(
     {{- self::c_params(params=func.params, is_method=is_method, class=class) -}}
 ) {
-{{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
+    {{ indent }}{{ self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
 {{ indent -}} }
 {%- endfor %}
 {%- endmacro -%}
@@ -84,8 +84,8 @@ uint64_t _turing_api_semver(void) {
 //// Classes ////
 {%- for class in api.classes %}
 // class {{ class.name | case(style="pascal") }}
-{{ self::func_impls(funcs=class.functions, class=class) }}
-{{ self::func_impls(func=class.methods, is_method=true, class=class) }}
+{{ self::func_impls(funcs=class.functions, is_method=false, class=class) }}
+{{ self::func_impls(funcs=class.methods, is_method=true, class=class) }}
 {% endfor %}
 
 

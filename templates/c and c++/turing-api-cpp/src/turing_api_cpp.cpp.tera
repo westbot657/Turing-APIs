@@ -35,7 +35,7 @@
 {%- macro func_impl(func, is_method=false, class=false, indent="") -%}
     {{ indent }}{%- if func.type == "String" -%}uint32_t turing_size = {% elif func.type in api.opaque_classes %}{{ types.cpp["op*"] }} turing_result = {% else %}return {% endif -%}
     {{ func.from }}(
-        {{- self::convert_args(params=func.params, is_method=is_method, class=class -}}
+        {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
     );{% if func.type == "String" %}
     {{ indent }}if (turing_size == 0) {
     {{ indent }}    return "";
@@ -53,7 +53,7 @@
 {{ types.cpp[func.type] }} {% if class %}{{ class.name | case(style="pascal") }}::{% endif %}{{ func.name | case(style="camel") }}(
     {{- self::cpp_params(params=func.params, is_method=is_method) -}}
 ) {
-{{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
+    {{ indent }}{{ self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
 {{ indent -}} }
 {%- endfor %}
 {%- endmacro -%}
