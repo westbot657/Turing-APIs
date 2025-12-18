@@ -1,0 +1,134 @@
+
+{% macro c_arg(type) -%}
+{%- if type == "&str" %}u32{% else %}{{ types.asmscript[type] }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro c_params(params, is_method=false, class=false) -%}
+{%- if is_method -%}
+opaqu: {% if class.is_opaque %}{{ types.rs["op*"] }}{% else %}{{ class.name | case(style="pascal") }}{% endif %}
+{%- for param in params -%}
+, {{ param.name | case(style="snake") }}: {{ self::c_arg(type=param.type) }}
+{%- endfor -%}
+{%- else -%}
+{%- for param in params -%}
+{{ param.name | case(style="snake") }}: {{ self::c_arg(type=param.type) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro c_ret(type) -%}
+{%- if type == "String" %}u32{% else %}{{ types.asmscript[type] }}{% endif %}
+{%- endmacro -%}
+
+{%- macro ffi_funcs(funcs, is_method=false, class=false) -%}
+{%- for func in funcs %}
+@external("env", "{{ func.from }}")
+declare function {{ func.from }}({{ self::c_params(params=func.params, is_method=is_method, class=class) }}): {{ self::c_ret(type=func.type) }};
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro converter(param, indent="") -%}
+    {%- if param.type == "&str" %}
+    {{ indent }}let turing_handle_{{ param.name | case(style="snake") }} = String.UTF8.encode({{ param.name | case(style="snake") }}, true);
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro convert_arg(param) -%}
+{%- if param.type == "&str" -%}
+turing_handle_
+{%- endif -%}
+{{- param.name | case(style="snake") -}}
+{%- endmacro -%}
+
+{%- macro asm_params(params, is_method=false, class=false) -%}
+    {%- for param in params -%}
+    {{ param.name | case(style="snake") }}: {{ types.asmscript[param.type] }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro convert_args(params, is_method=false, class=false) -%}
+    {%- if is_method -%}
+        this{% if class.is_opaque %}.opaqu{% endif %}
+        {%- for param in params -%}
+        , {{ self::convert_arg(param=param) }}
+        {%- endfor -%}
+    {%- else -%}
+        {%- for param in params -%}
+        {{ self::convert_arg(param=param) }}
+        {%- if not loop.last %}, {% endif -%}
+        {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro func_impl(func, is_method=false, class=false, indent="") -%}
+    {%- for param in func.params -%}
+    {{- self::converter(param=param, indent=indent) -}}
+    {%- endfor %}
+    {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}let turing_result = {% elif func.type != "void" %}return {% endif -%}
+    {{ func.from }}(
+        {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
+    );{% if func.type == "String" %}
+    {{ indent }}let turing_str = heap.alloc(usize(turing_result));
+    {{ indent }}_host_strcpy(u32(turing_str), turing_result);
+    {{ indent }}let turing_output = String.UTF8.decode(turing_str, true);
+    {{ indent }}heap.free(turing_str);
+    {{ indent }}return turing_output;
+    {%- elif func.type in api.opaque_classes %}
+    {{ indent }}return new {{ func.type | case(style="pascal") }}(turing_result);
+    {%- endif %}
+
+{%- endmacro -%}
+
+{%- macro func_impls(funcs, is_method=false, class=false, indent="", is_top=false) -%}
+{%- for func in funcs %}
+{% if is_top -%}
+export function {% else -%}
+{{ indent }}public {% if not is_method %}static {% endif %}
+{%- endif %}{{ func.name | case(style="snake") }}(
+    {{- self::asm_params(params=func.params, is_method=is_method, class=class) -}}
+): {{ types.asmscript[func.type] }} {
+{{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
+{{ indent -}} }
+{%- endfor %}
+{%- endmacro -%}
+
+///// Generated AssemblyScript API /////
+
+
+//// Wasm Bindings ////
+@external("env", "_host_strcpy")
+declare function _host_strcpy(location: u32, size: u32): void;
+{{ self::ffi_funcs(funcs=api.functions) }}
+{% for class in api.classes -%}
+{{ self::ffi_funcs(funcs=class.functions, class=class) }}
+{{ self::ffi_funcs(funcs=class.methods, is_method=true, class=class) }}
+{%- endfor -%}
+
+export function _turing_api_semver(): u64 {
+    return ({{ api.semver.major }}u64 << 16) | ({{ api.semver.minor }}u64 << 8) | {{ api.semver.patch }}u64;
+}
+
+//// Functions ////
+{{ self::func_impls(funcs=api.functions, is_top=true) }}
+
+
+//// Classes ////
+{%- for class in api.classes %}
+class {{ class.name | case(style="pascal") }} {
+    {%- for var in class.variables %}
+    {{ var.name }}: {{ types.asmscript[var.type] }};
+    {%- endfor %}
+    {% if class.is_opaque -%}
+    constructor(opaqu: {{ types.asmscript["op*"] }}) {
+        this.opaqu = opaqu;
+    }
+    {% endif -%}
+
+{{ self::func_impls(funcs=class.functions, class=class, indent="    ") }}
+{{ self::func_impls(funcs=class.methods, is_method=true, class=class, indent="    ") }}
+}
+
+{%- endfor %}
+

@@ -172,8 +172,8 @@ types { // derived from .api-spec/type-map at runtime
 - [x] Lua template
 - [x] Kotlin api
 - [x] Kotlin template
-- [ ] AsmScript api
-- [ ] AsmScript template
+- [x] AsmScript api
+- [x] AsmScript template
 - [ ] Nim api
 - [ ] Nim template
 - [ ] Grain api

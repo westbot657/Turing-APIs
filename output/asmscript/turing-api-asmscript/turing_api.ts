@@ -1,4 +1,0 @@
-
-///// Generated AssemblyScript API /////
-
-
