@@ -1,8 +1,9 @@
 -- NOTE: lua does not need any compiler or any extra setup, just include the plain lua file in-place of the wasm file in your map
 local script = {}
+local api = require("turing_api")
 
 function script.on_load()
-    turing_api.Log.info("Running lua in turing!")
+    api.Log.info("Running lua in turing!")
 end
 
 function script.on_update()
