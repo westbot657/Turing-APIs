@@ -1,0 +1,26 @@
+-- NOTE: lua does not need any compiler or any extra setup, just include the plain lua file in-place of the wasm file in your map
+local script = {}
+
+function script.on_load()
+    turing_api.Log.info("Running lua in turing!")
+end
+
+function script.on_update()
+
+end
+
+function script.on_exit()
+
+end
+
+
+
+function script._turing_api_semver()
+    -- this function is used by turing to make sure your script can be run without issues.
+    -- feel free to update the numbers manually or copy-paste from the template
+    -- whenever you update to a new version of the API
+    return ({{ api.semver.major }} << 16) -- (major << 16)
+    | ({{ api.semver.minor }} << 8) -- (minor << 8)
+    | {{ api.semver.patch }} -- patch
+end
+return script

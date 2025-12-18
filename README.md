@@ -169,7 +169,7 @@ types { // derived from .api-spec/type-map at runtime
 - [ ] Nelua api
 - [ ] Nelua template
 - [ ] Lua api
-- [ ] Lua template
+- [x] Lua template
 - [x] Kotlin api
 - [x] Kotlin template
 - [ ] AsmScript api
