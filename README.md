@@ -33,6 +33,12 @@ You can use this table to pick a language to use for writing scripts
 | JavaScript/TypeScript | Easy              | Will run slower than wasm |
 | Python                | Easy              | Not implemented.          |
 
+### Unsupported languages
+If your preferred language is not listed in either of the above tables, it's because it's not widely known.  
+You have 2 options for getting your language to work:  
+1. get it to compile to wasm32 wasi preview 1 (wasm32-wasip1), or wasm32 standalone/freestanding.  
+2. See if there's an interpreter for it written in rust, and then create an issue for us to look into it.  
+If you get either of these scenarios, make an issue for API support or make a PR adding it yourself.  
 
 # Turing API generator usage
 
