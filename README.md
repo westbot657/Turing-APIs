@@ -27,11 +27,11 @@ You can use this table to pick a language to use for writing scripts
 *These languages haven't been thoroughly evaluated, as they aren't as well known.
 
 ### Other supported languages
-| Language              | Coding Complexity | Notes                     |
-|-----------------------|-------------------|---------------------------|
-| Lua                   | Easy              | Will run slower than wasm |
-| JavaScript/TypeScript | Easy              | Will run slower than wasm |
-| Python                | Easy              | Not implemented.          |
+| Language              | Coding Complexity | Notes            |
+|-----------------------|-------------------|------------------|
+| Lua                   | Easy              | Not implemented. |
+| JavaScript/TypeScript | Easy              | Not implemented. |
+| Python                | Easy              | Not implemented. |
 
 ### Unsupported languages
 If your preferred language is not listed in either of the above tables, it's because it's not widely known.  
