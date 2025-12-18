@@ -162,8 +162,8 @@ types { // derived from .api-spec/type-map at runtime
 - [x] C template
 - [x] C++ api
 - [x] C++ template
-- [ ] Zig api
-- [ ] Zig template
+- [x] Zig api
+- [x] Zig template
 - [ ] TinyGo api
 - [ ] TinyGo template
 - [ ] Nelua api
