@@ -5,22 +5,24 @@
 You can use this table to pick a language to use for writing scripts  
 
 ### Wasm based languages
-| Language       | Coding complexity | Build complexity | Notes                                                                                                                     |
-|----------------|-------------------|------------------|---------------------------------------------------------------------------------------------------------------------------|
-| Rust           | Hard              | Easy             | Natively supports compilation to wasm32-wasip1.                                                                           |
-| C              | Hard              | Hard             | Build complexity is better on linux or with the zig compiler.                                                             |
-| C++            | Hard              | Hard             | Also easier on linux or with the zig compiler.                                                                            |
-| C3             | Moderate          | Moderate         | Similar to C but with some quality of life features                                                                       |
-| Zig            | Moderate          | Easy             | Quite verbose but has very good compatibility for compiling to wasm.                                                      |
-| Nelua          | Easy              | Hard             | Easier on linux due to C, will be smaller and run faster than the plain lua option.                                       |
-| Go/TinyGo      | Easy              | Easy             | TinyGo is a Go compiler that skips out on features that wasm can't support, such as OS threads.                           |
-| AssemblyScript | Easy              | Easy             | Has some quirks compared to js/ts but is maybe the most friendly if you're coming from js/ts.                             |
-| Kotlin         | Easy              | Moderate         | Probably best for those familiar with C# or java.                                                                         |
-| Nim*           | Unknown           | Unknown          | API is low priority.                                                                                                      |
-| Odin*          | Unknown           | Unknown          | API is low priority.                                                                                                      |
-| D*             | Unknown           | Unknown          | API is low priority.                                                                                                      |
-| V*             | Unknown           | Unknown          | API is low priority.                                                                                                      |
-| Grain*         | Unknown           | Unknown          | API is low priority.                                                                                                      |
+| Language       | Coding complexity | Build complexity | Notes                                                                                           |
+|----------------|-------------------|------------------|-------------------------------------------------------------------------------------------------|
+| Rust           | Hard              | Easy             | Natively supports compilation to wasm32-wasip1.                                                 |
+| C              | Hard              | Hard             | Build complexity is better on linux or with the zig compiler.                                   |
+| C++            | Hard              | Hard             | Also easier on linux or with the zig compiler.                                                  |
+| C3             | Moderate          | Moderate         | Similar to C but with some quality of life features                                             |
+| Zig            | Moderate          | Easy             | Quite verbose but has very good compatibility for compiling to wasm.                            |
+| Nelua          | Easy              | Hard             | Easier on linux due to C, will be smaller and run faster than the plain lua option.             |
+| Go/TinyGo      | Easy              | Easy             | TinyGo is a Go compiler that skips out on features that wasm can't support, such as OS threads. |
+| AssemblyScript | Easy              | Easy             | Has some quirks compared to js/ts but is maybe the most friendly if you're coming from js/ts.   |
+| Kotlin         | Easy              | Moderate         | Probably best for those familiar with C# or java.                                               |
+| C#             | Easy              | Unknown          | Theoretically possible via .NET 8 but untested                                                  |
+| Java           | Moderate          | Unknown          | Theoretically possible via TeaVM but untested                                                   |
+| Nim*           | Unknown           | Unknown          | API is low priority.                                                                            |
+| Odin*          | Unknown           | Unknown          | API is low priority.                                                                            |
+| D*             | Unknown           | Unknown          | API is low priority.                                                                            |
+| V*             | Unknown           | Unknown          | API is low priority.                                                                            |
+| Grain*         | Unknown           | Unknown          | API is low priority.                                                                            |
 
 *These languages haven't been thoroughly evaluated, as they aren't as well known.
 
@@ -29,17 +31,7 @@ You can use this table to pick a language to use for writing scripts
 |-----------------------|-------------------|---------------------------|
 | Lua                   | Easy              | Will run slower than wasm |
 | JavaScript/TypeScript | Easy              | Will run slower than wasm |
-
-
-## Unsupported languages
-These languages are not supportable, if you find a way to get one of these languages to properly compile to wasm32-wasip1,
-open an issue, and it'll be moved to the table above.  
-
-| Language              | Closest alternatives | Reason it's not supported                                                                           |
-|-----------------------|----------------------|-----------------------------------------------------------------------------------------------------|
-| Java                  | Kotlin               | Java's wasm ecosystem is built primarily around js runtimes and emscripten, which don't work here.  |
-| C#                    | Kotlin               | C# also heavily relies on emscripten and a js runtime which don't work.                             |
-| Python                | Lua/Nelua            | Technically possible, but I can't be bothered to write the very complex build system needed for it. |
+| Python                | Easy              | Not implemented.          |
 
 
 # Turing API generator usage
