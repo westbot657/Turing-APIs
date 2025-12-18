@@ -22,8 +22,8 @@ function script._turing_api_semver()
     -- this function is used by turing to make sure your script can be run without issues.
     -- feel free to update the numbers manually or copy-paste from the template
     -- whenever you update to a new version of the API
-    return ({{ api.semver.major }} << 16) -- (major << 16)
-    | ({{ api.semver.minor }} << 8) -- (minor << 8)
-    | {{ api.semver.patch }} -- patch
+    return (0 << 16) -- (major << 16)
+    | (0 << 8) -- (minor << 8)
+    | 1 -- patch
 end
 return script

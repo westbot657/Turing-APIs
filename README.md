@@ -168,7 +168,7 @@ types { // derived from .api-spec/type-map at runtime
 - [ ] TinyGo template
 - [ ] Nelua api
 - [ ] Nelua template
-- [ ] Lua api
+- [x] Lua api
 - [x] Lua template
 - [x] Kotlin api
 - [x] Kotlin template
