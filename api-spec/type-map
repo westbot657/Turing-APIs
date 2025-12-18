@@ -1,19 +1,39 @@
-| Type    | rs            | c           | cpp          | zig          | asmscript | nelua   | go      | kotlin             | lua     |
-|---------|---------------|-------------|--------------|--------------|-----------|---------|---------|--------------------|---------|
-| i8      | i8            | int8_t      | int8_t       | i8           | i8        | int8    | int8    | Byte               | number  |
-| i16     | i16           | int16_t     | int16_t      | i16          | i16       | int16   | int16   | Short              | number  |
-| i32     | i32           | int32_t     | int32_t      | i32          | i32       | int32   | int32   | Int                | number  |
-| i64     | i64           | int64_t     | int64_t      | i64          | i64       | int64   | int64   | Long               | number  |
-| u8      | u8            | uint8_t     | uint8_t      | u8           | u8        | uint8   | uint8   | UByte              | number  |
-| u16     | u16           | uint16_t    | uint16_t     | u16          | u16       | uint16  | uint16  | UShort             | number  |
-| u32     | u32           | uint32_t    | uint32_t     | u32          | u32       | uint32  | uint32  | UInt               | number  |
-| u64     | u64           | uint64_t    | uint64_t     | u64          | u64       | uint64  | uint64  | ULong              | number  |
-| f32     | f32           | float       | float        | f32          | f32       | float32 | float32 | Float              | number  |
-| f64     | f64           | double      | double       | f64          | f64       | float64 | float64 | Double             | number  |
-| bool    | bool          | bool        | bool         | bool         | bool      | boolean | bool    | Boolean            | boolean |
-| String  | String        | char*       | std::string  | []u8         | string    | string  | string  | String             | string  |
-| &str    | &str          | const char* | std::string& | []const u8   | string    | string  | string  | String             | string  |
-| CString | *const c_char | const char* | const char*  | [*c]const u8 | u32       | cstring | *byte   | CPointer<ByteVar>? | string  |
-| Cstr    | *const c_char | const char* | const char*  | [*c]const u8 | u32       | cstring | uint32  | UInt               | string  |
-| op*     | u64           | uint64_t    | uint64_t     | u64          | u64       | uint64  | uint64  | ULong              | table   |
-| void    | ()            | void        | void         | void         | void      | void    | void    | Unit               | nil     |
+| Type    | rs            | c           | cpp          | zig          | asmscript | nelua   | go      | lua     |
+|---------|---------------|-------------|--------------|--------------|-----------|---------|---------|---------|
+| i8      | i8            | int8_t      | int8_t       | i8           | i8        | int8    | int8    | number  |
+| i16     | i16           | int16_t     | int16_t      | i16          | i16       | int16   | int16   | number  |
+| i32     | i32           | int32_t     | int32_t      | i32          | i32       | int32   | int32   | number  |
+| i64     | i64           | int64_t     | int64_t      | i64          | i64       | int64   | int64   | number  |
+| u8      | u8            | uint8_t     | uint8_t      | u8           | u8        | uint8   | uint8   | number  |
+| u16     | u16           | uint16_t    | uint16_t     | u16          | u16       | uint16  | uint16  | number  |
+| u32     | u32           | uint32_t    | uint32_t     | u32          | u32       | uint32  | uint32  | number  |
+| u64     | u64           | uint64_t    | uint64_t     | u64          | u64       | uint64  | uint64  | number  |
+| f32     | f32           | float       | float        | f32          | f32       | float32 | float32 | number  |
+| f64     | f64           | double      | double       | f64          | f64       | float64 | float64 | number  |
+| bool    | bool          | bool        | bool         | bool         | bool      | boolean | bool    | boolean |
+| String  | String        | char*       | std::string  | []u8         | string    | string  | string  | string  |
+| &str    | &str          | const char* | std::string& | []const u8   | string    | string  | string  | string  |
+| CString | *const c_char | const char* | const char*  | [*c]const u8 | u32       | cstring | *byte   | string  |
+| Cstr    | *const c_char | const char* | const char*  | [*c]const u8 | u32       | cstring | uint32  | string  |
+| op*     | u64           | uint64_t    | uint64_t     | u64          | u64       | uint64  | uint64  | table   |
+| void    | ()            | void        | void         | void         | void      | void    | void    | nil     |
+
+| Type    | kotlin             |
+|---------|--------------------|
+| i8      | Byte               |
+| i16     | Short              |
+| i32     | Int                |
+| i64     | Long               |
+| u8      | UByte              |
+| u16     | UShort             |
+| u32     | UInt               |
+| u64     | ULong              |
+| f32     | Float              |
+| f64     | Double             |
+| bool    | Boolean            |
+| String  | String             |
+| &str    | String             |
+| CString | CPointer<ByteVar>? |
+| Cstr    | UInt               |
+| op*     | ULong              |
+| void    | Unit               |

@@ -322,54 +322,85 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
 }
 
 pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
-    let mut tm = HashMap::new();
+    let mut tm: HashMap<String, HashMap<String, String>> = HashMap::new();
 
-    let table = fs::read_to_string("./api-spec/type-map").expect("Failed to read type-map file");
+    let table = fs::read_to_string("./api-spec/type-map")
+        .expect("Failed to read type-map file");
 
-    let mut table: VecDeque<&str> = table.split("\n").collect::<VecDeque<&str>>();
+    let mut lines = table.lines().peekable();
 
-    let mut names = Vec::new();
+    while let Some(line) = lines.next() {
+        let line = line.trim();
 
-    loop {
-        let header = table.pop_front().expect("File ended before table was found").trim();
-        if !header.starts_with("|") { continue }
-
-        let mut columns: VecDeque<&str> = header.split("|").map(|x| x.trim()).filter(|x| !x.is_empty()).collect::<VecDeque<&str>>();
-
-        let _ = columns.pop_front().expect("Expected something after '|'");
-
-        for col in columns {
-            names.push(col.to_string());
-            tm.insert(col.to_string(), HashMap::new());
-        }
-        break;
-    }
-
-    let _ = table.pop_front().expect("Expected header separater");
-
-    for line in table {
-        if !line.starts_with("|") { continue }
-
-        let mut types: VecDeque<&str> = line.split("|").map(|x| x.trim()).filter(|x| !x.is_empty()).collect::<VecDeque<&str>>();
-
-        let base_type = types.pop_front().expect("Expected base type");
-
-        for (typ, lang) in types.iter().zip(&names) {
-            tm.get_mut(lang).unwrap().insert(base_type.to_string(), typ.to_string());
+        if !line.starts_with('|') {
+            continue;
         }
 
+        let mut columns: Vec<&str> = line
+            .split('|')
+            .map(str::trim)
+            .filter(|s| !s.is_empty())
+            .collect();
+
+        if columns.len() < 2 || columns[0] != "Type" {
+            continue;
+        }
+
+        columns.remove(0);
+
+        let current_names: Vec<String> =
+            columns.iter().map(|c| c.to_string()).collect();
+
+        for lang in &current_names {
+            tm.entry(lang.clone()).or_default();
+        }
+
+        if let Some(sep) = lines.peek() {
+            if sep.trim().starts_with('|') {
+                lines.next();
+            }
+        }
+
+        while let Some(row) = lines.peek() {
+            let row = row.trim();
+
+            if !row.starts_with('|') {
+                break;
+            }
+
+            let mut cells: Vec<&str> = row
+                .split('|')
+                .map(str::trim)
+                .filter(|s| !s.is_empty())
+                .collect();
+
+            if cells.is_empty() {
+                lines.next();
+                continue;
+            }
+
+            let base_type = cells.remove(0);
+
+            for (lang, typ) in current_names.iter().zip(cells.iter()) {
+                tm.get_mut(lang)
+                    .unwrap()
+                    .insert(base_type.to_string(), typ.to_string());
+            }
+
+            lines.next();
+        }
     }
 
-    for lang in &names {
-        let mm = tm.get_mut(lang).unwrap();
+    // Apply passthrough types to all languages
+    for map in tm.values_mut() {
         for ps in passthrough {
-            mm.insert(ps.clone(), ps.clone());
+            map.insert(ps.clone(), ps.clone());
         }
     }
-
 
     to_value(tm).expect("Hashmap failed to convert to serde Value")
 }
+
 
 fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
 
