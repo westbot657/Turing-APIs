@@ -1,0 +1,51 @@
+
+{% macro l_params(params, is_method=false, class=false) -%}
+    {%- if is_method -%}
+    self
+    {%- for param in params -%}
+    , {{ param.name | case(style="snake") }}
+    {%- endfor -%}
+    {%- else -%}
+    {%- for param in params -%}
+    {{ param.name | case(style="snake") }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro param_annotations(is_method, params, ret_type) -%}
+{%- if is_method %}
+---@param self table
+{%- endif -%}
+{%- for param in params %}
+---@param {{ param.name }} {{ types.lua[param.type] }}
+{%- endfor %}
+---@return {% if ret_type in api.opaque_classes %}{{ ret_type | case(style="pascal") }}{% else %}{{ types.lua[ret_type] }}{% endif %}
+{%- endmacro -%}
+
+{%- macro func_decls(funcs, is_method=false, class=false) -%}
+{% for func in funcs %}
+{% if func.doc %}--- {{ func.doc }}{% endif %}
+{{- self::param_annotations(is_method=is_method, params=func.params, ret_type=func.type) }}
+function turing_api.{% if class %}{{ class.name | case(style="pascal") }}.{% endif %}{{ func.name | case(style="camel") }}({{ self::l_params(params=func.params, is_method=is_method, class=class) }}) end
+{% endfor %}
+{%- endmacro -%}
+
+
+--/// Generated Lua Api ///--
+---@class {{ api.name | case(style="pascal") }}
+local turing_api = {}
+
+--// Functions //--
+{{ self::func_decls(funcs=api.functions) }}
+--// Classes //--
+{%- for class in api.classes %}
+{% if class.doc %}--- {{ class.doc }}{% endif %}
+---@class {{ class.name | case(style="pascal") }}
+local {{ class.name | case(style="pascal") }} = {}
+turing_api.{{ class.name | case(style="pascal") }} = {{ class.name | case(style="pascal") }}
+{{ self::func_decls(funcs=class.functions, is_method=false, class=class) }}
+{{ self::func_decls(funcs=class.methods, is_method=true, class=class) }}
+{%- endfor %}
+
+return turing_api

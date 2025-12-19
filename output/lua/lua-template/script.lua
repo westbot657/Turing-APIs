@@ -1,7 +1,7 @@
 -- NOTE: lua does not need any compiler or any extra setup, just include the plain lua file in-place of the wasm file in your map
 -- you do NOT need to include the api file with the script when putting the script in the map.
 local script = {}
----@type TuringAPI
+---@type TuringApi
 local api = require("turing_api")
 
 function script.on_load()

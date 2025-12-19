@@ -2,7 +2,7 @@
 
 ///// Generated C API /////
 #include "turing_api.h"
-#include "wasm.h"
+#include "turing_api_wasm.h"
 #include <stdlib.h>
 #include <string.h>
 

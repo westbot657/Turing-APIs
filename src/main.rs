@@ -12,6 +12,7 @@ use regex::Regex;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ApiModel {
     pub name: String,
+    pub nameh: String,
     pub classes: Vec<ClassDef>,
     pub functions: Vec<FunctionDef>,
     pub opaque_classes: Vec<String>,
@@ -80,6 +81,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
     let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
 
     let mut api_name = None;
+    let mut api_name2 = None;
     let mut version = "0".to_string();
     let mut semver = Semver::default();
 
@@ -108,6 +110,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
 
         if let Some(name) = line.strip_prefix("#api ") {
             api_name = Some(name.trim().to_string());
+            api_name2 = Some(name.trim().replace("_", "-").to_string());
             i += 1;
             continue;
         }
@@ -268,7 +271,10 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
         std::process::exit(1);
     }
 
-    ApiModel { name: api_name.expect("no `#api <name>` directive was found"), classes, functions, opaque_classes: Vec::new(), version, semver }
+    let name = api_name.expect("no `#api <name>` directive was found");
+    let nameh = api_name2.unwrap();
+    
+    ApiModel { name, nameh, classes, functions, opaque_classes: Vec::new(), version, semver }
 }
 
 
@@ -435,12 +441,13 @@ fn copy_non_template_files(
     base: &std::path::Path,
     current: &std::path::Path,
     dst_root: &std::path::Path,
+    api_name: &str,
 ) -> io::Result<()> {
     for entry in fs::read_dir(current)? {
         let entry = entry?;
         let path = entry.path();
         if path.is_dir() {
-            copy_non_template_files(base, &path, dst_root)?;
+            copy_non_template_files(base, &path, dst_root, api_name)?;
             continue;
         }
 
@@ -454,7 +461,7 @@ fn copy_non_template_files(
         }
 
         let rel = path.strip_prefix(base).unwrap_or(&path);
-        let dest = dst_root.join(rel);
+        let dest: PathBuf = dst_root.join(rel).to_string_lossy().replace("__api__", &api_name).replace("--api--", &api_name.replace("_", "-")).into();
         if let Some(parent) = dest.parent() {
             fs::create_dir_all(parent)?;
         }
@@ -511,13 +518,15 @@ fn main() {
 
     let templates_dir = PathBuf::from("./templates/");
     let out_dir_path = PathBuf::from("./output/");
-    if let Err(e) = copy_non_template_files(&templates_dir, &templates_dir, &out_dir_path) {
+    if let Err(e) = copy_non_template_files(&templates_dir, &templates_dir, &out_dir_path, &api_model.name) {
         eprintln!("Failed to copy non-template files: {}", e);
         std::process::exit(1);
     }
 
     for name in tera.get_template_names() {
         let nm = name
+            .replace("__api__", &api_model.name)
+            .replace("--api--", &api_model.name.replace("_", "-"))
             .replace(".tera", "")
             .replace("\\", "/")
             .replace("__", "/");

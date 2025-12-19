@@ -1,6 +1,6 @@
 
 --/// Generated Lua Api ///--
----@class TuringAPI
+---@class TuringApi
 local turing_api = {}
 
 --// Functions //--

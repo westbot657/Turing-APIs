@@ -1,4 +1,0 @@
-[package]
-name = "turing_api"
-version = "{{ api.version }}"
-edition = "2024"

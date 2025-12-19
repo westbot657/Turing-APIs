@@ -2,7 +2,7 @@
 
 ///// Generated C++ API /////
 #include "turing_api.hpp"
-#include "wasm.h"
+#include "turing_api_wasm.h"
 #include <string>
 
 namespace turing_api_cpp {

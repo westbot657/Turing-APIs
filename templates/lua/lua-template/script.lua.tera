@@ -1,8 +1,8 @@
 -- NOTE: lua does not need any compiler or any extra setup, just include the plain lua file in-place of the wasm file in your map
 -- you do NOT need to include the api file with the script when putting the script in the map.
 local script = {}
----@type TuringAPI
-local api = require("turing_api")
+---@type {{ api.name | case(style="pascal") }}
+local api = require("{{ api.name }}")
 
 function script.on_load()
     api.Log.info("Running lua in turing!")
@@ -18,7 +18,7 @@ end
 
 
 
-function script._turing_api_semver()
+function script._{{ api.name }}_semver()
     -- this function is used by turing to make sure your script can be run without issues.
     -- feel free to update the numbers manually or copy-paste from the template
     -- whenever you update to a new version of the API

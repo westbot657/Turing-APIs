@@ -4,8 +4,8 @@
     .fingerprint = 0xf2a35603ddb41190,
     .minimum_zig_version = "0.15.2",
     .dependencies = .{
-        .turing_api = .{
-            .path = "../turing-api-zig",
+        .{{ api.name }} = .{
+            .path = "../{{ api.nameh }}-zig",
         },
     },
     .paths = .{

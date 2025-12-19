@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 turing-api = "{{ api.version }}"
-# turing-api = { path = "../turing-api-rs" }
+# turing-api = { path = "../{{ api.nameh }}-rs" }
 
 [lib]
 crate-type = ["cdylib"]

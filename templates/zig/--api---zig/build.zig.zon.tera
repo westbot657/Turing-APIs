@@ -1,0 +1,10 @@
+.{
+    .name = .{{ api.name }},
+    .version = "0.1.0",
+    .fingerprint = 0x8e818f4be2d9b5b1,
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}

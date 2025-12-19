@@ -11,8 +11,8 @@ pub fn build(b: *std.Build) void {
         }
     });
 
-    const mod = b.addModule("turing_api", .{
-        .root_source_file = b.path("../turing-api-zig/src/turing_api.zig"),
+    const mod = b.addModule("{{ api.name }}", .{
+        .root_source_file = b.path("../{{ api.nameh }}-zig/src/{{ api.name }}.zig"),
         .target = target
     });
 
@@ -23,7 +23,7 @@ pub fn build(b: *std.Build) void {
             .target = target,
             .optimize = optimize,
             .imports = &.{
-                .{ .name = "turing_api", .module = mod }
+                .{ .name = "{{ api.name }}", .module = mod }
             }
         })
     });

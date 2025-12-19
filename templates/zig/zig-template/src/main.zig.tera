@@ -1,5 +1,5 @@
 const std = @import("std");
-const api = @import("turing_api");
+const api = @import("{{ api.name }}");
 var gpa = std.heap.GeneralPurposeAllocator(.{}){};
 const global_allocator = gpa.allocator();
 
