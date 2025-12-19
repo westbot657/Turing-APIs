@@ -5,7 +5,7 @@
 #define TURING_API_H
 #include <stdint.h>
 // skip ffi imports as they're included from wasm.h
-#define TURING_API_C_SEMVER "0.0.1"
+#define TURING_API_C_SEMVER "0.8.0"
 
 uint64_t _turing_api_semver(void);
 

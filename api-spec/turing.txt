@@ -1,5 +1,5 @@
 #api turing_api
-#version 0.0.1
+#version 0.8.0
 
 :Global:
 test_global(name: &str) -> void

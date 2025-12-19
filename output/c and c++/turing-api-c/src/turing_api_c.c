@@ -7,7 +7,7 @@
 #include <string.h>
 
 uint64_t _turing_api_semver(void) {
-    return ((uint64_t)0 << 16) | ((uint64_t)0 << 8) | (uint64_t)1;
+    return ((uint64_t)0 << 16) | ((uint64_t)8 << 8) | (uint64_t)0;
 }
 
 //// Functions ////

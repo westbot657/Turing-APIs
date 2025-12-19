@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include <string>
 // skip ffi imports as they're included from wasm.h
-#define TURING_API_CPP_SEMVER "0.0.1"
+#define TURING_API_CPP_SEMVER "0.8.0"
 
 namespace turing_api_cpp {
 

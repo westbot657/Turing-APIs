@@ -23,7 +23,7 @@ function script._turing_api_semver()
     -- feel free to update the numbers manually or copy-paste from the template
     -- whenever you update to a new version of the API
     return (0 << 16) -- (major << 16)
-    | (0 << 8) -- (minor << 8)
-    | 1 -- patch
+    | (8 << 8) -- (minor << 8)
+    | 0 -- patch
 end
 return script

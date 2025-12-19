@@ -25,7 +25,7 @@ declare function _log_critical(msg: u32): void;
 @external("env", "_log_debug")
 declare function _log_debug(msg: u32): void;
 export function _turing_api_semver(): u64 {
-    return (0u64 << 16) | (0u64 << 8) | 1u64;
+    return (0u64 << 16) | (8u64 << 8) | 0u64;
 }
 
 //// Functions ////

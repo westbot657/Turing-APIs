@@ -1,4 +1,17 @@
+[workspace]
+
 [package]
-name = "{{ api.name }}"
+name = "{{ api.nameh }}"
 version = "{{ api.version }}"
 edition = "2024"
+description = "The Turing mod scripting API for Beat Saber"
+license = "GPL-2.0-only"
+repository = "https://github.com/westbot657/turing-apis"
+include = [
+    "Cargo.toml",
+    "src/**",
+    "README.md"
+]
+readme = "README.md"
+keywords = ["beatsaber", "turing", "api"]
+categories = ["api-bindings", "game-development"]

@@ -39,10 +39,10 @@ func _log_debug(msg *byte)
 
 //export _turing_api_semver
 func _turing_api_semver() uint64 {
-    return (uint64(0) << 16) | (uint64(0) << 8) | uint64(1)
+    return (uint64(0) << 16) | (uint64(8) << 8) | uint64(0)
 }
 
-const APIVersion = "0.0.1"
+const APIVersion = "0.8.0"
 
 //// Functions ////
 
