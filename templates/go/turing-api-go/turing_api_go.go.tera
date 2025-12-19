@@ -1,0 +1,145 @@
+{% macro converter(param, indent="") -%}
+    {%- if param.type == "&str" %}
+    {{ indent }}turing_handle_{{ param.name | case(style="snake") }} := cString({{ param.name | case(style="camel") }})
+    {{ indent }}{{ param.name | case(style="camel") }}Ptr := &turing_handle_{{ param.name | case(style="snake") }}[0]
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro convert_arg(param) -%}
+    {%- if param.type == "&str" -%}
+    {{ param.name | case(style="camel") }}Ptr
+    {%- else -%}
+    {{ param.name | case(style="camel") }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro c_arg(type) -%}
+    {%- if type == "&str" %}*byte{% else %}{{ types.go[type] }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro c_params(params, is_method=false, class=false) -%}
+    {%- if is_method -%}
+    opaqu {% if class.is_opaque %}{{ types.go["op*"] }}{% else %}{{ class.name | case(style="pascal") }}{% endif %}
+    {%- for param in params -%}
+    , {{ param.name | case(style="snake") }} {{ self::c_arg(type=param.type) }}
+    {%- endfor -%}
+    {%- else -%}
+    {%- for param in params -%}
+    {{ param.name | case(style="snake") }} {{ self::c_arg(type=param.type) }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro go_params(params, is_method=false, class=false) -%}
+    {%- for param in params -%}
+    {{ param.name | case(style="camel") }} {{ types.go[param.type] }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+{%- endmacro -%}
+
+{%- macro go_ret(type) -%}
+    {%- if type == "void" %}{% elif type == "String" %} {{ types.go[type] }}{% else %} {{ types.go[type] }}{% endif %}
+{%- endmacro -%}
+
+{%- macro c_ret(type) -%}
+    {%- if type == "void" %}{% elif type == "String" %} uint32{% else %} {{ types.go[type] }}{% endif %}
+{%- endmacro -%}
+
+{%- macro convert_args(params, is_method=false, class=false) -%}
+    {%- if is_method -%}
+    self{% if class.is_opaque %}.opaqu{% endif %}
+    {%- for param in params -%}
+    , {{ self::convert_arg(param=param) }}
+    {%- endfor -%}
+    {%- else -%}
+    {%- for param in params -%}
+    {{ self::convert_arg(param=param) }}
+    {%- if not loop.last %}, {% endif -%}
+    {%- endfor -%}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro func_impl(func, is_method=false, class=false, indent="") -%}
+    {%- for param in func.params -%}
+        {{- self::converter(param=param, indent=indent) -}}
+    {%- endfor %}
+    {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}turingResult := {% elif func.type != "void" %}return {% endif -%}
+    {{ func.from }}(
+    {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
+    ){% if func.type == "String" %}
+    {{ indent }}turingStr := make([]byte, turingResult)
+    {{ indent }}_host_strcpy(&turingStr[0], uint32(turingResult))
+    {{ indent }}return goString(turingStr)
+    {%- elif func.type in api.opaque_classes %}
+    {{ indent }}return &{{ func.type | case(style="pascal") }}{opaqu: turingResult}
+{%- endif %}
+
+{%- endmacro -%}
+
+{%- macro ffi_decls(funcs, is_method=false, class=false) -%}
+{%- for func in funcs %}
+//go:wasmimport env {{ func.from }}
+func {{ func.from }}({{ self::c_params(params=func.params, is_method=is_method, class=class) }}){{ self::c_ret(type=func.type) }}
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
+{%- for func in funcs %}
+func {% if is_method %}(self *{{ class.name | case(style="pascal") }}) {% elif class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}(
+    {{- self::go_params(params=func.params, is_method=is_method, class=class) -}}
+    ){{ self::go_ret(type=func.type) }} {
+    {{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
+}
+{%- endfor %}
+{%- endmacro -%}
+
+///// Generated Go API /////
+package turing_api
+
+// Helper functions for string conversion
+func cString(s string) []byte {
+    b := []byte(s)
+    b = append(b, 0)
+    return b
+}
+
+func goString(b []byte) string {
+    for i, v := range b {
+        if v == 0 {
+            return string(b[:i])
+        }
+    }
+    return string(b)
+}
+
+//// WASM Imports ////
+//go:wasmimport env _host_strcpy
+func _host_strcpy(location *byte, size uint32)
+
+{{- self::ffi_decls(funcs=api.functions) }}
+{%- for class in api.classes -%}
+{{- self::ffi_decls(funcs=class.functions, class=class) }}
+{{- self::ffi_decls(funcs=class.methods, is_method=true, class=class) }}
+{%- endfor %}
+
+//export _turing_api_semver
+func _turing_api_semver() uint64 {
+    return (uint64({{ api.semver.major }}) << 16) | (uint64({{ api.semver.minor }}) << 8) | uint64({{ api.semver.patch }})
+}
+
+const APIVersion = "{{ api.version }}"
+
+//// Functions ////
+{{ self::func_impls(funcs=api.functions) }}
+
+//// Classes ////
+{%- for class in api.classes %}
+type {{ class.name | case(style="pascal") }} struct {
+{%- for var in class.variables %}
+    {{ var.name | case(style="snake") }} {{ types.go[var.type] }}
+{%- endfor %}
+}
+{{ self::func_impls(funcs=class.functions, class=class) }}
+{{ self::func_impls(funcs=class.methods, is_method=true, class=class) }}
+{%- endfor %}
