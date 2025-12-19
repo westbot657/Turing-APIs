@@ -41,6 +41,24 @@ void MyClass::objectFunc(int16_t a) {
     return _my_class_object_func(this->opaqu, a);
 }
 
+// class ColorNote
+
+ColorNote::ColorNote(uint64_t ptr) : opaqu(ptr) {}
+
+
+
+void ColorNote::setPosition(float x, float y, float z) {
+    return _color_note_set_position(this->opaqu, x, y, z);
+}
+void ColorNote::setOrientation(float x, float y, float z, float w) {
+    return _color_note_set_orientation(this->opaqu, x, y, z, w);
+}
+ColorNote ColorNote::clone() {
+    uint64_t turing_result = _color_note_clone(this->opaqu);
+    return ColorNote(turing_result);
+    
+}
+
 // class Log
 
 

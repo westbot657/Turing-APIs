@@ -29,7 +29,7 @@ opaqu: {% if class.is_opaque %}{{ types.zig["op*"] }}{% else %}{{ class.name | c
 
 {%- macro zig_params(params, is_method=false, class=false, needs_allocator=false) -%}
 {%- if is_method -%}
-self: *const {{ class.name | case(style="pascal") }}
+self: *const Self
 {%- for param in params -%}
 , {{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
 {%- endfor -%}
@@ -78,7 +78,7 @@ self{% if class.is_opaque %}.opaqu{% endif %}
 {%- for param in func.params -%}
 {{- self::converter(param=param, indent=indent) -}}
 {%- endfor %}
-{{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}const turing_result = {% elif func.type != "void" %}return {% endif -%}
+{{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}const turing_result = {% elif func.type != "void" and func.type != "self" %}return {% endif -%}
 {{ func.from }}(
 {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
 );{% if func.type == "String" %}
@@ -87,6 +87,8 @@ self{% if class.is_opaque %}.opaqu{% endif %}
 {{ indent }}_host_strcpy(turing_str.ptr, turing_result);
 {{ indent }}const result = try allocator.dupe(u8, std.mem.span(@as([*:0]const u8, @ptrCast(turing_str.ptr))));
 {{ indent }}return result;
+{%- elif func.type == "self" %}
+return self;
 {%- elif func.type in api.opaque_classes %}
 {{ indent }}return {{ func.type | case(style="pascal") }}{ .opaqu = turing_result };
 {%- endif %}
@@ -99,7 +101,21 @@ extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is
 {%- endmacro -%}
 
 {%- macro zig_return_type(func) -%}
-{%- if func.type == "String" %}![]u8{% elif self::needs_allocator(func=func) and func.type == "void" %}!void{% elif func.type != "void" %}{{ types.zig[func.type] }}{% else %}void{% endif -%}
+    {%- if func.type == "String" -%}
+        ![]u8
+    {%- elif self::needs_allocator(func=func) and (func.type == "void" or func.type == "self") -%}
+        {%- if func.type == "void" -%}
+            !void
+        {%- elif func.type == "self" -%}
+            !*const Self
+        {%- endif -%}
+    {%- elif func.type != "void" and func.type != "self" -%}
+        {{ types.zig[func.type] }}
+    {%- elif func.type == "self" -%}
+        *Self
+    {%- else -%}
+        void
+    {%- endif -%}
 {%- endmacro -%}
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}

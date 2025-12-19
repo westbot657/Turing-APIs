@@ -1,14 +1,24 @@
 #api turing_api
 #version 0.8.0
 
+// :Global: is special case for top-level functions
+// For other classes, :ClassName [opaque]: marks the class as opaque
+// .  prefix denotes a variable, which currently are not fully implemented in every template.
+// :: prefix denotes a static function for classes
+// No prefix denotes an instance method except in top level where the prefix doesn't matter
+
 :Global:
 test_global(name: &str) -> void
 global_2_test() -> i32
 my_test(a: i8, b: i16) -> String
 
 :My_Class [opaque] :
-
 object_func(a: i16) -> void : _my_class_object_func
+
+:ColorNote [opaque] :
+set_position(x: f32, y: f32, z: f32) -> self : _color_note_set_position
+set_orientation(x: f32, y: f32, z: f32, w: f32) -> self : _color_note_set_orientation
+clone() -> ColorNote : _color_note_clone
 
 :Log:
 -- used to log messages to the console

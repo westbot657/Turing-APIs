@@ -10,6 +10,9 @@ unsafe extern "C" {
     fn _global_2_test() -> i32;
     fn _my_test(a: i8, b: i16) -> u32;
     fn _my_class_object_func(opaqu: u64, a: i16);
+    fn _color_note_set_position(opaqu: u64, x: f32, y: f32, z: f32) -> ();
+    fn _color_note_set_orientation(opaqu: u64, x: f32, y: f32, z: f32, w: f32) -> ();
+    fn _color_note_clone(opaqu: u64) -> ColorNote;
     fn _log_info(msg: *const c_char);
     fn _log_warn(msg: *const c_char);
     fn _log_critical(msg: *const c_char);
@@ -53,6 +56,28 @@ impl MyClass {
 
     pub fn object_func(&self, a: i16) {
         unsafe { _my_class_object_func(self.opaqu, a) }
+    }
+}
+
+
+pub struct ColorNote {
+    opaqu: u64,
+}
+impl ColorNote {
+
+    pub fn set_position(&self, x: f32, y: f32, z: f32) -> &Self {
+        unsafe { _color_note_set_position(self.opaqu, x, y, z) };
+        self
+    }
+
+    pub fn set_orientation(&self, x: f32, y: f32, z: f32, w: f32) -> &Self {
+        unsafe { _color_note_set_orientation(self.opaqu, x, y, z, w) };
+        self
+    }
+
+    pub fn clone(&self) -> ColorNote {
+        let turing_result = unsafe { _color_note_clone(self.opaqu) };
+        ColorNote { opaqu: turing_result }
     }
 }
 

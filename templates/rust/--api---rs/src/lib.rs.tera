@@ -68,7 +68,8 @@
     {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}let turing_result = {% endif -%}
     unsafe { {{ func.from }}(
         {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
-    ) }{% if func.type == "String" %};
+    ) }{% if func.type == "self" %};
+    {{ indent }}self{% elif func.type == "String" %};
     {{ indent }}let mut turing_str: Vec<u8> = vec![0; turing_result as usize];
     {{ indent }}unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
     {{ indent }}let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
@@ -90,7 +91,7 @@
 {% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
 {{ indent }}pub fn {{ func.name | case(style="snake") }}(
     {{- self::rs_params(params=func.params, is_method=is_method, class=class) -}}
-){%- if func.type != "void" %} -> {{ types.rs[func.type] }}{% endif %} {
+){%- if func.type == "self" %} -> &Self{%- elif func.type != "void" %} -> {{ types.rs[func.type] }}{% endif %} {
 {{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
 {{ indent -}} }
 {%- endfor %}

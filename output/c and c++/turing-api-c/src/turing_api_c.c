@@ -41,6 +41,22 @@ void MyClass_objectFunc(MyClass* self, int16_t a) {
     return _my_class_object_func(self->opaqu, a);
 }
 
+// class ColorNote
+
+
+void ColorNote_setPosition(ColorNote* self, float x, float y, float z) {
+    return _color_note_set_position(self->opaqu, x, y, z);
+}
+void ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w) {
+    return _color_note_set_orientation(self->opaqu, x, y, z, w);
+}
+ColorNote ColorNote_clone(ColorNote* self) {
+    ColorNote turing_result = _color_note_clone(self->opaqu);
+    ColorNote turing_ret = { .opaqu = turing_result };
+    return turing_ret;
+    
+}
+
 // class Log
 
 void Log_info(const char* msg) {

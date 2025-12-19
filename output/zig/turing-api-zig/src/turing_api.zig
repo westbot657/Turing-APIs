@@ -7,6 +7,9 @@ extern "C" fn _test_global(name: [*:0]const u8) void;
 extern "C" fn _global_2_test() i32;
 extern "C" fn _my_test(a: i8, b: i16) u32;
 extern "C" fn _my_class_object_func(opaqu: u64, a: i16) void;
+extern "C" fn _color_note_set_position(opaqu: u64, x: f32, y: f32, z: f32) void;
+extern "C" fn _color_note_set_orientation(opaqu: u64, x: f32, y: f32, z: f32, w: f32) void;
+extern "C" fn _color_note_clone(opaqu: u64) ColorNote;
 extern "C" fn _log_info(msg: [*:0]const u8) void;
 extern "C" fn _log_warn(msg: [*:0]const u8) void;
 extern "C" fn _log_critical(msg: [*:0]const u8) void;
@@ -48,8 +51,31 @@ pub fn my_test(a: i8, b: i16, allocator: std.mem.Allocator) ![]u8 {
 pub const MyClass = struct {
     opaqu: u64,
 
-    pub fn object_func(self: *const MyClass, a: i16) void {
+    pub fn object_func(self: *const Self, a: i16) void {
         _my_class_object_func(self.opaqu, a);
+    }
+
+};
+
+
+pub const ColorNote = struct {
+    opaqu: u64,
+
+    pub fn set_position(self: *const Self, x: f32, y: f32, z: f32) *Self {
+        _color_note_set_position(self.opaqu, x, y, z);
+return self;
+    }
+
+
+    pub fn set_orientation(self: *const Self, x: f32, y: f32, z: f32, w: f32) *Self {
+        _color_note_set_orientation(self.opaqu, x, y, z, w);
+return self;
+    }
+
+
+    pub fn clone(self: *const Self) ColorNote {
+        const turing_result = _color_note_clone(self.opaqu);
+        return ColorNote{ .opaqu = turing_result };
     }
 
 };

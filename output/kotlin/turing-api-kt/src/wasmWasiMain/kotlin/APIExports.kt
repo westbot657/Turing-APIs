@@ -19,6 +19,12 @@ external fun _global_2_test(): Int
 external fun _my_test(a: Byte, b: Short): CPointer<ByteVar>?
 @WasmImport("env", "_my_class_object_func")
 external fun _my_class_object_func(opaqu: Int, a: Short)
+@WasmImport("env", "_color_note_set_position")
+external fun _color_note_set_position(opaqu: Int, x: Float, y: Float, z: Float): Unit
+@WasmImport("env", "_color_note_set_orientation")
+external fun _color_note_set_orientation(opaqu: Int, x: Float, y: Float, z: Float, w: Float): Unit
+@WasmImport("env", "_color_note_clone")
+external fun _color_note_clone(opaqu: Int): ColorNote
 @WasmImport("env", "_log_info")
 external fun _log_info(msg: CPointer<ByteVar>?)
 @WasmImport("env", "_log_warn")
@@ -57,6 +63,24 @@ data class MyClass(val opaqu: ULong) {
 
     fun objectFunc(a: Short) {
         val hostResult = _my_class_object_func(this.opaqu, a)
+    }
+}
+
+data class ColorNote(val opaqu: ULong) {
+
+    fun setPosition(x: Float, y: Float, z: Float) : Unit {
+        val hostResult = _color_note_set_position(this.opaqu, x, y, z)
+        hostResult
+    }
+
+    fun setOrientation(x: Float, y: Float, z: Float, w: Float) : Unit {
+        val hostResult = _color_note_set_orientation(this.opaqu, x, y, z, w)
+        hostResult
+    }
+
+    fun clone() : ColorNote {
+        val hostResult = _color_note_clone(this.opaqu)
+        ColorNote(opaqu = hostResult)
     }
 }
 /// used to log messages to the console

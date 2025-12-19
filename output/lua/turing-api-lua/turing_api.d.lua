@@ -33,6 +33,34 @@ turing_api.MyClass = MyClass
 ---@return nil
 function turing_api.MyClass.objectFunc(self, a) end
 
+
+---@class ColorNote
+local ColorNote = {}
+turing_api.ColorNote = ColorNote
+
+
+
+---@param self table
+---@param x number
+---@param y number
+---@param z number
+---@return nil
+function turing_api.ColorNote.setPosition(self, x, y, z) end
+
+
+---@param self table
+---@param x number
+---@param y number
+---@param z number
+---@param w number
+---@return nil
+function turing_api.ColorNote.setOrientation(self, x, y, z, w) end
+
+
+---@param self table
+---@return ColorNote
+function turing_api.ColorNote.clone(self) end
+
 --- used to log messages to the console
 ---@class Log
 local Log = {}

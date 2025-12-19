@@ -28,6 +28,12 @@ func _global_2_test() int32
 func _my_test(a int8, b int16) uint32
 //go:wasmimport env _my_class_object_func
 func _my_class_object_func(opaqu uint64, a int16)
+//go:wasmimport env _color_note_set_position
+func _color_note_set_position(opaqu uint64, x float32, y float32, z float32) void
+//go:wasmimport env _color_note_set_orientation
+func _color_note_set_orientation(opaqu uint64, x float32, y float32, z float32, w float32) void
+//go:wasmimport env _color_note_clone
+func _color_note_clone(opaqu uint64) ColorNote
 //go:wasmimport env _log_info
 func _log_info(msg *byte)
 //go:wasmimport env _log_warn
@@ -74,6 +80,25 @@ type MyClass struct {
 
 func (self *MyClass) objectFunc(a int16) {
     _my_class_object_func(self.opaqu, a)
+}
+
+type ColorNote struct {
+    opaqu uint64
+}
+
+
+
+func (self *ColorNote) setPosition(x float32, y float32, z float32) void {
+    return _color_note_set_position(self.opaqu, x, y, z)
+}
+
+func (self *ColorNote) setOrientation(x float32, y float32, z float32, w float32) void {
+    return _color_note_set_orientation(self.opaqu, x, y, z, w)
+}
+
+func (self *ColorNote) clone() ColorNote {
+    turingResult := _color_note_clone(self.opaqu)
+    return &ColorNote{opaqu: turingResult}
 }
 /// used to log messages to the console
 type Log struct {

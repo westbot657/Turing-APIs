@@ -16,6 +16,13 @@ declare function _my_test(a: i8, b: i16): u32;
 
 @external("env", "_my_class_object_func")
 declare function _my_class_object_func(opaqu: u64, a: i16): void;
+
+@external("env", "_color_note_set_position")
+declare function _color_note_set_position(opaqu: u64, x: f32, y: f32, z: f32): void;
+@external("env", "_color_note_set_orientation")
+declare function _color_note_set_orientation(opaqu: u64, x: f32, y: f32, z: f32, w: f32): void;
+@external("env", "_color_note_clone")
+declare function _color_note_clone(opaqu: u64): ColorNote;
 @external("env", "_log_info")
 declare function _log_info(msg: u32): void;
 @external("env", "_log_warn")
@@ -62,6 +69,28 @@ class MyClass {
 
     public object_func(a: i16): void {
         _my_class_object_func(this.opaqu, a);
+    }
+}
+
+class ColorNote {
+    opaqu: u64;
+    constructor(opaqu: u64) {
+        this.opaqu = opaqu;
+    }
+
+
+
+    public set_position(x: f32, y: f32, z: f32): void {
+        return _color_note_set_position(this.opaqu, x, y, z);
+    }
+
+    public set_orientation(x: f32, y: f32, z: f32, w: f32): void {
+        return _color_note_set_orientation(this.opaqu, x, y, z, w);
+    }
+
+    public clone(): ColorNote {
+        let turing_result = _color_note_clone(this.opaqu);
+        return new ColorNote(turing_result);
     }
 }
 /// used to log messages to the console

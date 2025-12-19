@@ -30,6 +30,21 @@ typedef struct {
 
 void MyClass_objectFunc(MyClass* self, int16_t a);
 
+// class ColorNote
+
+typedef struct {
+    uint64_t opaqu;
+} ColorNote;
+
+
+
+
+void ColorNote_setPosition(ColorNote* self, float x, float y, float z);
+
+void ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w);
+
+ColorNote ColorNote_clone(ColorNote* self);
+
 // class Log
 /// used to log messages to the console
 typedef struct Log Log;

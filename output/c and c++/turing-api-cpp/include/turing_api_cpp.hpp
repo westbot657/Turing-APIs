@@ -34,6 +34,23 @@ public:
     
     void objectFunc(int16_t a);
 };
+
+class ColorNote {
+private:
+    uint64_t opaqu;
+
+public:
+    ColorNote(uint64_t ptr);
+
+
+
+    
+    void setPosition(float x, float y, float z);
+    
+    void setOrientation(float x, float y, float z, float w);
+    
+    ColorNote clone();
+};
 /// used to log messages to the console
 class Log {
 public:
