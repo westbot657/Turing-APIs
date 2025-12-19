@@ -100,6 +100,11 @@ external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
 {{ self::ffi_imports(funcs=class.methods, is_method=true, class=class) -}}
 {%- endfor %}
 
+@WasmExport(name = "_turing_api_semver")
+fun _turing_api_semver() : ULong {
+    ({{ api.semver.major }}uL shl 16) or ({{ api.semver.minor }}uL shl 8) or {{ api.semver.patch }}uL
+}
+
 //// Functions ////
 {{ self::func_impls(funcs=api.functions) }}
 
