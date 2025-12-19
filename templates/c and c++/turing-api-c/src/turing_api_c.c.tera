@@ -68,12 +68,12 @@
 {%- endmacro -%}
 
 ///// Generated C API /////
-#include "turing_api.h"
+#include "{{ api.name }}.h"
 #include "wasm.h"
 #include <stdlib.h>
 #include <string.h>
 
-uint64_t _turing_api_semver(void) {
+uint64_t _{{ api.name }}_semver(void) {
     return ((uint64_t){{ api.semver.major }} << 16) | ((uint64_t){{ api.semver.minor }} << 8) | (uint64_t){{ api.semver.patch }};
 }
 

@@ -60,13 +60,13 @@
 
 
 ///// Generated C++ API /////
-#include "turing_api.hpp"
+#include "{{ api.name }}.hpp"
 #include "wasm.h"
 #include <string>
 
-namespace turing_api_cpp {
+namespace {{ api.name }}_cpp {
 
-uint64_t _turing_api_semver() {
+uint64_t _{{ api.name }}_semver() {
     return ((uint64_t){{ api.semver.major }} << 16) | ((uint64_t){{ api.semver.minor }} << 8) | (uint64_t){{ api.semver.patch }};
 }
 
@@ -83,4 +83,4 @@ uint64_t _turing_api_semver() {
 {{ self::func_impls(funcs=class.methods, is_method=true, class=class) }}
 {%- endfor %}
 
-} // namespace turing_api_cpp
+} // namespace {{ api.name }}_cpp

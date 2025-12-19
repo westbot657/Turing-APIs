@@ -117,18 +117,18 @@ extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is
 const std = @import("std");
 
 //// Wasm Bindings ////
-extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;
+{% if api.name == "turing_api" %}extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;{% endif %}
 {{- self::ffi_funcs(funcs=api.functions) }}
 {%- for class in api.classes -%}
 {{- self::ffi_funcs(funcs=class.functions, class=class) }}
 {{- self::ffi_funcs(funcs=class.methods, is_method=true, class=class) }}
 {%- endfor %}
 
-export fn _turing_api_semver() u64 {
+export fn _{{ api.name }}_semver() u64 {
     return (({{ api.semver.major }} << 16) | ({{ api.semver.minor }} << 8) | {{ api.semver.patch }});
 }
 
-pub const API_VERSION: []const u8 = "{{ api.version }}";
+pub const {{ api.name | case(style="upper_snake") }}_VERSION: []const u8 = "{{ api.version }}";
 
 //// Functions ////
 {{ self::func_impls(funcs=api.functions) }}

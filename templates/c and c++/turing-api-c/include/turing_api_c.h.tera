@@ -27,13 +27,13 @@
 
 
 ///// Generated C API Header /////
-#ifndef TURING_API_H
-#define TURING_API_H
+#ifndef {{ api.name | case(style="upper_snake") }}_H
+#define {{ api.name | case(style="upper_snake") }}_H
 #include <stdint.h>
 // skip ffi imports as they're included from wasm.h
-#define TURING_API_C_SEMVER "{{ api.version }}"
+#define {{ api.name | case(style="upper_snake") }}_C_SEMVER "{{ api.version }}"
 
-uint64_t _turing_api_semver(void);
+uint64_t _{{ api.name }}_semver(void);
 
 //// Functions ////
 {{ self::func_decls(funcs=api.functions) }}
@@ -54,6 +54,6 @@ typedef struct {{ class.name | case(style="pascal") }} {{ class.name | case(styl
 {{ self::func_decls(funcs=class.methods, is_method=true, class=class) }}
 {%- endfor %}
 
-#endif // TURING_API_H
+#endif // {{ api.name | case(style="upper_snake") }}_H
 
 

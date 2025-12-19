@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void _host_strcpy(const char* location, uint32_t size);
+{% if api.name == "turing_api" %}void _host_strcpy(const char* location, uint32_t size);{% endif %}
 {% for func in api.functions %}
 {%- if func.from is defined and func.from -%}
 {% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(

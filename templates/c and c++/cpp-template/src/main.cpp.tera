@@ -1,6 +1,6 @@
-#include "turing_api_cpp.hpp"
+#include "{{ api.name }}_cpp.hpp"
 
-using namespace turing_api_cpp;
+using namespace {{ api.name }}_cpp;
 
 extern "C" {
 

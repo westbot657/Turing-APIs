@@ -99,15 +99,15 @@ export function {% else -%}
 
 
 //// Wasm Bindings ////
-@external("env", "_host_strcpy")
-declare function _host_strcpy(location: u32, size: u32): void;
+{% if api.name == "turing_api" %}@external("env", "_host_strcpy")
+declare function _host_strcpy(location: u32, size: u32): void;{% endif %}
 {{ self::ffi_funcs(funcs=api.functions) }}
 {% for class in api.classes -%}
 {{ self::ffi_funcs(funcs=class.functions, class=class) }}
 {{ self::ffi_funcs(funcs=class.methods, is_method=true, class=class) }}
 {%- endfor -%}
 
-export function _turing_api_semver(): u64 {
+export function _{{ api.name }}_semver(): u64 {
     return ({{ api.semver.major }}u64 << 16) | ({{ api.semver.minor }}u64 << 8) | {{ api.semver.patch }}u64;
 }
 

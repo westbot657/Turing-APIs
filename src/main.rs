@@ -11,6 +11,7 @@ use regex::Regex;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ApiModel {
+    pub name: String,
     pub classes: Vec<ClassDef>,
     pub functions: Vec<FunctionDef>,
     pub opaque_classes: Vec<String>,
@@ -64,7 +65,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
     let mut classes: Vec<ClassDef> = Vec::new();
     let mut functions: Vec<FunctionDef> = Vec::new();
     let mut current_class: Option<String> = None;
-    let mut invalid_name = false;
+    let mut invalid = false;
 
     let func_re = Regex::new(
         r#"(?x)
@@ -78,6 +79,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
 
     let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
 
+    let mut api_name = None;
     let mut version = "0".to_string();
     let mut semver = Semver::default();
 
@@ -104,6 +106,12 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
             continue;
         }
 
+        if let Some(name) = line.strip_prefix("#api ") {
+            api_name = Some(name.trim().to_string());
+            i += 1;
+            continue;
+        }
+
         if line.starts_with(':') && line.ends_with(':') {
             let header = line.trim_matches(':').trim();
             let (name, is_opaque) = if let Some((name, flags)) = header.split_once(' ') {
@@ -116,7 +124,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                 current_class = None;
             } else if let Some(langs) = reserved.get(&name) {
                 eprintln!("Invalid class name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
-                invalid_name = true;
+                invalid = true;
             } else {
                 if !classes.iter().any(|c| c.name == name) {
                     let mut vars = Vec::new();
@@ -154,7 +162,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
 
             if let Some(langs) = reserved.get(&name) {
                 eprintln!("Invalid variable name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
-                invalid_name = true;
+                invalid = true;
             }
 
             let var = VariableDef {
@@ -189,12 +197,12 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                     name,
                     langs.join(", ")
                 );
-                invalid_name = true;
+                invalid = true;
             }
 
             if let Some(langs) = reserved.get(&from) {
                 eprintln!("Invalid wasm function name '{}' cannot be used, it is a keyword in language(s): {}", from, langs.join(", "));
-                invalid_name = true;
+                invalid = true;
             }
 
             let mut params = Vec::new();
@@ -206,7 +214,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                         let n = n.trim().to_string();
                         if let Some(langs) = reserved.get(&n) {
                             eprintln!("Invalid param name '{}' cannot be used, it is a keyword in language(s): {}", n, langs.join(", "));
-                            invalid_name = true;
+                            invalid = true;
                         }
 
                         params.push(ParamDef {
@@ -251,15 +259,16 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
             continue;
         }
 
-        panic!("Unrecognized line: {}", line);
+        eprintln!("Unrecognized line: {}", line);
+        invalid = true;
     }
 
-    if invalid_name {
+    if invalid {
         eprintln!("Generating API failed due to previous errors.");
-        ::std::process::exit(1);
+        std::process::exit(1);
     }
 
-    ApiModel { classes, functions, opaque_classes: Vec::new(), version, semver }
+    ApiModel { name: api_name.expect("no `#api <name>` directive was found"), classes, functions, opaque_classes: Vec::new(), version, semver }
 }
 
 

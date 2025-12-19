@@ -16,7 +16,7 @@ export fn _turing_api_semver() u64 {
     return ((0 << 16) | (0 << 8) | 1);
 }
 
-pub const API_VERSION: []const u8 = "0.0.1";
+pub const TURING_API_VERSION: []const u8 = "0.0.1";
 
 //// Functions ////
 

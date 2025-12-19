@@ -115,8 +115,8 @@ func goString(b []byte) string {
 }
 
 //// WASM Imports ////
-//go:wasmimport env _host_strcpy
-func _host_strcpy(location *byte, size uint32)
+{% if api.name == "turing_api" %}//go:wasmimport env _host_strcpy
+func _host_strcpy(location *byte, size uint32){% endif %}
 
 {{- self::ffi_decls(funcs=api.functions) }}
 {%- for class in api.classes -%}
@@ -124,8 +124,8 @@ func _host_strcpy(location *byte, size uint32)
 {{- self::ffi_decls(funcs=class.methods, is_method=true, class=class) }}
 {%- endfor %}
 
-//export _turing_api_semver
-func _turing_api_semver() uint64 {
+//export _{{ api.name }}_semver
+func _{{ api.name }}_semver() uint64 {
     return (uint64({{ api.semver.major }}) << 16) | (uint64({{ api.semver.minor }}) << 8) | uint64({{ api.semver.patch }})
 }
 

@@ -92,16 +92,16 @@ import kotlinx.cinterop.*
 import kotlin.native.concurrent.*
 
 //// Wasm Bindings ////
-@WasmImport("env", "_host_strcpy")
-external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
+{% if api.name == "turing_api" %}@WasmImport("env", "_host_strcpy")
+external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int){% endif %}
 {{ self::ffi_imports(funcs=api.functions) -}}
 {%- for class in api.classes -%}
 {{ self::ffi_imports(funcs=class.functions, class=class) -}}
 {{ self::ffi_imports(funcs=class.methods, is_method=true, class=class) -}}
 {%- endfor %}
 
-@WasmExport(name = "_turing_api_semver")
-fun _turing_api_semver() : ULong {
+@WasmExport(name = "_{{ api.name }}_semver")
+fun _{{ api.name }}_semver() : ULong {
     ({{ api.semver.major }}uL shl 16) or ({{ api.semver.minor }}uL shl 8) or {{ api.semver.patch }}uL
 }
 

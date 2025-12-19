@@ -20,7 +20,7 @@ unsafe extern "C" {
 extern "C" fn _turing_api_semver() -> u64 {
     (0u64 << 16) | (0u64 << 8) | 1u64
 }
-pub const API_VERSION: &str = "0.0.1";
+pub const TURING_API_VERSION: &str = "0.0.1";
 
 //// Functions ////
 

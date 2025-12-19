@@ -23,16 +23,16 @@
 
 
 ///// Generated C++ API Header /////
-#ifndef TURING_API_HPP
-#define TURING_API_HPP
+#ifndef {{ api.name | case(style="upper_snake") }}_HPP
+#define {{ api.name | case(style="upper_snake") }}_HPP
 #include <stdint.h>
 #include <string>
 // skip ffi imports as they're included from wasm.h
-#define TURING_API_CPP_SEMVER "{{ api.version }}"
+#define {{ api.name | case(style="upper_snake") }}_CPP_SEMVER "{{ api.version }}"
 
-namespace turing_api_cpp {
+namespace {{ api.name }}_cpp {
 
-uint64_t _turing_api_semver();
+uint64_t _{{ api.name }}_semver();
 
 //// Functions ////
 {{ self::func_decls(funcs=api.functions) }}
@@ -53,6 +53,6 @@ public:
 };
 {%- endfor %}
 
-} // namespace turing_api_cpp
+} // namespace {{ api.name }}_cpp
 
-#endif // TURING_API_HPP
+#endif // {{ api.name | case(style="upper_snake") }}_HPP

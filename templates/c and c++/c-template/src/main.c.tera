@@ -1,4 +1,4 @@
-#include "turing_api_c.h"
+#include "{{ api.name }}_c.h"
 
 void on_load(void) {
     // Called on map start
