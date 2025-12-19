@@ -12,7 +12,6 @@ You can use this table to pick a language to use for writing scripts
 | C++            | Hard              | Hard             | Also easier on linux or with the zig compiler.                                                  |
 | C3             | Moderate          | Moderate         | Similar to C but with some quality of life features                                             |
 | Zig            | Moderate          | Easy             | Quite verbose but has very good compatibility for compiling to wasm.                            |
-| Nelua          | Easy              | Hard             | Easier on linux due to C, will be smaller and run faster than the plain lua option.             |
 | Go/TinyGo      | Easy              | Easy             | TinyGo is a Go compiler that skips out on features that wasm can't support, such as OS threads. |
 | AssemblyScript | Easy              | Easy             | Has some quirks compared to js/ts but is maybe the most friendly if you're coming from js/ts.   |
 | Kotlin         | Easy              | Moderate         | Probably best for those familiar with C# or java.                                               |
@@ -27,11 +26,11 @@ You can use this table to pick a language to use for writing scripts
 *These languages haven't been thoroughly evaluated, as they aren't as well known.
 
 ### Other supported languages
-| Language              | Coding Complexity | Notes            |
-|-----------------------|-------------------|------------------|
-| Lua                   | Easy              | Not implemented. |
-| JavaScript/TypeScript | Easy              | Not implemented. |
-| Python                | Easy              | Not implemented. |
+| Language              | Coding Complexity | Notes                                           |
+|-----------------------|-------------------|-------------------------------------------------|
+| Lua                   | Easy              | Very easy to use, but may run slower than wasm. |
+| JavaScript/TypeScript | Easy              | Not implemented.                                |
+| Python                | Easy              | Not implemented.                                |
 
 ### Unsupported languages
 If your preferred language is not listed in either of the above tables, it's because it's not widely known.  
@@ -166,8 +165,6 @@ types { // derived from .api-spec/type-map at runtime
 - [x] Zig template
 - [x] TinyGo api
 - [x] TinyGo template
-- [ ] Nelua api
-- [ ] Nelua template
 - [x] Lua api
 - [x] Lua template
 - [x] Kotlin api
