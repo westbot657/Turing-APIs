@@ -46,14 +46,17 @@ const APIVersion = "0.0.1"
 
 //// Functions ////
 
+
 func testGlobal(name string) {
     turing_handle_name := cString(name)
     namePtr := &turing_handle_name[0]
     _test_global(namePtr)
 }
+
 func global2Test() int32 {
     return _global_2_test()
 }
+
 func myTest(a int8, b int16) string {
     turingResult := _my_test(a, b)
     turingStr := make([]byte, turingResult)
@@ -62,32 +65,39 @@ func myTest(a int8, b int16) string {
 }
 
 //// Classes ////
+
 type MyClass struct {
     opaqu uint64
 }
 
 
+
 func (self *MyClass) objectFunc(a int16) {
     _my_class_object_func(self.opaqu, a)
 }
+/// used to log messages to the console
 type Log struct {
 }
 
+/// logs `msg` to the console
 func Log_info(msg string) {
     turing_handle_msg := cString(msg)
     msgPtr := &turing_handle_msg[0]
     _log_info(msgPtr)
 }
+/// logs `msg` to the console as a warning
 func Log_warn(msg string) {
     turing_handle_msg := cString(msg)
     msgPtr := &turing_handle_msg[0]
     _log_warn(msgPtr)
 }
+/// logs `msg` to the console as an error
 func Log_critical(msg string) {
     turing_handle_msg := cString(msg)
     msgPtr := &turing_handle_msg[0]
     _log_critical(msgPtr)
 }
+/// logs `msg` to the console when in debug mode
 func Log_debug(msg string) {
     turing_handle_msg := cString(msg)
     msgPtr := &turing_handle_msg[0]

@@ -83,6 +83,7 @@ turing_handle_
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="", is_top=false) -%}
 {%- for func in funcs %}
+{% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
 {% if is_top -%}
 export function {% else -%}
 {{ indent }}public {% if not is_method %}static {% endif %}
@@ -116,6 +117,7 @@ export function _turing_api_semver(): u64 {
 
 //// Classes ////
 {%- for class in api.classes %}
+{% if class.doc %}/// {{ class.doc }}{% endif %}
 class {{ class.name | case(style="pascal") }} {
     {%- for var in class.variables %}
     {{ var.name }}: {{ types.asmscript[var.type] }};
@@ -124,8 +126,7 @@ class {{ class.name | case(style="pascal") }} {
     constructor(opaqu: {{ types.asmscript["op*"] }}) {
         this.opaqu = opaqu;
     }
-    {% endif -%}
-
+    {%- endif %}
 {{ self::func_impls(funcs=class.functions, class=class, indent="    ") }}
 {{ self::func_impls(funcs=class.methods, is_method=true, class=class, indent="    ") }}
 }

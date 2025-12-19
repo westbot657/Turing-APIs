@@ -24,10 +24,11 @@
 {%- endmacro -%}
 
 {%- macro func_decls(funcs, is_method=false, class=false) -%}
-{%- for func in funcs %}
-{{ self::param_annotations(is_method=is_method, params=func.params, ret_type=func.type) }}
+{% for func in funcs %}
+{% if func.doc %}--- {{ func.doc }}{% endif %}
+{{- self::param_annotations(is_method=is_method, params=func.params, ret_type=func.type) }}
 function turing_api.{% if class %}{{ class.name | case(style="pascal") }}.{% endif %}{{ func.name | case(style="camel") }}({{ self::l_params(params=func.params, is_method=is_method, class=class) }}) end
-{%- endfor %}
+{% endfor %}
 {%- endmacro -%}
 
 
@@ -39,7 +40,7 @@ local turing_api = {}
 {{ self::func_decls(funcs=api.functions) }}
 --// Classes //--
 {%- for class in api.classes %}
-
+{% if class.doc %}--- {{ class.doc }}{% endif %}
 ---@class {{ class.name | case(style="pascal") }}
 local {{ class.name | case(style="pascal") }} = {}
 turing_api.{{ class.name | case(style="pascal") }} = {{ class.name | case(style="pascal") }}

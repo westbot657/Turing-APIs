@@ -31,6 +31,7 @@ pub struct ClassDef {
     pub methods: Vec<FunctionDef>,
     pub functions: Vec<FunctionDef>,
     pub is_opaque: bool,
+    pub doc: Option<String>
 }
 
 
@@ -49,10 +50,7 @@ pub struct FunctionDef {
     pub returns: String,
     pub from: String,
     pub is_static: bool,
-
-    // new field
-    #[serde(default)]
-    pub returns_opaque: bool,
+    pub doc: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -83,8 +81,17 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
     let mut version = "0".to_string();
     let mut semver = Semver::default();
 
-    for line in input.lines().map(|l| l.trim()).filter(|l| !l.is_empty()) {
-        if line.starts_with("//") { continue }
+    let lines: Vec<&str> = input.lines().map(|l| l.trim()).collect();
+    let mut i = 0;
+
+    while i < lines.len() {
+        let line = lines[i];
+
+        if line.is_empty() || line.starts_with("//") {
+            i += 1;
+            continue;
+        }
+
         if let Some(ver) = line.strip_prefix("#version ") {
             version = ver.trim().to_string();
 
@@ -93,9 +100,10 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
             semver.minor = u16::try_from(ver[1]).expect("minor version number cannot exceed 2^16");
             semver.patch = u16::try_from(ver[2]).expect("patch version number cannot exceed 2^16");
 
+            i += 1;
             continue;
         }
-        // Section header like ":My_Class:"
+
         if line.starts_with(':') && line.ends_with(':') {
             let header = line.trim_matches(':').trim();
             let (name, is_opaque) = if let Some((name, flags)) = header.split_once(' ') {
@@ -118,23 +126,30 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                             typ: "op*".to_string(),
                         });
                     }
+
+                    let doc = if i + 1 < lines.len() && lines[i + 1].starts_with("-- ") {
+                        i += 1;
+                        Some(lines[i].strip_prefix("-- ").unwrap().to_string())
+                    } else {
+                        None
+                    };
+
                     classes.push(ClassDef {
                         name: name.clone(),
                         variables: vars,
                         methods: Vec::new(),
                         functions: Vec::new(),
+                        doc,
                         is_opaque,
                     });
                 }
                 current_class = Some(name);
             }
+            i += 1;
             continue;
         }
 
-
-        // Variable definition line like ".attr: i32"
         if let Some(caps) = var_re.captures(line) {
-
             let name = caps["name"].to_string();
 
             if let Some(langs) = reserved.get(&name) {
@@ -155,10 +170,10 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
             } else {
                 panic!("Variables are only allowed inside classes");
             }
+            i += 1;
             continue;
         }
 
-        // Function definition line
         if let Some(caps) = func_re.captures(line) {
             let is_static = caps.name("prefix").is_some();
             let name = caps["name"].to_string();
@@ -182,7 +197,6 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                 invalid_name = true;
             }
 
-            // Parse parameters
             let mut params = Vec::new();
             let params_text = caps["params"].trim();
             if !params_text.is_empty() {
@@ -203,13 +217,20 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                 }
             }
 
+            let doc = if i + 1 < lines.len() && lines[i + 1].starts_with("-- ") {
+                i += 1;
+                Some(lines[i].strip_prefix("-- ").unwrap().to_string())
+            } else {
+                None
+            };
+
             let func = FunctionDef {
                 name,
                 returns,
                 params,
                 from,
                 is_static,
-                returns_opaque: false,
+                doc,
             };
 
             if let Some(class_name) = &current_class {
@@ -226,6 +247,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                 functions.push(func);
             }
 
+            i += 1;
             continue;
         }
 
@@ -242,7 +264,6 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
 
 
 pub fn finalize_opaque_returns(mut api: ApiModel) -> ApiModel {
-    // Collect all opaque class names
     let opaque_classes: Vec<String> = api
         .classes
         .iter()
@@ -250,29 +271,7 @@ pub fn finalize_opaque_returns(mut api: ApiModel) -> ApiModel {
         .map(|c| c.name.clone())
         .collect();
 
-    api.opaque_classes = opaque_classes.clone();
-
-    // Helper to mark a function as returning opaque if needed
-    let mark_opaque = |func: &mut FunctionDef| {
-        if opaque_classes.contains(&func.returns) {
-            func.returns_opaque = true;
-        }
-    };
-
-    // Global functions
-    for func in &mut api.functions {
-        mark_opaque(func);
-    }
-
-    // Class methods and static functions
-    for class in &mut api.classes {
-        for func in &mut class.methods {
-            mark_opaque(func);
-        }
-        for func in &mut class.functions {
-            mark_opaque(func);
-        }
-    }
+    api.opaque_classes = opaque_classes;
 
     api
 }
@@ -300,22 +299,19 @@ fn get_input(label: &str) -> PathBuf {
 }
 
 pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<Value> {
-    // Extract input string
     let input: String = from_value(value.clone())?;
 
-    // Extract argument `style`, default = "snake"
     let style = args
         .get("style")
         .and_then(|v| v.as_str())
         .unwrap_or("snake");
 
-    // Convert to desired case
     let converted = match style {
         "camel" => input.to_case(Case::Camel),
         "pascal" => input.to_case(Case::Pascal),
         "snake" => input.to_case(Case::Snake),
         "screaming" | "upper_snake" => input.to_case(Case::UpperSnake),
-        _ => input, // fallback: unchanged
+        _ => input,
     };
 
     Ok(to_value(converted)?)
@@ -391,7 +387,6 @@ pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
         }
     }
 
-    // Apply passthrough types to all languages
     for map in tm.values_mut() {
         for ps in passthrough {
             map.insert(ps.clone(), ps.clone());
@@ -404,7 +399,7 @@ pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
 
 fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
 
-    let s2 = fs::read_to_string("./api-spec/dissallowed").expect("Failed to open dissallowed words list");
+    let s2 = fs::read_to_string("./api-spec/disallowed").expect("Failed to open disallowed words list");
     let s: Vec<&str> = s2
         .split("\n")
         .map(|l| l.trim())
@@ -427,7 +422,6 @@ fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
     words
 }
 
-// TODO: rewrite with walkdir crate?
 fn copy_non_template_files(
     base: &std::path::Path,
     current: &std::path::Path,
@@ -486,16 +480,16 @@ fn main() {
     let mut tera = Tera::new("./templates/**/*.tera").unwrap();
 
     tera.register_filter("case", case_filter);
-    // Convenience filters used by templates
+
     pub fn snake_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
         let mut a = HashMap::new();
-        a.insert("style".to_string(), to_value("snake").unwrap());
+        a.insert("style".to_string(), to_value("snake")?);
         case_filter(value, &a)
     }
 
     pub fn pascal_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
         let mut a = HashMap::new();
-        a.insert("style".to_string(), to_value("pascal").unwrap());
+        a.insert("style".to_string(), to_value("pascal")?);
         case_filter(value, &a)
     }
 
@@ -506,15 +500,13 @@ fn main() {
     fs::remove_dir_all("./output/").expect("Unable to clear output");
     fs::create_dir("./output/").expect("Unable to create output");
 
-    // copy non-template files from ./templates to ./output (recursive)
-    let templates_dir = std::path::PathBuf::from("./templates/");
-    let out_dir_path = std::path::PathBuf::from("./output/");
+    let templates_dir = PathBuf::from("./templates/");
+    let out_dir_path = PathBuf::from("./output/");
     if let Err(e) = copy_non_template_files(&templates_dir, &templates_dir, &out_dir_path) {
         eprintln!("Failed to copy non-template files: {}", e);
         std::process::exit(1);
     }
 
-    // Generate files from templates
     for name in tera.get_template_names() {
         let nm = name
             .replace(".tera", "")

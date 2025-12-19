@@ -1,3 +1,86 @@
+{%- macro kt_type(type) -%}
+{%- if type == "&str" or type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[type] }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro kt_param(param) -%}
+{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}
+{%- endmacro -%}
+
+{%- macro kt_params(params) -%}
+{%- for param in params -%}
+{{ self::kt_param(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro ffi_param(param) -%}
+{{ param.name | case(style="camel") }}: {{ self::kt_type(type=param.type) }}
+{%- endmacro -%}
+
+{%- macro ffi_params(params) -%}
+{%- for param in params -%}
+{{ self::ffi_param(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro ffi_ret(type) -%}
+{%- if type == "void" %}{% elif type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[type] }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro convert_arg(param) -%}
+{%- if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro convert_args(params, is_method=false, class=false) -%}
+{%- if is_method -%}
+{%- if class.is_opaque %}this.opaqu{% else %}{% endif -%}
+{%- for param in params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- else -%}
+{%- for param in params -%}
+{{ self::convert_arg(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro handle_result(type, indent="") -%}
+{%- if type == "String" %}
+{{ indent }}val useMe = hostResult?.toKString() ?: error("null pointer returned")
+{{ indent }}useMe
+{%- elif type in api.opaque_classes %}
+{{ indent }}{{ type | case(style="pascal") }}(opaqu = hostResult)
+{%- elif type != "void" %}
+{{ indent }}hostResult
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro ffi_imports(funcs, is_method=false, class=false) -%}
+{%- for func in funcs -%}
+@WasmImport("env", "{{ func.from }}")
+external fun {{ func.from }}(
+{%- if is_method -%}
+{%- if class.is_opaque %}opaqu: Int{% else %}self: {{ class.name | case(style="pascal") }}{% endif -%}
+{%- for param in func.params %}, {{ self::ffi_param(param=param) }}{% endfor -%}
+{%- else -%}
+{{- self::ffi_params(params=func.params) -}}
+{%- endif -%}
+){{ self::ffi_ret(type=func.type) }}
+{% endfor -%}
+{%- endmacro -%}
+
+{%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
+{%- for func in funcs %}
+{% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
+{{ indent }}fun {{ func.name | case(style="camel") }}({{ self::kt_params(params=func.params) }}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
+    {{ indent }}val hostResult = {{ func.from }}({{ self::convert_args(params=func.params, is_method=is_method, class=class) }})
+{{- self::handle_result(type=func.type, indent=indent ~ "    ") }}
+{{ indent }}}
+{%- endfor -%}
+{%- endmacro -%}
+
 @file:OptIn(
     kotlin.wasm.ExperimentalWasmInterop::class,
 )
@@ -9,77 +92,26 @@ import kotlinx.cinterop.*
 import kotlin.native.concurrent.*
 
 //// Wasm Bindings ////
-// host helper to copy string bytes from host memory into guest buffer
 @WasmImport("env", "_host_strcpy")
 external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
-
-// FFI imports for global functions
-{% for func in api.functions %}
-@WasmImport("env", "{{ func.from }}")
-external fun {{ func.from }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {% if param.type == "&str" or param.type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[param.type] }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type == "void" %}{% elif func.type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[func.type] }}{% endif %}
-{% endfor %}
-
-// FFI imports for classes
-{% for class in api.classes -%}
-{% for func in class.functions -%}
-@WasmImport("env", "{{ func.from }}")
-external fun {{ func.from }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {% if param.type == "&str" or param.type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[param.type] }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type == "void" %}{% elif func.type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[func.type] }}{% endif %}
-{% endfor -%}
-{% for func in class.methods -%}
-@WasmImport("env", "{{ func.from }}")
-external fun {{ func.from }}({% if class.is_opaque %}opaqu: Int{% else %}self: {{ class.name | case(style="pascal") }}{% endif %}{% for param in func.params %}, {{ param.name | case(style="camel") }}: {% if param.type == "&str" or param.type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[param.type] }}{% endif %}{% endfor %}){% if func.type == "void" %}{% elif func.type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[func.type] }}{% endif %}
-{% endfor -%}
+{{ self::ffi_imports(funcs=api.functions) -}}
+{%- for class in api.classes -%}
+{{ self::ffi_imports(funcs=class.functions, class=class) -}}
+{{ self::ffi_imports(funcs=class.methods, is_method=true, class=class) -}}
 {%- endfor %}
 
 //// Functions ////
-{% for func in api.functions %}
-fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
-    val hostResult = {{ func.from }}({% for param in func.params %}{% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %})
-    {% if func.type == "String" -%}
-    val useMe = hostResult?.toKString() ?: error("null pointer returned")
-    useMe
-    {% elif func.type in api.opaque_classes -%}
-    {{ func.type | case(style="pascal") }}(opaqu = hostResult)
-    {% elif func.type != "void" -%}
-    hostResult
-    {%- endif %}
-}
-{% endfor %}
+{{ self::func_impls(funcs=api.functions) }}
 
 //// Classes ////
-{% for class in api.classes -%}
+{%- for class in api.classes -%}
+{%- if class.doc %}/// {{ class.doc }}{% endif %}
 {% if class.is_opaque -%}
 data class {{ class.name | case(style="pascal") }}(val opaqu: {{ types.kotlin["op*"] }}) {
 {%- else -%}
 object {{ class.name | case(style="pascal") }} {
 {%- endif %}
-    {% for func in class.functions %}
-    fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
-        val hostResult = {{ func.from }}({% for param in func.params %}{% if param.type == "&str" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %})
-        {% if func.type == "String" -%}
-        val useMe = hostResult?.toKString() ?: error("null pointer returned")
-        useMe
-        {% elif func.type in api.opaque_classes -%}
-        {{ func.type | case(style="pascal") }}(opaqu = hostResult)
-        {% elif func.type != "void" -%}
-        hostResult
-        {%- endif %}
-    }
-    {% endfor -%}
-
-    {% for func in class.methods %}
-    fun {{ func.name | case(style="camel") }}({% for param in func.params %}{{ param.name | case(style="camel") }}: {{ types.kotlin[param.type] }}{% if not loop.last %}, {% endif %}{% endfor %}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
-        val hostResult = {{ func.from }}({% if class.is_opaque %}this.opaqu{% for param in func.params %}, {% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% endfor %}{% else %}{% for param in func.params %}{% if param.type == "&str" or param.type == "String" %}{{ param.name | case(style="camel") }}.cstr{% else %}{{ param.name | case(style="camel") }}{% endif %}{% if not loop.last %}, {% endif %}{% endfor %}{% endif %})
-        {% if func.type == "String" -%}
-        val useMe = hostResult?.toKString() ?: error("null pointer returned")
-        useMe
-        {% elif func.type in api.opaque_classes -%}
-        {{ func.type | case(style="pascal") }}(opaqu = hostResult)
-        {% elif func.type != "void" -%}
-        hostResult
-        {%- endif %}
-    }
-    {% endfor %}
+{{- self::func_impls(funcs=class.functions, class=class, indent="    ") }}
+{{- self::func_impls(funcs=class.methods, is_method=true, class=class, indent="    ") }}
 }
 {% endfor %}
-

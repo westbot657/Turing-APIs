@@ -20,6 +20,7 @@
 
 {%- macro func_decls(funcs, is_method=false, class=false) -%}
 {%- for func in funcs %}
+{% if func.doc %}/// {{ func.doc }}{% endif %}
 {{ types.c[func.type] }} {% if class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}({{ self::c_params(params=func.params, is_method=is_method, class=class) }});
 {%- endfor %}
 {%- endmacro -%}
@@ -40,11 +41,12 @@ uint64_t _turing_api_semver(void);
 {%- for class in api.classes %}
 
 // class {{ class.name | case(style="pascal") }}
-{%- if class.is_opaque %}
+{% if class.doc %}/// {{ class.doc }}{% endif %}
+{% if class.is_opaque -%}
 typedef struct {
     {{ types.c["op*"] }} opaqu;
 } {{ class.name | case(style="pascal") }};
-{%- else %}
+{%- else -%}
 typedef struct {{ class.name | case(style="pascal") }} {{ class.name | case(style="pascal") }};
 {%- endif %}
 

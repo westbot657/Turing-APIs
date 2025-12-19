@@ -10,7 +10,12 @@ my_test(a: i8, b: i16) -> String
 object_func(a: i16) -> void : _my_class_object_func
 
 :Log:
+-- used to log messages to the console
 ::info(msg: &str) -> void : _log_info
+-- logs `msg` to the console
 ::warn(msg: &str) -> void : _log_warn
+-- logs `msg` to the console as a warning
 ::critical(msg: &str) -> void : _log_critical
+-- logs `msg` to the console as an error
 ::debug(msg: &str) -> void : _log_debug
+-- logs `msg` to the console when in debug mode

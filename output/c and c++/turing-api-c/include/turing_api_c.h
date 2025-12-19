@@ -11,27 +11,37 @@ uint64_t _turing_api_semver(void);
 
 //// Functions ////
 
+
 void testGlobal(const char* name);
+
 int32_t global2Test(void);
+
 char* myTest(int8_t a, int16_t b);
 //// Classes ////
 
 // class MyClass
+
 typedef struct {
     uint64_t opaqu;
 } MyClass;
 
 
 
+
 void MyClass_objectFunc(MyClass* self, int16_t a);
 
 // class Log
+/// used to log messages to the console
 typedef struct Log Log;
 
 
+/// logs `msg` to the console
 void Log_info(const char* msg);
+/// logs `msg` to the console as a warning
 void Log_warn(const char* msg);
+/// logs `msg` to the console as an error
 void Log_critical(const char* msg);
+/// logs `msg` to the console when in debug mode
 void Log_debug(const char* msg);
 
 

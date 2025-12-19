@@ -104,6 +104,7 @@ extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
 {%- for func in funcs %}
+{% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
 {{ indent }}pub fn {{ func.name | case(style="snake") }}(
 {{- self::zig_params(params=func.params, is_method=is_method, class=class, needs_allocator=self::needs_allocator(func=func)) -}}
 ) {{ self::zig_return_type(func=func) }} {
@@ -134,6 +135,7 @@ pub const API_VERSION: []const u8 = "{{ api.version }}";
 
 //// Classes ////
 {%- for class in api.classes %}
+{% if class.doc %}/// {{ class.doc }}{% endif %}
 pub const {{ class.name | case(style="pascal") }} = struct {
 {%- if class.is_opaque %}
     opaqu: {{ types.zig["op*"] }},

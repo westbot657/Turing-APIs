@@ -20,15 +20,18 @@ pub const API_VERSION: []const u8 = "0.0.1";
 
 //// Functions ////
 
+
 pub fn test_global(name: []const u8, allocator: std.mem.Allocator) !void {
     const turing_handle_name = try allocator.dupeZ(u8, name);
     defer allocator.free(turing_handle_name);
     _test_global(turing_handle_name.ptr);
 }
 
+
 pub fn global_2_test() i32 {
     return _global_2_test();
 }
+
 
 pub fn my_test(a: i8, b: i16, allocator: std.mem.Allocator) ![]u8 {
     const turing_result = _my_test(a, b);
@@ -41,33 +44,40 @@ pub fn my_test(a: i8, b: i16, allocator: std.mem.Allocator) ![]u8 {
 
 
 //// Classes ////
+
 pub const MyClass = struct {
     opaqu: u64,
+
     pub fn object_func(self: *const MyClass, a: i16) void {
         _my_class_object_func(self.opaqu, a);
     }
 
 };
 
+/// used to log messages to the console
 pub const Log = struct {
+    /// logs `msg` to the console
     pub fn info(msg: []const u8, allocator: std.mem.Allocator) !void {
         const turing_handle_msg = try allocator.dupeZ(u8, msg);
         defer allocator.free(turing_handle_msg);
         _log_info(turing_handle_msg.ptr);
     }
 
+    /// logs `msg` to the console as a warning
     pub fn warn(msg: []const u8, allocator: std.mem.Allocator) !void {
         const turing_handle_msg = try allocator.dupeZ(u8, msg);
         defer allocator.free(turing_handle_msg);
         _log_warn(turing_handle_msg.ptr);
     }
 
+    /// logs `msg` to the console as an error
     pub fn critical(msg: []const u8, allocator: std.mem.Allocator) !void {
         const turing_handle_msg = try allocator.dupeZ(u8, msg);
         defer allocator.free(turing_handle_msg);
         _log_critical(turing_handle_msg.ptr);
     }
 
+    /// logs `msg` to the console when in debug mode
     pub fn debug(msg: []const u8, allocator: std.mem.Allocator) !void {
         const turing_handle_msg = try allocator.dupeZ(u8, msg);
         defer allocator.free(turing_handle_msg);

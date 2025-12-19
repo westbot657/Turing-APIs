@@ -87,6 +87,7 @@
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
 {%- for func in funcs %}
+{% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
 {{ indent }}pub fn {{ func.name | case(style="snake") }}(
     {{- self::rs_params(params=func.params, is_method=is_method, class=class) -}}
 ){%- if func.type != "void" %} -> {{ types.rs[func.type] }}{% endif %} {
@@ -121,6 +122,7 @@ pub const API_VERSION: &str = "{{ api.version }}";
 
 //// Classes ////
 {%- for class in api.classes %}
+{% if class.doc %}/// {{ class.doc }}{% endif %}
 pub struct {{ class.name | case(style="pascal") }} {
     {%- for var in class.variables %}
     {{ var.name }}: {{ types.rs[var.type] }},

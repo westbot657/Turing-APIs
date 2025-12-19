@@ -14,9 +14,12 @@ uint64_t _turing_api_semver();
 
 //// Functions ////
 
-    void testGlobal(std::string& name);
-    int32_t global2Test();
-    std::string myTest(int8_t a, int16_t b);
+    
+void testGlobal(std::string& name);
+    
+int32_t global2Test();
+    
+std::string myTest(int8_t a, int16_t b);
 //// Classes ////
 
 class MyClass {
@@ -28,15 +31,20 @@ public:
 
 
 
+    
     void objectFunc(int16_t a);
 };
-
+/// used to log messages to the console
 class Log {
 public:
 
+    /// logs `msg` to the console
     void info(std::string& msg);
+    /// logs `msg` to the console as a warning
     void warn(std::string& msg);
+    /// logs `msg` to the console as an error
     void critical(std::string& msg);
+    /// logs `msg` to the console when in debug mode
     void debug(std::string& msg);
 
 };

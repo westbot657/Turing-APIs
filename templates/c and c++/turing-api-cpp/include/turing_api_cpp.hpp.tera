@@ -14,9 +14,10 @@
     {%- endif -%}
 {%- endmacro -%}
 
-{%- macro func_decls(funcs, class=false, is_method=false) -%}
+{%- macro func_decls(funcs, class=false, is_method=false, indent="") -%}
 {%- for func in funcs %}
-    {{ types.cpp[func.type] }} {{ func.name | case(style="camel") }}({{ self::cpp_params(params=func.params, is_method=is_method) }});
+    {% if func.doc %}/// {{ func.doc }}{% endif %}
+{{ indent }}{{ types.cpp[func.type] }} {{ func.name | case(style="camel") }}({{ self::cpp_params(params=func.params, is_method=is_method) }});
 {%- endfor %}
 {%- endmacro -%}
 
@@ -37,7 +38,7 @@ uint64_t _turing_api_semver();
 {{ self::func_decls(funcs=api.functions) }}
 //// Classes ////
 {%- for class in api.classes %}
-
+{% if class.doc %}/// {{ class.doc }}{% endif %}
 class {{ class.name | case(style="pascal") }} {
 {%- if class.is_opaque %}
 private:
@@ -47,8 +48,8 @@ public:
 {%- if class.is_opaque %}
     {{ class.name | case(style="pascal") }}({{ types.cpp["op*"] }} ptr);
 {% endif %}
-{{ self::func_decls(funcs=class.functions, class=class) }}
-{{ self::func_decls(funcs=class.methods, class=class, is_method=true) }}
+{{ self::func_decls(funcs=class.functions, class=class, indent="    ") }}
+{{ self::func_decls(funcs=class.methods, class=class, is_method=true, indent="    ") }}
 };
 {%- endfor %}
 

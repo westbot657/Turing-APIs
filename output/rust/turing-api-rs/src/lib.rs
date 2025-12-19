@@ -24,14 +24,17 @@ pub const API_VERSION: &str = "0.0.1";
 
 //// Functions ////
 
+
 pub fn test_global(name: &str) {
     let turing_handle_name = CString::new(name).unwrap();
     let name = turing_handle_name.as_ptr();
     unsafe { _test_global(name) }
 }
+
 pub fn global_2_test() -> i32 {
     unsafe { _global_2_test() }
 }
+
 pub fn my_test(a: i8, b: i16) -> String {
     let turing_result = unsafe { _my_test(a, b) };
     let mut turing_str: Vec<u8> = vec![0; turing_result as usize];
@@ -42,33 +45,40 @@ pub fn my_test(a: i8, b: i16) -> String {
 
 
 //// Classes ////
+
 pub struct MyClass {
     opaqu: u64,
 }
 impl MyClass {
+
     pub fn object_func(&self, a: i16) {
         unsafe { _my_class_object_func(self.opaqu, a) }
     }
 }
 
+/// used to log messages to the console
 pub struct Log {
 }
 impl Log {
+    /// logs `msg` to the console
     pub fn info(msg: &str) {
         let turing_handle_msg = CString::new(msg).unwrap();
         let msg = turing_handle_msg.as_ptr();
         unsafe { _log_info(msg) }
     }
+    /// logs `msg` to the console as a warning
     pub fn warn(msg: &str) {
         let turing_handle_msg = CString::new(msg).unwrap();
         let msg = turing_handle_msg.as_ptr();
         unsafe { _log_warn(msg) }
     }
+    /// logs `msg` to the console as an error
     pub fn critical(msg: &str) {
         let turing_handle_msg = CString::new(msg).unwrap();
         let msg = turing_handle_msg.as_ptr();
         unsafe { _log_critical(msg) }
     }
+    /// logs `msg` to the console when in debug mode
     pub fn debug(msg: &str) {
         let turing_handle_msg = CString::new(msg).unwrap();
         let msg = turing_handle_msg.as_ptr();
