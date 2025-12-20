@@ -66,10 +66,12 @@ turing_handle_
     {%- for param in func.params -%}
     {{- self::converter(param=param, indent=indent) -}}
     {%- endfor %}
-    {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}let turing_result = {% elif func.type != "void" %}return {% endif -%}
+    {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}let turing_result = {% elif func.type != "void" and func.type != "self" %}return {% endif -%}
     {{ func.from }}(
         {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
-    );{% if func.type == "String" %}
+    );{% if func.type == "self" %}
+    {{ indent }}return this;
+    {%- elif func.type == "String" %}
     {{ indent }}let turing_str = heap.alloc(usize(turing_result));
     {{ indent }}_host_strcpy(u32(turing_str), turing_result);
     {{ indent }}let turing_output = String.UTF8.decode(turing_str, true);
@@ -89,7 +91,7 @@ export function {% else -%}
 {{ indent }}public {% if not is_method %}static {% endif %}
 {%- endif %}{{ func.name | case(style="snake") }}(
     {{- self::asm_params(params=func.params, is_method=is_method, class=class) -}}
-): {{ types.asmscript[func.type] }} {
+): {% if func.type == "self" %}{{ class.name | case(style="pascal") }}{% else %}{{ types.asmscript[func.type] }}{% endif %} {
 {{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
 {{ indent -}} }
 {%- endfor %}

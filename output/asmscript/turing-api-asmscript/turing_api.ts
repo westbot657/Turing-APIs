@@ -80,12 +80,14 @@ class ColorNote {
 
 
 
-    public set_position(x: f32, y: f32, z: f32): void {
-        return _color_note_set_position(this.opaqu, x, y, z);
+    public set_position(x: f32, y: f32, z: f32): ColorNote {
+        _color_note_set_position(this.opaqu, x, y, z);
+        return this;
     }
 
-    public set_orientation(x: f32, y: f32, z: f32, w: f32): void {
-        return _color_note_set_orientation(this.opaqu, x, y, z, w);
+    public set_orientation(x: f32, y: f32, z: f32, w: f32): ColorNote {
+        _color_note_set_orientation(this.opaqu, x, y, z, w);
+        return this;
     }
 
     public clone(): ColorNote {

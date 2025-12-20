@@ -33,10 +33,12 @@
 {%- endmacro -%}
 
 {%- macro func_impl(func, is_method=false, class=false, indent="") -%}
-    {{ indent }}{%- if func.type == "String" -%}uint32_t turing_size = {% elif func.type in api.opaque_classes %}{{ types.cpp["op*"] }} turing_result = {% else %}return {% endif -%}
+    {{ indent }}{%- if func.type == "String" -%}uint32_t turing_size = {% elif func.type in api.opaque_classes %}{{ types.cpp["op*"] }} turing_result = {% elif func.type == "void" or func.type == "self" %}{% else %}return {% endif -%}
     {{ func.from }}(
         {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
-    );{% if func.type == "String" %}
+    );{% if func.type == "self" %}
+    return this;
+    {%- elif func.type == "String" %}
     {{ indent }}if (turing_size == 0) {
     {{ indent }}    return "";
     {{ indent }}}
@@ -50,7 +52,7 @@
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
 {%- for func in funcs %}
-{{ types.cpp[func.type] }} {% if class %}{{ class.name | case(style="pascal") }}::{% endif %}{{ func.name | case(style="camel") }}(
+{% if func.type == "self" %}{{ class.name | case(style="pascal") }}*{% else %}{{ types.cpp[func.type] }}{% endif %} {% if class %}{{ class.name | case(style="pascal") }}::{% endif %}{{ func.name | case(style="camel") }}(
     {{- self::cpp_params(params=func.params, is_method=is_method) -}}
 ) {
     {{ indent }}{{ self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
@@ -76,9 +78,9 @@ uint64_t _{{ api.name }}_semver() {
 {%- for class in api.classes %}
 
 // class {{ class.name | case(style="pascal") }}
-{% if class.is_opaque %}
+{% if class.is_opaque -%}
 {{ class.name | case(style="pascal") }}::{{ class.name | case(style="pascal") }}({{ types.cpp["op*"] }} ptr) : opaqu(ptr) {}
-{% endif %}
+{% endif -%}
 {{ self::func_impls(funcs=class.functions, class=class) }}
 {{ self::func_impls(funcs=class.methods, is_method=true, class=class) }}
 {%- endfor %}

@@ -13,20 +13,20 @@
     {%- endif -%}
 {%- endmacro -%}
 
-{%- macro param_annotations(is_method, params, ret_type) -%}
+{%- macro param_annotations(is_method, params, ret_type, class) -%}
 {%- if is_method %}
 ---@param self table
 {%- endif -%}
 {%- for param in params %}
 ---@param {{ param.name }} {{ types.lua[param.type] }}
 {%- endfor %}
----@return {% if ret_type in api.opaque_classes %}{{ ret_type | case(style="pascal") }}{% else %}{{ types.lua[ret_type] }}{% endif %}
+---@return {% if ret_type == "self" -%} table{% elif ret_type in api.opaque_classes %}{{ ret_type | case(style="pascal") }}{% else %}{{ types.lua[ret_type] }}{% endif %}
 {%- endmacro -%}
 
 {%- macro func_decls(funcs, is_method=false, class=false) -%}
 {% for func in funcs %}
 {% if func.doc %}--- {{ func.doc }}{% endif %}
-{{- self::param_annotations(is_method=is_method, params=func.params, ret_type=func.type) }}
+{{- self::param_annotations(is_method=is_method, params=func.params, ret_type=func.type, class=class) }}
 function turing_api.{% if class %}{{ class.name | case(style="pascal") }}.{% endif %}{{ func.name | case(style="camel") }}({{ self::l_params(params=func.params, is_method=is_method, class=class) }}) end
 {% endfor %}
 {%- endmacro -%}

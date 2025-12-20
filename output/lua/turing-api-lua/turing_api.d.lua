@@ -44,7 +44,7 @@ turing_api.ColorNote = ColorNote
 ---@param x number
 ---@param y number
 ---@param z number
----@return nil
+---@return table
 function turing_api.ColorNote.setPosition(self, x, y, z) end
 
 
@@ -53,7 +53,7 @@ function turing_api.ColorNote.setPosition(self, x, y, z) end
 ---@param y number
 ---@param z number
 ---@param w number
----@return nil
+---@return table
 function turing_api.ColorNote.setOrientation(self, x, y, z, w) end
 
 

@@ -50,6 +50,8 @@
 {%- if type == "String" %}
 {{ indent }}val useMe = hostResult?.toKString() ?: error("null pointer returned")
 {{ indent }}useMe
+{%- elif type == "self" %}
+{{ indent }}this
 {%- elif type in api.opaque_classes %}
 {{ indent }}{{ type | case(style="pascal") }}(opaqu = hostResult)
 {%- elif type != "void" %}
@@ -74,7 +76,7 @@ external fun {{ func.from }}(
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
 {%- for func in funcs %}
 {% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
-{{ indent }}fun {{ func.name | case(style="camel") }}({{ self::kt_params(params=func.params) }}){% if func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
+{{ indent }}fun {{ func.name | case(style="camel") }}({{ self::kt_params(params=func.params) }}){% if func.type == "self" %} : {{ class.name | case(style="pascal") }}{% elif func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
     {{ indent }}val hostResult = {{ func.from }}({{ self::convert_args(params=func.params, is_method=is_method, class=class) }})
 {{- self::handle_result(type=func.type, indent=indent ~ "    ") }}
 {{ indent }}}

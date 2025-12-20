@@ -45,9 +45,9 @@ public:
 
 
     
-    void setPosition(float x, float y, float z);
+    ColorNote* setPosition(float x, float y, float z);
     
-    void setOrientation(float x, float y, float z, float w);
+    ColorNote* setOrientation(float x, float y, float z, float w);
     
     ColorNote clone();
 };

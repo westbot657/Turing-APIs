@@ -17,7 +17,7 @@
 {%- macro func_decls(funcs, class=false, is_method=false, indent="") -%}
 {%- for func in funcs %}
     {% if func.doc %}/// {{ func.doc }}{% endif %}
-{{ indent }}{{ types.cpp[func.type] }} {{ func.name | case(style="camel") }}({{ self::cpp_params(params=func.params, is_method=is_method) }});
+{{ indent }}{% if func.type == "self" %}{{ class.name | case(style="pascal") }}*{% else %}{{ types.cpp[func.type] }}{% endif %} {{ func.name | case(style="camel") }}({{ self::cpp_params(params=func.params, is_method=is_method) }});
 {%- endfor %}
 {%- endmacro -%}
 

@@ -38,8 +38,12 @@
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro go_ret(type) -%}
-    {%- if type == "void" %}{% elif type == "String" %} {{ types.go[type] }}{% else %} {{ types.go[type] }}{% endif %}
+{%- macro go_ret(type, class=false) -%}
+    {%- if type == "void" -%}
+    {%- elif type == "self" %} *{{ class.name | case(style="pascal") }}
+    {%- elif type in api.opaque_classes %} *{{ type | case(style="pascal") }}
+    {%- else %} {{ types.go[type] }}
+    {%- endif %}
 {%- endmacro -%}
 
 {%- macro c_ret(type) -%}
@@ -64,10 +68,12 @@
     {%- for param in func.params -%}
         {{- self::converter(param=param, indent=indent) -}}
     {%- endfor %}
-    {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}turingResult := {% elif func.type != "void" %}return {% endif -%}
+    {{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}turingResult := {% elif func.type != "void" and func.type != "self" %}return {% endif -%}
     {{ func.from }}(
     {{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
-    ){% if func.type == "String" %}
+    ){% if func.type == "self" %}
+    return self
+    {% elif func.type == "String" %}
     {{ indent }}turingStr := make([]byte, turingResult)
     {{ indent }}_host_strcpy(&turingStr[0], uint32(turingResult))
     {{ indent }}return goString(turingStr)
@@ -89,7 +95,7 @@ func {{ func.from }}({{ self::c_params(params=func.params, is_method=is_method, 
 {% if func.doc %}/// {{ func.doc }}{% endif %}
 func {% if is_method %}(self *{{ class.name | case(style="pascal") }}) {% elif class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}(
     {{- self::go_params(params=func.params, is_method=is_method, class=class) -}}
-    ){{ self::go_ret(type=func.type) }} {
+    ){{ self::go_ret(type=func.type, class=class) }} {
     {{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent) }}
 }
 {%- endfor %}

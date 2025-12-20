@@ -39,9 +39,9 @@ typedef struct {
 
 
 
-void ColorNote_setPosition(ColorNote* self, float x, float y, float z);
+ColorNote* ColorNote_setPosition(ColorNote* self, float x, float y, float z);
 
-void ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w);
+ColorNote* ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w);
 
 ColorNote ColorNote_clone(ColorNote* self);
 

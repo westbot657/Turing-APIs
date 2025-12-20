@@ -88,15 +88,19 @@ type ColorNote struct {
 
 
 
-func (self *ColorNote) setPosition(x float32, y float32, z float32) void {
-    return _color_note_set_position(self.opaqu, x, y, z)
+func (self *ColorNote) setPosition(x float32, y float32, z float32) *ColorNote {
+    _color_note_set_position(self.opaqu, x, y, z)
+    return self
+    
 }
 
-func (self *ColorNote) setOrientation(x float32, y float32, z float32, w float32) void {
-    return _color_note_set_orientation(self.opaqu, x, y, z, w)
+func (self *ColorNote) setOrientation(x float32, y float32, z float32, w float32) *ColorNote {
+    _color_note_set_orientation(self.opaqu, x, y, z, w)
+    return self
+    
 }
 
-func (self *ColorNote) clone() ColorNote {
+func (self *ColorNote) clone() *ColorNote {
     turingResult := _color_note_clone(self.opaqu)
     return &ColorNote{opaqu: turingResult}
 }

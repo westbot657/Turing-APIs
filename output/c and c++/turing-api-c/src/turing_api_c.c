@@ -13,7 +13,7 @@ uint64_t _turing_api_semver(void) {
 //// Functions ////
 
 void testGlobal(const char* name) {
-    return _test_global(name);
+    _test_global(name);
 }
 int32_t global2Test(void) {
     return _global_2_test();
@@ -38,20 +38,22 @@ char* myTest(int8_t a, int16_t b) {
 
 
 void MyClass_objectFunc(MyClass* self, int16_t a) {
-    return _my_class_object_func(self->opaqu, a);
+    _my_class_object_func(self->opaqu, a);
 }
 
 // class ColorNote
 
 
-void ColorNote_setPosition(ColorNote* self, float x, float y, float z) {
-    return _color_note_set_position(self->opaqu, x, y, z);
+ColorNote* ColorNote_setPosition(ColorNote* self, float x, float y, float z) {
+    _color_note_set_position(self->opaqu, x, y, z);
+    return self;
 }
-void ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w) {
-    return _color_note_set_orientation(self->opaqu, x, y, z, w);
+ColorNote* ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w) {
+    _color_note_set_orientation(self->opaqu, x, y, z, w);
+    return self;
 }
 ColorNote ColorNote_clone(ColorNote* self) {
-    ColorNote turing_result = _color_note_clone(self->opaqu);
+    uint64_t turing_result = _color_note_clone(self->opaqu);
     ColorNote turing_ret = { .opaqu = turing_result };
     return turing_ret;
     
@@ -60,16 +62,16 @@ ColorNote ColorNote_clone(ColorNote* self) {
 // class Log
 
 void Log_info(const char* msg) {
-    return _log_info(msg);
+    _log_info(msg);
 }
 void Log_warn(const char* msg) {
-    return _log_warn(msg);
+    _log_warn(msg);
 }
 void Log_critical(const char* msg) {
-    return _log_critical(msg);
+    _log_critical(msg);
 }
 void Log_debug(const char* msg) {
-    return _log_debug(msg);
+    _log_debug(msg);
 }
 
 

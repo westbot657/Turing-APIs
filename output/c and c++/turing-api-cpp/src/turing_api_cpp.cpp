@@ -14,7 +14,7 @@ uint64_t _turing_api_semver() {
 //// Functions ////
 
 void testGlobal(std::string& name) {
-    return _test_global(name);
+    _test_global(name);
 }
 int32_t global2Test() {
     return _global_2_test();
@@ -32,26 +32,24 @@ std::string myTest(int8_t a, int16_t b) {
 //// Classes ////
 
 // class MyClass
-
 MyClass::MyClass(uint64_t ptr) : opaqu(ptr) {}
 
 
-
 void MyClass::objectFunc(int16_t a) {
-    return _my_class_object_func(this->opaqu, a);
+    _my_class_object_func(this->opaqu, a);
 }
 
 // class ColorNote
-
 ColorNote::ColorNote(uint64_t ptr) : opaqu(ptr) {}
 
 
-
-void ColorNote::setPosition(float x, float y, float z) {
-    return _color_note_set_position(this->opaqu, x, y, z);
+ColorNote* ColorNote::setPosition(float x, float y, float z) {
+    _color_note_set_position(this->opaqu, x, y, z);
+    return this;
 }
-void ColorNote::setOrientation(float x, float y, float z, float w) {
-    return _color_note_set_orientation(this->opaqu, x, y, z, w);
+ColorNote* ColorNote::setOrientation(float x, float y, float z, float w) {
+    _color_note_set_orientation(this->opaqu, x, y, z, w);
+    return this;
 }
 ColorNote ColorNote::clone() {
     uint64_t turing_result = _color_note_clone(this->opaqu);
@@ -61,18 +59,17 @@ ColorNote ColorNote::clone() {
 
 // class Log
 
-
 void Log::info(std::string& msg) {
-    return _log_info(msg);
+    _log_info(msg);
 }
 void Log::warn(std::string& msg) {
-    return _log_warn(msg);
+    _log_warn(msg);
 }
 void Log::critical(std::string& msg) {
-    return _log_critical(msg);
+    _log_critical(msg);
 }
 void Log::debug(std::string& msg) {
-    return _log_debug(msg);
+    _log_debug(msg);
 }
 
 

@@ -68,14 +68,14 @@ data class MyClass(val opaqu: ULong) {
 
 data class ColorNote(val opaqu: ULong) {
 
-    fun setPosition(x: Float, y: Float, z: Float) : Unit {
+    fun setPosition(x: Float, y: Float, z: Float) : ColorNote {
         val hostResult = _color_note_set_position(this.opaqu, x, y, z)
-        hostResult
+        this
     }
 
-    fun setOrientation(x: Float, y: Float, z: Float, w: Float) : Unit {
+    fun setOrientation(x: Float, y: Float, z: Float, w: Float) : ColorNote {
         val hostResult = _color_note_set_orientation(this.opaqu, x, y, z, w)
-        hostResult
+        this
     }
 
     fun clone() : ColorNote {

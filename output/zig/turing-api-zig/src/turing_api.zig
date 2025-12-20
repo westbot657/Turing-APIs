@@ -51,7 +51,7 @@ pub fn my_test(a: i8, b: i16, allocator: std.mem.Allocator) ![]u8 {
 pub const MyClass = struct {
     opaqu: u64,
 
-    pub fn object_func(self: *const Self, a: i16) void {
+    pub fn object_func(self: *const MyClass, a: i16) void {
         _my_class_object_func(self.opaqu, a);
     }
 
@@ -61,19 +61,19 @@ pub const MyClass = struct {
 pub const ColorNote = struct {
     opaqu: u64,
 
-    pub fn set_position(self: *const Self, x: f32, y: f32, z: f32) *Self {
+    pub fn set_position(self: *const ColorNote, x: f32, y: f32, z: f32) *ColorNote {
         _color_note_set_position(self.opaqu, x, y, z);
 return self;
     }
 
 
-    pub fn set_orientation(self: *const Self, x: f32, y: f32, z: f32, w: f32) *Self {
+    pub fn set_orientation(self: *const ColorNote, x: f32, y: f32, z: f32, w: f32) *ColorNote {
         _color_note_set_orientation(self.opaqu, x, y, z, w);
 return self;
     }
 
 
-    pub fn clone(self: *const Self) ColorNote {
+    pub fn clone(self: *const ColorNote) ColorNote {
         const turing_result = _color_note_clone(self.opaqu);
         return ColorNote{ .opaqu = turing_result };
     }

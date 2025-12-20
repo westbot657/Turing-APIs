@@ -29,7 +29,7 @@ opaqu: {% if class.is_opaque %}{{ types.zig["op*"] }}{% else %}{{ class.name | c
 
 {%- macro zig_params(params, is_method=false, class=false, needs_allocator=false) -%}
 {%- if is_method -%}
-self: *const Self
+self: *const {{ class.name | case(style="pascal") }}
 {%- for param in params -%}
 , {{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
 {%- endfor -%}
@@ -100,19 +100,19 @@ extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is
 {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro zig_return_type(func) -%}
+{%- macro zig_return_type(func, class=false) -%}
     {%- if func.type == "String" -%}
         ![]u8
     {%- elif self::needs_allocator(func=func) and (func.type == "void" or func.type == "self") -%}
         {%- if func.type == "void" -%}
             !void
         {%- elif func.type == "self" -%}
-            !*const Self
+            !*const {{ class.name | case(style="pascal") }}
         {%- endif -%}
     {%- elif func.type != "void" and func.type != "self" -%}
         {{ types.zig[func.type] }}
     {%- elif func.type == "self" -%}
-        *Self
+        *{{ class.name | case(style="pascal") }}
     {%- else -%}
         void
     {%- endif -%}
@@ -123,7 +123,7 @@ extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is
 {% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
 {{ indent }}pub fn {{ func.name | case(style="snake") }}(
 {{- self::zig_params(params=func.params, is_method=is_method, class=class, needs_allocator=self::needs_allocator(func=func)) -}}
-) {{ self::zig_return_type(func=func) }} {
+) {{ self::zig_return_type(func=func, class=class) }} {
 {{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent ~ "    ") }}
 {{ indent }}}
 {% endfor -%}
