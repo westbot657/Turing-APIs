@@ -12,7 +12,7 @@ test_global(name: &str) -> void
 global_2_test() -> i32
 my_test(a: i8, b: i16) -> String
 
-:My_Class [opaque] :
+:MyClass [opaque] :
 object_func(a: i16) -> void : _my_class_object_func
 
 :ColorNote [opaque] :
