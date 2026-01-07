@@ -20,6 +20,10 @@ func goString(b []byte) string {
 //// WASM Imports ////
 //go:wasmimport env _host_strcpy
 func _host_strcpy(location *byte, size uint32)
+//go:wasmimport env _host_f32_enqueue
+func _host_f32_enqueue(f float32)
+//go:wasmimport env _host_f32_dequeue
+func _host_f32_dequeue() float32
 //go:wasmimport env _test_global
 func _test_global(name *byte)
 //go:wasmimport env _global_2_test
@@ -132,3 +136,4 @@ func Log_debug(msg string) {
     msgPtr := &turing_handle_msg[0]
     _log_debug(msgPtr)
 }
+

@@ -6,6 +6,8 @@ extern "C" {
 #endif
 
 void _host_strcpy(const char* location, uint32_t size);
+void _host_f32_enqueue(float f);
+float _host_f32_dequeue();
 void _test_global(const char* name);
 int32_t _global_2_test();
 uint32_t _my_test(int8_t a, int16_t b);

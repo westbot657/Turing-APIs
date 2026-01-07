@@ -122,7 +122,11 @@ func goString(b []byte) string {
 
 //// WASM Imports ////
 {% if api.name == "turing_api" %}//go:wasmimport env _host_strcpy
-func _host_strcpy(location *byte, size uint32){% endif %}
+func _host_strcpy(location *byte, size {{ types.go["u32"] }})
+//go:wasmimport env _host_f32_enqueue
+func _host_f32_enqueue(f {{ types.go["f32"] }})
+//go:wasmimport env _host_f32_dequeue
+func _host_f32_dequeue() {{ types.go["f32"] }}{% endif %}
 
 {{- self::ffi_decls(funcs=api.functions) }}
 {%- for class in api.classes -%}

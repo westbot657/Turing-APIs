@@ -3,6 +3,8 @@ const std = @import("std");
 
 //// Wasm Bindings ////
 extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;
+extern "C" fn _host_f32_enqueue(f: f32) void;
+extern "C" fn _host_f32_dequeue() f32;
 extern "C" fn _test_global(name: [*:0]const u8) void;
 extern "C" fn _global_2_test() i32;
 extern "C" fn _my_test(a: i8, b: i16) u32;
@@ -111,3 +113,4 @@ pub const Log = struct {
     }
 
 };
+

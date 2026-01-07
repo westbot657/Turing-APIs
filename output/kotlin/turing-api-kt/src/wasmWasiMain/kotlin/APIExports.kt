@@ -10,7 +10,11 @@ import kotlin.native.concurrent.*
 
 //// Wasm Bindings ////
 @WasmImport("env", "_host_strcpy")
-external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int)
+external fun _host_strcpy(location: CPointer<ByteVar>?, size: UInt)
+@WasmImport("env", "_host_f32_enqueue")
+external fun _host_f32_enqueue(f: Float);
+@WasmImport("env", "_host_f32_dequeue")
+external fun _host_f32_dequeue() : Float;
 @WasmImport("env", "_test_global")
 external fun _test_global(name: CPointer<ByteVar>?)
 @WasmImport("env", "_global_2_test")
@@ -102,3 +106,4 @@ object Log {
         val hostResult = _log_debug(msg.cstr)
     }
 }
+

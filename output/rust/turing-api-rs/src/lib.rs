@@ -6,6 +6,8 @@ use std::ffi::{CString, CStr, c_char, c_void};
 //// Wasm Bindings ////
 unsafe extern "C" {
     fn _host_strcpy(location: *const c_char, size: u32);
+    fn _host_f32_enqueue(f: f32);
+    fn _host_f32_dequeue() -> f32;
     fn _test_global(name: *const c_char);
     fn _global_2_test() -> i32;
     fn _my_test(a: i8, b: i16) -> u32;

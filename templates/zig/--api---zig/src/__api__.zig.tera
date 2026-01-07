@@ -133,7 +133,9 @@ extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is
 const std = @import("std");
 
 //// Wasm Bindings ////
-{% if api.name == "turing_api" %}extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;{% endif %}
+{% if api.name == "turing_api" %}extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;
+extern "C" fn _host_f32_enqueue(f: f32) void;
+extern "C" fn _host_f32_dequeue() f32;{% endif %}
 {{- self::ffi_funcs(funcs=api.functions) }}
 {%- for class in api.classes -%}
 {{- self::ffi_funcs(funcs=class.functions, class=class) }}

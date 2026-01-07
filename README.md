@@ -23,7 +23,7 @@ You can use this table to pick a language to use for writing scripts
 | V*             | Unknown           | Unknown          | API is low priority.                                                                            |
 | Grain*         | Unknown           | Unknown          | API is low priority.                                                                            |
 
-*These languages haven't been thoroughly evaluated, as they aren't as well known.
+*These languages haven't been thoroughly evaluated, as they aren't as well known, however you are still able to use them, but you will have to use the raw bindings directly.
 
 ### Other supported languages
 | Language              | Coding Complexity | Notes                                           |
@@ -181,6 +181,28 @@ types { // derived from .api-spec/type-map at runtime
 - [ ] V template
 - [ ] D api
 - [ ] D template
+
+
+# Raw API bindings
+Turing API is not actually needed to interact with Turing, but it does provide a lot of utilities to make it easier.
+If your language does not have API support currently, here are the main rules for the typing convention:
+
+### Strings
+Strings are complicated as Turing is unable to return a string directly to wasm, instead it will return the string length as a `u32`,
+and the guest code is expected to allocate a chunk of memory and call `_host_strcpy(pointer, size)` where the pointer is the location you allocated,
+and the size is for sanity checking that you are fetching the correct string.
+
+When passing a string to the host, you must pass a pointer to a null-terminated string.
+
+### Objects
+Unity objects such as notes, walls, etc, are represented with a `u64` opaque pointer. Turing maps this id to the real object, this keeps scripts safe,
+by not letting them touch memory directly.
+
+### Expected Exports
+currently, Turing will require you to export `_turing_api_semver() -> u64` which must return the semantic version as a packed `u64`:
+Major: u32, bit shifted left by 32 into a u64.
+Minor: u16, bit shifted left by 16 into a u64.
+
 
 
 

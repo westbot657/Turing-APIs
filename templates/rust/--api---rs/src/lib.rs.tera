@@ -103,7 +103,9 @@ use std::ffi::{CString, CStr, c_char, c_void};
 
 //// Wasm Bindings ////
 unsafe extern "C" {
-    {% if api.name == "turing_api" %}fn _host_strcpy(location: *const c_char, size: u32);{% endif %}
+    {% if api.name == "turing_api" %}fn _host_strcpy(location: *const c_char, size: {{ types.rs["u32"] }});
+    fn _host_f32_enqueue(f: {{ types.rs["f32"] }});
+    fn _host_f32_dequeue() -> {{ types.rs["f32"] }};{% endif %}
     {{- self::ffi_funcs(funcs=api.functions) }}
     {%- for class in api.classes -%}
     {{- self::ffi_funcs(funcs=class.functions, class=class) }}

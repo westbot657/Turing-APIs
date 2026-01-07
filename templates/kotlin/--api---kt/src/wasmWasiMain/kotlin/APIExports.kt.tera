@@ -95,7 +95,11 @@ import kotlin.native.concurrent.*
 
 //// Wasm Bindings ////
 {% if api.name == "turing_api" %}@WasmImport("env", "_host_strcpy")
-external fun _host_strcpy(location: CPointer<ByteVar>?, size: Int){% endif %}
+external fun _host_strcpy(location: CPointer<ByteVar>?, size: {{ types.kotlin["u32"] }})
+@WasmImport("env", "_host_f32_enqueue")
+external fun _host_f32_enqueue(f: {{ types.kotlin["f32"] }});
+@WasmImport("env", "_host_f32_dequeue")
+external fun _host_f32_dequeue() : {{ types.kotlin["f32"] }};{% endif %}
 {{ self::ffi_imports(funcs=api.functions) -}}
 {%- for class in api.classes -%}
 {{ self::ffi_imports(funcs=class.functions, class=class) -}}

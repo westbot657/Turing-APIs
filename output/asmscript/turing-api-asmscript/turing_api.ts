@@ -5,6 +5,10 @@
 //// Wasm Bindings ////
 @external("env", "_host_strcpy")
 declare function _host_strcpy(location: u32, size: u32): void;
+@external("env", "_host_f32_enqueue")
+declare function _host_f32_enqueue(f: f32): void;
+@external("env", "_host_f32_dequeue")
+declare function _host_f32_dequeue(): f32;
 
 @external("env", "_test_global")
 declare function _test_global(name: u32): void;
