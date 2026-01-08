@@ -85,7 +85,8 @@ type MyClass struct {
 func (self *MyClass) objectFunc(a int16) {
     _my_class_object_func(self.opaqu, a)
 }
-
+/// this is line 1
+/// this is line 2
 type ColorNote struct {
     opaqu uint64
 }
@@ -109,6 +110,7 @@ func (self *ColorNote) clone() *ColorNote {
     return &ColorNote{opaqu: turingResult}
 }
 /// used to log messages to the console
+/// idk, this is a second line
 type Log struct {
 }
 

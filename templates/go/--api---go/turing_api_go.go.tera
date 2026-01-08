@@ -92,7 +92,7 @@ func {{ func.from }}({{ self::c_params(params=func.params, is_method=is_method, 
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
 {%- for func in funcs %}
-{% if func.doc %}/// {{ func.doc }}{% endif %}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 func {% if is_method %}(self *{{ class.name | case(style="pascal") }}) {% elif class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}(
     {{- self::go_params(params=func.params, is_method=is_method, class=class) -}}
     ){{ self::go_ret(type=func.type, class=class) }} {
@@ -146,7 +146,7 @@ const APIVersion = "{{ api.version }}"
 
 //// Classes ////
 {%- for class in api.classes %}
-{% if class.doc %}/// {{ class.doc }}{% endif %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
 type {{ class.name | case(style="pascal") }} struct {
 {%- for var in class.variables %}
     {{ var.name | case(style="snake") }} {{ types.go[var.type] }}

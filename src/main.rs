@@ -62,6 +62,29 @@ pub struct ParamDef {
     pub typ: String,
 }
 
+fn parse_doc_comment(i: &mut usize, lines: &Vec<&str>) -> Option<String> {
+    let mut parts = Vec::new();
+    let mut idx = *i + 1;
+
+    while idx < lines.len() {
+        if let Some(rest) = lines[idx].strip_prefix("-- ") {
+            parts.push(rest);
+            idx += 1;
+        } else {
+            break;
+        }
+    }
+
+    if parts.is_empty() {
+        None
+    } else {
+        // Advance `i` to the last consumed line
+        *i = idx - 1;
+        Some(parts.join("\\n"))
+    }
+}
+
+
 pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiModel {
     let mut classes: Vec<ClassDef> = Vec::new();
     let mut functions: Vec<FunctionDef> = Vec::new();
@@ -138,12 +161,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                         });
                     }
 
-                    let doc = if i + 1 < lines.len() && lines[i + 1].starts_with("-- ") {
-                        i += 1;
-                        Some(lines[i].strip_prefix("-- ").unwrap().to_string())
-                    } else {
-                        None
-                    };
+                    let doc = parse_doc_comment(&mut i, &lines);
 
                     classes.push(ClassDef {
                         name: name.clone(),
@@ -228,12 +246,7 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
                 }
             }
 
-            let doc = if i + 1 < lines.len() && lines[i + 1].starts_with("-- ") {
-                i += 1;
-                Some(lines[i].strip_prefix("-- ").unwrap().to_string())
-            } else {
-                None
-            };
+            let doc = parse_doc_comment(&mut i, &lines);
 
             let func = FunctionDef {
                 name,
@@ -330,6 +343,13 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
     };
 
     Ok(to_value(converted)?)
+}
+
+pub fn doc_comment(args: &HashMap<String, Value>) -> TeraResult<Value> {
+    let doc = args.get("doc").and_then(|v| v.as_str()).ok_or_else(|| "argument 'doc' not found")?;
+    let delimiter = args.get("d").and_then(|v| v.as_str()).ok_or_else(|| "argument 'd' (delimiter) not found")?;
+    let out = delimiter.to_string() + &doc.replace("\\n", "\n").replace("\n", &format!("\n{}", delimiter));
+    Ok(to_value(out)?)
 }
 
 pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
@@ -496,6 +516,7 @@ fn main() {
     let mut tera = Tera::new("./templates/**/*.tera").unwrap();
 
     tera.register_filter("case", case_filter);
+    tera.register_function("docs", doc_comment);
 
     pub fn snake_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
         let mut a = HashMap::new();

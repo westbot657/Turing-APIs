@@ -16,12 +16,14 @@ my_test(a: i8, b: i16) -> String
 object_func(a: i16) -> void : _my_class_object_func
 
 :ColorNote [opaque] :
+-- this is line 1\nthis is line 2
 set_position(x: f32, y: f32, z: f32) -> self : _color_note_set_position
 set_orientation(x: f32, y: f32, z: f32, w: f32) -> self : _color_note_set_orientation
 clone() -> ColorNote : _color_note_clone
 
 :Log:
 -- used to log messages to the console
+-- idk, this is a second line
 ::info(msg: &str) -> void : _log_info
 -- logs `msg` to the console
 ::warn(msg: &str) -> void : _log_warn

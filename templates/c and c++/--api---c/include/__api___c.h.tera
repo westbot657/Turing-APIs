@@ -20,7 +20,7 @@
 
 {%- macro func_decls(funcs, is_method=false, class=false) -%}
 {%- for func in funcs %}
-{% if func.doc %}/// {{ func.doc }}{% endif %}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {% if func.type == "self" %}{{ class.name | case(style="pascal") }}*{% else %}{{ types.c[func.type] }}{% endif %} {% if class %}{{ class.name | case(style="pascal") }}_{% endif %}{{ func.name | case(style="camel") }}({{ self::c_params(params=func.params, is_method=is_method, class=class) }});
 {%- endfor %}
 {%- endmacro -%}
@@ -41,7 +41,7 @@ uint64_t _{{ api.name }}_semver(void);
 {%- for class in api.classes %}
 
 // class {{ class.name | case(style="pascal") }}
-{% if class.doc %}/// {{ class.doc }}{% endif %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
 {% if class.is_opaque -%}
 typedef struct {
     {{ types.c["op*"] }} opaqu;

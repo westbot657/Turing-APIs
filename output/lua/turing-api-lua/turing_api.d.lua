@@ -33,7 +33,8 @@ turing_api.MyClass = MyClass
 ---@return nil
 function turing_api.MyClass.objectFunc(self, a) end
 
-
+--- this is line 1
+--- this is line 2
 ---@class ColorNote
 local ColorNote = {}
 turing_api.ColorNote = ColorNote
@@ -62,6 +63,7 @@ function turing_api.ColorNote.setOrientation(self, x, y, z, w) end
 function turing_api.ColorNote.clone(self) end
 
 --- used to log messages to the console
+--- idk, this is a second line
 ---@class Log
 local Log = {}
 turing_api.Log = Log

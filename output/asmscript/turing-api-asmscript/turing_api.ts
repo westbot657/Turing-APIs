@@ -75,7 +75,8 @@ class MyClass {
         _my_class_object_func(this.opaqu, a);
     }
 }
-
+/// this is line 1
+/// this is line 2
 class ColorNote {
     opaqu: u64;
     constructor(opaqu: u64) {
@@ -100,6 +101,7 @@ class ColorNote {
     }
 }
 /// used to log messages to the console
+/// idk, this is a second line
 class Log {
     
 

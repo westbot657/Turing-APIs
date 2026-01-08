@@ -34,7 +34,8 @@ public:
     
     void objectFunc(int16_t a);
 };
-
+/// this is line 1
+/// this is line 2
 class ColorNote {
 private:
     uint64_t opaqu;
@@ -52,6 +53,7 @@ public:
     ColorNote clone();
 };
 /// used to log messages to the console
+/// idk, this is a second line
 class Log {
 public:
 

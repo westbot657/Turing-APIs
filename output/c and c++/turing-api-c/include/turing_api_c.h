@@ -31,7 +31,8 @@ typedef struct {
 void MyClass_objectFunc(MyClass* self, int16_t a);
 
 // class ColorNote
-
+/// this is line 1
+/// this is line 2
 typedef struct {
     uint64_t opaqu;
 } ColorNote;
@@ -47,6 +48,7 @@ ColorNote ColorNote_clone(ColorNote* self);
 
 // class Log
 /// used to log messages to the console
+/// idk, this is a second line
 typedef struct Log Log;
 
 

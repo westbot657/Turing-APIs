@@ -61,7 +61,8 @@ impl MyClass {
     }
 }
 
-
+/// this is line 1
+/// this is line 2
 pub struct ColorNote {
     opaqu: u64,
 }
@@ -84,6 +85,7 @@ impl ColorNote {
 }
 
 /// used to log messages to the console
+/// idk, this is a second line
 pub struct Log {
 }
 impl Log {

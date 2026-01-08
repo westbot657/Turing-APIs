@@ -75,7 +75,7 @@ external fun {{ func.from }}(
 
 {%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
 {%- for func in funcs %}
-{% if func.doc %}{{ indent }}/// {{ func.doc }}{% endif %}
+{% if func.doc %}{{ indent }}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ indent }}fun {{ func.name | case(style="camel") }}({{ self::kt_params(params=func.params) }}){% if func.type == "self" %} : {{ class.name | case(style="pascal") }}{% elif func.type != "void" %} : {{ types.kotlin[func.type] }}{% endif %} {
     {{ indent }}val hostResult = {{ func.from }}({{ self::convert_args(params=func.params, is_method=is_method, class=class) }})
 {{- self::handle_result(type=func.type, indent=indent ~ "    ") }}
@@ -116,7 +116,7 @@ fun _{{ api.name }}_semver() : ULong {
 
 //// Classes ////
 {%- for class in api.classes -%}
-{%- if class.doc %}/// {{ class.doc }}{% endif %}
+{%- if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
 {% if class.is_opaque -%}
 data class {{ class.name | case(style="pascal") }}(val opaqu: {{ types.kotlin["op*"] }}) {
 {%- else -%}

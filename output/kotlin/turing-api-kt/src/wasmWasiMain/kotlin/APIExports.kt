@@ -69,7 +69,8 @@ data class MyClass(val opaqu: ULong) {
         val hostResult = _my_class_object_func(this.opaqu, a)
     }
 }
-
+/// this is line 1
+/// this is line 2
 data class ColorNote(val opaqu: ULong) {
 
     fun setPosition(x: Float, y: Float, z: Float) : ColorNote {
@@ -88,6 +89,7 @@ data class ColorNote(val opaqu: ULong) {
     }
 }
 /// used to log messages to the console
+/// idk, this is a second line
 object Log {
     /// logs `msg` to the console
     fun info(msg: String) {

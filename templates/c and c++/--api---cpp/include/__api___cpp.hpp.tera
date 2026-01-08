@@ -16,7 +16,7 @@
 
 {%- macro func_decls(funcs, class=false, is_method=false, indent="") -%}
 {%- for func in funcs %}
-    {% if func.doc %}/// {{ func.doc }}{% endif %}
+    {% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ indent }}{% if func.type == "self" %}{{ class.name | case(style="pascal") }}*{% else %}{{ types.cpp[func.type] }}{% endif %} {{ func.name | case(style="camel") }}({{ self::cpp_params(params=func.params, is_method=is_method) }});
 {%- endfor %}
 {%- endmacro -%}
@@ -38,7 +38,7 @@ uint64_t _{{ api.name }}_semver();
 {{ self::func_decls(funcs=api.functions) }}
 //// Classes ////
 {%- for class in api.classes %}
-{% if class.doc %}/// {{ class.doc }}{% endif %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
 class {{ class.name | case(style="pascal") }} {
 {%- if class.is_opaque %}
 private:

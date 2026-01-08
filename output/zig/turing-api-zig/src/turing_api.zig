@@ -59,7 +59,8 @@ pub const MyClass = struct {
 
 };
 
-
+/// this is line 1
+/// this is line 2
 pub const ColorNote = struct {
     opaqu: u64,
 
@@ -83,6 +84,7 @@ return self;
 };
 
 /// used to log messages to the console
+/// idk, this is a second line
 pub const Log = struct {
     /// logs `msg` to the console
     pub fn info(msg: []const u8, allocator: std.mem.Allocator) !void {
