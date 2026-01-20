@@ -34,17 +34,19 @@ if buildtype == 'release'
     add_project_link_arguments('-Wl,--gc-sections', language: 'cpp')
 endif
 
-# target wasm32-unknown-unknown requires special handling
+# import dependency from ..
+glm_dep = dependency('glm', fallback: ['glm', 'glm_dep'], required: true)
 
-# additional per-subdir logic
+# build the api static library
 subdir('api')
 
 
-
+# our script
 api_inc = include_directories('api')
 executable(
     'turing_script',
     'src/main.cpp',
     include_directories: api_inc,
     link_with: libapi,
+    dependencies: glm_dep
 )
