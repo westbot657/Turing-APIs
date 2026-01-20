@@ -43,13 +43,26 @@ void MyClass::objectFunc(int16_t a) {
 ColorNote::ColorNote(uint64_t ptr) : opaqu(ptr) {}
 
 
-ColorNote* ColorNote::setPosition(float x, float y, float z) {
-    _color_note_set_position(this->opaqu, x, y, z);
+ColorNote* ColorNote::setPosition(uint32_t v) {
+    _color_note_set_position(this->opaqu, v);
     return this;
 }
-ColorNote* ColorNote::setOrientation(float x, float y, float z, float w) {
-    _color_note_set_orientation(this->opaqu, x, y, z, w);
+ColorNote* ColorNote::setOrientation(uint32_t q) {
+    _color_note_set_orientation(this->opaqu, q);
     return this;
+}
+ColorNote* ColorNote::setTransform(uint32_t m) {
+    _color_note_set(this->opaqu, m);
+    return this;
+}
+uint32_t ColorNote::getPosition() {
+    return _color_note_get_position(this->opaqu);
+}
+uint32_t ColorNote::getOrientation() {
+    return _color_note_get_orientation(this->opaqu);
+}
+uint32_t ColorNote::getTransform() {
+    return _color_note_get_transform(this->opaqu);
 }
 ColorNote ColorNote::clone() {
     uint64_t turing_result = _color_note_clone(this->opaqu);

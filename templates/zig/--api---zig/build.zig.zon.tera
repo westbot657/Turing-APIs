@@ -7,4 +7,9 @@
         "build.zig.zon",
         "src",
     },
+    .dependencies = .{
+        .zalgebra = .{
+            .url = "https://github.com/kooparse/zalgebra/archive/refs/heads/master.tar.gz"
+        }
+    }
 }

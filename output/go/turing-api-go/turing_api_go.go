@@ -33,9 +33,17 @@ func _my_test(a int8, b int16) uint32
 //go:wasmimport env _my_class_object_func
 func _my_class_object_func(opaqu uint64, a int16)
 //go:wasmimport env _color_note_set_position
-func _color_note_set_position(opaqu uint64, x float32, y float32, z float32) void
+func _color_note_set_position(opaqu uint64, v uint32) void
 //go:wasmimport env _color_note_set_orientation
-func _color_note_set_orientation(opaqu uint64, x float32, y float32, z float32, w float32) void
+func _color_note_set_orientation(opaqu uint64, q uint32) void
+//go:wasmimport env _color_note_set
+func _color_note_set(opaqu uint64, m uint32) void
+//go:wasmimport env _color_note_get_position
+func _color_note_get_position(opaqu uint64) uint32
+//go:wasmimport env _color_note_get_orientation
+func _color_note_get_orientation(opaqu uint64) uint32
+//go:wasmimport env _color_note_get_transform
+func _color_note_get_transform(opaqu uint64) uint32
 //go:wasmimport env _color_note_clone
 func _color_note_clone(opaqu uint64) ColorNote
 //go:wasmimport env _log_info
@@ -93,16 +101,34 @@ type ColorNote struct {
 
 
 
-func (self *ColorNote) setPosition(x float32, y float32, z float32) *ColorNote {
-    _color_note_set_position(self.opaqu, x, y, z)
+func (self *ColorNote) setPosition(v uint32) *ColorNote {
+    _color_note_set_position(self.opaqu, v)
     return self
     
 }
 
-func (self *ColorNote) setOrientation(x float32, y float32, z float32, w float32) *ColorNote {
-    _color_note_set_orientation(self.opaqu, x, y, z, w)
+func (self *ColorNote) setOrientation(q uint32) *ColorNote {
+    _color_note_set_orientation(self.opaqu, q)
     return self
     
+}
+
+func (self *ColorNote) setTransform(m uint32) *ColorNote {
+    _color_note_set(self.opaqu, m)
+    return self
+    
+}
+
+func (self *ColorNote) getPosition() uint32 {
+    return _color_note_get_position(self.opaqu)
+}
+
+func (self *ColorNote) getOrientation() uint32 {
+    return _color_note_get_orientation(self.opaqu)
+}
+
+func (self *ColorNote) getTransform() uint32 {
+    return _color_note_get_transform(self.opaqu)
 }
 
 func (self *ColorNote) clone() *ColorNote {

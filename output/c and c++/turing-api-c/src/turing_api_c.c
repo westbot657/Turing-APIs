@@ -44,13 +44,26 @@ void MyClass_objectFunc(MyClass* self, int16_t a) {
 // class ColorNote
 
 
-ColorNote* ColorNote_setPosition(ColorNote* self, float x, float y, float z) {
-    _color_note_set_position(self->opaqu, x, y, z);
+ColorNote* ColorNote_setPosition(ColorNote* self, uint32_t v) {
+    _color_note_set_position(self->opaqu, v);
     return self;
 }
-ColorNote* ColorNote_setOrientation(ColorNote* self, float x, float y, float z, float w) {
-    _color_note_set_orientation(self->opaqu, x, y, z, w);
+ColorNote* ColorNote_setOrientation(ColorNote* self, uint32_t q) {
+    _color_note_set_orientation(self->opaqu, q);
     return self;
+}
+ColorNote* ColorNote_setTransform(ColorNote* self, uint32_t m) {
+    _color_note_set(self->opaqu, m);
+    return self;
+}
+uint32_t ColorNote_getPosition(ColorNote* self) {
+    return _color_note_get_position(self->opaqu);
+}
+uint32_t ColorNote_getOrientation(ColorNote* self) {
+    return _color_note_get_orientation(self->opaqu);
+}
+uint32_t ColorNote_getTransform(ColorNote* self) {
+    return _color_note_get_transform(self->opaqu);
 }
 ColorNote ColorNote_clone(ColorNote* self) {
     uint64_t turing_result = _color_note_clone(self->opaqu);

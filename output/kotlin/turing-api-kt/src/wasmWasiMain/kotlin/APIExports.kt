@@ -24,9 +24,17 @@ external fun _my_test(a: Byte, b: Short): CPointer<ByteVar>?
 @WasmImport("env", "_my_class_object_func")
 external fun _my_class_object_func(opaqu: Int, a: Short)
 @WasmImport("env", "_color_note_set_position")
-external fun _color_note_set_position(opaqu: Int, x: Float, y: Float, z: Float): Unit
+external fun _color_note_set_position(opaqu: Int, v: UInt): Unit
 @WasmImport("env", "_color_note_set_orientation")
-external fun _color_note_set_orientation(opaqu: Int, x: Float, y: Float, z: Float, w: Float): Unit
+external fun _color_note_set_orientation(opaqu: Int, q: UInt): Unit
+@WasmImport("env", "_color_note_set")
+external fun _color_note_set(opaqu: Int, m: UInt): Unit
+@WasmImport("env", "_color_note_get_position")
+external fun _color_note_get_position(opaqu: Int): UInt
+@WasmImport("env", "_color_note_get_orientation")
+external fun _color_note_get_orientation(opaqu: Int): UInt
+@WasmImport("env", "_color_note_get_transform")
+external fun _color_note_get_transform(opaqu: Int): UInt
 @WasmImport("env", "_color_note_clone")
 external fun _color_note_clone(opaqu: Int): ColorNote
 @WasmImport("env", "_log_info")
@@ -73,14 +81,34 @@ data class MyClass(val opaqu: ULong) {
 /// this is line 2
 data class ColorNote(val opaqu: ULong) {
 
-    fun setPosition(x: Float, y: Float, z: Float) : ColorNote {
-        val hostResult = _color_note_set_position(this.opaqu, x, y, z)
+    fun setPosition(v: UInt) : ColorNote {
+        val hostResult = _color_note_set_position(this.opaqu, v)
         this
     }
 
-    fun setOrientation(x: Float, y: Float, z: Float, w: Float) : ColorNote {
-        val hostResult = _color_note_set_orientation(this.opaqu, x, y, z, w)
+    fun setOrientation(q: UInt) : ColorNote {
+        val hostResult = _color_note_set_orientation(this.opaqu, q)
         this
+    }
+
+    fun setTransform(m: UInt) : ColorNote {
+        val hostResult = _color_note_set(this.opaqu, m)
+        this
+    }
+
+    fun getPosition() : UInt {
+        val hostResult = _color_note_get_position(this.opaqu)
+        hostResult
+    }
+
+    fun getOrientation() : UInt {
+        val hostResult = _color_note_get_orientation(this.opaqu)
+        hostResult
+    }
+
+    fun getTransform() : UInt {
+        val hostResult = _color_note_get_transform(this.opaqu)
+        hostResult
     }
 
     fun clone() : ColorNote {

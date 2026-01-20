@@ -22,9 +22,17 @@ declare function _my_test(a: i8, b: i16): u32;
 declare function _my_class_object_func(opaqu: u64, a: i16): void;
 
 @external("env", "_color_note_set_position")
-declare function _color_note_set_position(opaqu: u64, x: f32, y: f32, z: f32): void;
+declare function _color_note_set_position(opaqu: u64, v: u32): void;
 @external("env", "_color_note_set_orientation")
-declare function _color_note_set_orientation(opaqu: u64, x: f32, y: f32, z: f32, w: f32): void;
+declare function _color_note_set_orientation(opaqu: u64, q: u32): void;
+@external("env", "_color_note_set")
+declare function _color_note_set(opaqu: u64, m: u32): void;
+@external("env", "_color_note_get_position")
+declare function _color_note_get_position(opaqu: u64): u32;
+@external("env", "_color_note_get_orientation")
+declare function _color_note_get_orientation(opaqu: u64): u32;
+@external("env", "_color_note_get_transform")
+declare function _color_note_get_transform(opaqu: u64): u32;
 @external("env", "_color_note_clone")
 declare function _color_note_clone(opaqu: u64): ColorNote;
 @external("env", "_log_info")
@@ -85,14 +93,31 @@ class ColorNote {
 
 
 
-    public set_position(x: f32, y: f32, z: f32): ColorNote {
-        _color_note_set_position(this.opaqu, x, y, z);
+    public set_position(v: u32): ColorNote {
+        _color_note_set_position(this.opaqu, v);
         return this;
     }
 
-    public set_orientation(x: f32, y: f32, z: f32, w: f32): ColorNote {
-        _color_note_set_orientation(this.opaqu, x, y, z, w);
+    public set_orientation(q: u32): ColorNote {
+        _color_note_set_orientation(this.opaqu, q);
         return this;
+    }
+
+    public set_transform(m: u32): ColorNote {
+        _color_note_set(this.opaqu, m);
+        return this;
+    }
+
+    public get_position(): u32 {
+        return _color_note_get_position(this.opaqu);
+    }
+
+    public get_orientation(): u32 {
+        return _color_note_get_orientation(this.opaqu);
+    }
+
+    public get_transform(): u32 {
+        return _color_note_get_transform(this.opaqu);
     }
 
     public clone(): ColorNote {

@@ -10,12 +10,23 @@ pub fn build(b: *std.Build) void {
         }
     });
 
+    const zalgebra_dep = b.dependency("zalgebra", .{
+        .target = target,
+        .optimize = optimize,
+    });
+
+    const zalgebra_mod = zalgebra_dep.module("zalgebra");
+
+
     const lib = b.addExecutable(.{
         .name = "turing_api",
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/turing_api.zig"),
             .target = target,
             .optimize = optimizations,
+            .imports = &.{
+                .{ .name = "zalgebra", .module = zalgebra_mod },
+            },
         })
     });
 

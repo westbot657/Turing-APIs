@@ -46,9 +46,17 @@ public:
 
 
     
-    ColorNote* setPosition(float x, float y, float z);
+    ColorNote* setPosition(uint32_t v);
     
-    ColorNote* setOrientation(float x, float y, float z, float w);
+    ColorNote* setOrientation(uint32_t q);
+    
+    ColorNote* setTransform(uint32_t m);
+    
+    uint32_t getPosition();
+    
+    uint32_t getOrientation();
+    
+    uint32_t getTransform();
     
     ColorNote clone();
 };
