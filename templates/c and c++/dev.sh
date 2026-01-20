@@ -4,3 +4,5 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 meson setup build-debug --buildtype=debug --cross-file "$DIR/wasi-cross.txt"
 meson compile -C build-debug
+mkdir -p ./build
+cp ./build-debug/compile_commands.json ./build/compile_commands.json

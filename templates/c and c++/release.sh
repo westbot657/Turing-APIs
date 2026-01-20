@@ -4,3 +4,5 @@
 DIR="$(cd "$(dirname "$0")" && pwd)"
 meson setup build-release --buildtype=release --cross-file "$DIR/wasi-cross.txt"
 meson compile -C build-release
+mkdir -p ./build
+cp ./build-release/compile_commands.json ./build/compile_commands.json
