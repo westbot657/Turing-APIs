@@ -1,6 +1,6 @@
 
 ///// Generated AssemblyScript API /////
-
+import { Vec2, Vec3, Vec4, Quat, Mat4 } from "./linear_algebra";
 
 //// Wasm Bindings ////
 @external("env", "_host_strcpy")
@@ -45,6 +45,90 @@ declare function _log_critical(msg: u32): void;
 declare function _log_debug(msg: u32): void;
 export function _turing_api_semver(): u64 {
     return (0u64 << 16) | (8u64 << 8) | 0u64;
+}
+
+//// Linear Algebra Helpers ////
+
+// Vec2
+function enqueue_vec2(v: Vec2): u32 {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    return 2;
+}
+
+function dequeue_vec2(): Vec2 {
+    return new Vec2(
+        _host_f32_dequeue(),
+        _host_f32_dequeue()
+    );
+}
+
+// Vec3
+function enqueue_vec3(v: Vec3): u32 {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    return 3;
+}
+
+function dequeue_vec3(): Vec3 {
+    return new Vec3(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue()
+    );
+}
+
+// Vec4
+function enqueue_vec4(v: Vec4): u32 {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    _host_f32_enqueue(v.w);
+    return 4;
+}
+
+function dequeue_vec4(): Vec4 {
+    return new Vec4(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue()
+    );
+}
+
+// Quat
+function enqueue_quat(q: Quat): u32 {
+    _host_f32_enqueue(q.x);
+    _host_f32_enqueue(q.y);
+    _host_f32_enqueue(q.z);
+    _host_f32_enqueue(q.w);
+    return 4;
+}
+
+function dequeue_quat(): Quat {
+    return new Quat(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue()
+    );
+}
+
+// Mat4 (column-major)
+function enqueue_mat4(m: Mat4): u32 {
+    for (let i: i32 = 0; i < 16; i++) {
+        _host_f32_enqueue(m.m[i]);
+    }
+    return 16;
+}
+
+function dequeue_mat4(): Mat4 {
+    let out = new Mat4();
+    for (let i: i32 = 0; i < 16; i++) {
+        out.m[i] = _host_f32_dequeue();
+    }
+    return out;
 }
 
 //// Functions ////
@@ -94,30 +178,36 @@ class ColorNote {
 
 
     public set_position(v: u32): ColorNote {
-        _color_note_set_position(this.opaqu, v);
+        let turing_handle_v = enqueue_vec3(v);
+        _color_note_set_position(this.opaqu, turing_handle_v);
         return this;
     }
 
     public set_orientation(q: u32): ColorNote {
-        _color_note_set_orientation(this.opaqu, q);
+        let turing_handle_q = enqueue_quat(q);
+        _color_note_set_orientation(this.opaqu, turing_handle_q);
         return this;
     }
 
     public set_transform(m: u32): ColorNote {
-        _color_note_set(this.opaqu, m);
+        let turing_handle_m = enqueue_mat4(m);
+        _color_note_set(this.opaqu, turing_handle_m);
         return this;
     }
 
     public get_position(): u32 {
-        return _color_note_get_position(this.opaqu);
+        _color_note_get_position(this.opaqu);
+        return dequeue_vec3();
     }
 
     public get_orientation(): u32 {
-        return _color_note_get_orientation(this.opaqu);
+        _color_note_get_orientation(this.opaqu);
+        return dequeue_quat();
     }
 
     public get_transform(): u32 {
-        return _color_note_get_transform(this.opaqu);
+        _color_note_get_transform(this.opaqu);
+        return dequeue_mat4();
     }
 
     public clone(): ColorNote {

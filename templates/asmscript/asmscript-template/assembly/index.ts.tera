@@ -1,4 +1,5 @@
 import * as Turing from "../../turing-api-asmscript/turing_api";
+import {Vec2, Vec3, Vec4, Quat, Mat4} from "../../turing-api-asmscript/linear_algebra"
 
 export function on_load(): void {
     Turing.Log.info("AsmScript on_load() called!")
