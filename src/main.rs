@@ -17,7 +17,8 @@ pub struct ApiModel {
     pub functions: Vec<FunctionDef>,
     pub opaque_classes: Vec<String>,
     pub version: String,
-    pub semver: Semver
+    pub semver: Semver,
+    pub glam_types: Vec<String>,
 }
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Semver {
@@ -287,7 +288,19 @@ pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiMod
     let name = api_name.expect("no `#api <name>` directive was found");
     let nameh = api_name2.unwrap();
     
-    ApiModel { name, nameh, classes, functions, opaque_classes: Vec::new(), version, semver }
+    ApiModel {
+        name, nameh,
+        classes, functions,
+        opaque_classes: Vec::new(),
+        version, semver,
+        glam_types: vec![
+            "Vec2".to_string(),
+            "Vec3".to_string(),
+            "Vec4".to_string(),
+            "Quat".to_string(),
+            "Mat4".to_string(),
+        ]
+    }
 }
 
 
@@ -339,6 +352,7 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<V
         "pascal" => input.to_case(Case::Pascal),
         "snake" => input.to_case(Case::Snake),
         "screaming" | "upper_snake" => input.to_case(Case::UpperSnake),
+        "lower" => input.to_lowercase(),
         _ => input,
     };
 
@@ -513,7 +527,14 @@ fn main() {
     ctx.insert("api", &api_model);
     ctx.insert("types", &type_map);
 
-    let mut tera = Tera::new("./templates/**/*.tera").unwrap();
+    let tera = Tera::new("./templates/**/*.tera");
+    let mut tera = match tera {
+        Ok(t) => t,
+        Err(e) => {
+            eprintln!("Failed to parse tera template.\n{e}");
+            std::process::exit(1)
+        }
+    };
 
     tera.register_filter("case", case_filter);
     tera.register_function("docs", doc_comment);

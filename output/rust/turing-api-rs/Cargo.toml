@@ -15,3 +15,12 @@ include = [
 readme = "README.md"
 keywords = ["beatsaber", "turing", "api"]
 categories = ["api-bindings", "game-development"]
+
+[features]
+default = ["glam"]
+glam = ["dep:glam"]
+nalgebra = ["dep:nalgebra"]
+
+[dependencies]
+glam = { version = "*", optional = true }
+nalgebra = { version = "*", optional = true }

@@ -17,8 +17,12 @@ object_func(a: i16) -> void : _my_class_object_func
 
 :ColorNote [opaque] :
 -- this is line 1\nthis is line 2
-set_position(x: f32, y: f32, z: f32) -> self : _color_note_set_position
-set_orientation(x: f32, y: f32, z: f32, w: f32) -> self : _color_note_set_orientation
+set_position(v: Vec3) -> self : _color_note_set_position
+set_orientation(q: Quat) -> self : _color_note_set_orientation
+set_transform(m: Mat4) -> self : _color_note_set
+get_position() -> Vec3 : _color_note_get_position
+get_orientation() -> Quat : _color_note_get_orientation
+get_transform() -> Mat4 : _color_note_get_transform
 clone() -> ColorNote : _color_note_clone
 
 :Log:

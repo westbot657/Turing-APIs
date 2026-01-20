@@ -1,41 +1,51 @@
-| Type    | rs            | c           | cpp          | zig          | asmscript | nelua   | go      | lua     |
-|---------|---------------|-------------|--------------|--------------|-----------|---------|---------|---------|
-| i8      | i8            | int8_t      | int8_t       | i8           | i8        | int8    | int8    | number  |
-| i16     | i16           | int16_t     | int16_t      | i16          | i16       | int16   | int16   | number  |
-| i32     | i32           | int32_t     | int32_t      | i32          | i32       | int32   | int32   | number  |
-| i64     | i64           | int64_t     | int64_t      | i64          | i64       | int64   | int64   | number  |
-| u8      | u8            | uint8_t     | uint8_t      | u8           | u8        | uint8   | uint8   | number  |
-| u16     | u16           | uint16_t    | uint16_t     | u16          | u16       | uint16  | uint16  | number  |
-| u32     | u32           | uint32_t    | uint32_t     | u32          | u32       | uint32  | uint32  | number  |
-| u64     | u64           | uint64_t    | uint64_t     | u64          | u64       | uint64  | uint64  | number  |
-| f32     | f32           | float       | float        | f32          | f32       | float32 | float32 | number  |
-| f64     | f64           | double      | double       | f64          | f64       | float64 | float64 | number  |
-| bool    | bool          | bool        | bool         | bool         | bool      | boolean | bool    | boolean |
-| String  | String        | char*       | std::string  | []u8         | string    | string  | string  | string  |
-| &str    | &str          | const char* | std::string& | []const u8   | string    | string  | string  | string  |
-| CString | *const c_char | const char* | const char*  | [*c]const u8 | u32       | cstring | *byte   | string  |
-| Cstr    | *const c_char | const char* | const char*  | [*c]const u8 | u32       | cstring | uint32  | string  |
-| op*     | u64           | uint64_t    | uint64_t     | u64          | u64       | uint64  | uint64  | table   |
-| void    | ()            | void        | void         | void         | void      | void    | void    | nil     |
-| self    | ()            | void        | void         | void         | void      | void    | void    | nil     |
+| Type    | rs            | c           | cpp          | zig          |
+|---------|---------------|-------------|--------------|--------------|
+| i8      | i8            | int8_t      | int8_t       | i8           |
+| i16     | i16           | int16_t     | int16_t      | i16          |
+| i32     | i32           | int32_t     | int32_t      | i32          |
+| i64     | i64           | int64_t     | int64_t      | i64          |
+| u8      | u8            | uint8_t     | uint8_t      | u8           |
+| u16     | u16           | uint16_t    | uint16_t     | u16          |
+| u32     | u32           | uint32_t    | uint32_t     | u32          |
+| u64     | u64           | uint64_t    | uint64_t     | u64          |
+| f32     | f32           | float       | float        | f32          |
+| f64     | f64           | double      | double       | f64          |
+| bool    | bool          | bool        | bool         | bool         |
+| String  | String        | char*       | std::string  | []u8         |
+| &str    | &str          | const char* | std::string& | []const u8   |
+| CString | *const c_char | const char* | const char*  | [*c]const u8 |
+| Cstr    | *const c_char | const char* | const char*  | [*c]const u8 |
+| op*     | u64           | uint64_t    | uint64_t     | u64          |
+| void    | ()            | void        | void         | void         |
+| self    | ()            | void        | void         | void         |
+| Vec2    | u32           | uint32_t    | uint32_t     | u32          |
+| Vec3    | u32           | uint32_t    | uint32_t     | u32          |
+| Vec4    | u32           | uint32_t    | uint32_t     | u32          |
+| Quat    | u32           | uint32_t    | uint32_t     | u32          |
+| Mat4    | u32           | uint32_t    | uint32_t     | u32          |
 
-| Type    | kotlin             |
-|---------|--------------------|
-| i8      | Byte               |
-| i16     | Short              |
-| i32     | Int                |
-| i64     | Long               |
-| u8      | UByte              |
-| u16     | UShort             |
-| u32     | UInt               |
-| u64     | ULong              |
-| f32     | Float              |
-| f64     | Double             |
-| bool    | Boolean            |
-| String  | String             |
-| &str    | String             |
-| CString | CPointer<ByteVar>? |
-| Cstr    | UInt               |
-| op*     | ULong              |
-| void    | Unit               |
-| self    | Unit               |
+| Type    | kotlin             | asmscript | nelua   | go      | lua     |
+|---------|--------------------|-----------|---------|---------|---------|
+| i8      | Byte               | i8        | int8    | int8    | number  |
+| i16     | Short              | i16       | int16   | int16   | number  |
+| i32     | Int                | i32       | int32   | int32   | number  |
+| i64     | Long               | i64       | int64   | int64   | number  |
+| u8      | UByte              | u8        | uint8   | uint8   | number  |
+| u16     | UShort             | u16       | uint16  | uint16  | number  |
+| u32     | UInt               | u32       | uint32  | uint32  | number  |
+| u64     | ULong              | u64       | uint64  | uint64  | number  |
+| f32     | Float              | f32       | float32 | float32 | number  |
+| f64     | Double             | f64       | float64 | float64 | number  |
+| bool    | Boolean            | bool      | boolean | bool    | boolean |
+| String  | String             | string    | string  | string  | string  |
+| &str    | String             | string    | string  | string  | string  |
+| CString | CPointer<ByteVar>? | u32       | cstring | *byte   | string  |
+| Cstr    | UInt               | u32       | cstring | uint32  | string  |
+| op*     | ULong              | u64       | uint64  | uint64  | table   |
+| void    | Unit               | void      | void    | void    | nil     |
+| self    | Unit               | void      | void    | void    | nil     |
+| Vec2    | UInt               | u32       | uint32  | uint32  | number  |
+| Vec3    | UInt               | u32       | uint32  | uint32  | number  |
+| Vec4    | UInt               | u32       | uint32  | uint32  | number  |
+| Quat    | UInt               | u32       | uint32  | uint32  | number  |
+| Mat4    | UInt               | u32       | uint32  | uint32  | number  |

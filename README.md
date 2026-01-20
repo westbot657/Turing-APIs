@@ -183,7 +183,7 @@ types { // derived from .api-spec/type-map at runtime
 - [ ] D template
 
 
-# Raw API bindings
+# Raw API Bindings
 Turing API is not actually needed to interact with Turing, but it does provide a lot of utilities to make it easier.
 If your language does not have API support currently, here are the main rules for the typing convention:
 
@@ -193,6 +193,21 @@ and the guest code is expected to allocate a chunk of memory and call `_host_str
 and the size is for sanity checking that you are fetching the correct string.
 
 When passing a string to the host, you must pass a pointer to a null-terminated string.
+
+### Linear Algebra Types
+Vec2, Vec3, Vec4, Quat, and Mat4 are passed via `_host_f32_enqueue(f32)` and `_host_f32_dequeue() -> f32` to push/pop each component.
+The API wraps this system to use native libraries where possible, each library is shown below
+
+| Language  | Setting           | Libraries | Notes                                                                   |
+|-----------|-------------------|-----------|-------------------------------------------------------------------------|
+| Rust      | feature: glam     | glam      |                                                                         |
+| Rust      | feature: nalgebra | nalgebra  | Can be used instead of glam if you prefer                               |
+| C         | default           | cglm      | https://github.com/recp/cglm                                            |
+| C++       | default           | glm       | https://github.com/g-truc/glm                                           |
+| Zig       | default           | zalgebra  | https://github.com/kooparse/zalgebra                                    |
+| Kotlin    | default           | N/A       | TODO: find a pure-kotlin implementation without reliance on jvm systems |
+| Go        | default           | N/A       | TODO: find/write a pure-go implementation that can work in tinygo       |
+| asmscript | default           | N/A       | TODO: find/write implementation                                         |
 
 ### Objects
 Unity objects such as notes, walls, etc, are represented with a `u64` opaque pointer. Turing maps this id to the real object, this keeps scripts safe,
