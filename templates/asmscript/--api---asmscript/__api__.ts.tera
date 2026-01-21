@@ -1,6 +1,6 @@
 
 {% macro c_arg(type) -%}
-{%- if type == "&str" %}u32{% else %}{{ types.asmscript[type] }}{% endif -%}
+{%- if type == "&str" or type in api.glam_types %}u32{% else %}{{ types.asmscript[type] }}{% endif -%}
 {%- endmacro -%}
 
 {%- macro c_params(params, is_method=false, class=false) -%}
@@ -18,7 +18,7 @@ opaqu: {% if class.is_opaque %}{{ types.rs["op*"] }}{% else %}{{ class.name | ca
 {%- endmacro -%}
 
 {%- macro c_ret(type) -%}
-{%- if type == "String" %}u32{% else %}{{ types.asmscript[type] }}{% endif %}
+{%- if type == "String" or type in api.glam_types %}u32{% else %}{{ types.asmscript[type] }}{% endif %}
 {%- endmacro -%}
 
 {%- macro ffi_funcs(funcs, is_method=false, class=false) -%}

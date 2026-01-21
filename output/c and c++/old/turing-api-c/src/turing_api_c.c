@@ -44,25 +44,25 @@ void MyClass_objectFunc(MyClass* self, int16_t a) {
 // class ColorNote
 
 
-ColorNote* ColorNote_setPosition(ColorNote* self, uint32_t v) {
+ColorNote* ColorNote_setPosition(ColorNote* self, vec3s v) {
     _color_note_set_position(self->opaqu, v);
     return self;
 }
-ColorNote* ColorNote_setOrientation(ColorNote* self, uint32_t q) {
+ColorNote* ColorNote_setOrientation(ColorNote* self, quats q) {
     _color_note_set_orientation(self->opaqu, q);
     return self;
 }
-ColorNote* ColorNote_setTransform(ColorNote* self, uint32_t m) {
-    _color_note_set(self->opaqu, m);
+ColorNote* ColorNote_setTransform(ColorNote* self, mat4s m) {
+    _color_note_set_transform(self->opaqu, m);
     return self;
 }
-uint32_t ColorNote_getPosition(ColorNote* self) {
+vec3s ColorNote_getPosition(ColorNote* self) {
     return _color_note_get_position(self->opaqu);
 }
-uint32_t ColorNote_getOrientation(ColorNote* self) {
+quats ColorNote_getOrientation(ColorNote* self) {
     return _color_note_get_orientation(self->opaqu);
 }
-uint32_t ColorNote_getTransform(ColorNote* self) {
+mat4s ColorNote_getTransform(ColorNote* self) {
     return _color_note_get_transform(self->opaqu);
 }
 ColorNote ColorNote_clone(ColorNote* self) {

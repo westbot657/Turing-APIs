@@ -10,9 +10,9 @@ void _host_f32_enqueue(float f);
 float _host_f32_dequeue();{% endif %}
 {% for func in api.functions %}
 {%- if func.from is defined and func.from -%}
-{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
+{% if func.type == "String" or func.type in api.glam_types %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
     {%- for param in func.params -%}
-    {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {% if param.type in api.glam_types %}uint32_t{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
     {%- if not loop.last %}, {% endif -%}
     {%- endfor -%}
 );
@@ -22,9 +22,9 @@ float _host_f32_dequeue();{% endif %}
 {% for class in api.classes %}
 {%- for func in class.functions -%}
 {%- if func.from is defined and func.from -%}
-{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
+{% if func.type == "String" or func.type in api.glam_types %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
     {%- for param in func.params -%}
-    {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+    {% if param.type in api.glam_types %}uint32_t{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
     {%- if not loop.last %}, {% endif -%}
     {%- endfor -%}
 );
@@ -32,9 +32,9 @@ float _host_f32_dequeue();{% endif %}
 {%- endfor -%}
 {%- for func in class.methods -%}
 {% if func.from is defined and func.from %}
-{% if func.type == "String" %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}({% if class.is_opaque %}{{ types.c["op*"] }} {% else %}{{ class.name | case(style="pascal") }} {% endif %}opaqu
+{% if func.type == "String" or func.type in api.glam_types %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}({% if class.is_opaque %}{{ types.c["op*"] }} {% else %}{{ class.name | case(style="pascal") }} {% endif %}opaqu
     {%- for param in func.params -%}
-    , {% if param.type == "&str" %}const char*{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
+    , {% if param.type == "&str" %}const char*{% elif param.type in api.glam_types %}uint32_t{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
     {%- endfor -%}
 );
 {% endif -%}

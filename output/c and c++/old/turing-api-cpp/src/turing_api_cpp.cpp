@@ -43,25 +43,25 @@ void MyClass::objectFunc(int16_t a) {
 ColorNote::ColorNote(uint64_t ptr) : opaqu(ptr) {}
 
 
-ColorNote* ColorNote::setPosition(uint32_t v) {
+ColorNote* ColorNote::setPosition(glm::vec3 v) {
     _color_note_set_position(this->opaqu, v);
     return this;
 }
-ColorNote* ColorNote::setOrientation(uint32_t q) {
+ColorNote* ColorNote::setOrientation(glm::quat q) {
     _color_note_set_orientation(this->opaqu, q);
     return this;
 }
-ColorNote* ColorNote::setTransform(uint32_t m) {
-    _color_note_set(this->opaqu, m);
+ColorNote* ColorNote::setTransform(glm::mat4 m) {
+    _color_note_set_transform(this->opaqu, m);
     return this;
 }
-uint32_t ColorNote::getPosition() {
+glm::vec3 ColorNote::getPosition() {
     return _color_note_get_position(this->opaqu);
 }
-uint32_t ColorNote::getOrientation() {
+glm::quat ColorNote::getOrientation() {
     return _color_note_get_orientation(this->opaqu);
 }
-uint32_t ColorNote::getTransform() {
+glm::mat4 ColorNote::getTransform() {
     return _color_note_get_transform(this->opaqu);
 }
 ColorNote ColorNote::clone() {

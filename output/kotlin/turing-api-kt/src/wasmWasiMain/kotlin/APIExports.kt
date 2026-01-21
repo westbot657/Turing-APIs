@@ -27,8 +27,8 @@ external fun _my_class_object_func(opaqu: Int, a: Short)
 external fun _color_note_set_position(opaqu: Int, v: UInt): Unit
 @WasmImport("env", "_color_note_set_orientation")
 external fun _color_note_set_orientation(opaqu: Int, q: UInt): Unit
-@WasmImport("env", "_color_note_set")
-external fun _color_note_set(opaqu: Int, m: UInt): Unit
+@WasmImport("env", "_color_note_set_transform")
+external fun _color_note_set_transform(opaqu: Int, m: UInt): Unit
 @WasmImport("env", "_color_note_get_position")
 external fun _color_note_get_position(opaqu: Int): UInt
 @WasmImport("env", "_color_note_get_orientation")
@@ -81,32 +81,32 @@ data class MyClass(val opaqu: ULong) {
 /// this is line 2
 data class ColorNote(val opaqu: ULong) {
 
-    fun setPosition(v: UInt) : ColorNote {
+    fun setPosition(v: Vec3) : ColorNote {
         val hostResult = _color_note_set_position(this.opaqu, v)
         this
     }
 
-    fun setOrientation(q: UInt) : ColorNote {
+    fun setOrientation(q: Quat) : ColorNote {
         val hostResult = _color_note_set_orientation(this.opaqu, q)
         this
     }
 
-    fun setTransform(m: UInt) : ColorNote {
-        val hostResult = _color_note_set(this.opaqu, m)
+    fun setTransform(m: Mat4) : ColorNote {
+        val hostResult = _color_note_set_transform(this.opaqu, m)
         this
     }
 
-    fun getPosition() : UInt {
+    fun getPosition() : Vec3 {
         val hostResult = _color_note_get_position(this.opaqu)
         hostResult
     }
 
-    fun getOrientation() : UInt {
+    fun getOrientation() : Quat {
         val hostResult = _color_note_get_orientation(this.opaqu)
         hostResult
     }
 
-    fun getTransform() : UInt {
+    fun getTransform() : Mat4 {
         val hostResult = _color_note_get_transform(this.opaqu)
         hostResult
     }

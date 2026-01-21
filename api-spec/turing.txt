@@ -19,7 +19,7 @@ object_func(a: i16) -> void : _my_class_object_func
 -- this is line 1\nthis is line 2
 set_position(v: Vec3) -> self : _color_note_set_position
 set_orientation(q: Quat) -> self : _color_note_set_orientation
-set_transform(m: Mat4) -> self : _color_note_set
+set_transform(m: Mat4) -> self : _color_note_set_transform
 get_position() -> Vec3 : _color_note_get_position
 get_orientation() -> Quat : _color_note_get_orientation
 get_transform() -> Mat4 : _color_note_get_transform

@@ -1,5 +1,5 @@
 {%- macro kt_type(type) -%}
-{%- if type == "&str" or type == "String" %}CPointer<ByteVar>?{% else %}{{ types.kotlin[type] }}{% endif -%}
+{%- if type == "&str" or type == "String" %}CPointer<ByteVar>?{% elif type in api.glam_types %}UInt{% else %}{{ types.kotlin[type] }}{% endif -%}
 {%- endmacro -%}
 
 {%- macro kt_param(param) -%}
@@ -25,7 +25,7 @@
 {%- endmacro -%}
 
 {%- macro ffi_ret(type) -%}
-{%- if type == "void" %}{% elif type == "String" %}: CPointer<ByteVar>?{% else %}: {{ types.kotlin[type] }}{% endif -%}
+{%- if type == "void" %}{% elif type == "String" %}: CPointer<ByteVar>?{% elif type in api.glam_types %}: UInt{% else %}: {{ types.kotlin[type] }}{% endif -%}
 {%- endmacro -%}
 
 {%- macro convert_arg(param) -%}

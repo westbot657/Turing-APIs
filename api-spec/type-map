@@ -18,34 +18,34 @@
 | op*     | u64           | uint64_t    | uint64_t     | u64          |
 | void    | ()            | void        | void         | void         |
 | self    | ()            | void        | void         | void         |
-| Vec2    | u32           | uint32_t    | uint32_t     | u32          |
-| Vec3    | u32           | uint32_t    | uint32_t     | u32          |
-| Vec4    | u32           | uint32_t    | uint32_t     | u32          |
-| Quat    | u32           | uint32_t    | uint32_t     | u32          |
-| Mat4    | u32           | uint32_t    | uint32_t     | u32          |
+| Vec2    | alg::Vec2     | vec2s       | glm::vec2    | zalg.Vec2    |
+| Vec3    | alg::Vec3     | vec3s       | glm::vec3    | zalg.Vec3    |
+| Vec4    | alg::Vec4     | vec4s       | glm::vec4    | zalg.Vec4    |
+| Quat    | alg::Quat     | quats       | glm::quat    | zalg.Quat    |
+| Mat4    | alg::Mat4     | mat4s       | glm::mat4    | zalg.Mat4    |
 
-| Type    | kotlin             | asmscript | nelua   | go      | lua     |
-|---------|--------------------|-----------|---------|---------|---------|
-| i8      | Byte               | i8        | int8    | int8    | number  |
-| i16     | Short              | i16       | int16   | int16   | number  |
-| i32     | Int                | i32       | int32   | int32   | number  |
-| i64     | Long               | i64       | int64   | int64   | number  |
-| u8      | UByte              | u8        | uint8   | uint8   | number  |
-| u16     | UShort             | u16       | uint16  | uint16  | number  |
-| u32     | UInt               | u32       | uint32  | uint32  | number  |
-| u64     | ULong              | u64       | uint64  | uint64  | number  |
-| f32     | Float              | f32       | float32 | float32 | number  |
-| f64     | Double             | f64       | float64 | float64 | number  |
-| bool    | Boolean            | bool      | boolean | bool    | boolean |
-| String  | String             | string    | string  | string  | string  |
-| &str    | String             | string    | string  | string  | string  |
-| CString | CPointer<ByteVar>? | u32       | cstring | *byte   | string  |
-| Cstr    | UInt               | u32       | cstring | uint32  | string  |
-| op*     | ULong              | u64       | uint64  | uint64  | table   |
-| void    | Unit               | void      | void    | void    | nil     |
-| self    | Unit               | void      | void    | void    | nil     |
-| Vec2    | UInt               | u32       | uint32  | uint32  | number  |
-| Vec3    | UInt               | u32       | uint32  | uint32  | number  |
-| Vec4    | UInt               | u32       | uint32  | uint32  | number  |
-| Quat    | UInt               | u32       | uint32  | uint32  | number  |
-| Mat4    | UInt               | u32       | uint32  | uint32  | number  |
+| Type    | kotlin             | asmscript | go      | lua     |
+|---------|--------------------|-----------|---------|---------|
+| i8      | Byte               | i8        | int8    | number  |
+| i16     | Short              | i16       | int16   | number  |
+| i32     | Int                | i32       | int32   | number  |
+| i64     | Long               | i64       | int64   | number  |
+| u8      | UByte              | u8        | uint8   | number  |
+| u16     | UShort             | u16       | uint16  | number  |
+| u32     | UInt               | u32       | uint32  | number  |
+| u64     | ULong              | u64       | uint64  | number  |
+| f32     | Float              | f32       | float32 | number  |
+| f64     | Double             | f64       | float64 | number  |
+| bool    | Boolean            | bool      | bool    | boolean |
+| String  | String             | string    | string  | string  |
+| &str    | String             | string    | string  | string  |
+| CString | CPointer<ByteVar>? | u32       | *byte   | string  |
+| Cstr    | UInt               | u32       | uint32  | string  |
+| op*     | ULong              | u64       | uint64  | table   |
+| void    | Unit               | void      | void    | nil     |
+| self    | Unit               | void      | void    | nil     |
+| Vec2    | Vec2               | Vec2      | Vec2    | table   |
+| Vec3    | Vec3               | Vec3      | Vec3    | table   |
+| Vec4    | Vec4               | Vec4      | Vec4    | table   |
+| Quat    | Quat               | Quat      | Quat    | table   |
+| Mat4    | Mat4               | Mat4      | Mat4    | table   |

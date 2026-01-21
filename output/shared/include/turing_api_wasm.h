@@ -20,7 +20,7 @@ void _color_note_set_position(uint64_t opaqu, uint32_t v);
 
 void _color_note_set_orientation(uint64_t opaqu, uint32_t q);
 
-void _color_note_set(uint64_t opaqu, uint32_t m);
+void _color_note_set_transform(uint64_t opaqu, uint32_t m);
 
 uint32_t _color_note_get_position(uint64_t opaqu);
 

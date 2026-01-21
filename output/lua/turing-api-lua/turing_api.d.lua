@@ -42,35 +42,35 @@ turing_api.ColorNote = ColorNote
 
 
 ---@param self table
----@param v number
+---@param v table
 ---@return table
 function turing_api.ColorNote.setPosition(self, v) end
 
 
 ---@param self table
----@param q number
+---@param q table
 ---@return table
 function turing_api.ColorNote.setOrientation(self, q) end
 
 
 ---@param self table
----@param m number
+---@param m table
 ---@return table
 function turing_api.ColorNote.setTransform(self, m) end
 
 
 ---@param self table
----@return number
+---@return table
 function turing_api.ColorNote.getPosition(self) end
 
 
 ---@param self table
----@return number
+---@return table
 function turing_api.ColorNote.getOrientation(self) end
 
 
 ---@param self table
----@return number
+---@return table
 function turing_api.ColorNote.getTransform(self) end
 
 

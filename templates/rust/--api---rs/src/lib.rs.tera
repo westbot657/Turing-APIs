@@ -13,7 +13,7 @@
 {%- endmacro -%}
 
 {%- macro c_arg(type) -%}
-    {%- if type == "&str" %}*const c_char{% else %}{{ types.rs[type] }}{% endif -%}
+    {%- if type == "&str" %}*const c_char{% elif type in api.glam_types %}u32{% else %}{{ types.rs[type] }}{% endif -%}
 {%- endmacro -%}
 
 {%- macro c_params(params, is_method=false, class=false) -%}
@@ -46,7 +46,7 @@
 {%- endmacro -%}
 
 {%- macro c_ret(type) -%}
-    {%- if type == "void" %}{% elif type == "String" %} -> u32{% elif type in api.opaque_classes %} -> u64{% else %} -> {{ types.rs[type] }}{% endif %}
+    {%- if type == "void" %}{% elif type == "String" or type in api.glam_types %} -> u32{% elif type in api.opaque_classes %} -> u64{% else %} -> {{ types.rs[type] }}{% endif %}
 {%- endmacro -%}
 
 {%- macro convert_args(params, is_method=false, class=false) -%}

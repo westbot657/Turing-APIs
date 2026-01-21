@@ -133,7 +133,7 @@ unsafe extern "C" {
     fn _my_class_object_func(opaqu: u64, a: i16);
     fn _color_note_set_position(opaqu: u64, v: u32) -> ();
     fn _color_note_set_orientation(opaqu: u64, q: u32) -> ();
-    fn _color_note_set(opaqu: u64, m: u32) -> ();
+    fn _color_note_set_transform(opaqu: u64, m: u32) -> ();
     fn _color_note_get_position(opaqu: u64) -> u32;
     fn _color_note_get_orientation(opaqu: u64) -> u32;
     fn _color_note_get_transform(opaqu: u64) -> u32;
@@ -191,35 +191,35 @@ pub struct ColorNote {
 }
 impl ColorNote {
 
-    pub fn set_position(&self, v: u32) -> &Self {
+    pub fn set_position(&self, v: alg::Vec3) -> &Self {
         let v = alg::enqueue_vec3(v);
         unsafe { _color_note_set_position(self.opaqu, v) };
         self
     }
 
-    pub fn set_orientation(&self, q: u32) -> &Self {
+    pub fn set_orientation(&self, q: alg::Quat) -> &Self {
         let q = alg::enqueue_quat(q);
         unsafe { _color_note_set_orientation(self.opaqu, q) };
         self
     }
 
-    pub fn set_transform(&self, m: u32) -> &Self {
+    pub fn set_transform(&self, m: alg::Mat4) -> &Self {
         let m = alg::enqueue_mat4(m);
-        unsafe { _color_note_set(self.opaqu, m) };
+        unsafe { _color_note_set_transform(self.opaqu, m) };
         self
     }
 
-    pub fn get_position(&self) -> u32 {
+    pub fn get_position(&self) -> alg::Vec3 {
         unsafe { _color_note_get_position(self.opaqu) };
         alg::dequeue_vec3()
     }
 
-    pub fn get_orientation(&self) -> u32 {
+    pub fn get_orientation(&self) -> alg::Quat {
         unsafe { _color_note_get_orientation(self.opaqu) };
         alg::dequeue_quat()
     }
 
-    pub fn get_transform(&self) -> u32 {
+    pub fn get_transform(&self) -> alg::Mat4 {
         unsafe { _color_note_get_transform(self.opaqu) };
         alg::dequeue_mat4()
     }

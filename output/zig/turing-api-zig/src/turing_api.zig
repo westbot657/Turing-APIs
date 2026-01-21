@@ -2,36 +2,41 @@
 const std = @import("std");
 const zalg = @import("zalgebra");
 
-pub fn enqueue_vec2(v: zalg.Vec2) void {
+pub fn enqueue_vec2(v: zalg.Vec2) u32 {
     _host_f32_enqueue(v.x);
     _host_f32_enqueue(v.y);
+    return 2;
 }
 
-pub fn enqueue_vec3(v: zalg.Vec3) void {
+pub fn enqueue_vec3(v: zalg.Vec3) u32 {
     _host_f32_enqueue(v.x);
     _host_f32_enqueue(v.y);
     _host_f32_enqueue(v.z);
+    return 3;
 }
 
-pub fn enqueue_vec4(v: zalg.Vec4) void {
+pub fn enqueue_vec4(v: zalg.Vec4) u32 {
     _host_f32_enqueue(v.x);
     _host_f32_enqueue(v.y);
     _host_f32_enqueue(v.z);
     _host_f32_enqueue(v.w);
+    return 4;
 }
 
-pub fn enqueue_quat(q: zalg.Quat) void {
+pub fn enqueue_quat(q: zalg.Quat) u32 {
     _host_f32_enqueue(q.x);
     _host_f32_enqueue(q.y);
     _host_f32_enqueue(q.z);
     _host_f32_enqueue(q.w);
+    return 4;
 }
 
-pub fn enqueue_mat4(m: zalg.Mat4) void {
+pub fn enqueue_mat4(m: zalg.Mat4) u32 {
     enqueue_vec4(m.c0);
     enqueue_vec4(m.c1);
     enqueue_vec4(m.c2);
     enqueue_vec4(m.c3);
+    return 16;
 }
 
 
@@ -87,7 +92,7 @@ extern "C" fn _my_test(a: i8, b: i16) u32;
 extern "C" fn _my_class_object_func(opaqu: u64, a: i16) void;
 extern "C" fn _color_note_set_position(opaqu: u64, v: u32) void;
 extern "C" fn _color_note_set_orientation(opaqu: u64, q: u32) void;
-extern "C" fn _color_note_set(opaqu: u64, m: u32) void;
+extern "C" fn _color_note_set_transform(opaqu: u64, m: u32) void;
 extern "C" fn _color_note_get_position(opaqu: u64) u32;
 extern "C" fn _color_note_get_orientation(opaqu: u64) u32;
 extern "C" fn _color_note_get_transform(opaqu: u64) u32;
@@ -144,40 +149,40 @@ pub const MyClass = struct {
 pub const ColorNote = struct {
     opaqu: u64,
 
-    pub fn set_position(self: *const ColorNote, v: u32) *ColorNote {
+    pub fn set_position(self: *const ColorNote, v: zalg.Vec3) *ColorNote {
         const turing_handle_v = enqueue_vec3(v);
         _color_note_set_position(self.opaqu, turing_handle_v);
         return self;
     }
 
 
-    pub fn set_orientation(self: *const ColorNote, q: u32) *ColorNote {
+    pub fn set_orientation(self: *const ColorNote, q: zalg.Quat) *ColorNote {
         const turing_handle_q = enqueue_quat(q);
         _color_note_set_orientation(self.opaqu, turing_handle_q);
         return self;
     }
 
 
-    pub fn set_transform(self: *const ColorNote, m: u32) *ColorNote {
+    pub fn set_transform(self: *const ColorNote, m: zalg.Mat4) *ColorNote {
         const turing_handle_m = enqueue_mat4(m);
-        _color_note_set(self.opaqu, turing_handle_m);
+        _color_note_set_transform(self.opaqu, turing_handle_m);
         return self;
     }
 
 
-    pub fn get_position(self: *const ColorNote) u32 {
+    pub fn get_position(self: *const ColorNote) zalg.Vec3 {
         _color_note_get_position(self.opaqu);
         return dequeue_vec3();
     }
 
 
-    pub fn get_orientation(self: *const ColorNote) u32 {
+    pub fn get_orientation(self: *const ColorNote) zalg.Quat {
         _color_note_get_orientation(self.opaqu);
         return dequeue_quat();
     }
 
 
-    pub fn get_transform(self: *const ColorNote) u32 {
+    pub fn get_transform(self: *const ColorNote) zalg.Mat4 {
         _color_note_get_transform(self.opaqu);
         return dequeue_mat4();
     }

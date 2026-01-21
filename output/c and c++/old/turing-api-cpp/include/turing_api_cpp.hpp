@@ -46,17 +46,17 @@ public:
 
 
     
-    ColorNote* setPosition(uint32_t v);
+    ColorNote* setPosition(glm::vec3 v);
     
-    ColorNote* setOrientation(uint32_t q);
+    ColorNote* setOrientation(glm::quat q);
     
-    ColorNote* setTransform(uint32_t m);
+    ColorNote* setTransform(glm::mat4 m);
     
-    uint32_t getPosition();
+    glm::vec3 getPosition();
     
-    uint32_t getOrientation();
+    glm::quat getOrientation();
     
-    uint32_t getTransform();
+    glm::mat4 getTransform();
     
     ColorNote clone();
 };

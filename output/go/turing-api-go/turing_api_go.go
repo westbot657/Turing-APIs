@@ -36,8 +36,8 @@ func _my_class_object_func(opaqu uint64, a int16)
 func _color_note_set_position(opaqu uint64, v uint32) void
 //go:wasmimport env _color_note_set_orientation
 func _color_note_set_orientation(opaqu uint64, q uint32) void
-//go:wasmimport env _color_note_set
-func _color_note_set(opaqu uint64, m uint32) void
+//go:wasmimport env _color_note_set_transform
+func _color_note_set_transform(opaqu uint64, m uint32) void
 //go:wasmimport env _color_note_get_position
 func _color_note_get_position(opaqu uint64) uint32
 //go:wasmimport env _color_note_get_orientation
@@ -101,20 +101,20 @@ type ColorNote struct {
 
 
 
-func (self *ColorNote) setPosition(v uint32) *ColorNote {
+func (self *ColorNote) setPosition(v Vec3) *ColorNote {
     _color_note_set_position(self.opaqu, v)
     return self
     
 }
 
-func (self *ColorNote) setOrientation(q uint32) *ColorNote {
+func (self *ColorNote) setOrientation(q Quat) *ColorNote {
     _color_note_set_orientation(self.opaqu, q)
     return self
     
 }
 
-func (self *ColorNote) setTransform(m uint32) *ColorNote {
-    _color_note_set(self.opaqu, m)
+func (self *ColorNote) setTransform(m Mat4) *ColorNote {
+    _color_note_set_transform(self.opaqu, m)
     return self
     
 }

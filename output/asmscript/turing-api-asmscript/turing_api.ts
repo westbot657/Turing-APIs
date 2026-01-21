@@ -25,8 +25,8 @@ declare function _my_class_object_func(opaqu: u64, a: i16): void;
 declare function _color_note_set_position(opaqu: u64, v: u32): void;
 @external("env", "_color_note_set_orientation")
 declare function _color_note_set_orientation(opaqu: u64, q: u32): void;
-@external("env", "_color_note_set")
-declare function _color_note_set(opaqu: u64, m: u32): void;
+@external("env", "_color_note_set_transform")
+declare function _color_note_set_transform(opaqu: u64, m: u32): void;
 @external("env", "_color_note_get_position")
 declare function _color_note_get_position(opaqu: u64): u32;
 @external("env", "_color_note_get_orientation")
@@ -177,35 +177,35 @@ class ColorNote {
 
 
 
-    public set_position(v: u32): ColorNote {
+    public set_position(v: Vec3): ColorNote {
         let turing_handle_v = enqueue_vec3(v);
         _color_note_set_position(this.opaqu, turing_handle_v);
         return this;
     }
 
-    public set_orientation(q: u32): ColorNote {
+    public set_orientation(q: Quat): ColorNote {
         let turing_handle_q = enqueue_quat(q);
         _color_note_set_orientation(this.opaqu, turing_handle_q);
         return this;
     }
 
-    public set_transform(m: u32): ColorNote {
+    public set_transform(m: Mat4): ColorNote {
         let turing_handle_m = enqueue_mat4(m);
-        _color_note_set(this.opaqu, turing_handle_m);
+        _color_note_set_transform(this.opaqu, turing_handle_m);
         return this;
     }
 
-    public get_position(): u32 {
+    public get_position(): Vec3 {
         _color_note_get_position(this.opaqu);
         return dequeue_vec3();
     }
 
-    public get_orientation(): u32 {
+    public get_orientation(): Quat {
         _color_note_get_orientation(this.opaqu);
         return dequeue_quat();
     }
 
-    public get_transform(): u32 {
+    public get_transform(): Mat4 {
         _color_note_get_transform(this.opaqu);
         return dequeue_mat4();
     }
