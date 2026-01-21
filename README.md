@@ -1,5 +1,8 @@
 # Turing
 
+All Templates and APIs can be found under [output/](./output), each language directory contains a README.md file
+explaining how to set up and use the API for that language.  
+
 ## Supported languages
 
 You can use this table to pick a language to use for writing scripts  

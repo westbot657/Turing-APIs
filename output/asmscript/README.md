@@ -6,6 +6,7 @@ Required dependencies:
 
 Recommended tools:
 - vscode
+- AssemblyScript extension
 
 Setup instructions:
 1. copy the entire `asmscript-template` and `turing-api-asmscript` directories into your project directory.

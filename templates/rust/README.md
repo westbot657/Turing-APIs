@@ -16,6 +16,6 @@ Setup instructions:
 
 Compile project:
 1. run `cargo build --target wasm32-wasip1 --release`
-2. Compiled wasm file is found at target/wasm32-wasip1/release/[crate-name].wasm
+2. Compiled wasm file is found at `target/wasm32-wasip1/release/[crate-name].wasm`
 3. copy the wasm file into your beatmap directory
 
