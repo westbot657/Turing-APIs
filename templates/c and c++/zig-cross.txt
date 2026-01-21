@@ -3,19 +3,19 @@ c = ['zig', 'cc']
 cpp = ['zig', 'c++']
 ar = ['zig', 'ar']
 strip = ['zig', 'strip']
-pkg-config = 'false'
 
 [properties]
-needs_exe_wrapper = true
+has_threads = false
+# needs_exe_wrapper = true
 # Force linker so Meson doesn't probe with -Wl,--version
-c_linker = 'lld'
-cpp_linker = 'lld'
+# c_linker = 'lld'
+# cpp_linker = 'lld'
 
 [built-in options]
 c_args = ['-target', 'wasm32-wasi']
-cpp_args = ['-target', 'wasm32-wasi']
+cpp_args = ['-target', 'wasm32-wasi', '-D_LIBCPP_HAS_NO_THREADS=1']
 c_link_args = ['-target', 'wasm32-wasi']
-cpp_link_args = ['-target', 'wasm32-wasi']
+cpp_link_args = ['-target', 'wasm32-wasi', '-D_LIBCPP_HAS_NO_THREADS=1']
 
 [host_machine]
 system = 'wasi'
