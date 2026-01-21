@@ -61,7 +61,7 @@ to run the script without user intervention, you can pass them in via the comman
 
 ### Version:
 `#version <version>`  
-i.e. `#version 0.1.0-alpha`
+i.e. `#version 0.1.0`
 the last line in the spec that specifies a version is the version used in the generated API code
 
 ### Classes:
