@@ -118,7 +118,7 @@ declare function _host_f32_dequeue(): {{ types.asmscript["f32"] }};{% endif %}
 {%- endfor -%}
 
 export function _{{ api.name }}_semver(): u64 {
-    return ({{ api.semver.major }}u64 << 16) | ({{ api.semver.minor }}u64 << 8) | {{ api.semver.patch }}u64;
+    return ({{ api.semver.major }}u64 << 32) | ({{ api.semver.minor }}u64 << 16) | {{ api.semver.patch }}u64;
 }
 
 //// Linear Algebra Helpers ////

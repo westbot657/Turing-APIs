@@ -98,7 +98,7 @@ extern "C" fn _log_critical(msg: [*:0]const u8) void;
 extern "C" fn _log_debug(msg: [*:0]const u8) void;
 
 export fn _turing_api_semver() u64 {
-    return ((0 << 16) | (8 << 8) | 0);
+    return ((0 << 32) | (8 << 16) | 0);
 }
 
 pub const TURING_API_VERSION: []const u8 = "0.8.0";

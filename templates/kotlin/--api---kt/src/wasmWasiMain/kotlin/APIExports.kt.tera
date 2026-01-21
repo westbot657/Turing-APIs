@@ -108,7 +108,7 @@ external fun _host_f32_dequeue() : {{ types.kotlin["f32"] }};{% endif %}
 
 @WasmExport(name = "_{{ api.name }}_semver")
 fun _{{ api.name }}_semver() : ULong {
-    ({{ api.semver.major }}uL shl 16) or ({{ api.semver.minor }}uL shl 8) or {{ api.semver.patch }}uL
+    ({{ api.semver.major }}uL shl 32) or ({{ api.semver.minor }}uL shl 16) or {{ api.semver.patch }}uL
 }
 
 //// Functions ////

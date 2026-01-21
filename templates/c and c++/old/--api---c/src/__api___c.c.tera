@@ -76,7 +76,7 @@
 #include <string.h>
 
 uint64_t _{{ api.name }}_semver(void) {
-    return ((uint64_t){{ api.semver.major }} << 16) | ((uint64_t){{ api.semver.minor }} << 8) | (uint64_t){{ api.semver.patch }};
+    return ((uint64_t){{ api.semver.major }} << 32) | ((uint64_t){{ api.semver.minor }} << 16) | (uint64_t){{ api.semver.patch }};
 }
 
 //// Functions ////

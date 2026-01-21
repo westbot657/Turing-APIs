@@ -49,7 +49,7 @@ external fun _log_debug(msg: CPointer<ByteVar>?)
 
 @WasmExport(name = "_turing_api_semver")
 fun _turing_api_semver() : ULong {
-    (0uL shl 16) or (8uL shl 8) or 0uL
+    (0uL shl 32) or (8uL shl 16) or 0uL
 }
 
 //// Functions ////

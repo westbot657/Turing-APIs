@@ -136,7 +136,7 @@ func _host_f32_dequeue() {{ types.go["f32"] }}{% endif %}
 
 //export _{{ api.name }}_semver
 func _{{ api.name }}_semver() uint64 {
-    return (uint64({{ api.semver.major }}) << 16) | (uint64({{ api.semver.minor }}) << 8) | uint64({{ api.semver.patch }})
+    return (uint64({{ api.semver.major }}) << 32) | (uint64({{ api.semver.minor }}) << 16) | uint64({{ api.semver.patch }})
 }
 
 const APIVersion = "{{ api.version }}"

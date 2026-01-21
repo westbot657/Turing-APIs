@@ -238,7 +238,7 @@ unsafe extern "C" {
 
 #[unsafe(no_mangle)]
 extern "C" fn _{{ api.name }}_semver() -> u64 {
-    ({{ api.semver.major }}u64 << 16) | ({{ api.semver.minor }}u64 << 8) | {{ api.semver.patch }}u64
+    ({{ api.semver.major }}u64 << 32) | ({{ api.semver.minor }}u64 << 16) | {{ api.semver.patch }}u64
 }
 pub const {{ api.name | case(style="upper_snake") }}_VERSION: &str = "{{ api.version }}";
 

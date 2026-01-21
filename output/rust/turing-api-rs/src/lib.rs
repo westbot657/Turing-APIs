@@ -146,7 +146,7 @@ unsafe extern "C" {
 
 #[unsafe(no_mangle)]
 extern "C" fn _turing_api_semver() -> u64 {
-    (0u64 << 16) | (8u64 << 8) | 0u64
+    (0u64 << 32) | (8u64 << 16) | 0u64
 }
 pub const TURING_API_VERSION: &str = "0.8.0";
 

@@ -223,7 +223,7 @@ extern "C" fn _host_f32_dequeue() f32;{% endif %}
 {%- endfor %}
 
 export fn _{{ api.name }}_semver() u64 {
-    return (({{ api.semver.major }} << 16) | ({{ api.semver.minor }} << 8) | {{ api.semver.patch }});
+    return (({{ api.semver.major }} << 32) | ({{ api.semver.minor }} << 16) | {{ api.semver.patch }});
 }
 
 pub const {{ api.name | case(style="upper_snake") }}_VERSION: []const u8 = "{{ api.version }}";
