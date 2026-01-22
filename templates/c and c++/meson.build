@@ -1,13 +1,5 @@
 project('turing_script', 'c', 'cpp', default_options: ['c_std=c11', 'cpp_std=c++20'])
 
-# disable threads if building with zig
-if meson.get_compiler('cpp').get_id() == 'clang'
-    warning('Disabling threads for zig-wasm build')
-    add_project_arguments(
-        '-D_LIBCPP_HAS_NO_THREADS=1',
-        language: 'cpp'
-    )
-endif
 
 # on release builds, disable debug symbols and enable optimizations
 buildtype = get_option('buildtype')
@@ -42,8 +34,13 @@ if buildtype == 'release'
     add_project_link_arguments('-Wl,--gc-sections', language: 'cpp')
 endif
 
-# import dependency from ..
+
+add_project_arguments('-Wl,--no-entry', language: 'cpp')
+
+# dependencies
+
 glm_dep = dependency('glm', fallback: ['glm', 'glm_dep'], required: true)
+cpp_rt = dependency('c++_static', required: false)  # optional
 
 # build the api static library
 subdir('api')
@@ -56,5 +53,5 @@ executable(
     'src/main.cpp',
     include_directories: api_inc,
     link_with: libapi,
-    dependencies: [glm_dep],
+    dependencies: [glm_dep, cpp_rt],
 )

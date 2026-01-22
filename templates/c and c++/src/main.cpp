@@ -37,3 +37,9 @@ WASM_EXPORT("on_exit") void on_exit() {
 // Add more hooks as needed
 
 } // extern "C"
+
+
+// unused, only for building
+int main() {
+    return 0;
+}
