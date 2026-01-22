@@ -1,6 +1,6 @@
 [wrap-git]
 url = https://github.com/g-truc/glm.git
-revision = 0.9.9.8   
+revision = 1.0.3
 # or 1.0.1, pin a version
 depth = 1
 
