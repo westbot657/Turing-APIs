@@ -90,13 +90,16 @@ Language template files (`.tera`) are written in a format called `tera`, a templ
 all templates operate over the following data structures:
 ```js
 api {
+    name: "turing_api",
+    nameh: "turing-api",
     version: "0.0.1",
     semver: {
         major: 0,
         minor: 0,
         patch: 1
     },
-    opaque_classes: ["class_name"],
+    opaque_classes: ["ClassName"],
+    glam_types: ["Vec2", "Vec3", "Vec4", "Quat", "Mat4"],
     functions: [
         {
             name: "function_name",
@@ -106,14 +109,17 @@ api {
                     name: "parameter_name",
                     type: "parameter_type"
                 }
-            ]
+            ],
+            from: "_function_name",
+            doc: "doc comment"
         }
     ],
     classes: [
         {
             is_opaque: bool,
             name: "class_name",
-            variables: [
+            doc: "class doc comment",
+            variables: [ // mostly unused, contains the opaqu handle when class is opaque
                 {
                     name: "attribute_name",
                     type: "attrubite_type"
@@ -128,7 +134,10 @@ api {
                             name: "parameter_name",
                             type: "parameter_type"
                         }
-                    ]
+                    ],
+                    from: "_method_name",
+                    doc: "function doc comment\nmay have newlines",
+                    is_static: false,
                 }
             ],
             functions: [
@@ -140,7 +149,10 @@ api {
                             name: "parameter_name",
                             type: "parameter_type"
                         }
-                    ]
+                    ],
+                    from: "_method_name",
+                    doc: "function doc comment",
+                    is_static: true,
                 }
             ]
         }
@@ -152,6 +164,16 @@ types { // derived from .api-spec/type-map at runtime
         <base_type>: <actual_type>
     }
 }
+```
+
+Available functions:
+```
+filter: case(style: "snake"|"pascal"|"camel"|"lower") -> str
+    "lower" converts upper-case letters to lower instead of using the case system that the others follow
+
+func: docs(doc: str, d: str) -> str
+    doc: the doc comment contents
+    d: the delimiter, such as "/// " or "--- "
 
 ```
 
@@ -174,6 +196,8 @@ types { // derived from .api-spec/type-map at runtime
 - [x] Kotlin template
 - [x] AsmScript api
 - [x] AsmScript template
+- [ ] C3 api
+- [ ] C3 template
 - [ ] Nim api
 - [ ] Nim template
 - [ ] Grain api
