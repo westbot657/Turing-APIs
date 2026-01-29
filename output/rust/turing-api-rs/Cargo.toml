@@ -2,7 +2,7 @@
 
 [package]
 name = "turing-api"
-version = "0.8.0"
+version = "0.1.0"
 edition = "2024"
 description = "The Turing mod scripting API for Beat Saber"
 license = "GPL-2.0-only"
