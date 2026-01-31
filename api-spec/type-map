@@ -12,7 +12,7 @@
 | f64     | f64           | double      | double       | f64          |
 | bool    | bool          | bool        | bool         | bool         |
 | String  | String        | char*       | std::string  | []u8         |
-| &str    | &str          | const char* | std::string& | []const u8   |
+| &str    | &str          | const char* | std::string_view | []const u8   |
 | CString | *const c_char | const char* | const char*  | [*c]const u8 |
 | Cstr    | *const c_char | const char* | const char*  | [*c]const u8 |
 | op*     | u64           | uint64_t    | uint64_t     | u64          |
