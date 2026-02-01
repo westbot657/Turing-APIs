@@ -88,81 +88,80 @@ if the class is opaque, attributes are all *after* the opaque pointer attribute
 
 Language template files (`.tera`) are written in a format called `tera`, a templating system based on `jinja2`  
 all templates operate over the following data structures:
-```js
-api {
-    name: "turing_api",
-    nameh: "turing-api",
-    version: "0.0.1",
-    semver: {
-        major: 0,
-        minor: 0,
-        patch: 1
-    },
-    opaque_classes: ["ClassName"],
-    glam_types: ["Vec2", "Vec3", "Vec4", "Quat", "Mat4"],
+```json5
+{
+  api: {
+    name: "api_name",
+    name_h: "api-name",
     functions: [
-        {
-            name: "function_name",
-            type: "return_type",
-            params: [
-                {
-                    name: "parameter_name",
-                    type: "parameter_type"
-                }
-            ],
-            from: "_function_name",
-            doc: "doc comment"
-        }
+      {
+        name: "func_name",
+        params: [
+          {
+            name: "param_name",
+            type: "u32"
+          }
+        ],
+        type: "void",
+        static: true,
+        doc: "doc comment", // optional
+        wasm: "_turing_api_func_name"
+      }
     ],
     classes: [
-        {
-            is_opaque: bool,
-            name: "class_name",
-            doc: "class doc comment",
-            variables: [ // mostly unused, contains the opaqu handle when class is opaque
-                {
-                    name: "attribute_name",
-                    type: "attrubite_type"
-                }
+      {
+        name: "ClassName",
+        static: false,
+        doc: "doc comment", // optional
+        functions: [
+          {
+            name: "func_name",
+            params: [
+              {
+                name: "param_name",
+                type: "u32"
+              }
             ],
-            methods: [
-                {
-                    name: "method_name",
-                    type: "return_type",
-                    params: [
-                        {
-                            name: "parameter_name",
-                            type: "parameter_type"
-                        }
-                    ],
-                    from: "_method_name",
-                    doc: "function doc comment\nmay have newlines",
-                    is_static: false,
-                }
+            type: "void",
+            static: true,
+            doc: "doc comment", // optional
+            wasm: "_turing_api_class_name__func_name",
+            class_name: "ClassName"
+          }
+        ],
+        methods: [
+          {
+            name: "method_name",
+            params: [
+              {
+                name: "param_name",
+                type: "u32"
+              }
             ],
-            functions: [
-                {
-                    name: "function_name",
-                    type: "return_type",
-                    params: [
-                        {
-                            name: "parameter_name",
-                            type: "parameter_type"
-                        }
-                    ],
-                    from: "_method_name",
-                    doc: "function doc comment",
-                    is_static: true,
-                }
-            ]
-        }
-    ]
-}
+            type: "void",
+            static: false,
+            doc: "doc comment", // optional
+            wasm: "_turing_api_class_name__method_name",
+            class_name: "ClassName"
+          }
+        ]
+      }
+    ],
+    version: "0.0.0",
+    semver: {
+      major: 0,
+      minor: 0,
+      patch: 0
+    },
+    include_core: false
+  },
 
-types { // derived from .api-spec/type-map at runtime
-    <lang>: {
-        <base_type>: <actual_type>
+  types: {
+    // derived from .api-spec/type-map at runtime
+    lang: {
+      base_type: "actual_type"
     }
+  }
 }
 ```
 

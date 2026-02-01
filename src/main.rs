@@ -1,48 +1,41 @@
+use std::collections::{HashMap, HashSet};
+use std::iter::{Enumerate, Peekable};
+use std::{fs, io, process};
+use std::io::Write;
+use std::path::PathBuf;
+use std::slice::Iter;
 use clap::Parser;
 use convert_case::{Case, Casing};
+use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
-use std::collections::{HashMap, VecDeque};
-use std::fs;
-use std::io::{self, Write};
-use std::path::PathBuf;
-use tera::{from_value, to_value, Context, Result as TeraResult, Tera, Value};
-
-use regex::Regex;
+use tera::{from_value, to_value, Context, Tera, Value};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ApiModel {
     pub name: String,
-    pub nameh: String,
+    pub name_h: String,
     pub classes: Vec<ClassDef>,
     pub functions: Vec<FunctionDef>,
-    pub opaque_classes: Vec<String>,
     pub version: String,
     pub semver: Semver,
-    pub glam_types: Vec<String>,
+    pub include_core: bool,
 }
+
 #[derive(Debug, Default, Serialize, Deserialize)]
 pub struct Semver {
     pub major: u32,
     pub minor: u16,
-    pub patch: u16
+    pub patch: u16,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClassDef {
     pub name: String,
-    pub variables: Vec<VariableDef>,
-    pub methods: Vec<FunctionDef>,
+    #[serde(rename = "static")]
+    pub is_static: bool,
+    pub doc: Option<String>,
     pub functions: Vec<FunctionDef>,
-    pub is_opaque: bool,
-    pub doc: Option<String>
-}
-
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct VariableDef {
-    pub name: String,
-    #[serde(rename = "type")]
-    pub typ: String,
+    pub methods: Vec<FunctionDef>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -51,9 +44,11 @@ pub struct FunctionDef {
     pub params: Vec<ParamDef>,
     #[serde(rename = "type")]
     pub returns: String,
-    pub from: String,
+    #[serde(rename = "static")]
     pub is_static: bool,
     pub doc: Option<String>,
+    pub wasm: String,
+    pub class_name: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -63,308 +58,284 @@ pub struct ParamDef {
     pub typ: String,
 }
 
-fn parse_doc_comment(i: &mut usize, lines: &Vec<&str>) -> Option<String> {
-    let mut parts = Vec::new();
-    let mut idx = *i + 1;
+impl Semver {
+    fn parse_into(&mut self, ver: &str) -> Result<(), String> {
+        let ver: [u32; 3] = ver
+            .splitn(3, ".")
+            .map(|x|
+                x
+                    .trim()
+                    .parse::<u32>()
+                    .map_err(|e| format!("{e}"))
+            )
+            .collect::<Result<Vec<u32>, String>>()?
+            .try_into()
+            .map_err(|_| String::from("version does nto follow semantic version format"))?;
 
-    while idx < lines.len() {
-        if let Some(rest) = lines[idx].strip_prefix("-- ") {
-            parts.push(rest);
-            idx += 1;
-        } else {
-            break;
-        }
-    }
+        self.major = ver[0];
+        self.minor = u16::try_from(ver[1]).map_err(|e| format!("minor version number is too large: {e}"))?;
+        self.patch = u16::try_from(ver[2]).map_err(|e| format!("patch version number is too large: {e}"))?;
 
-    if parts.is_empty() {
-        None
-    } else {
-        // Advance `i` to the last consumed line
-        *i = idx - 1;
-        Some(parts.join("\\n"))
+        Ok(())
     }
 }
 
-
-pub fn parse_api(input: &str, reserved: &HashMap<String, Vec<String>>) -> ApiModel {
-    let mut classes: Vec<ClassDef> = Vec::new();
-    let mut functions: Vec<FunctionDef> = Vec::new();
-    let mut current_class: Option<String> = None;
-    let mut invalid = false;
-
-    let func_re = Regex::new(
-        r#"(?x)
-        (?P<prefix>::)?             # optional '::' for static
-        (?P<name>\w+)\s*            # function name
-        \((?P<params>[^)]*)\)\s*    # parameters
-        ->\s*(?P<ret>\w+)           # return type
-        (?:\s*:\s*(?P<from>\S+))?   # optional source after colon
-        "#
-    ).unwrap();
-
-    let var_re = Regex::new(r#"^\.(?P<name>\w+)\s*:\s*(?P<typ>\S+)$"#).unwrap();
-
-    let mut api_name = None;
-    let mut api_name2 = None;
-    let mut version = "0".to_string();
-    let mut semver = Semver::default();
-
-    let lines: Vec<&str> = input.lines().map(|l| l.trim()).collect();
-    let mut i = 0;
-
-    while i < lines.len() {
-        let line = lines[i];
-
-        if line.is_empty() || line.starts_with("//") {
-            i += 1;
-            continue;
-        }
-
-        if let Some(ver) = line.strip_prefix("#version ") {
-            version = ver.trim().to_string();
-
-            let ver: Vec<u32> = version.splitn(3, ".").map(|x| x.trim().parse::<u32>().expect(&format!("Invalid semver format for version: {}", x))).collect();
-            semver.major = ver[0];
-            semver.minor = u16::try_from(ver[1]).expect("minor version number cannot exceed 2^16");
-            semver.patch = u16::try_from(ver[2]).expect("patch version number cannot exceed 2^16");
-
-            i += 1;
-            continue;
-        }
-
-        if let Some(name) = line.strip_prefix("#api ") {
-            api_name = Some(name.trim().to_string());
-            api_name2 = Some(name.trim().replace("_", "-").to_string());
-            i += 1;
-            continue;
-        }
-
-        if line.starts_with(':') && line.ends_with(':') {
-            let header = line.trim_matches(':').trim();
-            let (name, is_opaque) = if let Some((name, flags)) = header.split_once(' ') {
-                (name.trim().to_string(), flags.contains("[opaque]"))
-            } else {
-                (header.to_string(), false)
-            };
-
-            if name == "Global" {
-                current_class = None;
-            } else if let Some(langs) = reserved.get(&name) {
-                eprintln!("Invalid class name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
-                invalid = true;
-            } else {
-                if !classes.iter().any(|c| c.name == name) {
-                    let mut vars = Vec::new();
-                    if is_opaque {
-                        vars.push(VariableDef {
-                            name: "opaqu".to_string(),
-                            typ: "op*".to_string(),
-                        });
-                    }
-
-                    let doc = parse_doc_comment(&mut i, &lines);
-
-                    classes.push(ClassDef {
-                        name: name.clone(),
-                        variables: vars,
-                        methods: Vec::new(),
-                        functions: Vec::new(),
-                        doc,
-                        is_opaque,
-                    });
+impl ApiModel {
+    pub fn parse_doc(lines: &mut Peekable<Enumerate<Iter<&str>>>) -> Option<String> {
+        let mut s = Vec::new();
+        loop {
+            if let Some((_, line)) = lines.peek() {
+                if line.starts_with("-- ") {
+                    let comment = lines.next().unwrap().1.strip_prefix("-- ").unwrap();
+                    s.push(comment);
+                } else {
+                    break;
                 }
-                current_class = Some(name);
-            }
-            i += 1;
-            continue;
-        }
-
-        if let Some(caps) = var_re.captures(line) {
-            let name = caps["name"].to_string();
-
-            if let Some(langs) = reserved.get(&name) {
-                eprintln!("Invalid variable name '{}' cannot be used, it is a keyword in language(s): {}", name, langs.join(", "));
-                invalid = true;
-            }
-
-            let var = VariableDef {
-                name,
-                typ: caps["typ"].to_string(),
-            };
-            if let Some(class_name) = &current_class {
-                let class = classes
-                    .iter_mut()
-                    .find(|c| &c.name == class_name)
-                    .expect("Class should exist");
-                class.variables.push(var);
             } else {
-                panic!("Variables are only allowed inside classes");
+                return None;
             }
-            i += 1;
-            continue;
+        }
+        if s.is_empty() {
+            None
+        } else {
+            Some(s.join("\\n"))
+        }
+    }
+
+    pub fn parse_params(raw: &str, seen_types: &mut HashSet<String>, invalid: &mut bool, reserved: &HashMap<String, Vec<String>>) -> Result<Vec<ParamDef>, String> {
+        let mut params = Vec::new();
+
+        let raw = raw.trim();
+
+        for raw_p in raw.split(",") {
+            let raw_p = raw_p.trim();
+            if let Some((n, t)) = raw_p.split_once(":") {
+                let n = n.trim();
+                let t = t.trim();
+                if let Some(langs) = reserved.get(n) {
+                    eprintln!("Invalid param name '{n}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+                    *invalid = true;
+                }
+                if let Some(langs) = reserved.get(t) {
+                    eprintln!("Invalid param type '{t}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+                    *invalid = true;
+                }
+
+                seen_types.insert(t.to_string());
+
+                params.push(ParamDef {
+                    name: n.to_string(),
+                    typ: t.to_string(),
+                })
+
+            }
         }
 
-        if let Some(caps) = func_re.captures(line) {
-            let is_static = caps.name("prefix").is_some();
-            let name = caps["name"].to_string();
-            let returns = caps["ret"].to_string();
-            let from = caps
-                .name("from")
-                .map(|m| m.as_str().to_string())
-                .unwrap_or_else(|| format!("_{}", name));
+        Ok(params)
+    }
 
-            if let Some(langs) = reserved.get(&name) {
-                eprintln!(
-                    "Invalid function name '{}' cannot be used, it is a keyword in language(s): {}",
-                    name,
-                    langs.join(", ")
-                );
-                invalid = true;
+    pub fn parse_function(
+        capt: Captures,
+        lines: &mut Peekable<Enumerate<Iter<&str>>>,
+        ln_num: usize,
+        classes: &mut Vec<ClassDef>,
+        functions: &mut Vec<FunctionDef>,
+        invalid: &mut bool,
+        reserved: &HashMap<String, Vec<String>>,
+        current_class: Option<&String>,
+        seen_types: &mut HashSet<String>,
+    ) -> Option<()> {
+        let is_static = capt.name("static").is_some();
+        let name = capt.name("name").unwrap().as_str();
+        let raw_params = capt.name("params").unwrap().as_str();
+        let ret = capt.name("ret").unwrap().as_str();
+        let wasm = capt.name("wasm").unwrap().as_str();
+
+        if let Some(langs) = reserved.get(name) {
+            eprintln!("Invalid function name '{name}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+            *invalid = true;
+        }
+        if let Some(langs) = reserved.get(wasm) {
+            eprintln!("Invalid wasm binding name '{wasm}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+            *invalid = true;
+        }
+
+        let params = match Self::parse_params(raw_params, seen_types, invalid, reserved) {
+            Ok(p) => p,
+            Err(e) => {
+                eprintln!("[error]: on line {ln_num}: {e}");
+                *invalid = true;
+                return None;
             }
+        };
 
-            if let Some(langs) = reserved.get(&from) {
-                eprintln!("Invalid wasm function name '{}' cannot be used, it is a keyword in language(s): {}", from, langs.join(", "));
-                invalid = true;
-            }
+        if let Some(langs) = reserved.get(ret) {
+            eprintln!("Invalid return type '{ret}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+            *invalid = true;
+        }
 
-            let mut params = Vec::new();
-            let params_text = caps["params"].trim();
-            if !params_text.is_empty() {
-                for param in params_text.split(',') {
-                    let param = param.trim();
-                    if let Some((n, t)) = param.split_once(':') {
-                        let n = n.trim().to_string();
-                        if let Some(langs) = reserved.get(&n) {
-                            eprintln!("Invalid param name '{}' cannot be used, it is a keyword in language(s): {}", n, langs.join(", "));
-                            invalid = true;
-                        }
+        let doc = Self::parse_doc(lines);
 
-                        params.push(ParamDef {
-                            name: n,
-                            typ: t.trim().to_string(),
-                        });
-                    }
-                }
-            }
+        if let Some(class_name) = &current_class {
+            let class = classes
+                .iter_mut()
+                .find(|c| &c.name == *class_name)
+                .expect("Class should exist");
 
-            let doc = parse_doc_comment(&mut i, &lines);
-
-            let func = FunctionDef {
-                name,
-                returns,
+            let fn_def = FunctionDef {
+                name: name.to_string(),
                 params,
-                from,
+                returns: ret.to_string(),
                 is_static,
                 doc,
+                wasm: wasm.to_string(),
+                class_name: Some(class_name.to_string())
             };
 
-            if let Some(class_name) = &current_class {
-                let class = classes
-                    .iter_mut()
-                    .find(|c| &c.name == class_name)
-                    .expect("Class should exist");
-                if is_static {
-                    class.functions.push(func);
-                } else {
-                    class.methods.push(func);
-                }
+            if is_static {
+                class.functions.push(fn_def);
             } else {
-                functions.push(func);
+                class.is_static = false;
+                class.methods.push(fn_def);
             }
 
-            i += 1;
-            continue;
+        } else {
+
+            functions.push(FunctionDef {
+                name: name.to_string(),
+                params,
+                returns: ret.to_string(),
+                is_static: true,
+                doc,
+                wasm: wasm.to_string(),
+                class_name: None,
+            })
+        }
+        Some(())
+    }
+
+    pub fn parse(input: &str, reserved: &HashMap<String, Vec<String>>) -> (Self, HashSet<String>) {
+        let mut classes: Vec<ClassDef> = Vec::new();
+        let mut functions: Vec<FunctionDef> = Vec::new();
+        let mut current_class: Option<String> = None;
+        let mut invalid = false;
+        let mut semver = Semver::default();
+        let mut version = "0.0.0".to_string();
+        let mut api_name: Option<String> = None;
+        let mut include_core = false;
+        let mut seen_types = HashSet::new();
+
+        let toml_header_re = Regex::new(r#"\[(?P<name>\w+)]"#).unwrap();
+
+        let fn_re = Regex::new(
+            r#"(?x)\s*
+            (?P<static>::)?
+            (?P<name>\w+)\s*
+            \((?P<params>[^)]*)\)\s*
+            ->\s*(?P<ret>\w+)\s*
+            :\s*(?P<wasm>\w+)\s*
+            "#
+        ).unwrap();
+
+        let lines = input
+            .lines()
+            .map(|l| l.splitn(2, "//").next().unwrap().trim())
+            .filter(|l| !l.is_empty())
+            .collect::<Vec<&str>>();
+
+        let mut lines = lines
+            .iter()
+            .enumerate()
+            .peekable();
+
+        loop {
+            let Some((ln_num, line)) = lines.next() else { break };
+
+
+            if let Some(ver) = line.strip_prefix("#version ") {
+                version = ver.trim().to_string();
+                semver.parse_into(&version).unwrap_or_else(|e| {
+                    eprintln!("[error]: {e}");
+                    invalid = true;
+                });
+                continue;
+            }
+
+            if let Some(name) = line.strip_prefix("#api ") {
+                api_name = Some(name.trim().replace("-", "_").replace(" ", "_"));
+                continue;
+            }
+
+            if line.starts_with("#include-core") {
+                include_core = true;
+                continue;
+            };
+
+            if let Some(capt) = toml_header_re.captures(line) {
+                let class_name = capt.name("name").unwrap().as_str();
+                if class_name == "Global" {
+                    current_class = None;
+                } else if let Some(langs) = reserved.get(class_name) {
+                    eprintln!("Invalid class name '{class_name}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+                    invalid = true;
+                } else {
+                    if !classes.iter().any(|c| c.name == class_name) {
+                        let doc = Self::parse_doc(&mut lines);
+
+                        classes.push(ClassDef {
+                            name: class_name.to_string(),
+                            is_static: true,
+                            doc,
+                            functions: Vec::new(),
+                            methods: Vec::new(),
+                        });
+                    }
+                    seen_types.insert(class_name.to_string());
+                    current_class = Some(class_name.to_string());
+
+                }
+                continue;
+            }
+
+            if let Some(capt) = fn_re.captures(line) {
+                if let None = Self::parse_function(
+                    capt,
+                    &mut lines,
+                    ln_num,
+                    &mut classes,
+                    &mut functions,
+                    &mut invalid,
+                    reserved,
+                    current_class.as_ref(),
+                    &mut seen_types,
+                ) { continue; }
+            }
+
         }
 
-        eprintln!("Unrecognized line: {}", line);
-        invalid = true;
-    }
 
-    if invalid {
-        eprintln!("Generating API failed due to previous errors.");
-        std::process::exit(1);
-    }
+        let Some(name) = api_name else {
+            eprintln!("[error]: api file did not specify a name");
+            eprintln!("API generation failed due to previous errors.");
+            process::exit(1);
+        };
 
-    let name = api_name.expect("no `#api <name>` directive was found");
-    let nameh = api_name2.unwrap();
-    
-    ApiModel {
-        name, nameh,
-        classes, functions,
-        opaque_classes: Vec::new(),
-        version, semver,
-        glam_types: vec![
-            "Vec2".to_string(),
-            "Vec3".to_string(),
-            "Vec4".to_string(),
-            "Quat".to_string(),
-            "Mat4".to_string(),
-        ]
+        if invalid {
+            eprintln!("API generation failed due to previous errors.");
+            process::exit(1);
+        }
+
+        let name_h = name.replace("_", "-");
+
+        (Self {
+            name, name_h,
+            classes, functions,
+            version, semver,
+            include_core,
+        }, seen_types)
     }
 }
 
-
-pub fn finalize_opaque_returns(mut api: ApiModel) -> ApiModel {
-    let opaque_classes: Vec<String> = api
-        .classes
-        .iter()
-        .filter(|c| c.is_opaque)
-        .map(|c| c.name.clone())
-        .collect();
-
-    api.opaque_classes = opaque_classes;
-
-    api
-}
-
-
-#[derive(Parser, Debug)]
-#[command(name = "turingapigen")]
-#[command(about = "Generate APIs from templates", long_about = None)]
-struct Args {
-    #[arg(short, long)]
-    input: Option<PathBuf>,
-
-    #[arg(short, long)]
-    output: Option<PathBuf>,
-}
-
-fn get_input(label: &str) -> PathBuf {
-    print!("{label}: ");
-    io::stdout().flush().unwrap();
-
-    let mut buf = String::new();
-    io::stdin().read_line(&mut buf).unwrap();
-
-    PathBuf::from(buf.trim())
-}
-
-pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> TeraResult<Value> {
-    let input: String = from_value(value.clone())?;
-
-    let style = args
-        .get("style")
-        .and_then(|v| v.as_str())
-        .unwrap_or("snake");
-
-    let converted = match style {
-        "camel" => input.to_case(Case::Camel),
-        "pascal" => input.to_case(Case::Pascal),
-        "snake" => input.to_case(Case::Snake),
-        "screaming" | "upper_snake" => input.to_case(Case::UpperSnake),
-        "lower" => input.to_lowercase(),
-        _ => input,
-    };
-
-    Ok(to_value(converted)?)
-}
-
-pub fn doc_comment(args: &HashMap<String, Value>) -> TeraResult<Value> {
-    let doc = args.get("doc").and_then(|v| v.as_str()).ok_or_else(|| "argument 'doc' not found")?;
-    let delimiter = args.get("d").and_then(|v| v.as_str()).ok_or_else(|| "argument 'd' (delimiter) not found")?;
-    let out = delimiter.to_string() + &doc.replace("\\n", "\n").replace("\n", &format!("\n{}", delimiter));
-    Ok(to_value(out)?)
-}
 
 pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
     let mut tm: HashMap<String, HashMap<String, String>> = HashMap::new();
@@ -438,13 +409,14 @@ pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
 
     for map in tm.values_mut() {
         for ps in passthrough {
-            map.insert(ps.clone(), ps.clone());
+            if !map.contains_key(ps) {
+                map.insert(ps.clone(), ps.clone());
+            }
         }
     }
 
     to_value(tm).expect("Hashmap failed to convert to serde Value")
 }
-
 
 fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
 
@@ -505,23 +477,88 @@ fn copy_non_template_files(
     Ok(())
 }
 
+
+#[derive(Parser, Debug)]
+#[command(name = "turingapigen")]
+#[command(about = "Generate APIs from templates", long_about = None)]
+struct Args {
+    #[arg(short, long)]
+    input: Option<PathBuf>,
+
+    #[arg(short, long)]
+    output: Option<PathBuf>,
+}
+
+fn get_input(label: &str) -> PathBuf {
+    print!("{label}: ");
+    io::stdout().flush().unwrap();
+
+    let mut buf = String::new();
+    io::stdin().read_line(&mut buf).unwrap();
+
+    PathBuf::from(buf.trim())
+}
+
+
+pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let input: String = from_value(value.clone())?;
+
+    let style = args
+        .get("style")
+        .and_then(|v| v.as_str())
+        .unwrap_or("snake");
+
+    let converted = match style {
+        "camel" => input.to_case(Case::Camel),
+        "pascal" => input.to_case(Case::Pascal),
+        "snake" => input.to_case(Case::Snake),
+        "screaming" | "upper_snake" => input.to_case(Case::UpperSnake),
+        "lower" => input.to_lowercase(),
+        _ => input,
+    };
+
+    Ok(to_value(converted)?)
+}
+
+pub fn doc_comment(args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let doc = args.get("doc").and_then(|v| v.as_str()).ok_or_else(|| "argument 'doc' not found")?;
+    let delimiter = args.get("d").and_then(|v| v.as_str()).ok_or_else(|| "argument 'd' (delimiter) not found")?;
+    let out = delimiter.to_string() + &doc.replace("\\n", "\n").replace("\n", &format!("\n{}", delimiter));
+    Ok(to_value(out)?)
+}
+
+pub fn to_ffi_type(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let input: String = from_value(value.clone())?;
+    let input = input.as_str();
+
+    let map = args.get("map").unwrap().as_object().unwrap();
+
+    let ffi_ty = match input {
+        "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4" | "Vu32" | "String" => "u32",
+        "&Vu32" => "void*",
+        "&str" => "CStr",
+        _ => input,
+    };
+
+    Ok(map.get(ffi_ty).unwrap().clone())
+}
+
 fn main() {
     let args = Args::parse();
 
-    let input = args
-        .input
+    let input = args.input
         .unwrap_or_else(|| get_input("Enter path to API spec file"));
-    let output = args
-        .output
-        .unwrap_or_else(|| get_input("Enter output folder for API bindings"));
+    let output = args.output
+        .unwrap_or_else(|| get_input("Enter output directory path for APIs"));
 
-    let s = fs::read(input).expect("Failed to read input file");
-    let s = String::from_utf8(s).expect("input contained invalid UTF-8");
+    let s = fs::read_to_string(input).expect("Failed to read input file");
 
     let reserved = load_reserved_word_map();
 
-    let api_model = finalize_opaque_returns(parse_api(&s, &reserved));
-    let type_map = parse_type_map(&api_model.opaque_classes);
+    let (api_model, seen_classes) = ApiModel::parse(&s, &reserved);
+    let seen_classes = seen_classes.into_iter().collect::<Vec<String>>();
+
+    let type_map = parse_type_map(&seen_classes);
 
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);
@@ -532,37 +569,23 @@ fn main() {
         Ok(t) => t,
         Err(e) => {
             eprintln!("Failed to parse tera template.\n{e}");
-            std::process::exit(1)
+            process::exit(1)
         }
     };
 
     tera.register_filter("case", case_filter);
     tera.register_function("docs", doc_comment);
-
-    pub fn snake_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
-        let mut a = HashMap::new();
-        a.insert("style".to_string(), to_value("snake")?);
-        case_filter(value, &a)
-    }
-
-    pub fn pascal_case_filter(value: &Value, _args: &HashMap<String, Value>) -> TeraResult<Value> {
-        let mut a = HashMap::new();
-        a.insert("style".to_string(), to_value("pascal")?);
-        case_filter(value, &a)
-    }
-
-    tera.register_filter("snake_case", snake_case_filter);
-    tera.register_filter("pascal_case", pascal_case_filter);
+    tera.register_filter("ffi_type", to_ffi_type);
 
     println!("Clearing output directory");
-    fs::remove_dir_all("./output/").expect("Unable to clear output");
-    fs::create_dir("./output/").expect("Unable to create output");
+    fs::remove_dir_all(&output).expect("Unable to clear output directory");
+    fs::create_dir(&output).expect("Unable to create output directory");
 
     let templates_dir = PathBuf::from("./templates/");
-    let out_dir_path = PathBuf::from("./output/");
+    let out_dir_path = PathBuf::from(&output);
     if let Err(e) = copy_non_template_files(&templates_dir, &templates_dir, &out_dir_path, &api_model.name) {
         eprintln!("Failed to copy non-template files: {}", e);
-        std::process::exit(1);
+        process::exit(1);
     }
 
     for name in tera.get_template_names() {
@@ -585,4 +608,5 @@ fn main() {
         }
         fs::write(file_name, render).unwrap_or_else(|_| panic!("Failed to write render of {} to output", nm))
     }
+
 }

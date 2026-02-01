@@ -1,47 +1,79 @@
 
-//// Wasm Bindings ////
+///// Raw Wasm Bindings /////
+
+// Note on using this file directly:
+// Some types cannot properly be passed across FFI
+// such as strings and structs.
+// Due to this, there are mechanisms in place to
+// transfer those data types, such as `_host_strcpy`,
+// `_host_f32_enqueue`, etc...
+// The places where these mechanisms are meant to be used
+// may be poorly documented within this file
+
+#pragma once
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-{% if api.name == "turing_api" %}void _host_strcpy(const char* location, uint32_t size);
-void _host_f32_enqueue(float f);
-float _host_f32_dequeue();{% endif %}
+{% if api.include_core %}
+    //// Core functions ////
+
+    /// When a string is to be passed from the host to wasm,
+    /// it instead returns it's length, including the NUL terminator.
+    /// The wasm is responsible for allocating that space and then
+    /// calling this function, passing the pointer to the allocated
+    /// space, and the size received.
+    void _host_strcpy(const char* location, uint32_t size);
+    
+    /// This function allows types such as Vec3 and Mat4 to be passed back and forth
+    void _host_f32_enqueue(float f);
+    
+    /// Inverted behavior to `_host_f32_enqueue`
+    float _host_f32_dequeue();
+    
+    /// Same as `_host_f32_enqueue` but bit-casts u32 into it instead
+    void _host_u32_enqueue(uint32_t u);
+    
+    /// Same as `_host_f32_dequeue` but bit-casts to u32 before returning
+    uint32_t _host_u32_dequeue();
+    
+{% endif %}
+
+
+{% macro ffi_params(params) %}
+    {% for param in params %}
+        {{ param.type | ffi_type(map=types.c) }} {{ param.name | case(style="snake") }}
+        {% if not loop.last %}, {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+
+{% macro wasm_binding(func) %}
+    {{ func.type | ffi_type(map=types.c) }} {{ func.wasm -}}
+    (
+        {{- self::ffi_params(params=func.params) -}}
+    )
+{% endmacro %}
+
+
+//// Global Functions ////
 {% for func in api.functions %}
-{%- if func.from is defined and func.from -%}
-{% if func.type == "String" or func.type in api.glam_types %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
-    {%- for param in func.params -%}
-    {% if param.type in api.glam_types %}uint32_t{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
-    {%- if not loop.last %}, {% endif -%}
-    {%- endfor -%}
-);
-{% endif -%}
-{%- endfor %}
+    {{ self::wasm_binding(func=func) }}
+{% endfor %}
 
+//// Classes ////
 {% for class in api.classes %}
-{%- for func in class.functions -%}
-{%- if func.from is defined and func.from -%}
-{% if func.type == "String" or func.type in api.glam_types %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}(
-    {%- for param in func.params -%}
-    {% if param.type in api.glam_types %}uint32_t{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
-    {%- if not loop.last %}, {% endif -%}
-    {%- endfor -%}
-);
-{% endif -%}
-{%- endfor -%}
-{%- for func in class.methods -%}
-{% if func.from is defined and func.from %}
-{% if func.type == "String" or func.type in api.glam_types %}uint32_t{% else %}{{ types.c[func.type] }}{% endif %} {{ func.from }}({% if class.is_opaque %}{{ types.c["op*"] }} {% else %}{{ class.name | case(style="pascal") }} {% endif %}opaqu
-    {%- for param in func.params -%}
-    , {% if param.type == "&str" %}const char*{% elif param.type in api.glam_types %}uint32_t{% else %}{{ types.c[param.type] }}{% endif %} {{ param.name | case(style="snake") }}
-    {%- endfor -%}
-);
-{% endif -%}
-{%- endfor -%}
-
+    {%- for func in class.functions %}
+        {{- self::wasm_binding(func=func) }}
+    {%- endfor %}
+    {%- for func in class.methods %}
+        {{- self::wasm_binding(func=func) }}
+    {%- endfor %}
 {%- endfor %}
+
 
 #ifdef __cplusplus
-}
+%}
 #endif
+

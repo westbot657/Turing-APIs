@@ -5,7 +5,7 @@
     .minimum_zig_version = "0.15.2",
     .dependencies = .{
         .{{ api.name }} = .{
-            .path = "../{{ api.nameh }}-zig",
+            .path = "../{{ api.name_h }}-zig",
         },
     },
     .paths = .{

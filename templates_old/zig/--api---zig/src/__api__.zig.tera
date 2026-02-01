@@ -1,0 +1,254 @@
+{% macro converter(param, indent="") -%}
+{%- if param.type == "&str" %}
+{{ indent }}const turing_handle_{{ param.name | case(style="snake") }} = try allocator.dupeZ(u8, {{ param.name | case(style="snake") }});
+{{ indent }}defer allocator.free(turing_handle_{{ param.name | case(style="snake") }});
+{%- elif param.type in api.glam_types %}
+{{ indent }}const turing_handle_{{ param.name | case(style="snake") }} = enqueue_{{ param.type | case(style="lower") }}({{ param.name | case(style="snake") }});
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro convert_arg(param) -%}
+{%- if param.type == "&str" %}turing_handle_{{ param.name | case(style="snake") }}.ptr{% elif param.type in api.glam_types %}turing_handle_{{ param.name | case(style="snake") }}{% else %}{{ param.name | case(style="snake") }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro c_arg(type) -%}
+{%- if type == "&str" %}[*:0]const u8{% elif type in api.glam_types %}u32{% else %}{{ types.zig[type] }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro c_params(params, is_method=false, class=false) -%}
+{%- if is_method -%}
+opaqu: {% if class.is_opaque %}{{ types.zig["op*"] }}{% else %}{{ class.name | case(style="pascal") }}{% endif %}
+{%- for param in params -%}
+, {{ param.name | case(style="snake") }}: {{ self::c_arg(type=param.type) }}
+{%- endfor -%}
+{%- else -%}
+{%- for param in params -%}
+{{ param.name | case(style="snake") }}: {{ self::c_arg(type=param.type) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro zig_params(params, is_method=false, class=false, needs_allocator=false) -%}
+{%- if is_method -%}
+self: *const {{ class.name | case(style="pascal") }}
+{%- for param in params -%}
+, {{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
+{%- endfor -%}
+{%- if needs_allocator %}, allocator: std.mem.Allocator{% endif -%}
+{%- else -%}
+{%- for param in params -%}
+{{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- if needs_allocator -%}
+{%- if params %}, {% endif -%}
+allocator: std.mem.Allocator
+{%- endif -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro c_ret(type) -%}
+{%- if type == "void" %}void{% elif type == "String" or type in api.glam_types %}u32{% else %}{{ types.zig[type] }}{% endif %}
+{%- endmacro -%}
+
+{%- macro convert_args(params, is_method=false, class=false) -%}
+{%- if is_method -%}
+self{% if class.is_opaque %}.opaqu{% endif %}
+{%- for param in params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- else -%}
+{%- for param in params -%}
+{{ self::convert_arg(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro has_str_param(params) -%}
+{%- for param in params -%}
+{%- if param.type == "&str" %}true{% endif -%}
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro needs_allocator(func) -%}
+{%- if func.type == "String" %}true{% else %}{{ self::has_str_param(params=func.params) }}{% endif -%}
+{%- endmacro -%}
+
+{%- macro func_impl(func, is_method=false, class=false, indent="") -%}
+{%- for param in func.params -%}
+{{- self::converter(param=param, indent=indent) -}}
+{%- endfor %}
+{{ indent }}{%- if func.type == "String" or func.type in api.opaque_classes -%}const turing_result = {% elif func.type in api.glam_types %}{% elif func.type != "void" and func.type != "self" %}return {% endif -%}
+{{ func.from }}(
+{{- self::convert_args(params=func.params, is_method=is_method, class=class) -}}
+);{% if func.type == "String" %}
+{{ indent }}const turing_str = try allocator.alloc(u8, turing_result);
+{{ indent }}defer allocator.free(turing_str);
+{{ indent }}_host_strcpy(turing_str.ptr, turing_result);
+{{ indent }}const result = try allocator.dupe(u8, std.mem.span(@as([*:0]const u8, @ptrCast(turing_str.ptr))));
+{{ indent }}return result;
+{%- elif func.type in api.glam_types %}
+{{ indent }}return dequeue_{{ func.type | case(style="lower") }}();
+{%- elif func.type == "self" %}
+{{ indent }}return self;
+{%- elif func.type in api.opaque_classes %}
+{{ indent }}return {{ func.type | case(style="pascal") }}{ .opaqu = turing_result };
+{%- endif %}
+{%- endmacro -%}
+
+{%- macro ffi_funcs(funcs, is_method=false, class=false) -%}
+{%- for func in funcs %}
+extern "C" fn {{ func.from }}({{ self::c_params(params=func.params, is_method=is_method, class=class) }}) {{ self::c_ret(type=func.type) }};
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro zig_return_type(func, class=false) -%}
+    {%- if func.type == "String" -%}
+        ![]u8
+    {%- elif self::needs_allocator(func=func) and (func.type == "void" or func.type == "self") -%}
+        {%- if func.type == "void" -%}
+            !void
+        {%- elif func.type == "self" -%}
+            !*const {{ class.name | case(style="pascal") }}
+        {%- endif -%}
+    {%- elif func.type != "void" and func.type != "self" -%}
+        {{ types.zig[func.type] }}
+    {%- elif func.type == "self" -%}
+        *{{ class.name | case(style="pascal") }}
+    {%- else -%}
+        void
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro func_impls(funcs, is_method=false, class=false, indent="") -%}
+{%- for func in funcs %}
+{% if func.doc %}{{ indent }}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ indent }}pub fn {{ func.name | case(style="snake") }}(
+{{- self::zig_params(params=func.params, is_method=is_method, class=class, needs_allocator=self::needs_allocator(func=func)) -}}
+) {{ self::zig_return_type(func=func, class=class) }} {
+{{- self::func_impl(func=func, is_method=is_method, class=class, indent=indent ~ "    ") }}
+{{ indent }}}
+{% endfor -%}
+{%- endmacro -%}
+
+///// Generated Zig API /////
+const std = @import("std");
+const zalg = @import("zalgebra");
+
+pub fn enqueue_vec2(v: zalg.Vec2) u32 {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    return 2;
+}
+
+pub fn enqueue_vec3(v: zalg.Vec3) u32 {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    return 3;
+}
+
+pub fn enqueue_vec4(v: zalg.Vec4) u32 {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    _host_f32_enqueue(v.w);
+    return 4;
+}
+
+pub fn enqueue_quat(q: zalg.Quat) u32 {
+    _host_f32_enqueue(q.x);
+    _host_f32_enqueue(q.y);
+    _host_f32_enqueue(q.z);
+    _host_f32_enqueue(q.w);
+    return 4;
+}
+
+pub fn enqueue_mat4(m: zalg.Mat4) u32 {
+    enqueue_vec4(m.c0);
+    enqueue_vec4(m.c1);
+    enqueue_vec4(m.c2);
+    enqueue_vec4(m.c3);
+    return 16;
+}
+
+
+pub fn dequeue_vec2() zalg.Vec2 {
+    return zalg.Vec2.init(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+    );
+}
+
+pub fn dequeue_vec3() zalg.Vec3 {
+    return zalg.Vec3.init(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+    );
+}
+
+pub fn dequeue_vec4() zalg.Vec4 {
+    return zalg.Vec4.init(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+    );
+}
+
+pub fn dequeue_quat() zalg.Quat {
+    return zalg.Quat.init(
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+        _host_f32_dequeue(),
+    );
+}
+
+pub fn dequeue_mat4() zalg.Mat4 {
+    return zalg.Mat4{
+        .c0 = dequeue_vec4(),
+        .c1 = dequeue_vec4(),
+        .c2 = dequeue_vec4(),
+        .c3 = dequeue_vec4(),
+    };
+}
+
+//// Wasm Bindings ////
+{% if api.name == "turing_api" %}extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;
+extern "C" fn _host_f32_enqueue(f: f32) void;
+extern "C" fn _host_f32_dequeue() f32;{% endif %}
+{{- self::ffi_funcs(funcs=api.functions) }}
+{%- for class in api.classes -%}
+{{- self::ffi_funcs(funcs=class.functions, class=class) }}
+{{- self::ffi_funcs(funcs=class.methods, is_method=true, class=class) }}
+{%- endfor %}
+
+export fn _{{ api.name }}_semver() u64 {
+    return (({{ api.semver.major }} << 32) | ({{ api.semver.minor }} << 16) | {{ api.semver.patch }});
+}
+
+pub const {{ api.name | case(style="upper_snake") }}_VERSION: []const u8 = "{{ api.version }}";
+
+//// Functions ////
+{{ self::func_impls(funcs=api.functions) }}
+
+//// Classes ////
+{%- for class in api.classes %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
+pub const {{ class.name | case(style="pascal") }} = struct {
+{%- if class.is_opaque %}
+    opaqu: {{ types.zig["op*"] }},
+{%- else %}
+{%- for var in class.variables %}
+{{ var.name }}: {{ types.zig[var.type] }},
+{%- endfor %}
+{%- endif %}
+
+{{- self::func_impls(funcs=class.functions, class=class, indent="    ") }}
+{{- self::func_impls(funcs=class.methods, is_method=true, class=class, indent="    ") }}
+};
+{% endfor %}

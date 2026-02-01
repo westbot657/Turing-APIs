@@ -12,7 +12,7 @@ pub fn build(b: *std.Build) void {
     });
 
     const mod = b.addModule("{{ api.name }}", .{
-        .root_source_file = b.path("../{{ api.nameh }}-zig/src/{{ api.name }}.zig"),
+        .root_source_file = b.path("../{{ api.name_h }}-zig/src/{{ api.name }}.zig"),
         .target = target
     });
 
