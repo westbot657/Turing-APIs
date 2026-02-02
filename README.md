@@ -59,29 +59,28 @@ to run the script without user intervention, you can pass them in via the comman
 
 # API spec format
 
-### Version:
+### Metadata:
 `#version <version>`  
 i.e. `#version 0.1.0`
 the last line in the spec that specifies a version is the version used in the generated API code
 
-### Classes:
-marked as `:Class:`  
-`:Global:` is a special case that puts any functions after it into the top-level scope of code
+`#api <api_name>`
+i.e. `#api turing_api`
+sets the api name used throughout all templates
 
-You can also add `[opaque]` into the label to mark the class as a typed pointer referring to a C# class  
-i.e.: `:ColorNote [opaque]:`  
+`#include-core`
+Causes templates to define helper systems and core host imports. if missing,
+templates will import turing_api and access the helpers through it.
+
+### Classes:
+marked as `[Class]`  
+`[Global]` is a special case that puts any functions after it into the top-level scope of code
+
 
 ### Methods and Functions:
-`[::]<name>([<arg>: <type>], ...) -> <return_type> [: <from>]`
+`[::]<name>([<arg>: <type>], ...) -> <return_type> : <wasm>`
 If prefixed with `::`, the function is considered static, not taking the class object as an arg, otherwise the first arg is considered to be self/this  
-The return type is required  
-
-optionally, `: <from>` can be appended to link the function to a specific wasm binding, otherwise the function name with a prefixed underscore is used.  
-
-### Variables:
-`.<name>: <type> `  
-adds this attribute to the class (invalid in global scope)  
-if the class is opaque, attributes are all *after* the opaque pointer attribute  
+The return type and wasm binding is required  
 
 
 # Language template
