@@ -87,5 +87,171 @@ pub fn dequeue_mat4() zalg.Mat4 {
         .c3 = dequeue_vec4(),
     };
 }
-{% endif %}
+{% endif %}{# api.include_core #}
+
+
+//// Wasm Bindings ////
+{% if api.include_core %}
+
+extern "C" fn _host_strcpy(location: [*]u8, size: u32) void;
+extern "C" fn _host_bufcpy(location: [*]u32, size: u32) void;
+extern "C" fn _host_f32_enqueue(f: f32) void;
+extern "C" fn _host_f32_dequeue() f32;
+extern "C" fn _host_u32_enqueue(u: u32) void;
+extern "C" fn _host_u32_dequeue() u32;
+
+{% endif %}{# api.include_core #}
+
+export fn _{{ api.name }}_semver() u64 {
+    return (({{ api.semver.major }} << 32) | ({{ api.semver.minor }} << 16) | {{ api.semver.patch }});
+}
+pub const {{ api.name | case(style="upper_snake") }}_VERSION: []const u8 = "{{ api.version }}";
+
+{%- macro ffi_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.zig) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+opaqu: {{ class.name | case(style="pascal") }}
+{%- for param in func.params -%}
+, {{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.zig) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro ffi_funcs(funcs) -%}
+{%- for func in funcs %}
+extern "C" fn {{ func.wasm -}}
+(
+    {{- self::ffi_params(func=func) -}}
+) {{ func.type | ffi_type(map=types.zig) }}
+{%- endfor %}
+{%- endmacro -%}
+
+{{- self::ffi_funcs(funcs=api.functions) }}
+{%- for class in api.classes -%}
+{{- self::ffi_funcs(funcs=class.functions) }}
+{{- self::ffi_funcs(funcs=class.methods) }}
+{%- endfor %}
+
+{%- macro needs_allocator(func) -%}
+{{ func | needs_alloc }}
+{%- endmacro -%}
+
+{%- macro zig_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self: *const {{ func.class_name | case(style="pascal") }}
+{%- for param in func.params -%}
+, {{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
+{%- endfor -%}
+{%- if self::needs_allocator(func=func) %}, allocator: std.mem.Allocator{% endif -%}
+{%- endif -%}
+{%- endmacro -%}
+
+
+{%- macro zig_return(func) -%}
+{%- if self::needs_allocator(func=func) %}!{% endif -%}
+{%- if func.type == "self" -%}
+*const {{ func.class_name | case(style="pascal") }}
+{%- else -%}
+{{ types.zig[func.type] }}
+{%- endif -%}
+{%- endmacro -%}
+
+
+{%- macro converter(param, indent="") -%}
+
+{%- endmacro -%}
+
+{%- macro convert_arg(param) -%}
+{%- endmacro -%}
+
+{%- macro convert_args(func) -%}
+{%- if func.static -%}
+
+{%- else -%}
+self
+{%- for param in func.params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+
+{%- macro func_inner(func, indent="") -%}
+
+{%- for param in func.params -%}
+{{- self::converter(param=param, indent=indent) }}
+{%- endfor %}
+
+{{ indent }}{% if func.unpack_return %}const turing_result = {% elif not func.skip_return %}return {% endif -%}
+{{ func.wasm -}}
+(
+    {{- self::convert_args(func=func) -}}
+);
+{%- if func.type == "String" %}
+{{ indent }}const turing_str = try allocator.alloc(u8, turing_result);
+{{ indent }}{% if not api.include_core %}turing_api.{% endif %}_host_strcpy(turing_str.ptr, turing_result);
+{{ indent }}return turing_str[0 .. turing_result - 1];
+{%- elif func.type == "Vu32" %}
+{{ indent }}const turing_buf = try allocator.alloc(u32, turing_result);
+{{ indent }}{% if not api.include_core %}turing_api.{% endif %}_host_bufcpy(turing_buf.ptr, turing_result);
+{{ indent }}return turing_buf;
+{%- elif func.type == "self" %}
+{{ indent }}return self;
+{%- elif func.dequeue_return %}
+{{ indent }}return {% if not api.include_core %}turing_api.{% endif %}dequeue_{{ func.type | case(style="lower") }}();
+{%- endif -%}
+
+{%- endmacro -%}
+
+
+
+{%- macro func_impl(func, indent="") -%}
+{% if func.doc %}{{ indent }}{{ docs(doc=func.doc, d="///") }}{% endif %}
+{{ indent }}pub fn {{ func.name | case(style="snake") }}
+(
+    {{- self::zig_params(func=func) -}}
+) {{ self::zig_return(func=func) }} {
+    {{- self::func_inner(func=func, indent=indent ~ "    ") }}
+{{ indent -}} }
+{%- endmacro -%}
+
+{%- macro func_impls(funcs) -%}
+{%- for func in funcs -%}
+{{- self::func_impl(func=func) }}
+{%- endfor -%}
+{%- endmacro -%}
+
+//// Functions ////
+{{ self::func_impls(funcs=api.functions) }}
+
+
+//// Classes ////
+{%- for class in api.classes %}
+{{- self::class_def(class=class) }}
+{{- self::func_impls(funcs=class.functions, indent="    ") }}
+{{- self::func_impls(funcs=class.methods, indent="    ") }}
+{%- endfor %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

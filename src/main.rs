@@ -49,6 +49,12 @@ pub struct FunctionDef {
     pub doc: Option<String>,
     pub wasm: String,
     pub class_name: Option<String>,
+    /// Whether the wasm return needs to be "unpacked", such as String and Vu32
+    pub unpack_return: bool,
+    /// Whether the wasm return needs to be dequeued from the f32 queue
+    pub dequeue_return: bool,
+    /// Whether the wasm returns void, self, or a glam type
+    pub skip_return: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -102,7 +108,7 @@ impl ApiModel {
         }
     }
 
-    pub fn parse_params(raw: &str, seen_types: &mut HashSet<String>, invalid: &mut bool, reserved: &HashMap<String, Vec<String>>) -> Result<Vec<ParamDef>, String> {
+    pub fn parse_params(raw: &str, seen_types: &mut HashSet<String>, used_opaquely: &mut HashSet<String>, invalid: &mut bool, reserved: &HashMap<String, Vec<String>>) -> Result<Vec<ParamDef>, String> {
         let mut params = Vec::new();
 
         let raw = raw.trim();
@@ -122,6 +128,7 @@ impl ApiModel {
                 }
 
                 seen_types.insert(t.to_string());
+                used_opaquely.insert(t.to_string());
 
                 params.push(ParamDef {
                     name: n.to_string(),
@@ -144,6 +151,7 @@ impl ApiModel {
         reserved: &HashMap<String, Vec<String>>,
         current_class: Option<&String>,
         seen_types: &mut HashSet<String>,
+        used_opaquely: &mut HashSet<String>,
     ) -> Option<()> {
         let is_static = capt.name("static").is_some();
         let name = capt.name("name").unwrap().as_str();
@@ -160,7 +168,10 @@ impl ApiModel {
             *invalid = true;
         }
 
-        let params = match Self::parse_params(raw_params, seen_types, invalid, reserved) {
+        let params = match Self::parse_params(
+            raw_params, seen_types, used_opaquely,
+            invalid, reserved,
+        ) {
             Ok(p) => p,
             Err(e) => {
                 eprintln!("[error]: on line {ln_num}: {e}");
@@ -174,8 +185,15 @@ impl ApiModel {
             *invalid = true;
         }
 
-        let doc = Self::parse_doc(lines);
+        seen_types.insert(ret.to_string());
+        used_opaquely.insert(ret.to_string());
 
+        let doc = Self::parse_doc(lines);
+        
+        let unpack_return = matches!(ret, "String" | "Vu32");
+        let dequeue_return = matches!(ret, "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4");
+        let skip_return = dequeue_return || matches!(ret, "void" | "self");
+        
         if let Some(class_name) = &current_class {
             let class = classes
                 .iter_mut()
@@ -189,7 +207,11 @@ impl ApiModel {
                 is_static,
                 doc,
                 wasm: wasm.to_string(),
-                class_name: Some(class_name.to_string())
+                class_name: Some(class_name.to_string()),
+                unpack_return,
+                dequeue_return,
+                skip_return,
+                
             };
 
             if is_static {
@@ -209,6 +231,9 @@ impl ApiModel {
                 doc,
                 wasm: wasm.to_string(),
                 class_name: None,
+                unpack_return,
+                dequeue_return,
+                skip_return
             })
         }
         Some(())
@@ -224,6 +249,7 @@ impl ApiModel {
         let mut api_name: Option<String> = None;
         let mut include_core = false;
         let mut seen_types = HashSet::new();
+        let mut used_opaquely = HashSet::new();
 
         let toml_header_re = Regex::new(r#"\[(?P<name>\w+)]"#).unwrap();
 
@@ -250,7 +276,6 @@ impl ApiModel {
 
         loop {
             let Some((ln_num, line)) = lines.next() else { break };
-
 
             if let Some(ver) = line.strip_prefix("#version ") {
                 version = ver.trim().to_string();
@@ -308,9 +333,25 @@ impl ApiModel {
                     reserved,
                     current_class.as_ref(),
                     &mut seen_types,
+                    &mut used_opaquely,
                 ) { continue; }
             }
 
+        }
+
+        for opaque in used_opaquely {
+            if let Some(cls) = classes.iter_mut().find(|c| c.name == opaque) {
+                cls.is_static = false;
+            } else {
+                println!("\x1b[38;2;200;200;20m[warning]: type '{opaque}' is used but not defined, a blank stub class will be generated.\x1b[0m");
+                classes.push(ClassDef {
+                    name: opaque,
+                    is_static: false,
+                    doc: None,
+                    functions: Vec::new(),
+                    methods: Vec::new(),
+                })
+            }
         }
 
 
@@ -543,6 +584,29 @@ pub fn to_ffi_type(value: &Value, args: &HashMap<String, Value>) -> tera::Result
     Ok(map.get(ffi_ty).unwrap().clone())
 }
 
+pub fn needs_allocator(value: &Value, _args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let input = value.as_object().unwrap();
+    let mut types = Vec::new();
+    if let Some(ret_type) = input.get("type") {
+        let t = ret_type.as_str().unwrap();
+        types.push(t);
+    }
+    if let Some(params) = input.get("params") {
+        let params = params.as_array().unwrap();
+        for param in params {
+            let param = param.as_object().unwrap();
+            let t = param.get("type").unwrap().as_str().unwrap();
+            types.push(t);
+        }
+    }
+
+    Ok(to_value(
+        types
+            .iter()
+            .any(|t| matches!(*t, "String" | "&str" | "Vu32" | "&Vu32"))
+    )?)
+}
+
 fn main() {
     let args = Args::parse();
 
@@ -576,6 +640,7 @@ fn main() {
     tera.register_filter("case", case_filter);
     tera.register_function("docs", doc_comment);
     tera.register_filter("ffi_type", to_ffi_type);
+    tera.register_filter("needs_alloc", needs_allocator);
 
     println!("Clearing output directory");
     fs::remove_dir_all(&output).expect("Unable to clear output directory");
