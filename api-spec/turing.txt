@@ -15,170 +15,169 @@
 :Type [opaque]:
 :IEnumerator [opaque]:
 
-
 :Log:
-::warn(msg: &str) -> void : _log__warn
-::info(msg: &str) -> void : _log__info
-::debug(msg: &str) -> void : _log__debug
-::critical(msg: &str) -> void : _log__critical
-:NoteManager:
-::add_obstacle(beat: f32, duration: f32, line: i32, layer: i32, width: i32, height: i32, customData: CustomData) -> void : _note_manager__add_obstacle
-::add_color_note(beat: f32, line: i32, layer: i32, color: i32, cutDirection: i32, customData: CustomData) -> void : _note_manager__add_color_note
-::time_to_beat(time: f32) -> f32 : _note_manager__time_to_beat
-::add_bomb_note(beat: f32, line: i32, layer: i32, customData: CustomData) -> void : _note_manager__add_bomb_note
-:TuringerGameObjectManager [opaque] :
-::create_object(name: &str) -> TuringerGameObject : _turinger_game_object_manager__create_object
-instance_get() -> TuringerGameObjectManager : _turinger_game_object_manager__instance_get
-::find(name: &str) -> TuringerGameObject : _turinger_game_object_manager__find
-::destroy_object(listener: TuringerGameObject) -> void : _turinger_game_object_manager__destroy_object
+::warn(msg: &str) -> void : _core_log__warn
+::info(msg: &str) -> void : _core_log__info
+::debug(msg: &str) -> void : _core_log__debug
+::critical(msg: &str) -> void : _core_log__critical
 :TuringerGameObject [opaque] :
-get_components_in_parent_by_type(csType: Type, includeInactive: bool) -> Component[] : _turinger_game_object__get_components_in_parent_by_type
-send_message(methodName: &str) -> void : _turinger_game_object__send_message
-get_component_in_parent_by_type(csType: Type) -> Component : _turinger_game_object__get_component_in_parent_by_type
-is_static_get() -> bool : _turinger_game_object__is_static_get
-transform_get() -> TuringerTransform : _turinger_game_object__transform_get
-get_component_in_children_by_type(csType: Type) -> Component : _turinger_game_object__get_component_in_children_by_type
-get_components_by_type(csType: Type, results: List1) -> void : _turinger_game_object__get_components_by_type
-active_set(value: bool) -> void : _turinger_game_object__active_set
-broadcast_message(methodName: &str) -> void : _turinger_game_object__broadcast_message
-game_object_get() -> GameObject : _turinger_game_object__game_object_get
-is_static_set(value: bool) -> void : _turinger_game_object__is_static_set
-add_component(componentType: Type) -> Component : _turinger_game_object__add_component
-hide_flags_set(value: i32) -> void : _turinger_game_object__hide_flags_set
-send_message_upwards(methodName: &str) -> void : _turinger_game_object__send_message_upwards
-compare_tag(tag: &str) -> bool : _turinger_game_object__compare_tag
-hide_flags_get() -> i32 : _turinger_game_object__hide_flags_get
-tag_set(value: &str) -> void : _turinger_game_object__tag_set
-get_instance_id() -> i32 : _turinger_game_object__get_instance_id
-layer_get() -> i32 : _turinger_game_object__layer_get
-get_components_in_children_by_type(csType: Type, includeInactive: bool) -> Component[] : _turinger_game_object__get_components_in_children_by_type
-layer_set(value: i32) -> void : _turinger_game_object__layer_set
-set_active_recursively(state: bool) -> void : _turinger_game_object__set_active_recursively
-get_component_index(component: Component) -> i32 : _turinger_game_object__get_component_index
-get_component_count() -> i32 : _turinger_game_object__get_component_count
-get_component_at_index(index: i32) -> Component : _turinger_game_object__get_component_at_index
-tag_get() -> String : _turinger_game_object__tag_get
-active_self_get() -> bool : _turinger_game_object__active_self_get
-name_get() -> String : _turinger_game_object__name_get
-get_component_by_type(csType: Type) -> Component : _turinger_game_object__get_component_by_type
-active_in_hierarchy_get() -> bool : _turinger_game_object__active_in_hierarchy_get
-set_active(value: bool) -> void : _turinger_game_object__set_active
-active_get() -> bool : _turinger_game_object__active_get
-get_component_by_name(csType: &str) -> Component : _turinger_game_object__get_component_by_name
-name_set(value: &str) -> void : _turinger_game_object__name_set
-scene_culling_mask_get() -> u64 : _turinger_game_object__scene_culling_mask_get
-:TuringerTransform [opaque] :
-get_component_by_type(csType: Type) -> Component : _turinger_transform__get_component_by_type
-look_at(worldPosition: Vec3) -> void : _turinger_transform__look_at
-get_instance_id() -> i32 : _turinger_transform__get_instance_id
-tag_get() -> String : _turinger_transform__tag_get
-local_euler_angles_get() -> Vec3 : _turinger_transform__local_euler_angles_get
-rotation_get() -> Quat : _turinger_transform__rotation_get
-world_to_local_matrix_get() -> Mat4 : _turinger_transform__world_to_local_matrix_get
-hierarchy_count_get() -> i32 : _turinger_transform__hierarchy_count_get
-get_components_in_children_by_type(t: Type, includeInactive: bool) -> Component[] : _turinger_transform__get_components_in_children_by_type
-name_set(value: &str) -> void : _turinger_transform__name_set
-local_rotation_get() -> Quat : _turinger_transform__local_rotation_get
-detach_children() -> void : _turinger_transform__detach_children
-inverse_transform_point(x: f32, y: f32, z: f32) -> Vec3 : _turinger_transform__inverse_transform_point
-get_component_in_children_by_type(t: Type, includeInactive: bool) -> Component : _turinger_transform__get_component_in_children_by_type
-transform_get() -> Transform : _turinger_transform__transform_get
-lossy_scale_get() -> Vec3 : _turinger_transform__lossy_scale_get
-root_get() -> TuringerTransform : _turinger_transform__root_get
-get_components_by_type(csType: Type, results: List1) -> void : _turinger_transform__get_components_by_type
-get_enumerator() -> IEnumerator : _turinger_transform__get_enumerator
-local_scale_set(value: Vec3) -> void : _turinger_transform__local_scale_set
-child_count_get() -> i32 : _turinger_transform__child_count_get
-parent_set(value: TuringerTransform) -> void : _turinger_transform__parent_set
-get_child(index: i32) -> TuringerTransform : _turinger_transform__get_child
-transform_direction(x: f32, y: f32, z: f32) -> Vec3 : _turinger_transform__transform_direction
-has_changed_set(value: bool) -> void : _turinger_transform__has_changed_set
-send_message_upwards(methodName: &str, value: Object, options: i32) -> void : _turinger_transform__send_message_upwards
-find_child(n: &str) -> TuringerTransform : _turinger_transform__find_child
-get_components_in_parent_by_type(t: Type, includeInactive: bool) -> Component[] : _turinger_transform__get_components_in_parent_by_type
-rotate(axis: Vec3, angle: f32) -> void : _turinger_transform__rotate
-has_changed_get() -> bool : _turinger_transform__has_changed_get
-local_position_get() -> Vec3 : _turinger_transform__local_position_get
-translate_relative(translation: Vec3, relativeTo: TuringerTransform) -> void : _turinger_transform__translate_relative
-local_euler_angles_set(value: Vec3) -> void : _turinger_transform__local_euler_angles_set
-set_local_position_and_rotation(localPosition: Vec3, localRotation: Quat) -> void : _turinger_transform__set_local_position_and_rotation
-forward_get() -> Vec3 : _turinger_transform__forward_get
-get_sibling_index() -> i32 : _turinger_transform__get_sibling_index
-get_component_in_parent_by_type(t: Type, includeInactive: bool) -> Component : _turinger_transform__get_component_in_parent_by_type
-up_get() -> Vec3 : _turinger_transform__up_get
-get_component_index() -> i32 : _turinger_transform__get_component_index
-rotate_around_local(axis: Vec3, angle: f32) -> void : _turinger_transform__rotate_around_local
-translate(translation: Vec3) -> void : _turinger_transform__translate
-broadcast_message(methodName: &str, parameter: Object, options: i32) -> void : _turinger_transform__broadcast_message
-euler_angles_set(value: Vec3) -> void : _turinger_transform__euler_angles_set
-send_message(methodName: &str, value: Object, options: i32) -> void : _turinger_transform__send_message
-parent_get() -> TuringerTransform : _turinger_transform__parent_get
-local_to_world_matrix_get() -> Mat4 : _turinger_transform__local_to_world_matrix_get
-get_component_by_name(csType: &str) -> Component : _turinger_transform__get_component_by_name
-set_parent(parent: TuringerTransform, worldPositionStays: bool) -> void : _turinger_transform__set_parent
-rotate_around(axis: Vec3, angle: f32) -> void : _turinger_transform__rotate_around
-hierarchy_capacity_set(value: i32) -> void : _turinger_transform__hierarchy_capacity_set
-up_set(value: Vec3) -> void : _turinger_transform__up_set
-inverse_transform_direction(x: f32, y: f32, z: f32) -> Vec3 : _turinger_transform__inverse_transform_direction
-local_scale_get() -> Vec3 : _turinger_transform__local_scale_get
-transform_vector(x: f32, y: f32, z: f32) -> Vec3 : _turinger_transform__transform_vector
-transform_point(x: f32, y: f32, z: f32) -> Vec3 : _turinger_transform__transform_point
-euler_angles_get() -> Vec3 : _turinger_transform__euler_angles_get
-is_child_of(parent: TuringerTransform) -> bool : _turinger_transform__is_child_of
-right_set(value: Vec3) -> void : _turinger_transform__right_set
-get_child_count() -> i32 : _turinger_transform__get_child_count
-hide_flags_get() -> i32 : _turinger_transform__hide_flags_get
-rotate_relative(axis: Vec3, angle: f32, relativeTo: i32) -> void : _turinger_transform__rotate_relative
-rotation_set(value: Quat) -> void : _turinger_transform__rotation_set
-game_object_get() -> TuringerGameObject : _turinger_transform__game_object_get
-hierarchy_capacity_get() -> i32 : _turinger_transform__hierarchy_capacity_get
-set_as_first_sibling() -> void : _turinger_transform__set_as_first_sibling
-right_get() -> Vec3 : _turinger_transform__right_get
-local_position_set(value: Vec3) -> void : _turinger_transform__local_position_set
-forward_set(value: Vec3) -> void : _turinger_transform__forward_set
-name_get() -> String : _turinger_transform__name_get
-compare_tag(tag: &str) -> bool : _turinger_transform__compare_tag
-set_as_last_sibling() -> void : _turinger_transform__set_as_last_sibling
-position_get() -> Vec3 : _turinger_transform__position_get
-set_sibling_index(index: i32) -> void : _turinger_transform__set_sibling_index
-position_set(value: Vec3) -> void : _turinger_transform__position_set
-hide_flags_set(value: i32) -> void : _turinger_transform__hide_flags_set
-set_position_and_rotation(position: Vec3, rotation: Quat) -> void : _turinger_transform__set_position_and_rotation
-find(n: &str) -> TuringerTransform : _turinger_transform__find
-tag_set(value: &str) -> void : _turinger_transform__tag_set
-local_rotation_set(value: Quat) -> void : _turinger_transform__local_rotation_set
-inverse_transform_vector(x: f32, y: f32, z: f32) -> Vec3 : _turinger_transform__inverse_transform_vector
-:GCHelper [opaque] :
-::create() -> GCHelper : _gc_helper__create
-wasm_garbage_collect() -> void : _gc_helper__wasm_garbage_collect
-dispose() -> void : _gc_helper__dispose
-invalidate_all_handles() -> void : _gc_helper__invalidate_all_handles
-:Xr [opaque] :
-::get_device_tracking_state(nodeInt: i32) -> i32 : _xr__get_device_tracking_state
-::get_device_name(nodeInt: i32) -> String : _xr__get_device_name
-_manager_get() -> TuringScriptManager : _xr___manager_get
-::get_device_secondary_button_state(nodeInt: i32) -> bool : _xr__get_device_secondary_button_state
-::get_device_primary_button_state(nodeInt: i32) -> bool : _xr__get_device_primary_button_state
-::send_haptic_impulse(nodeInt: i32, amplitude: f32, duration: f32) -> void : _xr__send_haptic_impulse
-::is_device_valid(nodeInt: i32) -> bool : _xr__is_device_valid
-::get_device_battery_level(nodeInt: i32) -> f32 : _xr__get_device_battery_level
-::get_device_touchpad(nodeInt: i32) -> Vec2 : _xr__get_device_touchpad
-::get_device_grip_value(nodeInt: i32) -> f32 : _xr__get_device_grip_value
-::get_device_trigger_value(nodeInt: i32) -> f32 : _xr__get_device_trigger_value
-::stop_haptics(nodeInt: i32) -> void : _xr__stop_haptics
-::get_device_thumbstick(nodeInt: i32) -> Vec2 : _xr__get_device_thumbstick
+get_components_in_parent_by_type(csType: Type, includeInactive: bool) -> Component[] : _core_turinger_game_object__get_components_in_parent_by_type
+send_message(methodName: &str, options: i32) -> void : _core_turinger_game_object__send_message
+get_component_in_parent_by_type(csType: Type, includeInactive: bool) -> Component : _core_turinger_game_object__get_component_in_parent_by_type
+is_static_get() -> bool : _core_turinger_game_object__is_static_get
+transform_get() -> TuringerTransform : _core_turinger_game_object__transform_get
+get_component_in_children_by_type(csType: Type, includeInactive: bool) -> Component : _core_turinger_game_object__get_component_in_children_by_type
+get_components_by_type(csType: Type) -> Component[] : _core_turinger_game_object__get_components_by_type
+active_set(value: bool) -> void : _core_turinger_game_object__active_set
+broadcast_message(methodName: &str, options: i32) -> void : _core_turinger_game_object__broadcast_message
+game_object_get() -> GameObject : _core_turinger_game_object__game_object_get
+is_static_set(value: bool) -> void : _core_turinger_game_object__is_static_set
+add_component(componentType: Type) -> Component : _core_turinger_game_object__add_component
+hide_flags_set(value: i32) -> void : _core_turinger_game_object__hide_flags_set
+send_message_upwards(methodName: &str, options: i32) -> void : _core_turinger_game_object__send_message_upwards
+compare_tag(tag: &str) -> bool : _core_turinger_game_object__compare_tag
+hide_flags_get() -> i32 : _core_turinger_game_object__hide_flags_get
+tag_set(value: &str) -> void : _core_turinger_game_object__tag_set
+get_instance_id() -> i32 : _core_turinger_game_object__get_instance_id
+layer_get() -> i32 : _core_turinger_game_object__layer_get
+get_components_in_children_by_type(csType: Type, includeInactive: bool) -> Component[] : _core_turinger_game_object__get_components_in_children_by_type
+layer_set(value: i32) -> void : _core_turinger_game_object__layer_set
+set_active_recursively(state: bool) -> void : _core_turinger_game_object__set_active_recursively
+get_component_index(component: Component) -> i32 : _core_turinger_game_object__get_component_index
+get_component_count() -> i32 : _core_turinger_game_object__get_component_count
+get_component_at_index(index: i32) -> Component : _core_turinger_game_object__get_component_at_index
+tag_get() -> String : _core_turinger_game_object__tag_get
+active_self_get() -> bool : _core_turinger_game_object__active_self_get
+name_get() -> String : _core_turinger_game_object__name_get
+get_component_by_type(csType: Type) -> Component : _core_turinger_game_object__get_component_by_type
+active_in_hierarchy_get() -> bool : _core_turinger_game_object__active_in_hierarchy_get
+set_active(value: bool) -> void : _core_turinger_game_object__set_active
+active_get() -> bool : _core_turinger_game_object__active_get
+get_component_by_name(csType: &str) -> Component : _core_turinger_game_object__get_component_by_name
+name_set(value: &str) -> void : _core_turinger_game_object__name_set
+scene_culling_mask_get() -> u64 : _core_turinger_game_object__scene_culling_mask_get
+:TuringerGameObjectManager [opaque] :
+::create_object(name: &str) -> TuringerGameObject : _core_turinger_game_object_manager__create_object
+instance_get() -> TuringerGameObjectManager : _core_turinger_game_object_manager__instance_get
+::find(name: &str) -> TuringerGameObject : _core_turinger_game_object_manager__find
+::destroy_object(listener: TuringerGameObject) -> void : _core_turinger_game_object_manager__destroy_object
 :CustomData [opaque]:
-::create() -> CustomData : _custom_data__create
-::list_create() -> List`1 : _custom_data__list_create
-::set_string(customData: CustomData, key: &str, value: &str) -> void : _custom_data__set_string
-::set_custom_data(customData: CustomData, key: &str, value: CustomData) -> void : _custom_data__set_custom_data
-::list_add_string(list: List1, value: &str) -> void : _custom_data__list_add_string
-::set_custom_data_list(customData: CustomData, key: &str, value: List1) -> void : _custom_data__set_custom_data_list
-::set_float(customData: CustomData, key: &str, value: f32) -> void : _custom_data__set_float
-::list_add_int(list: List1, value: i32) -> void : _custom_data__list_add_int
-::list_add_bool(list: List1, value: bool) -> void : _custom_data__list_add_bool
-::set_int(customData: CustomData, key: &str, value: i32) -> void : _custom_data__set_int
-::set_bool(customData: CustomData, key: &str, value: bool) -> void : _custom_data__set_bool
-::list_add_custom_data_list(list: List1, value: List1) -> void : _custom_data__list_add_custom_data_list
-::list_add_float(list: List1, value: f32) -> void : _custom_data__list_add_float
-::list_add_custom_data(list: List1, value: CustomData) -> void : _custom_data__list_add_custom_data
+::create() -> CustomData : _core_custom_data__create
+::list_create() -> List`1 : _core_custom_data__list_create
+::set_string(customData: CustomData, key: &str, value: &str) -> void : _core_custom_data__set_string
+::set_custom_data(customData: CustomData, key: &str, value: CustomData) -> void : _core_custom_data__set_custom_data
+::list_add_string(list: List1, value: &str) -> void : _core_custom_data__list_add_string
+::set_custom_data_list(customData: CustomData, key: &str, value: List1) -> void : _core_custom_data__set_custom_data_list
+::set_float(customData: CustomData, key: &str, value: f32) -> void : _core_custom_data__set_float
+::list_add_int(list: List1, value: i32) -> void : _core_custom_data__list_add_int
+::list_add_bool(list: List1, value: bool) -> void : _core_custom_data__list_add_bool
+::set_int(customData: CustomData, key: &str, value: i32) -> void : _core_custom_data__set_int
+::set_bool(customData: CustomData, key: &str, value: bool) -> void : _core_custom_data__set_bool
+::list_add_custom_data_list(list: List1, value: List1) -> void : _core_custom_data__list_add_custom_data_list
+::list_add_float(list: List1, value: f32) -> void : _core_custom_data__list_add_float
+::list_add_custom_data(list: List1, value: CustomData) -> void : _core_custom_data__list_add_custom_data
+:GCHelper [opaque] :
+::create() -> GCHelper : _core_gc_helper__create
+wasm_garbage_collect() -> void : _core_gc_helper__wasm_garbage_collect
+dispose() -> void : _core_gc_helper__dispose
+invalidate_all_handles() -> void : _core_gc_helper__invalidate_all_handles
+:NoteManager:
+::add_obstacle(beat: f32, duration: f32, line: i32, layer: i32, width: i32, height: i32, customData: CustomData) -> void : _core_note_manager__add_obstacle
+::add_color_note(beat: f32, line: i32, layer: i32, color: i32, cutDirection: i32, customData: CustomData) -> void : _core_note_manager__add_color_note
+::time_to_beat(time: f32) -> f32 : _core_note_manager__time_to_beat
+::add_bomb_note(beat: f32, line: i32, layer: i32, customData: CustomData) -> void : _core_note_manager__add_bomb_note
+:Xr [opaque] :
+::get_device_tracking_state(nodeInt: i32) -> i32 : _core_xr__get_device_tracking_state
+::get_device_name(nodeInt: i32) -> String : _core_xr__get_device_name
+_manager_get() -> TuringScriptManager : _core_xr___manager_get
+::get_device_secondary_button_state(nodeInt: i32) -> bool : _core_xr__get_device_secondary_button_state
+::get_device_primary_button_state(nodeInt: i32) -> bool : _core_xr__get_device_primary_button_state
+::send_haptic_impulse(nodeInt: i32, amplitude: f32, duration: f32) -> void : _core_xr__send_haptic_impulse
+::is_device_valid(nodeInt: i32) -> bool : _core_xr__is_device_valid
+::get_device_battery_level(nodeInt: i32) -> f32 : _core_xr__get_device_battery_level
+::get_device_touchpad(nodeInt: i32) -> Vec2 : _core_xr__get_device_touchpad
+::get_device_grip_value(nodeInt: i32) -> f32 : _core_xr__get_device_grip_value
+::get_device_trigger_value(nodeInt: i32) -> f32 : _core_xr__get_device_trigger_value
+::stop_haptics(nodeInt: i32) -> void : _core_xr__stop_haptics
+::get_device_thumbstick(nodeInt: i32) -> Vec2 : _core_xr__get_device_thumbstick
+:TuringerTransform [opaque] :
+get_component_by_type(csType: Type) -> Component : _core_turinger_transform__get_component_by_type
+look_at(target: TuringerTransform, worldUp: Vec3) -> void : _core_turinger_transform__look_at
+get_instance_id() -> i32 : _core_turinger_transform__get_instance_id
+tag_get() -> String : _core_turinger_transform__tag_get
+local_euler_angles_get() -> Vec3 : _core_turinger_transform__local_euler_angles_get
+rotation_get() -> Quat : _core_turinger_transform__rotation_get
+world_to_local_matrix_get() -> Mat4 : _core_turinger_transform__world_to_local_matrix_get
+hierarchy_count_get() -> i32 : _core_turinger_transform__hierarchy_count_get
+get_components_in_children_by_type(t: Type, includeInactive: bool) -> Component[] : _core_turinger_transform__get_components_in_children_by_type
+name_set(value: &str) -> void : _core_turinger_transform__name_set
+local_rotation_get() -> Quat : _core_turinger_transform__local_rotation_get
+detach_children() -> void : _core_turinger_transform__detach_children
+inverse_transform_point(position: Vec3) -> Vec3 : _core_turinger_transform__inverse_transform_point
+get_component_in_children_by_type(t: Type, includeInactive: bool) -> Component : _core_turinger_transform__get_component_in_children_by_type
+transform_get() -> Transform : _core_turinger_transform__transform_get
+lossy_scale_get() -> Vec3 : _core_turinger_transform__lossy_scale_get
+root_get() -> TuringerTransform : _core_turinger_transform__root_get
+get_components_by_type(csType: Type) -> Component[] : _core_turinger_transform__get_components_by_type
+get_enumerator() -> IEnumerator : _core_turinger_transform__get_enumerator
+local_scale_set(value: Vec3) -> void : _core_turinger_transform__local_scale_set
+child_count_get() -> i32 : _core_turinger_transform__child_count_get
+parent_set(value: TuringerTransform) -> void : _core_turinger_transform__parent_set
+get_child(index: i32) -> TuringerTransform : _core_turinger_transform__get_child
+transform_direction(direction: Vec3) -> Vec3 : _core_turinger_transform__transform_direction
+has_changed_set(value: bool) -> void : _core_turinger_transform__has_changed_set
+send_message_upwards(methodName: &str, value: Object, options: i32) -> void : _core_turinger_transform__send_message_upwards
+find_child(n: &str) -> TuringerTransform : _core_turinger_transform__find_child
+get_components_in_parent_by_type(t: Type, includeInactive: bool) -> Component[] : _core_turinger_transform__get_components_in_parent_by_type
+rotate(eulers: Vec3) -> void : _core_turinger_transform__rotate
+has_changed_get() -> bool : _core_turinger_transform__has_changed_get
+local_position_get() -> Vec3 : _core_turinger_transform__local_position_get
+translate_relative(translation: Vec3, relativeTo: TuringerTransform) -> void : _core_turinger_transform__translate_relative
+local_euler_angles_set(value: Vec3) -> void : _core_turinger_transform__local_euler_angles_set
+set_local_position_and_rotation(localPosition: Vec3, localRotation: Quat) -> void : _core_turinger_transform__set_local_position_and_rotation
+forward_get() -> Vec3 : _core_turinger_transform__forward_get
+get_sibling_index() -> i32 : _core_turinger_transform__get_sibling_index
+get_component_in_parent_by_type(t: Type, includeInactive: bool) -> Component : _core_turinger_transform__get_component_in_parent_by_type
+up_get() -> Vec3 : _core_turinger_transform__up_get
+get_component_index() -> i32 : _core_turinger_transform__get_component_index
+rotate_around_local(axis: Vec3, angle: f32) -> void : _core_turinger_transform__rotate_around_local
+translate(translation: Vec3, relativeTo: i32) -> void : _core_turinger_transform__translate
+broadcast_message(methodName: &str, parameter: Object, options: i32) -> void : _core_turinger_transform__broadcast_message
+euler_angles_set(value: Vec3) -> void : _core_turinger_transform__euler_angles_set
+send_message(methodName: &str, value: Object, options: i32) -> void : _core_turinger_transform__send_message
+parent_get() -> TuringerTransform : _core_turinger_transform__parent_get
+local_to_world_matrix_get() -> Mat4 : _core_turinger_transform__local_to_world_matrix_get
+get_component_by_name(csType: &str) -> Component : _core_turinger_transform__get_component_by_name
+set_parent(parent: TuringerTransform, worldPositionStays: bool) -> void : _core_turinger_transform__set_parent
+rotate_around(point: Vec3, axis: Vec3, angle: f32) -> void : _core_turinger_transform__rotate_around
+hierarchy_capacity_set(value: i32) -> void : _core_turinger_transform__hierarchy_capacity_set
+up_set(value: Vec3) -> void : _core_turinger_transform__up_set
+inverse_transform_direction(direction: Vec3) -> Vec3 : _core_turinger_transform__inverse_transform_direction
+local_scale_get() -> Vec3 : _core_turinger_transform__local_scale_get
+transform_vector(vector: Vec3) -> Vec3 : _core_turinger_transform__transform_vector
+transform_point(position: Vec3) -> Vec3 : _core_turinger_transform__transform_point
+euler_angles_get() -> Vec3 : _core_turinger_transform__euler_angles_get
+is_child_of(parent: TuringerTransform) -> bool : _core_turinger_transform__is_child_of
+right_set(value: Vec3) -> void : _core_turinger_transform__right_set
+get_child_count() -> i32 : _core_turinger_transform__get_child_count
+hide_flags_get() -> i32 : _core_turinger_transform__hide_flags_get
+rotate_relative(eulers: Vec3, relativeTo: i32) -> void : _core_turinger_transform__rotate_relative
+rotation_set(value: Quat) -> void : _core_turinger_transform__rotation_set
+game_object_get() -> TuringerGameObject : _core_turinger_transform__game_object_get
+hierarchy_capacity_get() -> i32 : _core_turinger_transform__hierarchy_capacity_get
+set_as_first_sibling() -> void : _core_turinger_transform__set_as_first_sibling
+right_get() -> Vec3 : _core_turinger_transform__right_get
+local_position_set(value: Vec3) -> void : _core_turinger_transform__local_position_set
+forward_set(value: Vec3) -> void : _core_turinger_transform__forward_set
+name_get() -> String : _core_turinger_transform__name_get
+compare_tag(tag: &str) -> bool : _core_turinger_transform__compare_tag
+set_as_last_sibling() -> void : _core_turinger_transform__set_as_last_sibling
+position_get() -> Vec3 : _core_turinger_transform__position_get
+set_sibling_index(index: i32) -> void : _core_turinger_transform__set_sibling_index
+position_set(value: Vec3) -> void : _core_turinger_transform__position_set
+hide_flags_set(value: i32) -> void : _core_turinger_transform__hide_flags_set
+set_position_and_rotation(position: Vec3, rotation: Quat) -> void : _core_turinger_transform__set_position_and_rotation
+find(n: &str) -> TuringerTransform : _core_turinger_transform__find
+tag_set(value: &str) -> void : _core_turinger_transform__tag_set
+local_rotation_set(value: Quat) -> void : _core_turinger_transform__local_rotation_set
+inverse_transform_vector(vector: Vec3) -> Vec3 : _core_turinger_transform__inverse_transform_vector
