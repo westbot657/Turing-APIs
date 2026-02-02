@@ -1,11 +1,13 @@
+[workspace]
+
 [package]
 name = "turing_script"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-turing-api = "1.0.0"
-# turing-api = { path = "../turing-api-rs" }
+#turing-api = "1.0.0"
+turing-api = { path = "../turing-api-rs" }
 
 [lib]
 crate-type = ["cdylib"]

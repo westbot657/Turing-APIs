@@ -11,6 +11,8 @@ extern "C" fn on_load() {
 
 #[unsafe(no_mangle)]
 extern "C" fn on_update() {
+    let smth = do_thing(Random { opaqu: 8 });
+    Log::info(&format!("smth: {}", smth.opaqu))
     // This is called every frame.
 }
 

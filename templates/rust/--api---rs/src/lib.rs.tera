@@ -182,8 +182,8 @@ self
 {{ indent }}let turing_handle = CString::new({{ param.name | case(style="snake") }}).unwrap();
 {{ indent }}let {{ param.name | case(style="snake") }} = turing_handle.as_ptr();
 {%- elif param.type == "&Vu32" %}
-{{ indent }}{% if not api.include_core %}turing_api::{% endif %}_host_u32_enqueue({{ param.name | case(style="snake") }}.len() as u32);
-{{ indent }}let {{ param.name | case(style="snake") }} = {{ param.name | case(style="snake") }}.as_ptr();
+{{ indent }}unsafe { {% if not api.include_core %}turing_api::{% endif %}_host_u32_enqueue({{ param.name | case(style="snake") }}.len() as u32) };
+{{ indent }}let {{ param.name | case(style="snake") }} = {{ param.name | case(style="snake") }}.as_ptr() as *mut c_void;
 {%- elif param.is_glam_type %}
 {{ indent }} let {{ param.name | case(style="snake") }} = {% if not api.include_core -%}
 turing_api::{% endif %}alg::enqueue_{{ param.type | case(style="lower") -}}
@@ -217,17 +217,17 @@ self
 {{- self::converter(param=param, indent=indent) }}
 {%- endfor %}
 {{ indent }}{% if func.unpack_return %}let turing_result = {% endif -%}
-{{ func.wasm -}}
+unsafe { {{ func.wasm -}}
 (
     {{- self::convert_args(func=func) -}}
-){% if func.unpack_return or not func.skip_return %};{% endif %}
+) }{% if func.unpack_return or func.skip_return %};{% endif %}
 {%- if func.type == "String" %}
-{{ indent }}let turing_str = vec![0u8; turing_result as usize];
+{{ indent }}let mut turing_str = vec![0u8; turing_result as usize];
 {{ indent }}unsafe { {% if not api.include_core %}turing_api::{% endif %}_host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
 {{ indent }}let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
 {{ indent }}turing_str.to_string_lossy().into_owned()
 {%- elif func.type == "Vu32" %}
-{{ indent }}let turing_buf = vec![0u32; turing_result as usize];
+{{ indent }}let mut turing_buf = vec![0u32; turing_result as usize];
 {{ indent }}unsafe { {% if not api.include_core %}turing_api::{% endif %}_host_bufcpy(turing_buf.as_mut_ptr() as *mut c_void, turing_result) };
 {{ indent }}turing_buf
 {%- elif func.type == "self" %}
@@ -257,11 +257,12 @@ self
 
 
 {%- macro class_def(class) %}
+#[repr(C)]
 {% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
 pub struct {{ class.name | case(style="pascal") }}
 {%- if class.static %};
 {%- else %} {
-    opaqu: {{ types.rs["op*"] }},
+    pub opaqu: {{ types.rs["op*"] }},
 }
 {%- endif %}
 {%- if class.functions or class.methods %}
@@ -275,8 +276,8 @@ impl {{ class.name | case(style="pascal") }} {
 //// Wasm Bindings ////
 unsafe extern "C" {
     {% if api.include_core %}
-    pub fn _host_strcpy(location: *const c_char, size: u32);
-    pub fn _host_bufcpy(location: *const u32, size: u32);
+    pub fn _host_strcpy(location: *mut c_char, size: u32);
+    pub fn _host_bufcpy(location: *mut c_void, size: u32);
     pub fn _host_f32_enqueue(f: f32);
     pub fn _host_f32_dequeue() -> f32;
     pub fn _host_u32_enqueue(u: u32);

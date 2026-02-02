@@ -130,8 +130,8 @@ pub mod alg {
 //// Wasm Bindings ////
 unsafe extern "C" {
     
-    pub fn _host_strcpy(location: *const c_char, size: u32);
-    pub fn _host_bufcpy(location: *const u32, size: u32);
+    pub fn _host_strcpy(location: *mut c_char, size: u32);
+    pub fn _host_bufcpy(location: *mut c_void, size: u32);
     pub fn _host_f32_enqueue(f: f32);
     pub fn _host_f32_dequeue() -> f32;
     pub fn _host_u32_enqueue(u: u32);
@@ -146,7 +146,7 @@ unsafe extern "C" {
     fn _vivify__get_buffer() -> u32;
 
 }
-
+ 
 #[unsafe(no_mangle)]
 extern "C" fn _turing_api_semver() -> u64 {
     return (1u64 << 32) | (0u64 << 16) | 0u64;
@@ -159,10 +159,11 @@ pub static TURING_API_VERSION: &'static str = "1.0.0";
 
 
 pub fn do_thing(random: Random) -> Something {
-    _do_thing(random);
+    unsafe { _do_thing(random) }
 }
 
 //// Classes ////
+#[repr(C)]
 /// Used to log messages to the console
 pub struct Log;
 impl Log {
@@ -171,53 +172,56 @@ impl Log {
     pub fn debug(msg: &str) {
         let turing_handle = CString::new(msg).unwrap();
         let msg = turing_handle.as_ptr();
-        _log__debug(msg)
+        unsafe { _log__debug(msg) };
     }
     /// Highlights red
     pub fn critical(msg: &str) {
         let turing_handle = CString::new(msg).unwrap();
         let msg = turing_handle.as_ptr();
-        _log__critical(msg)
+        unsafe { _log__critical(msg) };
     }
     /// Highlights yellow
     pub fn warn(msg: &str) {
         let turing_handle = CString::new(msg).unwrap();
         let msg = turing_handle.as_ptr();
-        _log__warn(msg)
+        unsafe { _log__warn(msg) };
     }
     /// Highlights blue
     pub fn info(msg: &str) {
         let turing_handle = CString::new(msg).unwrap();
         let msg = turing_handle.as_ptr();
-        _log__info(msg)
+        unsafe { _log__info(msg) };
     }
     
 }
+#[repr(C)]
 /// Vivify compatibility systems
 pub struct Vivify;
 impl Vivify {
 
     /// Uploads a data buffer to beat saber
     pub fn upload_buffer(buf: &[u32]) {
-        _host_u32_enqueue(buf.len() as u32);
-        let buf = buf.as_ptr();
-        _vivify__upload_buffer(buf)
+        unsafe { _host_u32_enqueue(buf.len() as u32) };
+        let buf = buf.as_ptr() as *mut c_void;
+        unsafe { _vivify__upload_buffer(buf) };
     }
     /// Fetches a data buffer from beat saber
     pub fn get_buffer() -> Vec<u32> {
-        let turing_result = _vivify__get_buffer();
-        let turing_buf = vec![0u32; turing_result as usize];
+        let turing_result = unsafe { _vivify__get_buffer() };
+        let mut turing_buf = vec![0u32; turing_result as usize];
         unsafe { _host_bufcpy(turing_buf.as_mut_ptr() as *mut c_void, turing_result) };
         turing_buf
     }
     
 }
+#[repr(C)]
 
 pub struct Random {
-    opaqu: u64,
+    pub opaqu: u64,
 }
+#[repr(C)]
 
 pub struct Something {
-    opaqu: u64,
+    pub opaqu: u64,
 }
 

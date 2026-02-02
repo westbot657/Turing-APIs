@@ -102,7 +102,7 @@ export function {% else -%}
 {%- endmacro -%}
 
 ///// Generated AssemblyScript API /////
-import { Vec2, Vec3, Vec4, Quat, Mat4 } from "./linear_algebra";
+import { Vec2, Vec3, Vec4, Quat, Mat4 } from "../../../templates/asmscript/--api---asmscript/linear_algebra";
 
 //// Wasm Bindings ////
 {% if api.name == "turing_api" %}@external("env", "_host_strcpy")
