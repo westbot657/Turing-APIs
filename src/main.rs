@@ -638,6 +638,15 @@ pub fn needs_allocator(value: &Value, _args: &HashMap<String, Value>) -> tera::R
     })
 }
 
+pub fn is_opaque(value: &Value, _args: &HashMap<String, Value>) -> tera::Result<Value> {
+    let input = value.as_str().unwrap();
+    Ok(if is_opaque_maybe(input) {
+        Value::Bool(true)
+    } else {
+        Value::Null
+    })
+}
+
 fn main() {
     let args = Args::parse();
 
@@ -674,6 +683,7 @@ fn main() {
     tera.register_function("docs", doc_comment);
     tera.register_filter("ffi_type", to_ffi_type);
     tera.register_filter("needs_alloc", needs_allocator);
+    tera.register_filter("is_opaque", is_opaque);
 
     println!("Clearing output directory");
     fs::remove_dir_all(&output).expect("Unable to clear output directory");

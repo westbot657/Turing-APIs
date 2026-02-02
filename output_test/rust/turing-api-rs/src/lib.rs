@@ -146,7 +146,7 @@ unsafe extern "C" {
     fn _vivify__get_buffer() -> u32;
 
 }
- 
+
 #[unsafe(no_mangle)]
 extern "C" fn _turing_api_semver() -> u64 {
     return (1u64 << 32) | (0u64 << 16) | 0u64;

@@ -54,4 +54,4 @@
 | Mat4    | Mat4               | Mat4               | Mat4     | table   |
 | void*   | CPointer<Unit>?    | u32                | *void    | nil     |
 | Vu32    | UIntArray          | Array<u32>         | []uint32 | table   |
-| &Vu32   | UIntArray          | ReadonlyArray<u32> | []uint32 | table   |
+| &Vu32   | UIntArray          | Array<u32>         | []uint32 | table   |
