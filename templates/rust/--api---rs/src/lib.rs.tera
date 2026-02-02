@@ -1,0 +1,309 @@
+///// Generated Rust API /////
+use std::ffi::{CString, CStr, c_char, c_void};
+{% if not api.include_core -%}
+use turing_api::*;
+{%- endif %}
+
+
+{% if api.include_core %}
+
+//// Core Systems ////
+pub mod alg {
+    use crate::*;
+
+    #[cfg(feature = "glam")]
+    use glam::{Vec2, Vec3, Vec4, Quat, Mat4};
+
+    #[cfg(feature = "nalgebra")]
+    use nalgebra::{Vector2, Vector3, Vector4, Quaternion, Matrix4};
+
+    #[cfg(feature = "nalgebra")]
+    pub type Vec2 = Vector2<f32>;
+    #[cfg(feature = "nalgebra")]
+    pub type Vec3 = Vector3<f32>;
+    #[cfg(feature = "nalgebra")]
+    pub type Vec4 = Vector4<f32>;
+    #[cfg(feature = "nalgebra")]
+    pub type Quat = Quaternion<f32>;
+    #[cfg(feature = "nalgebra")]
+    pub type Mat4 = Matrix4<f32>;
+
+    pub fn dequeue_vec2() -> Vec2 {
+        let x = unsafe { _host_f32_dequeue() };
+        let y = unsafe { _host_f32_dequeue() };
+        Vec2::new(x, y)
+    }
+
+    pub fn enqueue_vec2(v: Vec2) -> u32 {
+        unsafe {
+            _host_f32_enqueue(v.x);
+            _host_f32_enqueue(v.y);
+        }
+        2
+    }
+
+    pub fn dequeue_vec3() -> Vec3 {
+        let x = unsafe { _host_f32_dequeue() };
+        let y = unsafe { _host_f32_dequeue() };
+        let z = unsafe { _host_f32_dequeue() };
+        Vec3::new(x, y, z)
+    }
+
+    pub fn enqueue_vec3(v: Vec3) -> u32 {
+        unsafe {
+            _host_f32_enqueue(v.x);
+            _host_f32_enqueue(v.y);
+            _host_f32_enqueue(v.z);
+        }
+        3
+    }
+
+    pub fn dequeue_vec4() -> Vec4 {
+        let x = unsafe { _host_f32_dequeue() };
+        let y = unsafe { _host_f32_dequeue() };
+        let z = unsafe { _host_f32_dequeue() };
+        let w = unsafe { _host_f32_dequeue() };
+        Vec4::new(x, y, z, w)
+    }
+
+    pub fn enqueue_vec4(v: Vec4) -> u32 {
+        unsafe {
+            _host_f32_enqueue(v.x);
+            _host_f32_enqueue(v.y);
+            _host_f32_enqueue(v.z);
+            _host_f32_enqueue(v.w);
+        }
+        4
+    }
+
+    pub fn dequeue_quat() -> Quat {
+        let x = unsafe { _host_f32_dequeue() };
+        let y = unsafe { _host_f32_dequeue() };
+        let z = unsafe { _host_f32_dequeue() };
+        let w = unsafe { _host_f32_dequeue() };
+        #[cfg(feature = "nalgebra")]
+        return Quat::new(x, y, z, w);
+        #[cfg(feature = "glam")]
+        Quat::from_xyzw(x, y, z, w)
+    }
+
+    pub fn enqueue_quat(v: Quat) -> u32 {
+        unsafe {
+            #[cfg(feature = "nalgebra")]
+            let v = v.coords;
+            _host_f32_enqueue(v.x);
+            _host_f32_enqueue(v.y);
+            _host_f32_enqueue(v.z);
+            _host_f32_enqueue(v.w);
+        }
+        4
+    }
+
+    pub fn dequeue_mat4() -> Mat4 {
+        let mut arr = [0f32; 16];
+        for i in 0..16 {
+            arr[i] = unsafe { _host_f32_dequeue() };
+        }
+        #[cfg(feature = "nalgebra")]
+        return Mat4::from_column_slice(&arr);
+        #[cfg(feature = "glam")]
+        Mat4::from_cols_array(&arr)
+    }
+
+    pub fn enqueue_mat4(m: Mat4) -> u32 {
+        #[cfg(feature = "nalgebra")]
+        let slice = m.as_slice();
+        #[cfg(feature = "glam")]
+        let slice = m.to_cols_array();
+
+        for v in slice {
+            #[cfg(feature = "nalgebra")]
+            let v = *v;
+            unsafe { _host_f32_enqueue(v) };
+        }
+
+        16
+    }
+
+}
+
+{% endif %}{# api.include_core #}
+
+
+{%- macro ffi_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.rs) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+opaqu: {{ class.name | case(style="pascal") }}
+{%- for param in func.params -%}
+, {{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.rs) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro ffi_params -%}
+
+
+{%- macro ffi_funcs(funcs) -%}
+{%- for func in funcs %}
+    fn {{ func.wasm -}}
+(
+    {{- self::ffi_params(func=func) -}}
+){% if func.type != "void" and func.type != "self" %} -> {{ func.type | ffi_type(map=types.rs) }}{% endif %};
+{%- endfor %}
+{%- endmacro ffi_funcs -%}
+
+
+{%- macro rs_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="snake") }}: {{ types.rs[param.type] }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self
+{%- for param in func.params -%}
+, {{ param.name | case(style="snake") }}: {{ types.rs[param.type] }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro rs_params -%}
+
+
+{%- macro rs_return(func) -%}
+{%- if func.type == "self" %} -> Self
+{%- elif func.type != "void" %} -> {{ types.rs[func.type] }}
+{%- endif -%}
+{%- endmacro rs_return -%}
+
+
+{%- macro converter(param, indent="") -%}
+{%- if param.type == "&str" %}
+{{ indent }}let turing_handle = CString::new({{ param.name | case(style="snake") }}).unwrap();
+{{ indent }}let {{ param.name | case(style="snake") }} = turing_handle.as_ptr();
+{%- elif param.type == "&Vu32" %}
+{{ indent }}{% if not api.include_core %}turing_api::{% endif %}_host_u32_enqueue({{ param.name | case(style="snake") }}.len() as u32);
+{{ indent }}let {{ param.name | case(style="snake") }} = {{ param.name | case(style="snake") }}.as_ptr();
+{%- elif param.is_glam_type %}
+{{ indent }} let {{ param.name | case(style="snake") }} = {% if not api.include_core -%}
+turing_api::{% endif %}alg::enqueue_{{ param.type | case(style="lower") -}}
+({{ param.name | case(style="snake") }});
+{%- endif %}
+{%- endmacro converter -%}
+
+
+{%- macro convert_arg(param) -%}
+    {{ param.name | case(style="snake") }}
+{%- endmacro convert_arg -%}
+
+
+{%- macro convert_args(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ self::convert_arg(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self
+{%- for param in func.params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro convert_args -%}
+
+
+{%- macro func_inner(func, indent="") -%}
+{%- for param in func.params -%}
+{{- self::converter(param=param, indent=indent) }}
+{%- endfor %}
+{{ indent }}{% if func.unpack_return %}let turing_result = {% endif -%}
+{{ func.wasm -}}
+(
+    {{- self::convert_args(func=func) -}}
+){% if func.unpack_return or not func.skip_return %};{% endif %}
+{%- if func.type == "String" %}
+{{ indent }}let turing_str = vec![0u8; turing_result as usize];
+{{ indent }}unsafe { {% if not api.include_core %}turing_api::{% endif %}_host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
+{{ indent }}let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
+{{ indent }}turing_str.to_string_lossy().into_owned()
+{%- elif func.type == "Vu32" %}
+{{ indent }}let turing_buf = vec![0u32; turing_result as usize];
+{{ indent }}unsafe { {% if not api.include_core %}turing_api::{% endif %}_host_bufcpy(turing_buf.as_mut_ptr() as *mut c_void, turing_result) };
+{{ indent }}turing_buf
+{%- elif func.type == "self" %}
+{{ indent }}self
+{%- elif func.dequeue_return %}
+{{ indent }}{% if not api.include_core %}turing_api::{% endif %}alg::dequeue_{{ func.type | case(style="lower") }}()
+{%- endif %}
+{%- endmacro func_inner -%}
+
+
+{%- macro func_impl(func, indent="") -%}
+{% if func.doc %}{{ indent }}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ indent }}pub fn {{ func.name | case(style="snake") -}}
+(
+    {{- self::rs_params(func=func) -}}
+){{ self::rs_return(func=func) }} {
+    {{- self::func_inner(func=func, indent=indent ~ "    ") }}
+{{ indent -}} }
+{%- endmacro func_impl -%}
+
+
+{%- macro func_impls(funcs, indent="") -%}
+{%- for func in funcs %}
+{{ self::func_impl(func=func, indent=indent) }}
+{%- endfor -%}
+{%- endmacro func_impls -%}
+
+
+{%- macro class_def(class) %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
+pub struct {{ class.name | case(style="pascal") }}
+{%- if class.static %};
+{%- else %} {
+    opaqu: {{ types.rs["op*"] }},
+}
+{%- endif %}
+{%- if class.functions or class.methods %}
+impl {{ class.name | case(style="pascal") }} {
+{{ self::func_impls(funcs=class.functions, indent="    ") }}
+    {{ self::func_impls(funcs=class.methods, indent="    ") }}
+}
+{%- endif %}
+{%- endmacro class_def %}
+
+//// Wasm Bindings ////
+unsafe extern "C" {
+    {% if api.include_core %}
+    pub fn _host_strcpy(location: *const c_char, size: u32);
+    pub fn _host_bufcpy(location: *const u32, size: u32);
+    pub fn _host_f32_enqueue(f: f32);
+    pub fn _host_f32_dequeue() -> f32;
+    pub fn _host_u32_enqueue(u: u32);
+    pub fn _host_u32_dequeue() -> u32;
+    {% endif %}{# api.include_core #}
+
+    {{- self::ffi_funcs(funcs=api.functions) }}
+    {%- for class in api.classes -%}
+    {{- self::ffi_funcs(funcs=class.functions) }}
+    {{- self::ffi_funcs(funcs=class.methods) }}
+    {%- endfor %}
+
+}
+
+#[unsafe(no_mangle)]
+extern "C" fn _{{ api.name }}_semver() -> u64 {
+    return ({{ api.semver.major }}u64 << 32) | ({{ api.semver.minor }}u64 << 16) | {{ api.semver.patch }}u64;
+}
+
+pub static {{ api.name | case(style="upper_snake") }}_VERSION: &'static str = "{{ api.version }}";
+
+
+//// Functions ////
+{{ self::func_impls(funcs=api.functions) }}
+
+//// Classes ////
+{%- for class in api.classes %}
+{{- self::class_def(class=class) }}
+{%- endfor %}
+

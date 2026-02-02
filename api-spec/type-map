@@ -1,53 +1,57 @@
-| Type    | rs            | c           | cpp          | zig              |
-|---------|---------------|-------------|--------------|------------------|
-| i8      | i8            | int8_t      | int8_t       | i8               |
-| i16     | i16           | int16_t     | int16_t      | i16              |
-| i32     | i32           | int32_t     | int32_t      | i32              |
-| i64     | i64           | int64_t     | int64_t      | i64              |
-| u8      | u8            | uint8_t     | uint8_t      | u8               |
-| u16     | u16           | uint16_t    | uint16_t     | u16              |
-| u32     | u32           | uint32_t    | uint32_t     | u32              |
-| u64     | u64           | uint64_t    | uint64_t     | u64              |
-| f32     | f32           | float       | float        | f32              |
-| f64     | f64           | double      | double       | f64              |
-| bool    | bool          | bool        | bool         | bool             |
-| String  | String        | char*       | std::string  | []u8             |
-| &str    | &str          | const char* | std::string& | []const u8       |
-| CString | *const c_char | const char* | const char*  | [*c]const u8     |
-| Cstr    | *const c_char | const char* | const char*  | [*c]const u8     |
-| op*     | u64           | uint64_t    | uint64_t     | u64              |
-| void    | ()            | void        | void         | void             |
-| self    | ()            | void        | void         | void             |
-| Vec2    | alg::Vec2     | vec2s       | glm::vec2    | zalg.Vec2        |
-| Vec3    | alg::Vec3     | vec3s       | glm::vec3    | zalg.Vec3        |
-| Vec4    | alg::Vec4     | vec4s       | glm::vec4    | zalg.Vec4        |
-| Quat    | alg::Quat     | quats       | glm::quat    | zalg.Quat        |
-| Mat4    | alg::Mat4     | mat4s       | glm::mat4    | zalg.Mat4        |
-| void*   | *const c_void | const void* | const void*  | *const anyopaque |
+| Type    | rs            | c           | cpp                       | zig              |
+|---------|---------------|-------------|---------------------------|------------------|
+| i8      | i8            | int8_t      | int8_t                    | i8               |
+| i16     | i16           | int16_t     | int16_t                   | i16              |
+| i32     | i32           | int32_t     | int32_t                   | i32              |
+| i64     | i64           | int64_t     | int64_t                   | i64              |
+| u8      | u8            | uint8_t     | uint8_t                   | u8               |
+| u16     | u16           | uint16_t    | uint16_t                  | u16              |
+| u32     | u32           | uint32_t    | uint32_t                  | u32              |
+| u64     | u64           | uint64_t    | uint64_t                  | u64              |
+| f32     | f32           | float       | float                     | f32              |
+| f64     | f64           | double      | double                    | f64              |
+| bool    | bool          | bool        | bool                      | bool             |
+| String  | String        | char*       | std::string               | []u8             |
+| &str    | &str          | const char* | std::string&              | []const u8       |
+| CString | *const c_char | const char* | const char*               | [*c]const u8     |
+| Cstr    | *const c_char | const char* | const char*               | [*c]const u8     |
+| op*     | u64           | uint64_t    | uint64_t                  | u64              |
+| void    | ()            | void        | void                      | void             |
+| self    | ()            | void        | void                      | void             |
+| Vec2    | alg::Vec2     | vec2s       | glm::vec2                 | zalg.Vec2        |
+| Vec3    | alg::Vec3     | vec3s       | glm::vec3                 | zalg.Vec3        |
+| Vec4    | alg::Vec4     | vec4s       | glm::vec4                 | zalg.Vec4        |
+| Quat    | alg::Quat     | quats       | glm::quat                 | zalg.Quat        |
+| Mat4    | alg::Mat4     | mat4s       | glm::mat4                 | zalg.Mat4        |
+| void*   | *const c_void | const void* | const void*               | *const anyopaque |
+| Vu32    | Vec<u32>      | U32Buffer   | std::vector<uint32_t>     | []u32            |
+| &Vu32   | &[u32]        | U32Buffer   | std::span<const uint32_t> | []const u32      |
 
-| Type    | kotlin             | asmscript | go      | lua     |
-|---------|--------------------|-----------|---------|---------|
-| i8      | Byte               | i8        | int8    | number  |
-| i16     | Short              | i16       | int16   | number  |
-| i32     | Int                | i32       | int32   | number  |
-| i64     | Long               | i64       | int64   | number  |
-| u8      | UByte              | u8        | uint8   | number  |
-| u16     | UShort             | u16       | uint16  | number  |
-| u32     | UInt               | u32       | uint32  | number  |
-| u64     | ULong              | u64       | uint64  | number  |
-| f32     | Float              | f32       | float32 | number  |
-| f64     | Double             | f64       | float64 | number  |
-| bool    | Boolean            | bool      | bool    | boolean |
-| String  | String             | string    | string  | string  |
-| &str    | String             | string    | string  | string  |
-| CString | CPointer<ByteVar>? | u32       | *byte   | string  |
-| Cstr    | UInt               | u32       | uint32  | string  |
-| op*     | ULong              | u64       | uint64  | table   |
-| void    | Unit               | void      | void    | nil     |
-| self    | Unit               | void      | void    | nil     |
-| Vec2    | Vec2               | Vec2      | Vec2    | table   |
-| Vec3    | Vec3               | Vec3      | Vec3    | table   |
-| Vec4    | Vec4               | Vec4      | Vec4    | table   |
-| Quat    | Quat               | Quat      | Quat    | table   |
-| Mat4    | Mat4               | Mat4      | Mat4    | table   |
-| void*   | CPointer<Unit>?    | u32       | *void   | nil     |
+| Type    | kotlin             | asmscript          | go       | lua     |
+|---------|--------------------|--------------------|----------|---------|
+| i8      | Byte               | i8                 | int8     | number  |
+| i16     | Short              | i16                | int16    | number  |
+| i32     | Int                | i32                | int32    | number  |
+| i64     | Long               | i64                | int64    | number  |
+| u8      | UByte              | u8                 | uint8    | number  |
+| u16     | UShort             | u16                | uint16   | number  |
+| u32     | UInt               | u32                | uint32   | number  |
+| u64     | ULong              | u64                | uint64   | number  |
+| f32     | Float              | f32                | float32  | number  |
+| f64     | Double             | f64                | float64  | number  |
+| bool    | Boolean            | bool               | bool     | boolean |
+| String  | String             | string             | string   | string  |
+| &str    | String             | string             | string   | string  |
+| CString | CPointer<ByteVar>? | u32                | *byte    | string  |
+| Cstr    | UInt               | u32                | uint32   | string  |
+| op*     | ULong              | u64                | uint64   | table   |
+| void    | Unit               | void               | void     | nil     |
+| self    | Unit               | void               | void     | nil     |
+| Vec2    | Vec2               | Vec2               | Vec2     | table   |
+| Vec3    | Vec3               | Vec3               | Vec3     | table   |
+| Vec4    | Vec4               | Vec4               | Vec4     | table   |
+| Quat    | Quat               | Quat               | Quat     | table   |
+| Mat4    | Mat4               | Mat4               | Mat4     | table   |
+| void*   | CPointer<Unit>?    | u32                | *void    | nil     |
+| Vu32    | UIntArray          | Array<u32>         | []uint32 | table   |
+| &Vu32   | UIntArray          | ReadonlyArray<u32> | []unit32 | table   |

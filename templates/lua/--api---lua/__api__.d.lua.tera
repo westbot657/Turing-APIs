@@ -1,0 +1,59 @@
+
+
+{%- macro lua_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="snake") }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self
+{%- for param in params -%}
+, {{ param.name | case(style="snake") }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro lua_params -%}
+
+
+{%- macro param_annotations(func) -%}
+{%- if not func.static %}
+---@param self table
+{%- endif -%}
+{%- for param in func.params %}
+---@param {{ param.name | case(style="snake") }} {{ types.lua[param.type] }}
+{%- endfor %}
+---@return {% if func.type == "self" -%} table{% else %}{{ types.lua[func.type] }}{% endif %}
+{%- endmacro param_annotations -%}
+
+
+{%- macro func_decls(funcs) -%}
+{%- for func in funcs %}
+{% if func.doc %}{{ docs(doc=func.doc, d="--- ") }}{% endif %}
+{{- self::param_annotations(func=func) }}
+function {{ api.name }}.
+{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}.{% endif %}
+{{- func.name | case(style="camel") -}}
+(
+    {{- self::lua_params(func=func) -}}
+) end
+{% endfor -%}
+{%- endmacro func_decls %}
+
+--/// Generated Lua API ///--
+---@class {{ api.name | case(style="pascal") }}
+local {{ api.name }} = {}
+
+--// Functions //--
+{{ self::func_decls(funcs=api.functions) }}
+
+--// Classes //--
+{%- for class in api.classes %}
+{% if class.doc %}{{ docs(doc=class.doc, d="--- ") }}{% endif %}
+---@class {{ class.name | case(style="pascal") }}
+local {{ class.name | case(style="pascal") }} = {}
+{{ api.name }}.{{ class.name | case(style="pascal") }} = {{ class.name | case(style="pascal") }}
+{{ self::func_decls(funcs=class.functions) }}
+{{ self::func_decls(funcs=class.methods) }}
+{%- endfor %}
+
+return {{ api.name }}

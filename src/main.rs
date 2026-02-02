@@ -62,6 +62,7 @@ pub struct ParamDef {
     pub name: String,
     #[serde(rename = "type")]
     pub typ: String,
+    pub is_glam_type: bool,
 }
 
 impl Semver {
@@ -86,7 +87,25 @@ impl Semver {
     }
 }
 
+static DEFAULT_TYPES: [&str; 26] = [
+    "i8", "i16", "i32", "i64",
+    "u8", "u16", "u32", "u64",
+    "f32", "f64", "bool",
+    "String", "&str",
+    "CString", "CStr",
+    "op*", "void", "self",
+    "Vec2", "Vec3", "Vec4", "Quat", "Mat4",
+    "void*",
+     "Vu32", "&Vu32",
+];
+
+/// Returns true if t is NOT a builtin-type
+pub fn is_opaque_maybe(t: &str) -> bool {
+    !DEFAULT_TYPES.contains(&t)
+}
+
 impl ApiModel {
+
     pub fn parse_doc(lines: &mut Peekable<Enumerate<Iter<&str>>>) -> Option<String> {
         let mut s = Vec::new();
         loop {
@@ -98,7 +117,7 @@ impl ApiModel {
                     break;
                 }
             } else {
-                return None;
+                break;
             }
         }
         if s.is_empty() {
@@ -122,19 +141,25 @@ impl ApiModel {
                     eprintln!("Invalid param name '{n}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
                     *invalid = true;
                 }
-                if let Some(langs) = reserved.get(t) {
-                    eprintln!("Invalid param type '{t}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
-                    *invalid = true;
-                }
+                if is_opaque_maybe(t) {
+                    if let Some(langs) = reserved.get(t) {
+                        eprintln!("Invalid param type '{t}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+                        *invalid = true;
+                    }
 
-                seen_types.insert(t.to_string());
-                used_opaquely.insert(t.to_string());
+                    seen_types.insert(t.to_string());
+                    used_opaquely.insert(t.to_string());
+                }
 
                 params.push(ParamDef {
                     name: n.to_string(),
                     typ: t.to_string(),
+                    is_glam_type: matches!(t, "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4")
                 })
 
+            } else if !raw_p.is_empty() {
+                eprintln!("Error parsing params: {raw}\n{raw_p}");
+                *invalid = true;
             }
         }
 
@@ -180,20 +205,22 @@ impl ApiModel {
             }
         };
 
-        if let Some(langs) = reserved.get(ret) {
-            eprintln!("Invalid return type '{ret}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
-            *invalid = true;
+        if is_opaque_maybe(ret) {
+            if let Some(langs) = reserved.get(ret) {
+                eprintln!("Invalid return type '{ret}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+                *invalid = true;
+            }
+
+            seen_types.insert(ret.to_string());
+            used_opaquely.insert(ret.to_string());
         }
 
-        seen_types.insert(ret.to_string());
-        used_opaquely.insert(ret.to_string());
-
         let doc = Self::parse_doc(lines);
-        
+
         let unpack_return = matches!(ret, "String" | "Vu32");
         let dequeue_return = matches!(ret, "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4");
         let skip_return = dequeue_return || matches!(ret, "void" | "self");
-        
+
         if let Some(class_name) = &current_class {
             let class = classes
                 .iter_mut()
@@ -211,7 +238,7 @@ impl ApiModel {
                 unpack_return,
                 dequeue_return,
                 skip_return,
-                
+
             };
 
             if is_static {
@@ -577,7 +604,7 @@ pub fn to_ffi_type(value: &Value, args: &HashMap<String, Value>) -> tera::Result
     let ffi_ty = match input {
         "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4" | "Vu32" | "String" => "u32",
         "&Vu32" => "void*",
-        "&str" => "CStr",
+        "&str" => "Cstr",
         _ => input,
     };
 
@@ -600,11 +627,15 @@ pub fn needs_allocator(value: &Value, _args: &HashMap<String, Value>) -> tera::R
         }
     }
 
-    Ok(to_value(
-        types
-            .iter()
-            .any(|t| matches!(*t, "String" | "&str" | "Vu32" | "&Vu32"))
-    )?)
+    let r = types
+        .iter()
+        .any(|t| matches!(*t, "String" | "&str" | "Vu32"));
+
+    Ok(if r {
+        Value::Bool(true)
+    } else {
+        Value::Null
+    })
 }
 
 fn main() {
@@ -623,6 +654,8 @@ fn main() {
     let seen_classes = seen_classes.into_iter().collect::<Vec<String>>();
 
     let type_map = parse_type_map(&seen_classes);
+
+    // println!("API model: {api_model:#?}");
 
     let mut ctx = Context::new();
     ctx.insert("api", &api_model);
