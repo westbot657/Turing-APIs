@@ -8,7 +8,7 @@
 {%- endfor -%}
 {%- else -%}
 self
-{%- for param in params -%}
+{%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}
 {%- endfor -%}
 {%- endif -%}

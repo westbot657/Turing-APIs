@@ -137,7 +137,7 @@ pub mod alg {
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-opaqu: {{ class.name | case(style="pascal") }}
+handle: {{ func.class_name | case(style="pascal") }}
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.rs) }}
 {%- endfor -%}
@@ -213,7 +213,7 @@ self
 
 
 {%- macro func_inner(func, indent="") -%}
-{%- for param in func.params -%}
+{%- for param in func.params %}
 {{- self::converter(param=param, indent=indent) }}
 {%- endfor %}
 {{ indent }}{% if func.unpack_return %}let turing_result = {% endif -%}
@@ -262,7 +262,7 @@ unsafe { {{ func.wasm -}}
 pub struct {{ class.name | case(style="pascal") }}
 {%- if class.static %};
 {%- else %} {
-    pub opaqu: {{ types.rs["op*"] }},
+    handle: {{ types.rs["op*"] }},
 }
 {%- endif %}
 {%- if class.functions or class.methods %}

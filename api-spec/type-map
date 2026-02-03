@@ -21,7 +21,7 @@
 | Vec2    | alg::Vec2     | vec2s       | glm::vec2                 | zalg.Vec2        |
 | Vec3    | alg::Vec3     | vec3s       | glm::vec3                 | zalg.Vec3        |
 | Vec4    | alg::Vec4     | vec4s       | glm::vec4                 | zalg.Vec4        |
-| Quat    | alg::Quat     | quats       | glm::quat                 | zalg.Quat        |
+| Quat    | alg::Quat     | versors     | glm::quat                 | zalg.Quat        |
 | Mat4    | alg::Mat4     | mat4s       | glm::mat4                 | zalg.Mat4        |
 | void*   | *const c_void | const void* | const void*               | *const anyopaque |
 | Vu32    | Vec<u32>      | U32Buffer   | std::vector<uint32_t>     | []u32            |

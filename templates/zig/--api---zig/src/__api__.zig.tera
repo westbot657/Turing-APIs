@@ -114,7 +114,7 @@ pub const {{ api.name | case(style="upper_snake") }}_VERSION: []const u8 = "{{ a
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-opaqu: {{ class.name | case(style="pascal") }}
+handle: {{ func.class_name | case(style="pascal") }}
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.zig) }}
 {%- endfor -%}

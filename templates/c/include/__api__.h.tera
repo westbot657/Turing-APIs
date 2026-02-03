@@ -1,0 +1,104 @@
+#pragma once
+
+///// Generated C API /////
+
+// This file is found in output/shared/include/
+#include "{{ api.name }}_wasm.h"
+#include "cglm/struct.h"
+
+#ifndef WASM_EXPORT
+#define WASM_EXPORT(name) __attribute__((visibility("default"))) __attribute__((used)) __attribute__((export_name(name)))
+#endif
+
+{% if api.include_core -%}
+uint32_t __enqueue_vec2(vec2s v);
+vec2s __dequeue_vec2();
+
+uint32_t __enqueue_vec3(vec3s v);
+vec3s __dequeue_vec3();
+
+uint32_t __enqueue_vec4(vec4s v);
+vec4s __dequeue_vec4();
+
+uint32_t __enqueue_quat(versors v);
+versors __dequeue_quat();
+
+uint32_t __enqueue_mat4(mat4s v);
+mat4s __dequeue_mat4();
+{%- endif %}{# api.include_core #}
+
+#define {{ api.name | case(style="upper_snake") }}_VERSION "{{ api.version }}"
+
+{%- macro c_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params -%}
+, {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro c_params -%}
+
+
+{%- macro func_decls(funcs, prefix="", doc=false) -%}
+{%- for func in funcs %}
+{% if doc %}{{ docs(doc=doc, d="/// | ") }}
+{% endif %}{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}
+{% endif %}{{ types.c[func.type] }} {{ prefix }}{{ func.name | case(style="camel") -}}
+(
+    {{- self::c_params(func=func) -}}
+);
+{%- endfor -%}
+{%- endmacro func_decls -%}
+
+{%- macro concat_name(class) -%}
+{{ api.name | case(style="pascal") }}_{{ class.name | case(style="pascal") }}
+{%- endmacro -%}
+
+
+{%- macro class_decl(class) -%}
+{% set class_name = self::concat_name(class=class) %}
+{{- self::func_decls(funcs=class.functions, prefix=class_name ~ "_", doc=class.doc) }}
+{{- self::func_decls(funcs=class.methods, prefix=class_name ~ "_", doc=class.doc) }}
+{%- endmacro class_decl -%}
+
+
+
+{%- macro class_typedef(class) -%}
+{%- if not class.static %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
+typedef struct {{ class.name | case(style="pascal") }} {
+    uint64_t handle;
+} {{ class.name | case(style="pascal") }};
+{% endif -%}
+{%- endmacro class_typedef %}
+
+// // Type Defs // //
+
+/// Represents a slice of 32-bit unsigned integers.
+typedef struct U32Buffer {
+    uint32_t* data;
+    uint32_t length;
+} U32Buffer;
+
+{%- for class in api.classes %}
+{{- self::class_typedef(class=class) }}
+{%- endfor %}
+
+{%- macro prefix() -%}{{ api.name | case(style="pascal") }}_{%- endmacro -%}
+
+
+// // Functions // //
+{%- set pre = self::prefix() %}
+{{- self::func_decls(funcs=api.functions, prefix=pre) }}
+
+
+// // Classes // //
+{%- for class in api.classes %}
+{{- self::class_decl(class=class) }}
+{%- endfor %}
+

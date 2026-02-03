@@ -1,0 +1,188 @@
+
+#include "{{ api.name }}.h"
+
+
+WASM_EXPORT("_{{ api.name }}_semver") uint64_t _{{ api.name }}_semver() {
+    return (((uint64_t) {{ api.semver.major }}) << 32) | (((uint64_t) {{ api.semver.minor }}) << 16) | {{ api.semver.patch }};
+}
+
+
+{% if api.include_core -%}
+uint32_t __enqueue_vec2(vec2s v) {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    return 2;
+}
+vec2s __dequeue_vec2() {
+    float x = _host_f32_dequeue();
+    float y = _host_f32_dequeue();
+    return (vec2s){ .x=x, .y=y };
+}
+
+uint32_t __enqueue_vec3(vec3s v) {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    return 3;
+}
+vec3s __dequeue_vec3() {
+    float x = _host_f32_dequeue();
+    float y = _host_f32_dequeue();
+    float z = _host_f32_dequeue();
+    return (vec3s){ .x=x, .y=y, .z=z };
+}
+
+uint32_t __enqueue_vec4(vec4s v) {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    _host_f32_enqueue(v.w);
+    return 4;
+}
+vec4s __dequeue_vec4() {
+    float x = _host_f32_dequeue();
+    float y = _host_f32_dequeue();
+    float z = _host_f32_dequeue();
+    float w = _host_f32_dequeue();
+    return (vec4s){ .x=x, .y=y, .z=z, .w=w };
+}
+
+uint32_t __enqueue_quat(versors v) {
+    _host_f32_enqueue(v.x);
+    _host_f32_enqueue(v.y);
+    _host_f32_enqueue(v.z);
+    _host_f32_enqueue(v.w);
+    return 4;
+}
+versors __dequeue_quat() {
+    float x = _host_f32_dequeue();
+    float y = _host_f32_dequeue();
+    float z = _host_f32_dequeue();
+    float w = _host_f32_dequeue();
+    return (versors){ .x=x, .y=y, .z=z, .w=w };
+}
+
+uint32_t __enqueue_mat4(mat4s v) {
+    __enqueue_vec4(v.col[0]);
+    __enqueue_vec4(v.col[1]);
+    __enqueue_vec4(v.col[2]);
+    __enqueue_vec4(v.col[3]);
+    return 16;
+}
+mat4s __dequeue_mat4() {
+    vec4s x = __dequeue_vec4();
+    vec4s y = __dequeue_vec4();
+    vec4s z = __dequeue_vec4();
+    vec4s w = __dequeue_vec4();
+    return (mat4s){ .col={x, y, z, w} };
+}
+{%- endif %}{# api.include_core #}
+
+{%- macro prefix() -%}{{ api.name | case(style="pascal") }}_{%- endmacro -%}
+
+
+{%- macro converter(param) -%}
+{%- if param.type == "&Vu32" -%}
+    _host_u32_enqueue({{ param.name | case(style="snake") }}.length);
+{%- elif param.is_glam_type -%}
+    uint32_t turing_handle_{{ param.name | case(style="snake") }} = __enqueue_
+    {{- param.type | case(style="lower") }}({{ param.name | case(style="snake") }});
+{%- endif -%}
+{%- endmacro converter -%}
+
+
+{%- macro convert_arg(param) -%}
+{%- if param.type == "&Vu32" -%}
+{{ param.name | case(style="snake") }}.data
+{%- elif param.is_glam_type -%}
+turing_handle_{{ param.name | case(style="snake") }}
+{%- else -%}
+{{ param.name | case(style="snake") }}
+{%- endif -%}
+{%- endmacro convert_arg -%}
+
+
+{%- macro convert_args(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ self::convert_arg(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self
+{%- for param in func.params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro convert_args -%}
+
+
+{%- macro c_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params %}
+, {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro c_params -%}
+
+
+{%- macro func_inner(func) -%}
+{%- for param in func.params %}
+{{- self::converter(param=param) }}
+{%- endfor %}
+    {% if func.unpack_return %}{{ func.type | ffi_type(map=types.c) }} turing_result = {% elif not func.skip_return %}return {% endif -%}
+    {{ func.wasm -}}
+    (
+        {{- self::convert_args(func=func) -}}
+    );
+    {%- if func.type == "String" %}
+    char* turing_str = malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+    {%- elif func.type == "Vu32" %}
+    uint32_t turing_buf = malloc((size_t) turing_result * 4);
+    _host_bufcpy(turing_buf, turing_result);
+    return (U32Buffer){ .data=turing_buf, .length=turing_result };
+    {%- elif func.dequeue_return %}
+    return __dequeue_{{ func.type | case(style="lower") }}();
+    {%- endif -%}
+{%- endmacro func_inner -%}
+
+
+{%- macro func_impl(func) -%}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- endif %}{{ func.name | case(style="camel") -}}
+(
+    {{- self::c_params(func=func) -}}
+) {
+    {{ self::func_inner(func=func) }}
+}
+{%- endmacro func_impl -%}
+
+{%- macro func_impls(funcs) -%}
+{%- for func in funcs %}
+{{ self::func_impl(func=func) }}
+{%- endfor -%}
+{%- endmacro func_impls %}
+
+// // Functions // //
+{%- set pre = self::prefix() %}
+{{ self::func_impls(funcs=api.functions, prefix=pre) }}
+
+
+// // Classes // //
+{%- for class in api.classes %}
+{{ self::func_impls(funcs=class.functions) }}
+{{ self::func_impls(funcs=class.methods) }}
+{%- endfor %}
+
+
+
