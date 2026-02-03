@@ -16,7 +16,7 @@ if buildtype == 'release'
 # hide all symbols by default (only exported functions will be visible)
     add_project_arguments('-fvisibility=hidden', language: 'c')
     add_project_arguments('-fvisibility=hidden', language: 'cpp')
-    
+
 # enable function/data sections for dead code elimination
     add_project_arguments('-ffunction-sections', language: 'c')
     add_project_arguments('-ffunction-sections', language: 'cpp')
@@ -26,7 +26,7 @@ if buildtype == 'release'
 # enable stripping on release builds
     add_project_link_arguments('-s', language: 'c')
     add_project_link_arguments('-s', language: 'cpp')
-    
+
 # strip unused functions and keep only exported ones (Emscripten)
     # add_project_link_arguments('-sEXPORTED_RUNTIME_METHODS=[]', language: 'c')
     # add_project_link_arguments('-sEXPORTED_RUNTIME_METHODS=[]', language: 'cpp')

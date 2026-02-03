@@ -1,0 +1,38 @@
+[workspace]
+
+[package]
+name = "{{ api.name_h }}"
+version = "{{ api.version }}"
+edition = "2024"
+license = "GPL-2.0-only"
+{% if api.include_core %}
+description = "The Turing mod scripting API for Beat Saber"
+repository = "https://github.com/westbot657/turing-apis"
+include = [
+    "Cargo.toml",
+    "src/**",
+    "README.md"
+]
+readme = "README.md"
+keywords = ["beatsaber", "turing", "api"]
+categories = ["api-bindings", "game-development"]
+
+[features]
+default = ["glam"]
+glam = ["dep:glam"]
+nalgebra = ["dep:nalgebra"]
+
+[dependencies]
+glam = { version = "0.31.0", optional = true }
+nalgebra = { version = "0.34.1", optional = true }
+{% else %}
+[dependencies]
+{% endif %}{# api.include_core #}
+
+{% if not api.include_core -%}
+[dependencies.turing-api]
+# FIXME: you should set this to a concrete version to avoid your code breaking when the api updates
+version = "*"
+# path = "../{{ api.name_h }}-rs"
+features = ["glam"] # You can use 'glam' or 'nalgebra'
+{%- endif %}

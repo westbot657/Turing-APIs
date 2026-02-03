@@ -1,0 +1,29 @@
+#api turing_api
+#version 1.0.0
+#include-core
+
+// [Global] is special case for top-level functions
+// [ClassName] marks a class. including methods or using this type as a param/return turns it into an opaque wrapper
+// :: prefix denotes a static function for classes
+// No prefix denotes an instance method except in top level where the prefix doesn't matter
+
+[Global]
+DoThing(random: Random) -> Something : _do_thing
+
+[Log]
+-- Used to log messages to the console
+::Debug(msg: &str) -> void : _log__debug
+-- Only logs in debug mode
+::Critical(msg: &str) -> void : _log__critical
+-- Highlights red
+::Warn(msg: &str) -> void : _log__warn
+-- Highlights yellow
+::Info(msg: &str) -> void : _log__info
+-- Highlights blue
+
+[Vivify]
+-- Vivify compatibility systems
+::UploadBuffer(buf: &Vu32) -> void : _vivify__upload_buffer
+-- Uploads a data buffer to beat saber
+::GetBuffer() -> Vu32 : _vivify__get_buffer
+-- Fetches a data buffer from beat saber
