@@ -2,9 +2,8 @@
 #version 1.0.0
 #include-core
 
-// :Global: is special case for top-level functions
-// For other classes, :ClassName [opaque]: marks the class as opaque
-// .  prefix denotes a variable, which currently are not fully implemented in every template.
+// [Global] is special case for top-level functions
+// [ClassName] marks a class. including methods or using this type as a param/return turns it into an opaque wrapper
 // :: prefix denotes a static function for classes
 // No prefix denotes an instance method except in top level where the prefix doesn't matter
 
