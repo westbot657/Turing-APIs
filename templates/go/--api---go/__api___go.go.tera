@@ -1,0 +1,178 @@
+{%- macro converter(param, indent="") -%}
+{%- if param.type == "&str" %}
+{{ indent }}turingH{{ param.name | case(style="pascal") }} := []byte({{ param.name | case(style="camel") }})
+{{ indent }}turingH{{ param.name | case(style="pascal") }} = append(turingH{{ param.name | case(style="pascal") }}, 0)
+{{ indent }}turingHandle{{ param.name | case(style="pascal") }} := &turingH{{ param.name | case(style="pascal") }}[0]
+{%- elif param.type == "&Vu32" %}
+{{ indent }}{% if not api.include_core %}turing_api.{% endif %}_host_u32_enqueue(len({{ param.name | case(style="camel") }}))
+{{ indent }}turingH{{ param.name | case(style="pascal") }} := []uint32({{ param.name | case(style="camel") }})
+{{ indent }}turingHandle{{ param.name | case(style="pascal") }} := &turingH{{ param.name | case(style="pascal") }}[0]
+{%- elif param.is_glam_type %}
+{{ indent }}turingHandle{{ param.name | case(style="pascal") }} := {% if not api.include_core -%}
+    turing_api.{% endif %}enqueue_{{ param.type | case(style="lower") }}({{ param.name | case(style="camel") }})
+{% endif %}
+{%- endmacro converter -%}
+
+
+{%- macro convert_arg(param) -%}
+    {%- if param.type == "&str" or param.type == "&Vu32" or param.is_glam_type -%}
+        turingHandle{{ param.name | case(style="pascal") }}
+    {%- else -%}
+        {{ param.name | case(style="camel") }}
+    {%- endif -%}
+{%- endmacro convert_arg -%}
+
+
+{%- macro ffi_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="snake") }} {{ param.type | ffi_type(map=types.go) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+opaqu {{ class.name | case(style="pascal") }}
+{%- for param in func.params -%}
+, {{ param.name | case(style="snake") }} {{ param.type | ffi_type(map=types.go) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro ffi_params -%}
+
+
+{%- macro go_params(func) -%}
+{%- for param in func.params -%}
+{{ param.name | case(style="camel") }} {{ types.go[param.type] }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endmacro go_params -%}
+
+
+{%- macro go_return(func) -%}
+{%- if func.type == "self" %} *{{ func.class_name | case(style="pascal") }}
+{%- else %} {{ types.go[func.type] }}
+{%- endif -%}
+{%- endmacro go_return -%}
+
+
+{%- macro ffi_return(func) %} {{ func.type | ffi_type(map=types.go) -}}
+{%- endmacro ffi_return -%}
+
+
+{%- macro convert_args(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ self::convert_arg(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self
+{%- for param in func.params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro convert_args -%}
+
+
+{%- macro func_inner(func, indent="") -%}
+{%- for param in func.params -%}
+{{- self::converter(param=param, indent=indent) }}
+{%- endfor %}
+{{ indent }}{% if func.unpack_return %}turingResult := {% elif not func.skip_return %}return {% endif -%}
+{{ func.wasm -}}
+(
+    {{- self::convert_args(func=func) -}}
+)
+{%- if func.type == "String" %}
+{{ indent }}turingStr := make([]byte, turingResult)
+{{ indent }}{% if not api.include_core %}turing_api.{% endif %}_host_strcpy(&turingStr[0], turingResult)
+{{ indent }}return string(turingStr[:len(turingStr)-1])
+{%- elif func.type == "Vu32" %}
+{{ indent }}turingBuf := make([]uint32, turingResult)
+{{ indent }}{% if not api.include_core %}turing_api.{% endif %}_host_bufcpy(&turingBuf[0], turingResult)
+{{ indent }}return turingBuf
+{%- elif func.type == "self" %}
+{{ indent }}return self
+{%- elif func.dequeue_return %}
+{{ indent }}return {% if not api.include_core %}turing_api.{% endif %}dequeue_{{ func.type | case(style="lower") }}()
+{%- endif %}
+{%- endmacro func_inner -%}
+
+
+{%- macro ffi_decls(funcs) -%}
+{%- for func in funcs %}
+//go:wasmimport env {{ func.wasm }}
+func {{ func.wasm -}}
+    (
+        {{- self::ffi_params(func=func) -}}
+    ){{ self::ffi_return(func=func) }}
+{%- endfor -%}
+{%- endmacro ffi_decls -%}
+
+
+{%- macro func_impl(func, indent="") -%}
+{% if func.doc %}{{ indent }}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ indent }}func {% if not func.static -%}
+    (self *{{ func.class_name | case(style="pascal") }})
+{%- elif func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- endif %}{{ func.name | case(style="camel") -}}
+    (
+        {{- self::go_params(func=func) -}}
+    ){{ self::go_return(func=func) }} {
+    {{ self::func_inner(func=func, indent=indent ~ "    ") }}
+}
+{%- endmacro func_impl -%}
+
+
+{%- macro func_impls(funcs) -%}
+{%- for func in funcs %}
+{{ self::func_impl(func=func) }}
+{%- endfor -%}
+{%- endmacro func_impls %}
+
+
+///// Generated Go API /////
+package {{ api.name }}
+
+//// Wasm Bindings ////
+{% if api.include_core %}
+//go:wasmimport env _host_strcpy
+func _host_strcpy(location *byte, size uint32)
+//go:wasmimport env _host_bufcpy
+func _host_bufcpy(location *uint32, size uint32)
+//go:wasmimport env _host_f32_enqueue
+func _host_f32_enqueue(f: float32)
+//go:wasmimport env _host_f32_dequeue
+func _host_f32_dequeue() float32
+//go:wasmimport env _host_u32_enqueue
+func _host_u32_enqueue(u: uint32)
+//go:wasmimport env _host_u32_dequeue
+func _host_u32_dequeue() uint32
+
+{% endif %}{# api.include_core #}
+
+{{- self::ffi_decls(funcs=api.functions) }}
+{%- for class in api.classes -%}
+{{- self::ffi_decls(funcs=class.functions) }}
+{{- self::ffi_decls(funcs=class.methods) }}
+{%- endfor %}
+
+//export _{{ api.name }}_semver
+func _{{ api.name }}_semver() uint64 {
+    return (uint64({{ api.semver.major }}) << 32) | (uint64({{ api.semver.minor }}) << 16) | uint64({{ api.semver.patch }})
+}
+
+const {{ api.name | case(style="upper_snake") }}_VERSION = "{{ api.version }}"
+
+//// Functions ////
+{{ self::func_impls(funcs=api.functions) }}
+
+//// Classes ////
+{%- for class in api.classes %}
+{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
+type {{ class.name | case(style="pascal") }} struct {
+    {% if not class.static %}opaqu uint32{% endif %}
+}
+{{ self::func_impls(funcs=class.functions) }}
+{{ self::func_impls(funcs=class.methods) }}
+{%- endfor %}
+
+

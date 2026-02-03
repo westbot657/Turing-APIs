@@ -1,0 +1,16 @@
+[workspace]
+
+[package]
+name = "turing_script"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+#turing-api = "{{ api.version }}"
+turing-api = { path = "../{{ api.name_h }}-rs" }
+
+[lib]
+crate-type = ["cdylib"]
+
+
+
