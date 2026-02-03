@@ -1,0 +1,123 @@
+// Generated C++ header for {{ api.name }}
+#pragma once
+
+#include <cstdint>
+#include <string>
+#include <array>
+#include <vector>
+
+#include <glm/mat4x4.hpp>               // glm::mat4
+#include <glm/vec3.hpp>                 // glm::vec3
+#include <glm/vec4.hpp>                 // glm::vec4
+#include <glm/vec2.hpp>                 // glm::vec2
+#include <glm/gtc/quaternion.hpp>       // glm::quat
+
+// Visibility macros to allow compiler optimizations and symbol hiding
+#if defined(__GNUC__) || defined(__clang__)
+#  define TURING_API_EXPORT __attribute__((visibility("default")))
+#  define TURING_API_HIDDEN __attribute__((visibility("hidden")))
+#else
+#  define TURING_API_EXPORT
+#  define TURING_API_HIDDEN
+#endif
+
+
+{% macro c_arg(type) -%}{{ types.c[type] }}{%- endmacro -%}
+
+{%- macro c_params(params, is_method=false, class=false) -%}
+{%- if is_method -%}
+uint64_t opaqu{%- for param in params -%}, {{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- endfor -%}
+{%- else -%}
+{%- for param in params -%}{{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}{%- endfor -%}
+{%- endif -%}
+{%- endmacro -%}
+
+{%- macro names(params) -%}
+{%- for p in params -%}
+{%- set pname = (p.name | case(style="snake")) -%}
+{%- if types.cpp[p.type] == "std::string_view" -%}
+{{ pname }}.data(){%- elif types.cpp[p.type] == "const char *" -%}
+{{ pname }}{%- else -%}
+{{ pname }}
+{%- endif -%}{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- endmacro -%}
+
+{%- macro cpp_params(params) -%}{%- for p in params -%}{{ types.cpp[p.type] }} {{ p.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}{%- endfor -%}{%- endmacro -%}
+
+{%- macro c_ret(type) -%}{{ types.c[type] }}{%- endmacro -%}
+
+
+namespace alg {
+    using Vec2 = glm::vec2;
+    using Vec3 = glm::vec3;
+    using Vec4 = glm::vec4;
+    using Quat = glm::quat;
+    using Mat4 = glm::mat4;
+
+    Vec2 dequeue_vec2();
+    uint32_t enqueue_vec2(const Vec2& v);
+
+    Vec3 dequeue_vec3();
+    uint32_t enqueue_vec3(const Vec3& v);
+
+    Vec4 dequeue_vec4();
+    uint32_t enqueue_vec4(const Vec4& v);
+
+    Quat dequeue_quat();
+    uint32_t enqueue_quat(const Quat& q);
+
+    Mat4 dequeue_mat4();
+    uint32_t enqueue_mat4(const Mat4& m);
+}
+
+// Public API wrappers
+// Forward declarations for all classes (opaque or not)
+{% for class in api.classes %}
+struct {{ class.name | case(style="pascal") }};
+{% endfor %}
+{%- for func in api.functions %}
+{% if func.doc %}{{ docs(doc=func.doc, d="// ") }}{% endif %}
+TURING_API_EXPORT {{ types.cpp[func.type] }} {{ func.name | case(style="snake") }}({{ self::cpp_params(params=func.params) }});
+{%- endfor %}
+
+{% for class in api.classes %}
+{% if class.doc %}{{ docs(doc=class.doc, d="// ") }}{% endif %}
+struct {{ class.name | case(style="pascal") }} {
+    {% for var in class.variables %}
+    {{ types.cpp[var.type] }} {{ var.name }};
+    {%- endfor %}
+
+    {# static/class functions as static methods on the struct #}
+    {%- for f in class.functions %}
+    static {{ types.cpp[f.type] }} {{ f.name | case(style="snake") }}({{ self::cpp_params(params=f.params) }});
+    {%- endfor %}
+
+    {# instance methods (use C++ param types; `this` is implicit) #}
+    {% for m in class.methods %}
+    {{ types.cpp[m.type] }} {{ m.name | case(style="snake") }}({{ self::cpp_params(params=m.params) }});
+    {%- endfor %}
+};
+{% endfor %}
+
+
+extern "C" {
+{% if api.name == "turing_api" %}
+    TURING_API_EXPORT void _host_strcpy(const char* location, uint32_t size);
+    TURING_API_EXPORT void _host_f32_enqueue(float f);
+    TURING_API_EXPORT float _host_f32_dequeue();
+{% endif %}
+
+    {%- for func in api.functions %}
+    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {{ func.from }}({{ self::c_params(params=func.params) }});
+    {%- endfor %}
+
+    {%- for class in api.classes -%}
+    {%- for func in class.functions %}
+    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {{ func.from }}({{ self::c_params(params=func.params, is_method=false, class=class) }});
+    {%- endfor %}
+    {%- for func in class.methods %}
+    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {{ func.from }}({{ self::c_params(params=func.params, is_method=true, class=class) }});
+    {%- endfor %}
+    {% endfor %}
+}

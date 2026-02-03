@@ -1,0 +1,4 @@
+# use compile commands from `templates/c and c++/build/compile_commands.json`
+
+CompileFlags:
+  CompilationDatabase: "templates/c and c++/build/"

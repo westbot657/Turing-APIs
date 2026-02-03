@@ -9,10 +9,10 @@ use turing_api::*;
 
 //// Core Systems ////
 pub mod alg {
-    use crate::*;
+    use super::*;
 
     #[cfg(feature = "glam")]
-    use glam::{Vec2, Vec3, Vec4, Quat, Mat4};
+    pub use glam::{Vec2, Vec3, Vec4, Quat, Mat4};
 
     #[cfg(feature = "nalgebra")]
     use nalgebra::{Vector2, Vector3, Vector4, Quaternion, Matrix4};

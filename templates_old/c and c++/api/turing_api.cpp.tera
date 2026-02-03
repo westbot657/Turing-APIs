@@ -1,0 +1,147 @@
+{%- import "c and c++/api/turing_api.hpp.tera" as self -%}
+#include "./turing_api.hpp"
+#include <cstring>
+
+
+
+namespace alg {
+
+     TURING_API_HIDDEN Vec2 dequeue_vec2() {
+        Vec2 v;
+        v[0] = _host_f32_dequeue();
+        v[1] = _host_f32_dequeue();
+        return v;
+    }
+
+     TURING_API_HIDDEN uint32_t enqueue_vec2(const Vec2& v) {
+        _host_f32_enqueue(v[0]);
+        _host_f32_enqueue(v[1]);
+        return 2;
+    }
+
+     TURING_API_HIDDEN Vec3 dequeue_vec3() {
+        Vec3 v;
+        v[0] = _host_f32_dequeue();
+        v[1] = _host_f32_dequeue();
+        v[2] = _host_f32_dequeue();
+        return v;
+    }
+
+     TURING_API_HIDDEN uint32_t enqueue_vec3(const Vec3& v) {
+        _host_f32_enqueue(v[0]);
+        _host_f32_enqueue(v[1]);
+        _host_f32_enqueue(v[2]);
+        return 3;
+    }
+
+     TURING_API_HIDDEN Vec4 dequeue_vec4() {
+        Vec4 v;
+        v[0] = _host_f32_dequeue();
+        v[1] = _host_f32_dequeue();
+        v[2] = _host_f32_dequeue();
+        v[3] = _host_f32_dequeue();
+        return v;
+    }
+
+     TURING_API_HIDDEN uint32_t enqueue_vec4(const Vec4& v) {
+        _host_f32_enqueue(v[0]);
+        _host_f32_enqueue(v[1]);
+        _host_f32_enqueue(v[2]);
+        _host_f32_enqueue(v[3]);
+        return 4;
+    }
+
+     TURING_API_HIDDEN Quat dequeue_quat() {
+          Quat q;
+          q.x = _host_f32_dequeue();
+          q.y = _host_f32_dequeue();
+          q.z = _host_f32_dequeue();
+          q.w = _host_f32_dequeue();
+          return q;
+    }
+
+     TURING_API_HIDDEN uint32_t enqueue_quat(const Quat& q) {
+        _host_f32_enqueue(q.x);
+        _host_f32_enqueue(q.y);
+        _host_f32_enqueue(q.z);
+        _host_f32_enqueue(q.w);
+        return 4;
+    }
+
+     TURING_API_HIDDEN Mat4 dequeue_mat4() {
+        Mat4 m;
+        for (int c = 0; c < 4; ++c) {
+            for (int r = 0; r < 4; ++r) {
+                m[c][r] = _host_f32_dequeue();
+            }
+        }
+        return m;
+    }
+
+     TURING_API_HIDDEN uint32_t enqueue_mat4(const Mat4& m) {
+        for (int c = 0; c < 4; ++c) {
+            for (int r = 0; r < 4; ++r) {
+                _host_f32_enqueue(m[c][r]);
+            }
+        }
+        return 16;
+    }
+
+}
+
+// Function implementations
+{%- for func in api.functions %}
+{% if func.doc %}{{ docs(doc=func.doc, d="// ") }}{% endif %}
+TURING_API_EXPORT {{ types.cpp[func.type] }} {{ func.name | case(style="snake") }}({{ self::cpp_params(params=func.params) }}) {
+    {%- if func.type == "String" %}
+    const char* turing_result = {{ func.from }}({{ self::names(params=func.params) }});
+    return std::string(turing_result);
+    {%- elif func.type in api.glam_types %}
+    {{ func.from }}({{ self::names(params=func.params) }});
+    return alg::dequeue_{{ func.type | case(style="lower") }}();
+    {%- elif func.type == "self" %}
+    {{ func.from }}({{ self::names(params=func.params) }});
+    return; /* self -> void */
+    {%- else %}
+    return {{ func.from }}({{ self::names(params=func.params) }});
+    {%- endif %}
+}
+{%- endfor %}
+
+{%- for class in api.classes %}
+// {{ class.name }} methods
+{%- for f in class.functions %}
+{% if f.doc %}{{ docs(doc=f.doc, d="// ") }}{% endif %}
+TURING_API_EXPORT {{ types.cpp[f.type] }} {{ class.name | case(style="pascal") }}::{{ f.name | case(style="snake") }}({{ self::cpp_params(params=f.params) }}) {
+    {%- if f.type == "String" %}
+    const char* turing_result = {{ f.from }}({{ self::names(params=f.params) }});
+    return std::string(turing_result);
+    {%- elif f.type in api.glam_types %}
+    {{ f.from }}({{ self::names(params=f.params) }});
+    return alg::dequeue_{{ f.type | case(style="lower") }}();
+    {%- elif f.type == "void" %}
+    {{ f.from }}({{ self::names(params=f.params) }});
+    {%- else %}
+    return {{ f.from }}({{ self::names(params=f.params) }});
+    {%- endif %}
+}
+{%- endfor %}
+
+// methods that take self (instance methods)
+{%- for m in class.methods %}
+{% if m.doc %}{{ docs(doc=m.doc, d="// ") }}{% endif %}
+TURING_API_EXPORT {{ types.cpp[m.type] }} {{ class.name | case(style="pascal") }}::{{ m.name | case(style="snake") }}({{ self::cpp_params(params=m.params) }}) {
+    {%- if m.type == "String" %}
+    const char* turing_result = {{ m.from }}(this->opaqu{% if m.params | length > 0 %}, {{ self::names(params=m.params) }}{% endif %});
+    return std::string(turing_result);
+    {%- elif m.type in api.glam_types %}
+    {{ m.from }}(this->opaqu{% if m.params | length > 0 %}, {{ self::names(params=m.params) }}{% endif %});
+    return alg::dequeue_{{ m.type | case(style="lower") }}();
+    {%- elif m.type == "void" %}
+    {{ m.from }}(this->opaqu{% if m.params | length > 0 %}, {{ self::names(params=m.params) }}{% endif %});
+    {%- else %}
+    return {{ m.from }}(this->opaqu{% if m.params | length > 0 %}, {{ self::names(params=m.params) }}{% endif %});
+    {%- endif %}
+}
+{%- endfor %}
+{%- endfor %}
