@@ -199,7 +199,7 @@ turing_handle_{{ param.name | case(style="snake") }}
 {%- else -%}
 this.handle
 {%- for param in func.params -%}
-, {{ self::conver_arg(param=param) }}
+, {{ self::convert_arg(param=param) }}
 {%- endfor -%}
 {%- endif -%}
 {%- endmacro convert_args -%}
