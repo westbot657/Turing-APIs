@@ -12,7 +12,7 @@ pub mod alg {
     use crate::*;
 
     #[cfg(feature = "glam")]
-    use glam::{Vec2, Vec3, Vec4, Quat, Mat4};
+    pub use glam::{Vec2, Vec3, Vec4, Quat, Mat4};
 
     #[cfg(feature = "nalgebra")]
     use nalgebra::{Vector2, Vector3, Vector4, Quaternion, Matrix4};
@@ -162,7 +162,7 @@ handle: {{ func.class_name | case(style="pascal") }}
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-self
+&self
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}: {{ types.rs[param.type] }}
 {%- endfor -%}
@@ -204,7 +204,7 @@ turing_api::{% endif %}alg::enqueue_{{ param.type | case(style="lower") -}}
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-self
+*self
 {%- for param in func.params -%}
 , {{ self::convert_arg(param=param) }}
 {%- endfor -%}
@@ -257,8 +257,10 @@ unsafe { {{ func.wasm -}}
 
 
 {%- macro class_def(class) %}
-#[repr(C)]
-{% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
+#[repr(C)]{% if class.doc %}
+{{ docs(doc=class.doc, d="/// ") }}{% endif %}
+#[derive(Copy, Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
 pub struct {{ class.name | case(style="pascal") }}
 {%- if class.static %};
 {%- else %} {
@@ -294,7 +296,7 @@ unsafe extern "C" {
 
 #[unsafe(no_mangle)]
 extern "C" fn _{{ api.name }}_semver() -> u64 {
-    return ({{ api.semver.major }}u64 << 32) | ({{ api.semver.minor }}u64 << 16) | {{ api.semver.patch }}u64;
+    ({{ api.semver.major }}u64 << 32) | ({{ api.semver.minor }}u64 << 16) | {{ api.semver.patch }}u64
 }
 
 pub static {{ api.name | case(style="upper_snake") }}_VERSION: &'static str = "{{ api.version }}";
