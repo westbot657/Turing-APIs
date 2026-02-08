@@ -1,0 +1,27 @@
+[binaries]
+c = ['zig', 'cc']
+cpp = ['zig', 'c++']
+ar = ['zig', 'ar']
+strip = ['zig', 'strip']
+
+[properties]
+has_threads = false
+needs_exe_wrapper = true
+has_function_printf = true
+# cpp_stdlib = 'none'
+# needs_exe_wrapper = true
+# Force linker so Meson doesn't probe with -Wl,--version
+# c_linker = 'lld'
+# cpp_linker = 'lld'
+
+[built-in options]
+c_args = ['-target', 'wasm32-wasi']
+cpp_args = ['-target', 'wasm32-wasi']
+c_link_args = ['-target', 'wasm32-wasi']
+cpp_link_args = ['-target', 'wasm32-wasi']
+
+[host_machine]
+system = 'wasi'
+cpu_family = 'wasm32'
+cpu = 'wasm32'
+endian = 'little'

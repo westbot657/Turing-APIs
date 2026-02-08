@@ -1135,25 +1135,7 @@ impl TuringerGameObject {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct Object {
-    handle: u64,
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-#[cfg_attr(feature = "debug", derive(Debug))]
-pub struct Component {
-    handle: u64,
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-#[cfg_attr(feature = "debug", derive(Debug))]
 pub struct Type {
-    handle: u64,
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-#[cfg_attr(feature = "debug", derive(Debug))]
-pub struct TuringScriptManager {
     handle: u64,
 }
 #[repr(C)]
@@ -1165,7 +1147,19 @@ pub struct IEnumerator {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct Action {
+pub struct GameObject {
+    handle: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
+pub struct TuringScriptManager {
+    handle: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
+pub struct Transform {
     handle: u64,
 }
 #[repr(C)]
@@ -1177,13 +1171,19 @@ pub struct List1 {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct GameObject {
+pub struct Action {
     handle: u64,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct Transform {
+pub struct Object {
+    handle: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
+pub struct Component {
     handle: u64,
 }
 

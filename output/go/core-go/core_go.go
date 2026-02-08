@@ -1340,25 +1340,7 @@ func (self *TuringerGameObject)sceneCullingMaskGet() uint64 {
     return _core_turinger_game_object__scene_culling_mask_get(self)
 }
 
-type Object struct {
-    opaqu uint32
-}
-
-
-
-type Component struct {
-    opaqu uint32
-}
-
-
-
 type Type struct {
-    opaqu uint32
-}
-
-
-
-type TuringScriptManager struct {
     opaqu uint32
 }
 
@@ -1370,7 +1352,19 @@ type IEnumerator struct {
 
 
 
-type Action struct {
+type GameObject struct {
+    opaqu uint32
+}
+
+
+
+type TuringScriptManager struct {
+    opaqu uint32
+}
+
+
+
+type Transform struct {
     opaqu uint32
 }
 
@@ -1382,13 +1376,19 @@ type List1 struct {
 
 
 
-type GameObject struct {
+type Action struct {
     opaqu uint32
 }
 
 
 
-type Transform struct {
+type Object struct {
+    opaqu uint32
+}
+
+
+
+type Component struct {
     opaqu uint32
 }
 

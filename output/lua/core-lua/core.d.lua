@@ -947,27 +947,9 @@ function core.TuringerGameObject.nameSet(self, value) end
 function core.TuringerGameObject.sceneCullingMaskGet(self) end
 
 
----@class Object
-local Object = {}
-core.Object = Object
-
-
-
----@class Component
-local Component = {}
-core.Component = Component
-
-
-
 ---@class Type
 local Type = {}
 core.Type = Type
-
-
-
----@class TuringScriptManager
-local TuringScriptManager = {}
-core.TuringScriptManager = TuringScriptManager
 
 
 
@@ -977,9 +959,21 @@ core.IEnumerator = IEnumerator
 
 
 
----@class Action
-local Action = {}
-core.Action = Action
+---@class GameObject
+local GameObject = {}
+core.GameObject = GameObject
+
+
+
+---@class TuringScriptManager
+local TuringScriptManager = {}
+core.TuringScriptManager = TuringScriptManager
+
+
+
+---@class Transform
+local Transform = {}
+core.Transform = Transform
 
 
 
@@ -989,15 +983,21 @@ core.List1 = List1
 
 
 
----@class GameObject
-local GameObject = {}
-core.GameObject = GameObject
+---@class Action
+local Action = {}
+core.Action = Action
 
 
 
----@class Transform
-local Transform = {}
-core.Transform = Transform
+---@class Object
+local Object = {}
+core.Object = Object
+
+
+
+---@class Component
+local Component = {}
+core.Component = Component
 
 
 

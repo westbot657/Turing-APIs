@@ -1,0 +1,273 @@
+
+#include "./turing_api.hpp"
+#include <cstring>
+#include <cstdlib>
+
+extern "C" {
+    TURING_API_EXPORT uint64_t _{{ api.name }}_semver() {
+        return (((uint64_t) {{ api.semver.major }}) << 32) | (((uint64_t) {{ api.semver.minor }}) << 16) | {{ api.semver.patch }};
+    }
+}
+
+// C++ helpers that enqueue/dequeue glm types using the host FFI
+namespace alg {
+    using Vec2 = glm::vec2;
+    using Vec3 = glm::vec3;
+    using Vec4 = glm::vec4;
+    using Quat = glm::quat;
+    using Mat4 = glm::mat4;
+
+    TURING_API_HIDDEN Vec2 __dequeue_vec2() {
+        Vec2 v;
+        v[0] = _host_f32_dequeue();
+        v[1] = _host_f32_dequeue();
+        return v;
+    }
+
+    TURING_API_HIDDEN uint32_t __enqueue_vec2(const Vec2& v) {
+        _host_f32_enqueue(v[0]);
+        _host_f32_enqueue(v[1]);
+        return 2;
+    }
+
+    TURING_API_HIDDEN Vec3 __dequeue_vec3() {
+        Vec3 v;
+        v[0] = _host_f32_dequeue();
+        v[1] = _host_f32_dequeue();
+        v[2] = _host_f32_dequeue();
+        return v;
+    }
+
+    TURING_API_HIDDEN uint32_t __enqueue_vec3(const Vec3& v) {
+        _host_f32_enqueue(v[0]);
+        _host_f32_enqueue(v[1]);
+        _host_f32_enqueue(v[2]);
+        return 3;
+    }
+
+    TURING_API_HIDDEN Vec4 __dequeue_vec4() {
+        Vec4 v;
+        v[0] = _host_f32_dequeue();
+        v[1] = _host_f32_dequeue();
+        v[2] = _host_f32_dequeue();
+        v[3] = _host_f32_dequeue();
+        return v;
+    }
+
+    TURING_API_HIDDEN uint32_t __enqueue_vec4(const Vec4& v) {
+        _host_f32_enqueue(v[0]);
+        _host_f32_enqueue(v[1]);
+        _host_f32_enqueue(v[2]);
+        _host_f32_enqueue(v[3]);
+        return 4;
+    }
+
+    TURING_API_HIDDEN Quat __dequeue_quat() {
+        Quat q;
+        q.x = _host_f32_dequeue();
+        q.y = _host_f32_dequeue();
+        q.z = _host_f32_dequeue();
+        q.w = _host_f32_dequeue();
+        return q;
+    }
+
+    TURING_API_HIDDEN uint32_t __enqueue_quat(const Quat& q) {
+        _host_f32_enqueue(q.x);
+        _host_f32_enqueue(q.y);
+        _host_f32_enqueue(q.z);
+        _host_f32_enqueue(q.w);
+        return 4;
+    }
+
+    TURING_API_HIDDEN Mat4 __dequeue_mat4() {
+        Mat4 m;
+        for (int c = 0; c < 4; ++c) {
+            for (int r = 0; r < 4; ++r) {
+                m[c][r] = _host_f32_dequeue();
+            }
+        }
+        return m;
+    }
+
+    TURING_API_HIDDEN uint32_t __enqueue_mat4(const Mat4& m) {
+        for (int c = 0; c < 4; ++c) {
+            for (int r = 0; r < 4; ++r) {
+                _host_f32_enqueue(m[c][r]);
+            }
+        }
+        return 16;
+    }
+}
+
+{%- macro prefix() -%}{{ api.name | case(style="pascal") }}_{%- endmacro -%}
+
+
+{%- macro converter(param) -%}
+{%- if param.type == "&Vu32" -%}
+    _host_u32_enqueue({{ param.name | case(style="snake") }}.length);
+{%- elif param.is_glam_type -%}
+    uint32_t turing_handle_{{ param.name | case(style="snake") }} = alg::__enqueue_{{ param.type | case(style="lower") }}({{ param.name | case(style="snake") }});
+{%- endif -%}
+{%- endmacro converter -%}
+
+
+{%- macro convert_arg(param) -%}
+{%- if param.type == "&Vu32" -%}
+{{ param.name | case(style="snake") }}.data
+{%- elif param.is_glam_type -%}
+turing_handle_{{ param.name | case(style="snake") }}
+{%- else -%}
+{{ param.name | case(style="snake") }}
+{%- endif -%}
+{%- endmacro convert_arg -%}
+
+
+{%- macro convert_args(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ self::convert_arg(param=param) }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+self
+{%- for param in func.params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro convert_args -%}
+
+
+{%- macro c_params(func) -%}
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params %}
+, {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- endfor -%}
+{%- endif -%}
+{%- endmacro c_params -%}
+
+
+{%- macro func_inner(func) -%}
+{%- for param in func.params %}
+{{- self::converter(param=param) }}
+{%- endfor %}
+    {% if func.unpack_return %}{{ func.type | ffi_type(map=types.c) }} turing_result = {% elif not func.skip_return %}return {% endif -%}
+    {{ func.wasm -}}
+    (
+        {{- self::convert_args(func=func) -}}
+    );
+    {%- if func.type == "String" %}
+    char* turing_str = (char*) malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+    {%- elif func.type == "Vu32" %}
+    uint32_t turing_buf = (uint32_t) malloc((size_t) turing_result * 4);
+    _host_bufcpy(turing_buf, turing_result);
+    return (U32Buffer){ .data=turing_buf, .length=turing_result };
+    {%- elif func.dequeue_return %}
+    return alg::__dequeue_{{ func.type | case(style="lower") }}();
+    {%- endif -%}
+{%- endmacro func_inner -%}
+
+
+{%- macro func_impl(func) -%}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- endif %}{{ func.name | case(style="camel") -}}
+(
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params -%}
+{{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+) {
+    {{ self::func_inner(func=func) }}
+}
+{%- endmacro func_impl -%}
+
+
+{%- macro func_impls(funcs) -%}
+{%- for func in funcs %}
+{{ func_impl(func=func) }}
+{%- endfor -%}
+{%- endmacro func_impls %}
+
+
+// // Functions // //
+{%- for func in api.functions %}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- endif %}{{ func.name | case(style="camel") -}}
+(
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params -%}
+, {{ self::convert_arg(param=param) }}
+{%- endfor -%}
+{%- endif -%}
+) {
+    {{ self::func_inner(func=func) }}
+}
+{%- endfor %}
+
+
+
+// // Classes // //
+{%- for class in api.classes %}
+{%- for func in class.functions %}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- endif %}{{ func.name | case(style="camel") -}}
+(
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params %}
+, {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- endfor -%}
+{%- endif -%}
+) {
+    {{ self::func_inner(func=func) }}
+}
+{%- endfor %}
+{%- for func in class.methods %}
+{% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
+{{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- endif %}{{ func.name | case(style="camel") -}}
+(
+{%- if func.static -%}
+{%- for param in func.params -%}
+{{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
+{%- endfor -%}
+{%- else -%}
+{{ func.class_name | case(style="pascal") }} self
+{%- for param in func.params %}
+, {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
+{%- endfor -%}
+{%- endif -%}
+) {
+    {{ self::func_inner(func=func) }}
+}
+{%- endfor %}
+{%- endfor %}

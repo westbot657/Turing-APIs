@@ -1036,19 +1036,7 @@ pub const TuringerGameObject = struct {
     }
 };
 
-pub const Object = struct {
-    opaqu: u64,
-};
-
-pub const Component = struct {
-    opaqu: u64,
-};
-
 pub const Type = struct {
-    opaqu: u64,
-};
-
-pub const TuringScriptManager = struct {
     opaqu: u64,
 };
 
@@ -1056,7 +1044,15 @@ pub const IEnumerator = struct {
     opaqu: u64,
 };
 
-pub const Action = struct {
+pub const GameObject = struct {
+    opaqu: u64,
+};
+
+pub const TuringScriptManager = struct {
+    opaqu: u64,
+};
+
+pub const Transform = struct {
     opaqu: u64,
 };
 
@@ -1064,11 +1060,15 @@ pub const List1 = struct {
     opaqu: u64,
 };
 
-pub const GameObject = struct {
+pub const Action = struct {
     opaqu: u64,
 };
 
-pub const Transform = struct {
+pub const Object = struct {
+    opaqu: u64,
+};
+
+pub const Component = struct {
     opaqu: u64,
 };
 

@@ -70,6 +70,41 @@ typedef struct TuringerGameObject {
 } TuringerGameObject;
 
 
+typedef struct Type {
+    uint64_t handle;
+} Type;
+
+
+typedef struct IEnumerator {
+    uint64_t handle;
+} IEnumerator;
+
+
+typedef struct GameObject {
+    uint64_t handle;
+} GameObject;
+
+
+typedef struct TuringScriptManager {
+    uint64_t handle;
+} TuringScriptManager;
+
+
+typedef struct Transform {
+    uint64_t handle;
+} Transform;
+
+
+typedef struct List1 {
+    uint64_t handle;
+} List1;
+
+
+typedef struct Action {
+    uint64_t handle;
+} Action;
+
+
 typedef struct Object {
     uint64_t handle;
 } Object;
@@ -78,41 +113,6 @@ typedef struct Object {
 typedef struct Component {
     uint64_t handle;
 } Component;
-
-
-typedef struct Type {
-    uint64_t handle;
-} Type;
-
-
-typedef struct TuringScriptManager {
-    uint64_t handle;
-} TuringScriptManager;
-
-
-typedef struct IEnumerator {
-    uint64_t handle;
-} IEnumerator;
-
-
-typedef struct Action {
-    uint64_t handle;
-} Action;
-
-
-typedef struct List1 {
-    uint64_t handle;
-} List1;
-
-
-typedef struct GameObject {
-    uint64_t handle;
-} GameObject;
-
-
-typedef struct Transform {
-    uint64_t handle;
-} Transform;
 // // Functions // //
 
 

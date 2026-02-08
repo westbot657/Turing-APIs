@@ -1268,46 +1268,7 @@ export class TuringerGameObject {
 }
 
 @final
-export class Object {
-    
-    handle: u64;
-
-    constructor(handle: u64) {
-        this.handle = handle;
-    }
-    
-
-
-}
-
-@final
-export class Component {
-    
-    handle: u64;
-
-    constructor(handle: u64) {
-        this.handle = handle;
-    }
-    
-
-
-}
-
-@final
 export class Type {
-    
-    handle: u64;
-
-    constructor(handle: u64) {
-        this.handle = handle;
-    }
-    
-
-
-}
-
-@final
-export class TuringScriptManager {
     
     handle: u64;
 
@@ -1333,7 +1294,33 @@ export class IEnumerator {
 }
 
 @final
-export class Action {
+export class GameObject {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+}
+
+@final
+export class TuringScriptManager {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+}
+
+@final
+export class Transform {
     
     handle: u64;
 
@@ -1359,7 +1346,7 @@ export class List1 {
 }
 
 @final
-export class GameObject {
+export class Action {
     
     handle: u64;
 
@@ -1372,7 +1359,20 @@ export class GameObject {
 }
 
 @final
-export class Transform {
+export class Object {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+}
+
+@final
+export class Component {
     
     handle: u64;
 
