@@ -1,13 +1,13 @@
-use std::collections::{HashMap, HashSet};
-use std::iter::{Enumerate, Peekable};
-use std::{fs, io, process};
-use std::io::Write;
-use std::path::PathBuf;
-use std::slice::Iter;
 use clap::Parser;
 use convert_case::{Case, Casing};
 use regex::{Captures, Regex};
 use serde::{Deserialize, Serialize};
+use std::collections::{HashMap, HashSet};
+use std::io::Write;
+use std::iter::{Enumerate, Peekable};
+use std::path::PathBuf;
+use std::slice::Iter;
+use std::{fs, io, process};
 use tera::{from_value, to_value, Context, Tera, Value};
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -69,34 +69,25 @@ impl Semver {
     fn parse_into(&mut self, ver: &str) -> Result<(), String> {
         let ver: [u32; 3] = ver
             .splitn(3, ".")
-            .map(|x|
-                x
-                    .trim()
-                    .parse::<u32>()
-                    .map_err(|e| format!("{e}"))
-            )
+            .map(|x| x.trim().parse::<u32>().map_err(|e| format!("{e}")))
             .collect::<Result<Vec<u32>, String>>()?
             .try_into()
             .map_err(|_| String::from("version does nto follow semantic version format"))?;
 
         self.major = ver[0];
-        self.minor = u16::try_from(ver[1]).map_err(|e| format!("minor version number is too large: {e}"))?;
-        self.patch = u16::try_from(ver[2]).map_err(|e| format!("patch version number is too large: {e}"))?;
+        self.minor =
+            u16::try_from(ver[1]).map_err(|e| format!("minor version number is too large: {e}"))?;
+        self.patch =
+            u16::try_from(ver[2]).map_err(|e| format!("patch version number is too large: {e}"))?;
 
         Ok(())
     }
 }
 
 static DEFAULT_TYPES: [&str; 26] = [
-    "i8", "i16", "i32", "i64",
-    "u8", "u16", "u32", "u64",
-    "f32", "f64", "bool",
-    "String", "&str",
-    "CString", "CStr",
-    "op*", "void", "self",
-    "Vec2", "Vec3", "Vec4", "Quat", "Mat4",
-    "void*",
-     "Vu32", "&Vu32",
+    "i8", "i16", "i32", "i64", "u8", "u16", "u32", "u64", "f32", "f64", "bool", "String", "&str",
+    "CString", "CStr", "op*", "void", "self", "Vec2", "Vec3", "Vec4", "Quat", "Mat4", "void*",
+    "Vu32", "&Vu32",
 ];
 
 /// Returns true if t is NOT a builtin-type
@@ -105,7 +96,6 @@ pub fn is_opaque_maybe(t: &str) -> bool {
 }
 
 impl ApiModel {
-
     pub fn parse_doc(lines: &mut Peekable<Enumerate<Iter<&str>>>) -> Option<String> {
         let mut s = Vec::new();
         loop {
@@ -127,7 +117,13 @@ impl ApiModel {
         }
     }
 
-    pub fn parse_params(raw: &str, seen_types: &mut HashSet<String>, used_opaquely: &mut HashSet<String>, invalid: &mut bool, reserved: &HashMap<String, Vec<String>>) -> Result<Vec<ParamDef>, String> {
+    pub fn parse_params(
+        raw: &str,
+        seen_types: &mut HashSet<String>,
+        used_opaquely: &mut HashSet<String>,
+        invalid: &mut bool,
+        reserved: &HashMap<String, Vec<String>>,
+    ) -> Result<Vec<ParamDef>, String> {
         let mut params = Vec::new();
 
         let raw = raw.trim();
@@ -154,9 +150,8 @@ impl ApiModel {
                 params.push(ParamDef {
                     name: n.to_string(),
                     typ: t.to_string(),
-                    is_glam_type: matches!(t, "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4")
+                    is_glam_type: matches!(t, "Vec2" | "Vec3" | "Vec4" | "Quat" | "Mat4"),
                 })
-
             } else if !raw_p.is_empty() {
                 eprintln!("Error parsing params: {raw}\n{raw_p}");
                 *invalid = true;
@@ -185,7 +180,10 @@ impl ApiModel {
         let wasm = capt.name("wasm").unwrap().as_str();
 
         if let Some(langs) = reserved.get(name) {
-            eprintln!("Invalid function name '{name}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
+            eprintln!(
+                "Invalid function name '{name}' cannot be used, it is a keyword in language(s): {}",
+                langs.join(", ")
+            );
             *invalid = true;
         }
         if let Some(langs) = reserved.get(wasm) {
@@ -193,17 +191,15 @@ impl ApiModel {
             *invalid = true;
         }
 
-        let params = match Self::parse_params(
-            raw_params, seen_types, used_opaquely,
-            invalid, reserved,
-        ) {
-            Ok(p) => p,
-            Err(e) => {
-                eprintln!("[error]: on line {ln_num}: {e}");
-                *invalid = true;
-                return None;
-            }
-        };
+        let params =
+            match Self::parse_params(raw_params, seen_types, used_opaquely, invalid, reserved) {
+                Ok(p) => p,
+                Err(e) => {
+                    eprintln!("[error]: on line {ln_num}: {e}");
+                    *invalid = true;
+                    return None;
+                }
+            };
 
         if is_opaque_maybe(ret) {
             if let Some(langs) = reserved.get(ret) {
@@ -238,7 +234,6 @@ impl ApiModel {
                 unpack_return,
                 dequeue_return,
                 skip_return,
-
             };
 
             if is_static {
@@ -247,9 +242,7 @@ impl ApiModel {
                 class.is_static = false;
                 class.methods.push(fn_def);
             }
-
         } else {
-
             functions.push(FunctionDef {
                 name: name.to_string(),
                 params,
@@ -260,7 +253,7 @@ impl ApiModel {
                 class_name: None,
                 unpack_return,
                 dequeue_return,
-                skip_return
+                skip_return,
             })
         }
         Some(())
@@ -287,8 +280,9 @@ impl ApiModel {
             \((?P<params>[^)]*)\)\s*
             ->\s*(?P<ret>\w+)\s*
             :\s*(?P<wasm>\w+)\s*
-            "#
-        ).unwrap();
+            "#,
+        )
+        .unwrap();
 
         let lines = input
             .lines()
@@ -296,13 +290,12 @@ impl ApiModel {
             .filter(|l| !l.is_empty())
             .collect::<Vec<&str>>();
 
-        let mut lines = lines
-            .iter()
-            .enumerate()
-            .peekable();
+        let mut lines = lines.iter().enumerate().peekable();
 
         loop {
-            let Some((ln_num, line)) = lines.next() else { break };
+            let Some((ln_num, line)) = lines.next() else {
+                break;
+            };
 
             if let Some(ver) = line.strip_prefix("#version ") {
                 version = ver.trim().to_string();
@@ -344,7 +337,6 @@ impl ApiModel {
                     }
                     seen_types.insert(class_name.to_string());
                     current_class = Some(class_name.to_string());
-
                 }
                 continue;
             }
@@ -361,9 +353,10 @@ impl ApiModel {
                     current_class.as_ref(),
                     &mut seen_types,
                     &mut used_opaquely,
-                ) { continue; }
+                ) {
+                    continue;
+                }
             }
-
         }
 
         for opaque in used_opaquely {
@@ -381,7 +374,6 @@ impl ApiModel {
             }
         }
 
-
         let Some(name) = api_name else {
             eprintln!("[error]: api file did not specify a name");
             eprintln!("API generation failed due to previous errors.");
@@ -395,21 +387,32 @@ impl ApiModel {
 
         let name_h = name.replace("_", "-");
 
-        (Self {
-            name, name_h,
-            classes, functions,
-            version, semver,
-            include_core,
-        }, seen_types)
+        classes.sort_by(|a, b| a.name.cmp(&b.name));
+        for class in &mut classes {
+            class.methods.sort_by(|a, b| a.name.cmp(&b.name));
+            class.functions.sort_by(|a, b| a.name.cmp(&b.name));
+        }
+        functions.sort_by(|a, b| a.name.cmp(&b.name));
+
+        (
+            Self {
+                name,
+                name_h,
+                classes,
+                functions,
+                version,
+                semver,
+                include_core,
+            },
+            seen_types,
+        )
     }
 }
-
 
 pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
     let mut tm: HashMap<String, HashMap<String, String>> = HashMap::new();
 
-    let table = fs::read_to_string("./api-spec/type-map")
-        .expect("Failed to read type-map file");
+    let table = fs::read_to_string("./api-spec/type-map").expect("Failed to read type-map file");
 
     let mut lines = table.lines().peekable();
 
@@ -432,8 +435,7 @@ pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
 
         columns.remove(0);
 
-        let current_names: Vec<String> =
-            columns.iter().map(|c| c.to_string()).collect();
+        let current_names: Vec<String> = columns.iter().map(|c| c.to_string()).collect();
 
         for lang in &current_names {
             tm.entry(lang.clone()).or_default();
@@ -487,8 +489,8 @@ pub fn parse_type_map(passthrough: &Vec<String>) -> Value {
 }
 
 fn load_reserved_word_map() -> HashMap<String, Vec<String>> {
-
-    let s2 = fs::read_to_string("./api-spec/disallowed").expect("Failed to open disallowed words list");
+    let s2 =
+        fs::read_to_string("./api-spec/disallowed").expect("Failed to open disallowed words list");
     let s: Vec<&str> = s2
         .split("\n")
         .map(|l| l.trim())
@@ -535,7 +537,12 @@ fn copy_non_template_files(
         }
 
         let rel = path.strip_prefix(base).unwrap_or(&path);
-        let dest: PathBuf = dst_root.join(rel).to_string_lossy().replace("__api__", &api_name).replace("--api--", &api_name.replace("_", "-")).into();
+        let dest: PathBuf = dst_root
+            .join(rel)
+            .to_string_lossy()
+            .replace("__api__", &api_name)
+            .replace("--api--", &api_name.replace("_", "-"))
+            .into();
         if let Some(parent) = dest.parent() {
             fs::create_dir_all(parent)?;
         }
@@ -544,7 +551,6 @@ fn copy_non_template_files(
 
     Ok(())
 }
-
 
 #[derive(Parser, Debug)]
 #[command(name = "turingapigen")]
@@ -567,7 +573,6 @@ fn get_input(label: &str) -> PathBuf {
     PathBuf::from(buf.trim())
 }
 
-
 pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> tera::Result<Value> {
     let input: String = from_value(value.clone())?;
 
@@ -589,9 +594,18 @@ pub fn case_filter(value: &Value, args: &HashMap<String, Value>) -> tera::Result
 }
 
 pub fn doc_comment(args: &HashMap<String, Value>) -> tera::Result<Value> {
-    let doc = args.get("doc").and_then(|v| v.as_str()).ok_or_else(|| "argument 'doc' not found")?;
-    let delimiter = args.get("d").and_then(|v| v.as_str()).ok_or_else(|| "argument 'd' (delimiter) not found")?;
-    let out = delimiter.to_string() + &doc.replace("\\n", "\n").replace("\n", &format!("\n{}", delimiter));
+    let doc = args
+        .get("doc")
+        .and_then(|v| v.as_str())
+        .ok_or_else(|| "argument 'doc' not found")?;
+    let delimiter = args
+        .get("d")
+        .and_then(|v| v.as_str())
+        .ok_or_else(|| "argument 'd' (delimiter) not found")?;
+    let out = delimiter.to_string()
+        + &doc
+            .replace("\\n", "\n")
+            .replace("\n", &format!("\n{}", delimiter));
     Ok(to_value(out)?)
 }
 
@@ -631,11 +645,7 @@ pub fn needs_allocator(value: &Value, _args: &HashMap<String, Value>) -> tera::R
         .iter()
         .any(|t| matches!(*t, "String" | "&str" | "Vu32"));
 
-    Ok(if r {
-        Value::Bool(true)
-    } else {
-        Value::Null
-    })
+    Ok(if r { Value::Bool(true) } else { Value::Null })
 }
 
 pub fn is_opaque(value: &Value, _args: &HashMap<String, Value>) -> tera::Result<Value> {
@@ -650,9 +660,11 @@ pub fn is_opaque(value: &Value, _args: &HashMap<String, Value>) -> tera::Result<
 fn main() {
     let args = Args::parse();
 
-    let input = args.input
+    let input = args
+        .input
         .unwrap_or_else(|| get_input("Enter path to API spec file"));
-    let output = args.output
+    let output = args
+        .output
         .unwrap_or_else(|| get_input("Enter output directory path for APIs"));
 
     let s = fs::read_to_string(input).expect("Failed to read input file");
@@ -691,7 +703,12 @@ fn main() {
 
     let templates_dir = PathBuf::from("./templates/");
     let out_dir_path = PathBuf::from(&output);
-    if let Err(e) = copy_non_template_files(&templates_dir, &templates_dir, &out_dir_path, &api_model.name) {
+    if let Err(e) = copy_non_template_files(
+        &templates_dir,
+        &templates_dir,
+        &out_dir_path,
+        &api_model.name,
+    ) {
         eprintln!("Failed to copy non-template files: {}", e);
         process::exit(1);
     }
@@ -712,9 +729,10 @@ fn main() {
             .unwrap_or_else(|e| panic!("Failed to render API model to {}: {:?}", nm, e));
 
         if let Some(sep) = file_name.rsplit_once("/") {
-            fs::create_dir_all(sep.0).unwrap_or_else(|_| panic!("Unable to create directory {}", sep.0));
+            fs::create_dir_all(sep.0)
+                .unwrap_or_else(|_| panic!("Unable to create directory {}", sep.0));
         }
-        fs::write(file_name, render).unwrap_or_else(|_| panic!("Failed to write render of {} to output", nm))
+        fs::write(file_name, render)
+            .unwrap_or_else(|_| panic!("Failed to write render of {} to output", nm))
     }
-
 }
