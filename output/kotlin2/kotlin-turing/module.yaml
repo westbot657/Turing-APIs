@@ -1,4 +1,0 @@
-product:
-  type: wasm-wasi/app
-#  platforms:
-#    - wasmWasi

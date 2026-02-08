@@ -1,4 +1,0 @@
-*/
-# ignore everything but .wrap files
-!*.wrap
-!*/meson.build
