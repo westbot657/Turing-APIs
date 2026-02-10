@@ -9,7 +9,7 @@ use turing_api::*;
 
 //// Core Systems ////
 pub mod alg {
-    use crate::*;
+    use super::*;
 
     #[cfg(feature = "glam")]
     pub use glam::{Vec2, Vec3, Vec4, Quat, Mat4};
