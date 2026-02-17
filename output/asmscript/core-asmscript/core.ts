@@ -21,6 +21,8 @@ export declare function _host_u32_dequeue(): u32;
 
 @external("env", "_core_custom_data__create")
 declare function _core_custom_data__create(): u64;
+@external("env", "_core_custom_data__from_json")
+declare function _core_custom_data__from_json(json: u32): u64;
 @external("env", "_core_custom_data__list_add_bool")
 declare function _core_custom_data__list_add_bool(list: u64, value: bool): void;
 @external("env", "_core_custom_data__list_add_custom_data")
@@ -45,6 +47,8 @@ declare function _core_custom_data__set_float(custom_data: u64, key: u32, value:
 declare function _core_custom_data__set_int(custom_data: u64, key: u32, value: i32): void;
 @external("env", "_core_custom_data__set_string")
 declare function _core_custom_data__set_string(custom_data: u64, key: u32, value: u32): void;
+@external("env", "_core_custom_data__to_json")
+declare function _core_custom_data__to_json(custom_data: u64, pretty: bool): u32;
 @external("env", "_core_custom_event_data__custom_data_get")
 declare function _core_custom_event_data__custom_data_get(handle: u64): u64;
 @external("env", "_core_custom_event_data__event_type_get")
@@ -125,6 +129,8 @@ declare function _core_note_floor_movement___world_rotation_set(handle: u64, val
 declare function _core_note_floor_movement__distance_to_player_get(handle: u64): f32;
 @external("env", "_core_note_floor_movement__end_pos_get")
 declare function _core_note_floor_movement__end_pos_get(handle: u64): u32;
+@external("env", "_core_note_floor_movement__init")
+declare function _core_note_floor_movement__init(handle: u64, world_rotation: f32, beat_time: f32, move_start_offset: u32, move_end_offset: u32): void;
 @external("env", "_core_note_floor_movement__inverse_world_rotation_get")
 declare function _core_note_floor_movement__inverse_world_rotation_get(handle: u64): u32;
 @external("env", "_core_note_floor_movement__local_position_get")
@@ -269,6 +275,8 @@ declare function _core_note_jump__add_note_jump_did_update_progress_event(handle
 declare function _core_note_jump__beat_pos_get(handle: u64): u32;
 @external("env", "_core_note_jump__distance_to_player_get")
 declare function _core_note_jump__distance_to_player_get(handle: u64): f32;
+@external("env", "_core_note_jump__init")
+declare function _core_note_jump__init(handle: u64, note_time: f32, world_rotation: f32, move_end_offset: u32, jump_end_offset: u32, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool): void;
 @external("env", "_core_note_jump__local_position_get")
 declare function _core_note_jump__local_position_get(handle: u64): u32;
 @external("env", "_core_note_jump__manual_update")
@@ -317,6 +325,60 @@ declare function _core_note_manager__time_to_beat(time: f32): f32;
 declare function _core_task_scheduler__schedule(task: u64): void;
 @external("env", "_core_task_scheduler__dispose")
 declare function _core_task_scheduler__dispose(handle: u64): void;
+@external("env", "_core_turing_mesh___mesh_get")
+declare function _core_turing_mesh___mesh_get(handle: u64): u64;
+@external("env", "_core_turing_mesh___mesh_set")
+declare function _core_turing_mesh___mesh_set(handle: u64, value: u64): void;
+@external("env", "_core_turing_mesh__clear")
+declare function _core_turing_mesh__clear(handle: u64): void;
+@external("env", "_core_turing_mesh__get_bounds_max_x")
+declare function _core_turing_mesh__get_bounds_max_x(handle: u64): f32;
+@external("env", "_core_turing_mesh__get_bounds_max_y")
+declare function _core_turing_mesh__get_bounds_max_y(handle: u64): f32;
+@external("env", "_core_turing_mesh__get_bounds_max_z")
+declare function _core_turing_mesh__get_bounds_max_z(handle: u64): f32;
+@external("env", "_core_turing_mesh__get_bounds_min_x")
+declare function _core_turing_mesh__get_bounds_min_x(handle: u64): f32;
+@external("env", "_core_turing_mesh__get_bounds_min_y")
+declare function _core_turing_mesh__get_bounds_min_y(handle: u64): f32;
+@external("env", "_core_turing_mesh__get_bounds_min_z")
+declare function _core_turing_mesh__get_bounds_min_z(handle: u64): f32;
+@external("env", "_core_turing_mesh__get_instance_id")
+declare function _core_turing_mesh__get_instance_id(handle: u64): i32;
+@external("env", "_core_turing_mesh__get_u_vs")
+declare function _core_turing_mesh__get_u_vs(handle: u64, channel: i32): u32;
+@external("env", "_core_turing_mesh__get_vertices")
+declare function _core_turing_mesh__get_vertices(handle: u64): u32;
+@external("env", "_core_turing_mesh__hide_flags_get")
+declare function _core_turing_mesh__hide_flags_get(handle: u64): void;
+@external("env", "_core_turing_mesh__hide_flags_set")
+declare function _core_turing_mesh__hide_flags_set(handle: u64): void;
+@external("env", "_core_turing_mesh__mark_modified")
+declare function _core_turing_mesh__mark_modified(handle: u64): void;
+@external("env", "_core_turing_mesh__name_get")
+declare function _core_turing_mesh__name_get(handle: u64): u32;
+@external("env", "_core_turing_mesh__name_set")
+declare function _core_turing_mesh__name_set(handle: u64, value: u32): void;
+@external("env", "_core_turing_mesh__optimize")
+declare function _core_turing_mesh__optimize(handle: u64): void;
+@external("env", "_core_turing_mesh__optimize_index_buffers")
+declare function _core_turing_mesh__optimize_index_buffers(handle: u64): void;
+@external("env", "_core_turing_mesh__recalculate_bounds")
+declare function _core_turing_mesh__recalculate_bounds(handle: u64): void;
+@external("env", "_core_turing_mesh__recalculate_normals")
+declare function _core_turing_mesh__recalculate_normals(handle: u64): void;
+@external("env", "_core_turing_mesh__recalculate_tangents")
+declare function _core_turing_mesh__recalculate_tangents(handle: u64): void;
+@external("env", "_core_turing_mesh__set_bounds")
+declare function _core_turing_mesh__set_bounds(handle: u64, min_x: f32, min_y: f32, min_z: f32, max_x: f32, max_y: f32, max_z: f32): void;
+@external("env", "_core_turing_mesh__set_triangles")
+declare function _core_turing_mesh__set_triangles(handle: u64, triangles: u64, submesh: i32, calculate_bounds: bool, base_vertex: i32): void;
+@external("env", "_core_turing_mesh__set_u_vs")
+declare function _core_turing_mesh__set_u_vs(handle: u64, channel: i32, uvs: u32): void;
+@external("env", "_core_turing_mesh__set_vertices")
+declare function _core_turing_mesh__set_vertices(handle: u64, in_vertices: u32): void;
+@external("env", "_core_turing_mesh__upload_mesh_data")
+declare function _core_turing_mesh__upload_mesh_data(handle: u64, mark_no_longer_readable: bool): void;
 @external("env", "_core_turinger_game_object__active_get")
 declare function _core_turinger_game_object__active_get(handle: u64): bool;
 @external("env", "_core_turinger_game_object__active_in_hierarchy_get")
@@ -327,6 +389,8 @@ declare function _core_turinger_game_object__active_self_get(handle: u64): bool;
 declare function _core_turinger_game_object__active_set(handle: u64, value: bool): void;
 @external("env", "_core_turinger_game_object__add_component")
 declare function _core_turinger_game_object__add_component(handle: u64, component_type: u64): u64;
+@external("env", "_core_turinger_game_object__add_or_get_mesh")
+declare function _core_turinger_game_object__add_or_get_mesh(handle: u64): u64;
 @external("env", "_core_turinger_game_object__broadcast_message")
 declare function _core_turinger_game_object__broadcast_message(handle: u64, method_name: u32, options: i32): void;
 @external("env", "_core_turinger_game_object__compare_tag")
@@ -732,6 +796,12 @@ export class CustomData {
         return new CustomData(turing_result);
     }
 
+    public static from_json(json: string): CustomData {
+        let turing_handle_json = String.UTF8.encode(json, true);
+        let turing_result = _core_custom_data__from_json(turing_handle_json);
+        return new CustomData(turing_result);
+    }
+
     public static list_add_bool(list: List1, value: bool): void {
         _core_custom_data__list_add_bool(list.handle, value);
     }
@@ -786,6 +856,15 @@ export class CustomData {
         let turing_handle_key = String.UTF8.encode(key, true);
         let turing_handle_value = String.UTF8.encode(value, true);
         _core_custom_data__set_string(custom_data.handle, turing_handle_key, turing_handle_value);
+    }
+
+    public static to_json(custom_data: CustomData, pretty: bool): string {
+        let turing_result = _core_custom_data__to_json(custom_data.handle, pretty);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
     }
 
 }
@@ -909,6 +988,32 @@ export class GcHelper {
     
 
 
+}
+
+@final
+export class GameObject {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+}
+
+@final
+export class GcHelper {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
     public static create(): GCHelper {
         let turing_result = _core_gc_helper__create();
         return new GcHelper(turing_result);
@@ -926,19 +1031,6 @@ export class GcHelper {
     public wasm_garbage_collect(): void {
         _core_gc_helper__wasm_garbage_collect(this.handle);
     }
-}
-
-@final
-export class GameObject {
-    
-    handle: u64;
-
-    constructor(handle: u64) {
-        this.handle = handle;
-    }
-    
-
-
 }
 
 @final
@@ -969,6 +1061,19 @@ export class IEnumerator {
 
 @final
 export class IVariableMovementDataProvider {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+}
+
+@final
+export class Int32 {
     
     handle: u64;
 
@@ -1017,6 +1122,19 @@ export class Log {
         let turing_handle_msg = String.UTF8.encode(msg, true);
         _core_log__warn(turing_handle_msg);
     }
+
+}
+
+@final
+export class Mesh {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
 
 }
 
@@ -1134,6 +1252,12 @@ export class NoteFloorMovement {
     public end_pos_get(): Vec3 {
         _core_note_floor_movement__end_pos_get(this.handle);
         return __dequeue_vec3();
+    }
+
+    public init_floor(world_rotation: f32, beat_time: f32, move_start_offset: Vec3, move_end_offset: Vec3): void {
+        let turing_handle_move_start_offset = __enqueue_vec3(move_start_offset);
+        let turing_handle_move_end_offset = __enqueue_vec3(move_end_offset);
+        _core_note_floor_movement__init(this.handle, world_rotation, beat_time, turing_handle_move_start_offset, turing_handle_move_end_offset);
     }
 
     public inverse_world_rotation_get(): Quat {
@@ -1468,6 +1592,12 @@ export class NoteJump {
         return _core_note_jump__distance_to_player_get(this.handle);
     }
 
+    public init_note(note_time: f32, world_rotation: f32, move_end_offset: Vec3, jump_end_offset: Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool): void {
+        let turing_handle_move_end_offset = __enqueue_vec3(move_end_offset);
+        let turing_handle_jump_end_offset = __enqueue_vec3(jump_end_offset);
+        _core_note_jump__init(this.handle, note_time, world_rotation, turing_handle_move_end_offset, turing_handle_jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation);
+    }
+
     public local_position_get(): Vec3 {
         _core_note_jump__local_position_get(this.handle);
         return __dequeue_vec3();
@@ -1678,6 +1808,152 @@ export class Transform {
 }
 
 @final
+export class TuringMesh {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+
+    public _mesh_get(): Mesh {
+        let turing_result = _core_turing_mesh___mesh_get(this.handle);
+        return new Mesh(turing_result);
+    }
+
+    public _mesh_set(value: Mesh): void {
+        _core_turing_mesh___mesh_set(this.handle, value.handle);
+    }
+
+    public clear(): void {
+        _core_turing_mesh__clear(this.handle);
+    }
+
+    public get_bounds_max_x(): f32 {
+        return _core_turing_mesh__get_bounds_max_x(this.handle);
+    }
+
+    public get_bounds_max_y(): f32 {
+        return _core_turing_mesh__get_bounds_max_y(this.handle);
+    }
+
+    public get_bounds_max_z(): f32 {
+        return _core_turing_mesh__get_bounds_max_z(this.handle);
+    }
+
+    public get_bounds_min_x(): f32 {
+        return _core_turing_mesh__get_bounds_min_x(this.handle);
+    }
+
+    public get_bounds_min_y(): f32 {
+        return _core_turing_mesh__get_bounds_min_y(this.handle);
+    }
+
+    public get_bounds_min_z(): f32 {
+        return _core_turing_mesh__get_bounds_min_z(this.handle);
+    }
+
+    public get_instance_id(): i32 {
+        return _core_turing_mesh__get_instance_id(this.handle);
+    }
+
+    public get_u_vs(channel: i32): Array<u32> {
+        let turing_result = _core_turing_mesh__get_u_vs(this.handle, channel);
+        let turing_buf = heap.alloc(usize(turing_result) * sizeof<u32>());
+        _host_bufcpy(u32(turing_buf), turing_result);
+        let view = Uint32Array.wrap(turing_buf, turing_result);
+        let arr = Array.from(view);
+        heap.free(turing_buf);
+        return arr;
+    }
+
+    public get_vertices(): Array<u32> {
+        let turing_result = _core_turing_mesh__get_vertices(this.handle);
+        let turing_buf = heap.alloc(usize(turing_result) * sizeof<u32>());
+        _host_bufcpy(u32(turing_buf), turing_result);
+        let view = Uint32Array.wrap(turing_buf, turing_result);
+        let arr = Array.from(view);
+        heap.free(turing_buf);
+        return arr;
+    }
+
+    public hide_flags_get(): void {
+        _core_turing_mesh__hide_flags_get(this.handle);
+    }
+
+    public hide_flags_set(): void {
+        _core_turing_mesh__hide_flags_set(this.handle);
+    }
+
+    public mark_modified(): void {
+        _core_turing_mesh__mark_modified(this.handle);
+    }
+
+    public name_get(): string {
+        let turing_result = _core_turing_mesh__name_get(this.handle);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
+    }
+
+    public name_set(value: string): void {
+        let turing_handle_value = String.UTF8.encode(value, true);
+        _core_turing_mesh__name_set(this.handle, turing_handle_value);
+    }
+
+    public optimize(): void {
+        _core_turing_mesh__optimize(this.handle);
+    }
+
+    public optimize_index_buffers(): void {
+        _core_turing_mesh__optimize_index_buffers(this.handle);
+    }
+
+    public recalculate_bounds(): void {
+        _core_turing_mesh__recalculate_bounds(this.handle);
+    }
+
+    public recalculate_normals(): void {
+        _core_turing_mesh__recalculate_normals(this.handle);
+    }
+
+    public recalculate_tangents(): void {
+        _core_turing_mesh__recalculate_tangents(this.handle);
+    }
+
+    public set_bounds(min_x: f32, min_y: f32, min_z: f32, max_x: f32, max_y: f32, max_z: f32): void {
+        _core_turing_mesh__set_bounds(this.handle, min_x, min_y, min_z, max_x, max_y, max_z);
+    }
+
+    public set_triangles(triangles: Int32, submesh: i32, calculate_bounds: bool, base_vertex: i32): void {
+        _core_turing_mesh__set_triangles(this.handle, triangles.handle, submesh, calculate_bounds, base_vertex);
+    }
+
+    public set_u_vs(channel: i32, uvs: Array<u32>): void {
+        _host_u32_enqueue(u32(uvs.length));
+        let turing_view_uvs = Uint32Array.wrap(uvs);
+        let turing_handle_uvs = turing_view_uvs.dataStart;
+        _core_turing_mesh__set_u_vs(this.handle, channel, turing_handle_uvs);
+    }
+
+    public set_vertices(in_vertices: Array<u32>): void {
+        _host_u32_enqueue(u32(in_vertices.length));
+        let turing_view_in_vertices = Uint32Array.wrap(in_vertices);
+        let turing_handle_in_vertices = turing_view_in_vertices.dataStart;
+        _core_turing_mesh__set_vertices(this.handle, turing_handle_in_vertices);
+    }
+
+    public upload_mesh_data(mark_no_longer_readable: bool): void {
+        _core_turing_mesh__upload_mesh_data(this.handle, mark_no_longer_readable);
+    }
+}
+
+@final
 export class TuringScriptManager {
     
     handle: u64;
@@ -1721,6 +1997,11 @@ export class TuringerGameObject {
     public add_component(component_type: Type): Component {
         let turing_result = _core_turinger_game_object__add_component(this.handle, component_type.handle);
         return new Component(turing_result);
+    }
+
+    public add_or_get_mesh(): TuringMesh {
+        let turing_result = _core_turinger_game_object__add_or_get_mesh(this.handle);
+        return new TuringMesh(turing_result);
     }
 
     public broadcast_message(method_name: string, options: i32): void {

@@ -22,6 +22,8 @@ func _host_u32_dequeue() uint32
 
 //go:wasmimport env _core_custom_data__create
 func _core_custom_data__create() CustomData
+//go:wasmimport env _core_custom_data__from_json
+func _core_custom_data__from_json(json uint32) CustomData
 //go:wasmimport env _core_custom_data__list_add_bool
 func _core_custom_data__list_add_bool(list List1, value bool) void
 //go:wasmimport env _core_custom_data__list_add_custom_data
@@ -46,6 +48,8 @@ func _core_custom_data__set_float(custom_data CustomData, key uint32, value floa
 func _core_custom_data__set_int(custom_data CustomData, key uint32, value int32) void
 //go:wasmimport env _core_custom_data__set_string
 func _core_custom_data__set_string(custom_data CustomData, key uint32, value uint32) void
+//go:wasmimport env _core_custom_data__to_json
+func _core_custom_data__to_json(custom_data CustomData, pretty bool) uint32
 //go:wasmimport env _core_custom_event_data__custom_data_get
 func _core_custom_event_data__custom_data_get(handle CustomEventData) CustomData
 //go:wasmimport env _core_custom_event_data__event_type_get
@@ -126,6 +130,8 @@ func _core_note_floor_movement___world_rotation_set(handle NoteFloorMovement, va
 func _core_note_floor_movement__distance_to_player_get(handle NoteFloorMovement) float32
 //go:wasmimport env _core_note_floor_movement__end_pos_get
 func _core_note_floor_movement__end_pos_get(handle NoteFloorMovement) uint32
+//go:wasmimport env _core_note_floor_movement__init
+func _core_note_floor_movement__init(handle NoteFloorMovement, world_rotation float32, beat_time float32, move_start_offset uint32, move_end_offset uint32) void
 //go:wasmimport env _core_note_floor_movement__inverse_world_rotation_get
 func _core_note_floor_movement__inverse_world_rotation_get(handle NoteFloorMovement) uint32
 //go:wasmimport env _core_note_floor_movement__local_position_get
@@ -270,6 +276,8 @@ func _core_note_jump__add_note_jump_did_update_progress_event(handle NoteJump, v
 func _core_note_jump__beat_pos_get(handle NoteJump) uint32
 //go:wasmimport env _core_note_jump__distance_to_player_get
 func _core_note_jump__distance_to_player_get(handle NoteJump) float32
+//go:wasmimport env _core_note_jump__init
+func _core_note_jump__init(handle NoteJump, note_time float32, world_rotation float32, move_end_offset uint32, jump_end_offset uint32, gravity_base float32, flip_y_side float32, end_rotation float32, rotate_towards_player bool, use_random_rotation bool) void
 //go:wasmimport env _core_note_jump__local_position_get
 func _core_note_jump__local_position_get(handle NoteJump) uint32
 //go:wasmimport env _core_note_jump__manual_update
@@ -318,6 +326,60 @@ func _core_note_manager__time_to_beat(time float32) float32
 func _core_task_scheduler__schedule(task Action) void
 //go:wasmimport env _core_task_scheduler__dispose
 func _core_task_scheduler__dispose(handle TaskScheduler) void
+//go:wasmimport env _core_turing_mesh___mesh_get
+func _core_turing_mesh___mesh_get(handle TuringMesh) Mesh
+//go:wasmimport env _core_turing_mesh___mesh_set
+func _core_turing_mesh___mesh_set(handle TuringMesh, value Mesh) void
+//go:wasmimport env _core_turing_mesh__clear
+func _core_turing_mesh__clear(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__get_bounds_max_x
+func _core_turing_mesh__get_bounds_max_x(handle TuringMesh) float32
+//go:wasmimport env _core_turing_mesh__get_bounds_max_y
+func _core_turing_mesh__get_bounds_max_y(handle TuringMesh) float32
+//go:wasmimport env _core_turing_mesh__get_bounds_max_z
+func _core_turing_mesh__get_bounds_max_z(handle TuringMesh) float32
+//go:wasmimport env _core_turing_mesh__get_bounds_min_x
+func _core_turing_mesh__get_bounds_min_x(handle TuringMesh) float32
+//go:wasmimport env _core_turing_mesh__get_bounds_min_y
+func _core_turing_mesh__get_bounds_min_y(handle TuringMesh) float32
+//go:wasmimport env _core_turing_mesh__get_bounds_min_z
+func _core_turing_mesh__get_bounds_min_z(handle TuringMesh) float32
+//go:wasmimport env _core_turing_mesh__get_instance_id
+func _core_turing_mesh__get_instance_id(handle TuringMesh) int32
+//go:wasmimport env _core_turing_mesh__get_u_vs
+func _core_turing_mesh__get_u_vs(handle TuringMesh, channel int32) uint32
+//go:wasmimport env _core_turing_mesh__get_vertices
+func _core_turing_mesh__get_vertices(handle TuringMesh) uint32
+//go:wasmimport env _core_turing_mesh__hide_flags_get
+func _core_turing_mesh__hide_flags_get(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__hide_flags_set
+func _core_turing_mesh__hide_flags_set(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__mark_modified
+func _core_turing_mesh__mark_modified(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__name_get
+func _core_turing_mesh__name_get(handle TuringMesh) uint32
+//go:wasmimport env _core_turing_mesh__name_set
+func _core_turing_mesh__name_set(handle TuringMesh, value uint32) void
+//go:wasmimport env _core_turing_mesh__optimize
+func _core_turing_mesh__optimize(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__optimize_index_buffers
+func _core_turing_mesh__optimize_index_buffers(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__recalculate_bounds
+func _core_turing_mesh__recalculate_bounds(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__recalculate_normals
+func _core_turing_mesh__recalculate_normals(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__recalculate_tangents
+func _core_turing_mesh__recalculate_tangents(handle TuringMesh) void
+//go:wasmimport env _core_turing_mesh__set_bounds
+func _core_turing_mesh__set_bounds(handle TuringMesh, min_x float32, min_y float32, min_z float32, max_x float32, max_y float32, max_z float32) void
+//go:wasmimport env _core_turing_mesh__set_triangles
+func _core_turing_mesh__set_triangles(handle TuringMesh, triangles Int32, submesh int32, calculate_bounds bool, base_vertex int32) void
+//go:wasmimport env _core_turing_mesh__set_u_vs
+func _core_turing_mesh__set_u_vs(handle TuringMesh, channel int32, uvs *void) void
+//go:wasmimport env _core_turing_mesh__set_vertices
+func _core_turing_mesh__set_vertices(handle TuringMesh, in_vertices *void) void
+//go:wasmimport env _core_turing_mesh__upload_mesh_data
+func _core_turing_mesh__upload_mesh_data(handle TuringMesh, mark_no_longer_readable bool) void
 //go:wasmimport env _core_turinger_game_object__active_get
 func _core_turinger_game_object__active_get(handle TuringerGameObject) bool
 //go:wasmimport env _core_turinger_game_object__active_in_hierarchy_get
@@ -328,6 +390,8 @@ func _core_turinger_game_object__active_self_get(handle TuringerGameObject) bool
 func _core_turinger_game_object__active_set(handle TuringerGameObject, value bool) void
 //go:wasmimport env _core_turinger_game_object__add_component
 func _core_turinger_game_object__add_component(handle TuringerGameObject, component_type Type) Component
+//go:wasmimport env _core_turinger_game_object__add_or_get_mesh
+func _core_turinger_game_object__add_or_get_mesh(handle TuringerGameObject) TuringMesh
 //go:wasmimport env _core_turinger_game_object__broadcast_message
 func _core_turinger_game_object__broadcast_message(handle TuringerGameObject, method_name uint32, options int32) void
 //go:wasmimport env _core_turinger_game_object__compare_tag
@@ -617,6 +681,14 @@ func CustomData_create() CustomData {
     return _core_custom_data__create()
 }
 
+func CustomData_fromJson(json string) CustomData {
+    
+    turingHJson := []byte(json)
+    turingHJson = append(turingHJson, 0)
+    turingHandleJson := &turingHJson[0]
+    return _core_custom_data__from_json(turingHandleJson)
+}
+
 func CustomData_listAddBool(list List1, value bool) void {
     
     _core_custom_data__list_add_bool(list, value)
@@ -699,6 +771,14 @@ func CustomData_setString(customData CustomData, key string, value string) void 
     turingHValue = append(turingHValue, 0)
     turingHandleValue := &turingHValue[0]
     _core_custom_data__set_string(customData, turingHandleKey, turingHandleValue)
+}
+
+func CustomData_toJson(customData CustomData, pretty bool) string {
+    
+    turingResult := _core_custom_data__to_json(customData, pretty)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
 }
 
 
@@ -793,6 +873,18 @@ type GcHelper struct {
 }
 
 
+
+type GameObject struct {
+    opaqu uint32
+}
+
+
+
+type GcHelper struct {
+    opaqu uint32
+}
+
+
 func GcHelper_create() GCHelper {
     
     return _core_gc_helper__create()
@@ -814,12 +906,6 @@ func (self *GcHelper)wasmGarbageCollect() void {
     _core_gc_helper__wasm_garbage_collect(self)
 }
 
-type GameObject struct {
-    opaqu uint32
-}
-
-
-
 type IAudioTimeSource struct {
     opaqu uint32
 }
@@ -833,6 +919,12 @@ type IEnumerator struct {
 
 
 type IVariableMovementDataProvider struct {
+    opaqu uint32
+}
+
+
+
+type Int32 struct {
     opaqu uint32
 }
 
@@ -880,6 +972,12 @@ func Log_warn(msg string) void {
     turingHandleMsg := &turingHMsg[0]
     _core_log__warn(turingHandleMsg)
 }
+
+
+type Mesh struct {
+    opaqu uint32
+}
+
 
 
 type NoteControllerBase struct {
@@ -1003,6 +1101,15 @@ func (self *NoteFloorMovement)endPosGet() Vec3 {
     
     _core_note_floor_movement__end_pos_get(self)
     return dequeue_vec3()
+}
+
+func (self *NoteFloorMovement)initFloor(worldRotation float32, beatTime float32, moveStartOffset Vec3, moveEndOffset Vec3) void {
+    
+    turingHandleMoveStartOffset := enqueue_vec3(moveStartOffset)
+
+    turingHandleMoveEndOffset := enqueue_vec3(moveEndOffset)
+
+    _core_note_floor_movement__init(self, worldRotation, beatTime, turingHandleMoveStartOffset, turingHandleMoveEndOffset)
 }
 
 func (self *NoteFloorMovement)inverseWorldRotationGet() Quat {
@@ -1407,6 +1514,15 @@ func (self *NoteJump)distanceToPlayerGet() float32 {
     return _core_note_jump__distance_to_player_get(self)
 }
 
+func (self *NoteJump)initNote(noteTime float32, worldRotation float32, moveEndOffset Vec3, jumpEndOffset Vec3, gravityBase float32, flipYSide float32, endRotation float32, rotateTowardsPlayer bool, useRandomRotation bool) void {
+    
+    turingHandleMoveEndOffset := enqueue_vec3(moveEndOffset)
+
+    turingHandleJumpEndOffset := enqueue_vec3(jumpEndOffset)
+
+    _core_note_jump__init(self, noteTime, worldRotation, turingHandleMoveEndOffset, turingHandleJumpEndOffset, gravityBase, flipYSide, endRotation, rotateTowardsPlayer, useRandomRotation)
+}
+
 func (self *NoteJump)localPositionGet() Vec3 {
     
     _core_note_jump__local_position_get(self)
@@ -1578,6 +1694,165 @@ type Transform struct {
 
 
 
+type TuringMesh struct {
+    opaqu uint32
+}
+
+
+
+func (self *TuringMesh)MeshGet() Mesh {
+    
+    return _core_turing_mesh___mesh_get(self)
+}
+
+func (self *TuringMesh)MeshSet(value Mesh) void {
+    
+    _core_turing_mesh___mesh_set(self, value)
+}
+
+func (self *TuringMesh)clear() void {
+    
+    _core_turing_mesh__clear(self)
+}
+
+func (self *TuringMesh)getBoundsMaxX() float32 {
+    
+    return _core_turing_mesh__get_bounds_max_x(self)
+}
+
+func (self *TuringMesh)getBoundsMaxY() float32 {
+    
+    return _core_turing_mesh__get_bounds_max_y(self)
+}
+
+func (self *TuringMesh)getBoundsMaxZ() float32 {
+    
+    return _core_turing_mesh__get_bounds_max_z(self)
+}
+
+func (self *TuringMesh)getBoundsMinX() float32 {
+    
+    return _core_turing_mesh__get_bounds_min_x(self)
+}
+
+func (self *TuringMesh)getBoundsMinY() float32 {
+    
+    return _core_turing_mesh__get_bounds_min_y(self)
+}
+
+func (self *TuringMesh)getBoundsMinZ() float32 {
+    
+    return _core_turing_mesh__get_bounds_min_z(self)
+}
+
+func (self *TuringMesh)getInstanceId() int32 {
+    
+    return _core_turing_mesh__get_instance_id(self)
+}
+
+func (self *TuringMesh)getUVs(channel int32) []uint32 {
+    
+    turingResult := _core_turing_mesh__get_u_vs(self, channel)
+    turingBuf := make([]uint32, turingResult)
+    _host_bufcpy(&turingBuf[0], turingResult)
+    return turingBuf
+}
+
+func (self *TuringMesh)getVertices() []uint32 {
+    
+    turingResult := _core_turing_mesh__get_vertices(self)
+    turingBuf := make([]uint32, turingResult)
+    _host_bufcpy(&turingBuf[0], turingResult)
+    return turingBuf
+}
+
+func (self *TuringMesh)hideFlagsGet() void {
+    
+    _core_turing_mesh__hide_flags_get(self)
+}
+
+func (self *TuringMesh)hideFlagsSet() void {
+    
+    _core_turing_mesh__hide_flags_set(self)
+}
+
+func (self *TuringMesh)markModified() void {
+    
+    _core_turing_mesh__mark_modified(self)
+}
+
+func (self *TuringMesh)nameGet() string {
+    
+    turingResult := _core_turing_mesh__name_get(self)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
+}
+
+func (self *TuringMesh)nameSet(value string) void {
+    
+    turingHValue := []byte(value)
+    turingHValue = append(turingHValue, 0)
+    turingHandleValue := &turingHValue[0]
+    _core_turing_mesh__name_set(self, turingHandleValue)
+}
+
+func (self *TuringMesh)optimize() void {
+    
+    _core_turing_mesh__optimize(self)
+}
+
+func (self *TuringMesh)optimizeIndexBuffers() void {
+    
+    _core_turing_mesh__optimize_index_buffers(self)
+}
+
+func (self *TuringMesh)recalculateBounds() void {
+    
+    _core_turing_mesh__recalculate_bounds(self)
+}
+
+func (self *TuringMesh)recalculateNormals() void {
+    
+    _core_turing_mesh__recalculate_normals(self)
+}
+
+func (self *TuringMesh)recalculateTangents() void {
+    
+    _core_turing_mesh__recalculate_tangents(self)
+}
+
+func (self *TuringMesh)setBounds(minX float32, minY float32, minZ float32, maxX float32, maxY float32, maxZ float32) void {
+    
+    _core_turing_mesh__set_bounds(self, minX, minY, minZ, maxX, maxY, maxZ)
+}
+
+func (self *TuringMesh)setTriangles(triangles Int32, submesh int32, calculateBounds bool, baseVertex int32) void {
+    
+    _core_turing_mesh__set_triangles(self, triangles, submesh, calculateBounds, baseVertex)
+}
+
+func (self *TuringMesh)setUVs(channel int32, uvs []uint32) void {
+    
+    _host_u32_enqueue(len(uvs))
+    turingHUvs := []uint32(uvs)
+    turingHandleUvs := &turingHUvs[0]
+    _core_turing_mesh__set_u_vs(self, channel, turingHandleUvs)
+}
+
+func (self *TuringMesh)setVertices(inVertices []uint32) void {
+    
+    _host_u32_enqueue(len(inVertices))
+    turingHInVertices := []uint32(inVertices)
+    turingHandleInVertices := &turingHInVertices[0]
+    _core_turing_mesh__set_vertices(self, turingHandleInVertices)
+}
+
+func (self *TuringMesh)uploadMeshData(markNoLongerReadable bool) void {
+    
+    _core_turing_mesh__upload_mesh_data(self, markNoLongerReadable)
+}
+
 type TuringScriptManager struct {
     opaqu uint32
 }
@@ -1613,6 +1888,11 @@ func (self *TuringerGameObject)activeSet(value bool) void {
 func (self *TuringerGameObject)addComponent(componentType Type) Component {
     
     return _core_turinger_game_object__add_component(self, componentType)
+}
+
+func (self *TuringerGameObject)addOrGetMesh() TuringMesh {
+    
+    return _core_turinger_game_object__add_or_get_mesh(self)
 }
 
 func (self *TuringerGameObject)broadcastMessage(methodName string, options int32) void {

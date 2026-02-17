@@ -42,6 +42,11 @@ core.CustomData = CustomData
 function core.CustomData.create() end
 
 
+---@param json string
+---@return CustomData
+function core.CustomData.fromJson(json) end
+
+
 ---@param list List1
 ---@param value boolean
 ---@return nil
@@ -118,6 +123,12 @@ function core.CustomData.setInt(custom_data, key, value) end
 ---@param value string
 ---@return nil
 function core.CustomData.setString(custom_data, key, value) end
+
+
+---@param custom_data CustomData
+---@param pretty boolean
+---@return string
+function core.CustomData.toJson(custom_data, pretty) end
 
 
 
@@ -218,6 +229,18 @@ local GcHelper = {}
 core.GcHelper = GcHelper
 
 
+
+---@class GameObject
+local GameObject = {}
+core.GameObject = GameObject
+
+
+
+---@class GcHelper
+local GcHelper = {}
+core.GcHelper = GcHelper
+
+
 ---@return GCHelper
 function core.GcHelper.create() end
 
@@ -238,12 +261,6 @@ function core.GcHelper.invalidateAllHandles(self) end
 function core.GcHelper.wasmGarbageCollect(self) end
 
 
----@class GameObject
-local GameObject = {}
-core.GameObject = GameObject
-
-
-
 ---@class IAudioTimeSource
 local IAudioTimeSource = {}
 core.IAudioTimeSource = IAudioTimeSource
@@ -259,6 +276,12 @@ core.IEnumerator = IEnumerator
 ---@class IVariableMovementDataProvider
 local IVariableMovementDataProvider = {}
 core.IVariableMovementDataProvider = IVariableMovementDataProvider
+
+
+
+---@class Int32
+local Int32 = {}
+core.Int32 = Int32
 
 
 
@@ -291,6 +314,12 @@ function core.Log.info(msg) end
 ---@param msg string
 ---@return nil
 function core.Log.warn(msg) end
+
+
+
+---@class Mesh
+local Mesh = {}
+core.Mesh = Mesh
 
 
 
@@ -406,6 +435,15 @@ function core.NoteFloorMovement.distanceToPlayerGet(self) end
 ---@param self table
 ---@return table
 function core.NoteFloorMovement.endPosGet(self) end
+
+
+---@param self table
+---@param world_rotation number
+---@param beat_time number
+---@param move_start_offset table
+---@param move_end_offset table
+---@return nil
+function core.NoteFloorMovement.initFloor(self, world_rotation, beat_time, move_start_offset, move_end_offset) end
 
 
 ---@param self table
@@ -806,6 +844,20 @@ function core.NoteJump.distanceToPlayerGet(self) end
 
 
 ---@param self table
+---@param note_time number
+---@param world_rotation number
+---@param move_end_offset table
+---@param jump_end_offset table
+---@param gravity_base number
+---@param flip_y_side number
+---@param end_rotation number
+---@param rotate_towards_player boolean
+---@param use_random_rotation boolean
+---@return nil
+function core.NoteJump.initNote(self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) end
+
+
+---@param self table
 ---@return table
 function core.NoteJump.localPositionGet(self) end
 
@@ -993,6 +1045,164 @@ core.Transform = Transform
 
 
 
+---@class TuringMesh
+local TuringMesh = {}
+core.TuringMesh = TuringMesh
+
+
+
+---@param self table
+---@return Mesh
+function core.TuringMesh.MeshGet(self) end
+
+
+---@param self table
+---@param value Mesh
+---@return nil
+function core.TuringMesh.MeshSet(self, value) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.clear(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getBoundsMaxX(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getBoundsMaxY(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getBoundsMaxZ(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getBoundsMinX(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getBoundsMinY(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getBoundsMinZ(self) end
+
+
+---@param self table
+---@return number
+function core.TuringMesh.getInstanceId(self) end
+
+
+---@param self table
+---@param channel number
+---@return table
+function core.TuringMesh.getUVs(self, channel) end
+
+
+---@param self table
+---@return table
+function core.TuringMesh.getVertices(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.hideFlagsGet(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.hideFlagsSet(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.markModified(self) end
+
+
+---@param self table
+---@return string
+function core.TuringMesh.nameGet(self) end
+
+
+---@param self table
+---@param value string
+---@return nil
+function core.TuringMesh.nameSet(self, value) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.optimize(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.optimizeIndexBuffers(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.recalculateBounds(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.recalculateNormals(self) end
+
+
+---@param self table
+---@return nil
+function core.TuringMesh.recalculateTangents(self) end
+
+
+---@param self table
+---@param min_x number
+---@param min_y number
+---@param min_z number
+---@param max_x number
+---@param max_y number
+---@param max_z number
+---@return nil
+function core.TuringMesh.setBounds(self, min_x, min_y, min_z, max_x, max_y, max_z) end
+
+
+---@param self table
+---@param triangles Int32
+---@param submesh number
+---@param calculate_bounds boolean
+---@param base_vertex number
+---@return nil
+function core.TuringMesh.setTriangles(self, triangles, submesh, calculate_bounds, base_vertex) end
+
+
+---@param self table
+---@param channel number
+---@param uvs table
+---@return nil
+function core.TuringMesh.setUVs(self, channel, uvs) end
+
+
+---@param self table
+---@param in_vertices table
+---@return nil
+function core.TuringMesh.setVertices(self, in_vertices) end
+
+
+---@param self table
+---@param mark_no_longer_readable boolean
+---@return nil
+function core.TuringMesh.uploadMeshData(self, mark_no_longer_readable) end
+
+
 ---@class TuringScriptManager
 local TuringScriptManager = {}
 core.TuringScriptManager = TuringScriptManager
@@ -1030,6 +1240,11 @@ function core.TuringerGameObject.activeSet(self, value) end
 ---@param component_type Type
 ---@return Component
 function core.TuringerGameObject.addComponent(self, component_type) end
+
+
+---@param self table
+---@return TuringMesh
+function core.TuringerGameObject.addOrGetMesh(self) end
 
 
 ---@param self table

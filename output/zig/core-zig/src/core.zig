@@ -105,6 +105,7 @@ export fn _core_semver() u64 {
 }
 pub const CORE_VERSION: []const u8 = "0.1.0";
 extern "C" fn _core_custom_data__create() CustomData;
+extern "C" fn _core_custom_data__from_json(json: [*c]const u8) CustomData;
 extern "C" fn _core_custom_data__list_add_bool(list: List1, value: bool) void;
 extern "C" fn _core_custom_data__list_add_custom_data(list: List1, value: CustomData) void;
 extern "C" fn _core_custom_data__list_add_custom_data_list(list: List1, value: List1) void;
@@ -117,6 +118,7 @@ extern "C" fn _core_custom_data__set_custom_data_list(custom_data: CustomData, k
 extern "C" fn _core_custom_data__set_float(custom_data: CustomData, key: [*c]const u8, value: f32) void;
 extern "C" fn _core_custom_data__set_int(custom_data: CustomData, key: [*c]const u8, value: i32) void;
 extern "C" fn _core_custom_data__set_string(custom_data: CustomData, key: [*c]const u8, value: [*c]const u8) void;
+extern "C" fn _core_custom_data__to_json(custom_data: CustomData, pretty: bool) u32;
 extern "C" fn _core_custom_event_data__custom_data_get(handle: CustomEventData) CustomData;
 extern "C" fn _core_custom_event_data__event_type_get(handle: CustomEventData) u32;
 extern "C" fn _core_custom_event_data__get_copy(handle: CustomEventData) BeatmapDataItem;
@@ -157,6 +159,7 @@ extern "C" fn _core_note_floor_movement___world_rotation_get(handle: NoteFloorMo
 extern "C" fn _core_note_floor_movement___world_rotation_set(handle: NoteFloorMovement, value: u32) void;
 extern "C" fn _core_note_floor_movement__distance_to_player_get(handle: NoteFloorMovement) f32;
 extern "C" fn _core_note_floor_movement__end_pos_get(handle: NoteFloorMovement) u32;
+extern "C" fn _core_note_floor_movement__init(handle: NoteFloorMovement, world_rotation: f32, beat_time: f32, move_start_offset: u32, move_end_offset: u32) void;
 extern "C" fn _core_note_floor_movement__inverse_world_rotation_get(handle: NoteFloorMovement) u32;
 extern "C" fn _core_note_floor_movement__local_position_get(handle: NoteFloorMovement) u32;
 extern "C" fn _core_note_floor_movement__manual_update(handle: NoteFloorMovement) u32;
@@ -229,6 +232,7 @@ extern "C" fn _core_note_jump__add_note_jump_did_start_event(handle: NoteJump, v
 extern "C" fn _core_note_jump__add_note_jump_did_update_progress_event(handle: NoteJump, value: Action1) void;
 extern "C" fn _core_note_jump__beat_pos_get(handle: NoteJump) u32;
 extern "C" fn _core_note_jump__distance_to_player_get(handle: NoteJump) f32;
+extern "C" fn _core_note_jump__init(handle: NoteJump, note_time: f32, world_rotation: f32, move_end_offset: u32, jump_end_offset: u32, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) void;
 extern "C" fn _core_note_jump__local_position_get(handle: NoteJump) u32;
 extern "C" fn _core_note_jump__manual_update(handle: NoteJump) u32;
 extern "C" fn _core_note_jump__move_vec_get(handle: NoteJump) u32;
@@ -253,11 +257,39 @@ extern "C" fn _core_note_manager__get_obstacle_controller_from_custom(n: CustomO
 extern "C" fn _core_note_manager__time_to_beat(time: f32) f32;
 extern "C" fn _core_task_scheduler__schedule(task: Action) void;
 extern "C" fn _core_task_scheduler__dispose(handle: TaskScheduler) void;
+extern "C" fn _core_turing_mesh___mesh_get(handle: TuringMesh) Mesh;
+extern "C" fn _core_turing_mesh___mesh_set(handle: TuringMesh, value: Mesh) void;
+extern "C" fn _core_turing_mesh__clear(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__get_bounds_max_x(handle: TuringMesh) f32;
+extern "C" fn _core_turing_mesh__get_bounds_max_y(handle: TuringMesh) f32;
+extern "C" fn _core_turing_mesh__get_bounds_max_z(handle: TuringMesh) f32;
+extern "C" fn _core_turing_mesh__get_bounds_min_x(handle: TuringMesh) f32;
+extern "C" fn _core_turing_mesh__get_bounds_min_y(handle: TuringMesh) f32;
+extern "C" fn _core_turing_mesh__get_bounds_min_z(handle: TuringMesh) f32;
+extern "C" fn _core_turing_mesh__get_instance_id(handle: TuringMesh) i32;
+extern "C" fn _core_turing_mesh__get_u_vs(handle: TuringMesh, channel: i32) u32;
+extern "C" fn _core_turing_mesh__get_vertices(handle: TuringMesh) u32;
+extern "C" fn _core_turing_mesh__hide_flags_get(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__hide_flags_set(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__mark_modified(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__name_get(handle: TuringMesh) u32;
+extern "C" fn _core_turing_mesh__name_set(handle: TuringMesh, value: [*c]const u8) void;
+extern "C" fn _core_turing_mesh__optimize(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__optimize_index_buffers(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__recalculate_bounds(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__recalculate_normals(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__recalculate_tangents(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__set_bounds(handle: TuringMesh, min_x: f32, min_y: f32, min_z: f32, max_x: f32, max_y: f32, max_z: f32) void;
+extern "C" fn _core_turing_mesh__set_triangles(handle: TuringMesh, triangles: Int32, submesh: i32, calculate_bounds: bool, base_vertex: i32) void;
+extern "C" fn _core_turing_mesh__set_u_vs(handle: TuringMesh, channel: i32, uvs: *const anyopaque) void;
+extern "C" fn _core_turing_mesh__set_vertices(handle: TuringMesh, in_vertices: *const anyopaque) void;
+extern "C" fn _core_turing_mesh__upload_mesh_data(handle: TuringMesh, mark_no_longer_readable: bool) void;
 extern "C" fn _core_turinger_game_object__active_get(handle: TuringerGameObject) bool;
 extern "C" fn _core_turinger_game_object__active_in_hierarchy_get(handle: TuringerGameObject) bool;
 extern "C" fn _core_turinger_game_object__active_self_get(handle: TuringerGameObject) bool;
 extern "C" fn _core_turinger_game_object__active_set(handle: TuringerGameObject, value: bool) void;
 extern "C" fn _core_turinger_game_object__add_component(handle: TuringerGameObject, component_type: Type) Component;
+extern "C" fn _core_turinger_game_object__add_or_get_mesh(handle: TuringerGameObject) TuringMesh;
 extern "C" fn _core_turinger_game_object__broadcast_message(handle: TuringerGameObject, method_name: [*c]const u8, options: i32) void;
 extern "C" fn _core_turinger_game_object__compare_tag(handle: TuringerGameObject, tag: [*c]const u8) bool;
 extern "C" fn _core_turinger_game_object__game_object_get(handle: TuringerGameObject) GameObject;
@@ -409,6 +441,12 @@ pub const CustomData = struct {
         return _core_custom_data__create();
     }
 
+    pub fn from_json(json: []const u8, allocator: std.mem.Allocator) !CustomData {
+        const turing_handle_json = try allocator.dupeZ(u8, json);
+        defer allocator.free(turing_handle_json);
+        return _core_custom_data__from_json(turing_handle_json.ptr);
+    }
+
     pub fn list_add_bool(list: List1, value: bool) void {
         _core_custom_data__list_add_bool(list, value);
     }
@@ -471,6 +509,13 @@ pub const CustomData = struct {
         const turing_handle_value = try allocator.dupeZ(u8, value);
         defer allocator.free(turing_handle_value);
         _core_custom_data__set_string(custom_data, turing_handle_key.ptr, turing_handle_value.ptr);
+    }
+
+    pub fn to_json(custom_data: CustomData, pretty: bool, allocator: std.mem.Allocator) ![]u8 {
+        const turing_result = _core_custom_data__to_json(custom_data, pretty);
+        const turing_str = try allocator.alloc(u8, turing_result);
+        _host_strcpy(turing_str.ptr, turing_result);
+        return turing_str[0 .. turing_result - 1];
     }
 };
 
@@ -543,6 +588,14 @@ pub const CustomObstacleData = struct {
 
 pub const GcHelper = struct {
     opaqu: u64,
+};
+
+pub const GameObject = struct {
+    opaqu: u64,
+};
+
+pub const GcHelper = struct {
+    opaqu: u64,
 
     pub fn create() GCHelper {
         return _core_gc_helper__create();
@@ -561,10 +614,6 @@ pub const GcHelper = struct {
     }
 };
 
-pub const GameObject = struct {
-    opaqu: u64,
-};
-
 pub const IAudioTimeSource = struct {
     opaqu: u64,
 };
@@ -574,6 +623,10 @@ pub const IEnumerator = struct {
 };
 
 pub const IVariableMovementDataProvider = struct {
+    opaqu: u64,
+};
+
+pub const Int32 = struct {
     opaqu: u64,
 };
 
@@ -607,6 +660,10 @@ pub const Log = struct {
         defer allocator.free(turing_handle_msg);
         _core_log__warn(turing_handle_msg.ptr);
     }
+};
+
+pub const Mesh = struct {
+    opaqu: u64,
 };
 
 pub const NoteControllerBase = struct {
@@ -701,6 +758,12 @@ pub const NoteFloorMovement = struct {
     pub fn end_pos_get(self: *const NoteFloorMovement) zalg.Vec3 {
         _core_note_floor_movement__end_pos_get(self);
         return dequeue_vec3();
+    }
+
+    pub fn init_floor(self: *const NoteFloorMovement, world_rotation: f32, beat_time: f32, move_start_offset: zalg.Vec3, move_end_offset: zalg.Vec3) void {
+        const turing_handle_move_start_offset = enqueue_vec3(move_start_offset);
+        const turing_handle_move_end_offset = enqueue_vec3(move_end_offset);
+        _core_note_floor_movement__init(self, world_rotation, beat_time, turing_handle_move_start_offset, turing_handle_move_end_offset);
     }
 
     pub fn inverse_world_rotation_get(self: *const NoteFloorMovement) zalg.Quat {
@@ -1021,6 +1084,12 @@ pub const NoteJump = struct {
         return _core_note_jump__distance_to_player_get(self);
     }
 
+    pub fn init_note(self: *const NoteJump, note_time: f32, world_rotation: f32, move_end_offset: zalg.Vec3, jump_end_offset: zalg.Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) void {
+        const turing_handle_move_end_offset = enqueue_vec3(move_end_offset);
+        const turing_handle_jump_end_offset = enqueue_vec3(jump_end_offset);
+        _core_note_jump__init(self, note_time, world_rotation, turing_handle_move_end_offset, turing_handle_jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation);
+    }
+
     pub fn local_position_get(self: *const NoteJump) zalg.Vec3 {
         _core_note_jump__local_position_get(self);
         return dequeue_vec3();
@@ -1153,6 +1222,131 @@ pub const Transform = struct {
     opaqu: u64,
 };
 
+pub const TuringMesh = struct {
+    opaqu: u64,
+
+    pub fn _mesh_get(self: *const TuringMesh) Mesh {
+        return _core_turing_mesh___mesh_get(self);
+    }
+
+    pub fn _mesh_set(self: *const TuringMesh, value: Mesh) void {
+        _core_turing_mesh___mesh_set(self, value);
+    }
+
+    pub fn clear(self: *const TuringMesh) void {
+        _core_turing_mesh__clear(self);
+    }
+
+    pub fn get_bounds_max_x(self: *const TuringMesh) f32 {
+        return _core_turing_mesh__get_bounds_max_x(self);
+    }
+
+    pub fn get_bounds_max_y(self: *const TuringMesh) f32 {
+        return _core_turing_mesh__get_bounds_max_y(self);
+    }
+
+    pub fn get_bounds_max_z(self: *const TuringMesh) f32 {
+        return _core_turing_mesh__get_bounds_max_z(self);
+    }
+
+    pub fn get_bounds_min_x(self: *const TuringMesh) f32 {
+        return _core_turing_mesh__get_bounds_min_x(self);
+    }
+
+    pub fn get_bounds_min_y(self: *const TuringMesh) f32 {
+        return _core_turing_mesh__get_bounds_min_y(self);
+    }
+
+    pub fn get_bounds_min_z(self: *const TuringMesh) f32 {
+        return _core_turing_mesh__get_bounds_min_z(self);
+    }
+
+    pub fn get_instance_id(self: *const TuringMesh) i32 {
+        return _core_turing_mesh__get_instance_id(self);
+    }
+
+    pub fn get_u_vs(self: *const TuringMesh, channel: i32, allocator: std.mem.Allocator) ![]u32 {
+        const turing_result = _core_turing_mesh__get_u_vs(self, channel);
+        const turing_buf = try allocator.alloc(u32, turing_result);
+        _host_bufcpy(turing_buf.ptr, turing_result);
+        return turing_buf;
+    }
+
+    pub fn get_vertices(self: *const TuringMesh, allocator: std.mem.Allocator) ![]u32 {
+        const turing_result = _core_turing_mesh__get_vertices(self);
+        const turing_buf = try allocator.alloc(u32, turing_result);
+        _host_bufcpy(turing_buf.ptr, turing_result);
+        return turing_buf;
+    }
+
+    pub fn hide_flags_get(self: *const TuringMesh) void {
+        _core_turing_mesh__hide_flags_get(self);
+    }
+
+    pub fn hide_flags_set(self: *const TuringMesh) void {
+        _core_turing_mesh__hide_flags_set(self);
+    }
+
+    pub fn mark_modified(self: *const TuringMesh) void {
+        _core_turing_mesh__mark_modified(self);
+    }
+
+    pub fn name_get(self: *const TuringMesh, allocator: std.mem.Allocator) ![]u8 {
+        const turing_result = _core_turing_mesh__name_get(self);
+        const turing_str = try allocator.alloc(u8, turing_result);
+        _host_strcpy(turing_str.ptr, turing_result);
+        return turing_str[0 .. turing_result - 1];
+    }
+
+    pub fn name_set(self: *const TuringMesh, value: []const u8, allocator: std.mem.Allocator) !void {
+        const turing_handle_value = try allocator.dupeZ(u8, value);
+        defer allocator.free(turing_handle_value);
+        _core_turing_mesh__name_set(self, turing_handle_value.ptr);
+    }
+
+    pub fn optimize(self: *const TuringMesh) void {
+        _core_turing_mesh__optimize(self);
+    }
+
+    pub fn optimize_index_buffers(self: *const TuringMesh) void {
+        _core_turing_mesh__optimize_index_buffers(self);
+    }
+
+    pub fn recalculate_bounds(self: *const TuringMesh) void {
+        _core_turing_mesh__recalculate_bounds(self);
+    }
+
+    pub fn recalculate_normals(self: *const TuringMesh) void {
+        _core_turing_mesh__recalculate_normals(self);
+    }
+
+    pub fn recalculate_tangents(self: *const TuringMesh) void {
+        _core_turing_mesh__recalculate_tangents(self);
+    }
+
+    pub fn set_bounds(self: *const TuringMesh, min_x: f32, min_y: f32, min_z: f32, max_x: f32, max_y: f32, max_z: f32) void {
+        _core_turing_mesh__set_bounds(self, min_x, min_y, min_z, max_x, max_y, max_z);
+    }
+
+    pub fn set_triangles(self: *const TuringMesh, triangles: Int32, submesh: i32, calculate_bounds: bool, base_vertex: i32) void {
+        _core_turing_mesh__set_triangles(self, triangles, submesh, calculate_bounds, base_vertex);
+    }
+
+    pub fn set_u_vs(self: *const TuringMesh, channel: i32, uvs: []const u32) void {
+        _host_u32_enqueue(@intCast(uvs.len));
+        _core_turing_mesh__set_u_vs(self, channel, uvs.ptr);
+    }
+
+    pub fn set_vertices(self: *const TuringMesh, in_vertices: []const u32) void {
+        _host_u32_enqueue(@intCast(in_vertices.len));
+        _core_turing_mesh__set_vertices(self, in_vertices.ptr);
+    }
+
+    pub fn upload_mesh_data(self: *const TuringMesh, mark_no_longer_readable: bool) void {
+        _core_turing_mesh__upload_mesh_data(self, mark_no_longer_readable);
+    }
+};
+
 pub const TuringScriptManager = struct {
     opaqu: u64,
 };
@@ -1178,6 +1372,10 @@ pub const TuringerGameObject = struct {
 
     pub fn add_component(self: *const TuringerGameObject, component_type: Type) Component {
         return _core_turinger_game_object__add_component(self, component_type);
+    }
+
+    pub fn add_or_get_mesh(self: *const TuringerGameObject) TuringMesh {
+        return _core_turinger_game_object__add_or_get_mesh(self);
     }
 
     pub fn broadcast_message(self: *const TuringerGameObject, method_name: []const u8, options: i32, allocator: std.mem.Allocator) !void {

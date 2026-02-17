@@ -68,15 +68,21 @@ struct GcHelper;
 
 struct GameObject;
 
+struct GcHelper;
+
 struct IAudioTimeSource;
 
 struct IEnumerator;
 
 struct IVariableMovementDataProvider;
 
+struct Int32;
+
 struct List1;
 
 struct Log;
+
+struct Mesh;
 
 struct NoteControllerBase;
 
@@ -99,6 +105,8 @@ struct PlayerTransforms;
 struct TaskScheduler;
 
 struct Transform;
+
+struct TuringMesh;
 
 struct TuringScriptManager;
 
@@ -165,6 +173,7 @@ struct CustomData {
 
     
      static CustomData create();
+     static CustomData from_json(std::string_view json);
      static void list_add_bool(List1 list, bool value);
      static void list_add_custom_data(List1 list, CustomData value);
      static void list_add_custom_data_list(List1 list, List1 value);
@@ -177,6 +186,7 @@ struct CustomData {
      static void set_float(CustomData custom_data, std::string_view key, float value);
      static void set_int(CustomData custom_data, std::string_view key, int32_t value);
      static void set_string(CustomData custom_data, std::string_view key, std::string_view value);
+     static std::string to_json(CustomData custom_data, bool pretty);
 
     
     
@@ -234,14 +244,10 @@ struct CustomObstacleData {
 struct GcHelper {
 
     
-     static GCHelper create();
 
     
     
     
-     void dispose();
-     void invalidate_all_handles();
-     void wasm_garbage_collect();
     
 };
 
@@ -253,6 +259,21 @@ struct GameObject {
     
     
     
+    
+};
+
+
+struct GcHelper {
+
+    
+     static GCHelper create();
+
+    
+    
+    
+     void dispose();
+     void invalidate_all_handles();
+     void wasm_garbage_collect();
     
 };
 
@@ -290,6 +311,17 @@ struct IVariableMovementDataProvider {
 };
 
 
+struct Int32 {
+
+    
+
+    
+    
+    
+    
+};
+
+
 struct List1 {
 
     
@@ -308,6 +340,17 @@ struct Log {
      static void debug(std::string_view msg);
      static void info(std::string_view msg);
      static void warn(std::string_view msg);
+
+    
+    
+    
+    
+};
+
+
+struct Mesh {
+
+    
 
     
     
@@ -353,6 +396,7 @@ struct NoteFloorMovement {
      void _world_rotation_set(glm::quat value);
      float distance_to_player_get();
      glm::vec3 end_pos_get();
+     void init_floor(float world_rotation, float beat_time, glm::vec3 move_start_offset, glm::vec3 move_end_offset);
      glm::quat inverse_world_rotation_get();
      glm::vec3 local_position_get();
      glm::vec3 manual_update();
@@ -436,6 +480,7 @@ struct NoteJump {
      void add_note_jump_did_update_progress_event(Action1 value);
      glm::vec3 beat_pos_get();
      float distance_to_player_get();
+     void init_note(float note_time, float world_rotation, glm::vec3 move_end_offset, glm::vec3 jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
      glm::vec3 local_position_get();
      glm::vec3 manual_update();
      glm::vec3 move_vec_get();
@@ -552,6 +597,44 @@ struct Transform {
 };
 
 
+struct TuringMesh {
+
+    
+
+    
+    
+    
+     Mesh _mesh_get();
+     void _mesh_set(Mesh value);
+     void clear();
+     float get_bounds_max_x();
+     float get_bounds_max_y();
+     float get_bounds_max_z();
+     float get_bounds_min_x();
+     float get_bounds_min_y();
+     float get_bounds_min_z();
+     int32_t get_instance_id();
+     std::vector<uint32_t> get_u_vs(int32_t channel);
+     std::vector<uint32_t> get_vertices();
+     void hide_flags_get();
+     void hide_flags_set();
+     void mark_modified();
+     std::string name_get();
+     void name_set(std::string_view value);
+     void optimize();
+     void optimize_index_buffers();
+     void recalculate_bounds();
+     void recalculate_normals();
+     void recalculate_tangents();
+     void set_bounds(float min_x, float min_y, float min_z, float max_x, float max_y, float max_z);
+     void set_triangles(Int32 triangles, int32_t submesh, bool calculate_bounds, int32_t base_vertex);
+     void set_u_vs(int32_t channel, std::span<const uint32_t> uvs);
+     void set_vertices(std::span<const uint32_t> in_vertices);
+     void upload_mesh_data(bool mark_no_longer_readable);
+    
+};
+
+
 struct TuringScriptManager {
 
     
@@ -575,6 +658,7 @@ struct TuringerGameObject {
      bool active_self_get();
      void active_set(bool value);
      Component add_component(Type component_type);
+     TuringMesh add_or_get_mesh();
      void broadcast_message(std::string_view method_name, int32_t options);
      bool compare_tag(std::string_view tag);
      GameObject game_object_get();
@@ -763,6 +847,7 @@ extern "C" {
     
     
     TURING_API_EXPORT CustomData Core_CustomData_create();
+    TURING_API_EXPORT CustomData Core_CustomData_fromJson(const char* json);
     TURING_API_EXPORT void Core_CustomData_listAddBool(List1 list, bool value);
     TURING_API_EXPORT void Core_CustomData_listAddCustomData(List1 list, CustomData value);
     TURING_API_EXPORT void Core_CustomData_listAddCustomDataList(List1 list, List1 value);
@@ -775,6 +860,7 @@ extern "C" {
     TURING_API_EXPORT void Core_CustomData_setFloat(CustomData custom_data, const char* key, float value);
     TURING_API_EXPORT void Core_CustomData_setInt(CustomData custom_data, const char* key, int32_t value);
     TURING_API_EXPORT void Core_CustomData_setString(CustomData custom_data, const char* key, const char* value);
+    TURING_API_EXPORT char* Core_CustomData_toJson(CustomData custom_data, bool pretty);
     
     TURING_API_EXPORT CustomData Core_CustomEventData_customDataGet(uint64_t opaqu);
     TURING_API_EXPORT char* Core_CustomEventData_eventTypeGet(uint64_t opaqu);
@@ -792,6 +878,8 @@ extern "C" {
     TURING_API_EXPORT BeatmapDataItem Core_CustomObstacleData_getCopy(uint64_t opaqu);
     TURING_API_EXPORT Version Core_CustomObstacleData_versionGet(uint64_t opaqu);
     
+    
+    
     TURING_API_EXPORT GCHelper Core_GcHelper_create();
     TURING_API_EXPORT void Core_GcHelper_dispose(uint64_t opaqu);
     TURING_API_EXPORT void Core_GcHelper_invalidateAllHandles(uint64_t opaqu);
@@ -806,6 +894,7 @@ extern "C" {
     TURING_API_EXPORT void Core_Log_debug(const char* msg);
     TURING_API_EXPORT void Core_Log_info(const char* msg);
     TURING_API_EXPORT void Core_Log_warn(const char* msg);
+    
     
     
     TURING_API_EXPORT IAudioTimeSource Core_NoteFloorMovement_AudioTimeSyncControllerGet(uint64_t opaqu);
@@ -827,6 +916,7 @@ extern "C" {
     TURING_API_EXPORT void Core_NoteFloorMovement_WorldRotationSet(uint64_t opaqu, versors value);
     TURING_API_EXPORT float Core_NoteFloorMovement_distanceToPlayerGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteFloorMovement_endPosGet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_NoteFloorMovement_initFloor(uint64_t opaqu, float world_rotation, float beat_time, vec3s move_start_offset, vec3s move_end_offset);
     TURING_API_EXPORT versors Core_NoteFloorMovement_inverseWorldRotationGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteFloorMovement_localPositionGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteFloorMovement_manualUpdate(uint64_t opaqu);
@@ -900,6 +990,7 @@ extern "C" {
     TURING_API_EXPORT void Core_NoteJump_addNoteJumpDidUpdateProgressEvent(uint64_t opaqu, Action1 value);
     TURING_API_EXPORT vec3s Core_NoteJump_beatPosGet(uint64_t opaqu);
     TURING_API_EXPORT float Core_NoteJump_distanceToPlayerGet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_NoteJump_initNote(uint64_t opaqu, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
     TURING_API_EXPORT vec3s Core_NoteJump_localPositionGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteJump_manualUpdate(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteJump_moveVecGet(uint64_t opaqu);
@@ -933,12 +1024,41 @@ extern "C" {
     TURING_API_EXPORT void Core_TaskScheduler_dispose(uint64_t opaqu);
     
     
+    TURING_API_EXPORT Mesh Core_TuringMesh_MeshGet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_MeshSet(uint64_t opaqu, Mesh value);
+    TURING_API_EXPORT void Core_TuringMesh_clear(uint64_t opaqu);
+    TURING_API_EXPORT float Core_TuringMesh_getBoundsMaxX(uint64_t opaqu);
+    TURING_API_EXPORT float Core_TuringMesh_getBoundsMaxY(uint64_t opaqu);
+    TURING_API_EXPORT float Core_TuringMesh_getBoundsMaxZ(uint64_t opaqu);
+    TURING_API_EXPORT float Core_TuringMesh_getBoundsMinX(uint64_t opaqu);
+    TURING_API_EXPORT float Core_TuringMesh_getBoundsMinY(uint64_t opaqu);
+    TURING_API_EXPORT float Core_TuringMesh_getBoundsMinZ(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_TuringMesh_getInstanceId(uint64_t opaqu);
+    TURING_API_EXPORT U32Buffer Core_TuringMesh_getUVs(uint64_t opaqu, int32_t channel);
+    TURING_API_EXPORT U32Buffer Core_TuringMesh_getVertices(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_hideFlagsGet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_hideFlagsSet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_markModified(uint64_t opaqu);
+    TURING_API_EXPORT char* Core_TuringMesh_nameGet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_nameSet(uint64_t opaqu, const char* value);
+    TURING_API_EXPORT void Core_TuringMesh_optimize(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_optimizeIndexBuffers(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_recalculateBounds(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_recalculateNormals(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_recalculateTangents(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_setBounds(uint64_t opaqu, float min_x, float min_y, float min_z, float max_x, float max_y, float max_z);
+    TURING_API_EXPORT void Core_TuringMesh_setTriangles(uint64_t opaqu, Int32 triangles, int32_t submesh, bool calculate_bounds, int32_t base_vertex);
+    TURING_API_EXPORT void Core_TuringMesh_setUVs(uint64_t opaqu, int32_t channel, U32Buffer uvs);
+    TURING_API_EXPORT void Core_TuringMesh_setVertices(uint64_t opaqu, U32Buffer in_vertices);
+    TURING_API_EXPORT void Core_TuringMesh_uploadMeshData(uint64_t opaqu, bool mark_no_longer_readable);
+    
     
     TURING_API_EXPORT bool Core_TuringerGameObject_activeGet(uint64_t opaqu);
     TURING_API_EXPORT bool Core_TuringerGameObject_activeInHierarchyGet(uint64_t opaqu);
     TURING_API_EXPORT bool Core_TuringerGameObject_activeSelfGet(uint64_t opaqu);
     TURING_API_EXPORT void Core_TuringerGameObject_activeSet(uint64_t opaqu, bool value);
     TURING_API_EXPORT Component Core_TuringerGameObject_addComponent(uint64_t opaqu, Type component_type);
+    TURING_API_EXPORT TuringMesh Core_TuringerGameObject_addOrGetMesh(uint64_t opaqu);
     TURING_API_EXPORT void Core_TuringerGameObject_broadcastMessage(uint64_t opaqu, const char* method_name, int32_t options);
     TURING_API_EXPORT bool Core_TuringerGameObject_compareTag(uint64_t opaqu, const char* tag);
     TURING_API_EXPORT GameObject Core_TuringerGameObject_gameObjectGet(uint64_t opaqu);

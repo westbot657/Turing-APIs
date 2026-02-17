@@ -85,6 +85,11 @@ typedef struct GameObject {
 } GameObject;
 
 
+typedef struct GcHelper {
+    uint64_t handle;
+} GcHelper;
+
+
 typedef struct IAudioTimeSource {
     uint64_t handle;
 } IAudioTimeSource;
@@ -100,9 +105,19 @@ typedef struct IVariableMovementDataProvider {
 } IVariableMovementDataProvider;
 
 
+typedef struct Int32 {
+    uint64_t handle;
+} Int32;
+
+
 typedef struct List1 {
     uint64_t handle;
 } List1;
+
+
+typedef struct Mesh {
+    uint64_t handle;
+} Mesh;
 
 
 typedef struct NoteControllerBase {
@@ -155,6 +170,11 @@ typedef struct Transform {
 } Transform;
 
 
+typedef struct TuringMesh {
+    uint64_t handle;
+} TuringMesh;
+
+
 typedef struct TuringScriptManager {
     uint64_t handle;
 } TuringScriptManager;
@@ -193,6 +213,7 @@ typedef struct Xr {
 
 // // Classes // //
 CustomData Core_CustomData_create();
+CustomData Core_CustomData_fromJson(const char* json);
 void Core_CustomData_listAddBool(List1 list, bool value);
 void Core_CustomData_listAddCustomData(List1 list, CustomData value);
 void Core_CustomData_listAddCustomDataList(List1 list, List1 value);
@@ -205,6 +226,7 @@ void Core_CustomData_setCustomDataList(CustomData custom_data, const char* key, 
 void Core_CustomData_setFloat(CustomData custom_data, const char* key, float value);
 void Core_CustomData_setInt(CustomData custom_data, const char* key, int32_t value);
 void Core_CustomData_setString(CustomData custom_data, const char* key, const char* value);
+char* Core_CustomData_toJson(CustomData custom_data, bool pretty);
 CustomData Core_CustomEventData_customDataGet(CustomEventData self);
 char* Core_CustomEventData_eventTypeGet(CustomEventData self);
 BeatmapDataItem Core_CustomEventData_getCopy(CustomEventData self);
@@ -245,6 +267,7 @@ versors Core_NoteFloorMovement_WorldRotationGet(NoteFloorMovement self);
 void Core_NoteFloorMovement_WorldRotationSet(NoteFloorMovement self, versors value);
 float Core_NoteFloorMovement_distanceToPlayerGet(NoteFloorMovement self);
 vec3s Core_NoteFloorMovement_endPosGet(NoteFloorMovement self);
+void Core_NoteFloorMovement_initFloor(NoteFloorMovement self, float world_rotation, float beat_time, vec3s move_start_offset, vec3s move_end_offset);
 versors Core_NoteFloorMovement_inverseWorldRotationGet(NoteFloorMovement self);
 vec3s Core_NoteFloorMovement_localPositionGet(NoteFloorMovement self);
 vec3s Core_NoteFloorMovement_manualUpdate(NoteFloorMovement self);
@@ -317,6 +340,7 @@ void Core_NoteJump_addNoteJumpDidStartEvent(NoteJump self, Action value);
 void Core_NoteJump_addNoteJumpDidUpdateProgressEvent(NoteJump self, Action1 value);
 vec3s Core_NoteJump_beatPosGet(NoteJump self);
 float Core_NoteJump_distanceToPlayerGet(NoteJump self);
+void Core_NoteJump_initNote(NoteJump self, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
 vec3s Core_NoteJump_localPositionGet(NoteJump self);
 vec3s Core_NoteJump_manualUpdate(NoteJump self);
 vec3s Core_NoteJump_moveVecGet(NoteJump self);
@@ -341,11 +365,39 @@ ObstacleController Core_NoteManager_getObstacleControllerFromCustom(CustomObstac
 float Core_NoteManager_timeToBeat(float time);
 void Core_TaskScheduler_schedule(Action task);
 void Core_TaskScheduler_dispose(TaskScheduler self);
+Mesh Core_TuringMesh_MeshGet(TuringMesh self);
+void Core_TuringMesh_MeshSet(TuringMesh self, Mesh value);
+void Core_TuringMesh_clear(TuringMesh self);
+float Core_TuringMesh_getBoundsMaxX(TuringMesh self);
+float Core_TuringMesh_getBoundsMaxY(TuringMesh self);
+float Core_TuringMesh_getBoundsMaxZ(TuringMesh self);
+float Core_TuringMesh_getBoundsMinX(TuringMesh self);
+float Core_TuringMesh_getBoundsMinY(TuringMesh self);
+float Core_TuringMesh_getBoundsMinZ(TuringMesh self);
+int32_t Core_TuringMesh_getInstanceId(TuringMesh self);
+U32Buffer Core_TuringMesh_getUVs(TuringMesh self, int32_t channel);
+U32Buffer Core_TuringMesh_getVertices(TuringMesh self);
+void Core_TuringMesh_hideFlagsGet(TuringMesh self);
+void Core_TuringMesh_hideFlagsSet(TuringMesh self);
+void Core_TuringMesh_markModified(TuringMesh self);
+char* Core_TuringMesh_nameGet(TuringMesh self);
+void Core_TuringMesh_nameSet(TuringMesh self, const char* value);
+void Core_TuringMesh_optimize(TuringMesh self);
+void Core_TuringMesh_optimizeIndexBuffers(TuringMesh self);
+void Core_TuringMesh_recalculateBounds(TuringMesh self);
+void Core_TuringMesh_recalculateNormals(TuringMesh self);
+void Core_TuringMesh_recalculateTangents(TuringMesh self);
+void Core_TuringMesh_setBounds(TuringMesh self, float min_x, float min_y, float min_z, float max_x, float max_y, float max_z);
+void Core_TuringMesh_setTriangles(TuringMesh self, Int32 triangles, int32_t submesh, bool calculate_bounds, int32_t base_vertex);
+void Core_TuringMesh_setUVs(TuringMesh self, int32_t channel, U32Buffer uvs);
+void Core_TuringMesh_setVertices(TuringMesh self, U32Buffer in_vertices);
+void Core_TuringMesh_uploadMeshData(TuringMesh self, bool mark_no_longer_readable);
 bool Core_TuringerGameObject_activeGet(TuringerGameObject self);
 bool Core_TuringerGameObject_activeInHierarchyGet(TuringerGameObject self);
 bool Core_TuringerGameObject_activeSelfGet(TuringerGameObject self);
 void Core_TuringerGameObject_activeSet(TuringerGameObject self, bool value);
 Component Core_TuringerGameObject_addComponent(TuringerGameObject self, Type component_type);
+TuringMesh Core_TuringerGameObject_addOrGetMesh(TuringerGameObject self);
 void Core_TuringerGameObject_broadcastMessage(TuringerGameObject self, const char* method_name, int32_t options);
 bool Core_TuringerGameObject_compareTag(TuringerGameObject self, const char* tag);
 GameObject Core_TuringerGameObject_gameObjectGet(TuringerGameObject self);

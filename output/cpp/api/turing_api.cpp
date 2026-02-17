@@ -111,6 +111,11 @@ CustomData Core_CustomData_create() {
     return _core_custom_data__create();
 }
 
+CustomData Core_CustomData_fromJson(const char* json) {
+    
+    return _core_custom_data__from_json(json);
+}
+
 void Core_CustomData_listAddBool(List1 list, bool value) {
     
     _core_custom_data__list_add_bool(list, value);
@@ -169,6 +174,14 @@ void Core_CustomData_setInt(CustomData custom_data, const char* key, int32_t val
 void Core_CustomData_setString(CustomData custom_data, const char* key, const char* value) {
     
     _core_custom_data__set_string(custom_data, key, value);
+}
+
+char* Core_CustomData_toJson(CustomData custom_data, bool pretty) {
+    
+    uint32_t turing_result = _core_custom_data__to_json(custom_data, pretty);
+    char* turing_str = (char*) malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
 }
 
 CustomData Core_CustomEventData_customDataGet(CustomEventData self) {
@@ -385,6 +398,15 @@ vec3s Core_NoteFloorMovement_endPosGet(NoteFloorMovement self) {
     
     _core_note_floor_movement__end_pos_get(self);
     return alg::__dequeue_vec3();
+}
+
+void Core_NoteFloorMovement_initFloor(NoteFloorMovement self
+, float world_rotation
+, float beat_time
+, vec3s move_start_offset
+, vec3s move_end_offset) {
+    uint32_t turing_handle_move_start_offset = alg::__enqueue_vec3(move_start_offset);uint32_t turing_handle_move_end_offset = alg::__enqueue_vec3(move_end_offset);
+    _core_note_floor_movement__init(self, world_rotation, beat_time, turing_handle_move_start_offset, turing_handle_move_end_offset);
 }
 
 versors Core_NoteFloorMovement_inverseWorldRotationGet(NoteFloorMovement self) {
@@ -795,6 +817,20 @@ float Core_NoteJump_distanceToPlayerGet(NoteJump self) {
     return _core_note_jump__distance_to_player_get(self);
 }
 
+void Core_NoteJump_initNote(NoteJump self
+, float note_time
+, float world_rotation
+, vec3s move_end_offset
+, vec3s jump_end_offset
+, float gravity_base
+, float flip_y_side
+, float end_rotation
+, bool rotate_towards_player
+, bool use_random_rotation) {
+    uint32_t turing_handle_move_end_offset = alg::__enqueue_vec3(move_end_offset);uint32_t turing_handle_jump_end_offset = alg::__enqueue_vec3(jump_end_offset);
+    _core_note_jump__init(self, note_time, world_rotation, turing_handle_move_end_offset, turing_handle_jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation);
+}
+
 vec3s Core_NoteJump_localPositionGet(NoteJump self) {
     
     _core_note_jump__local_position_get(self);
@@ -924,6 +960,167 @@ void Core_TaskScheduler_dispose(TaskScheduler self) {
     _core_task_scheduler__dispose(self);
 }
 
+Mesh Core_TuringMesh_MeshGet(TuringMesh self) {
+    
+    return _core_turing_mesh___mesh_get(self);
+}
+
+void Core_TuringMesh_MeshSet(TuringMesh self
+, Mesh value) {
+    
+    _core_turing_mesh___mesh_set(self, value);
+}
+
+void Core_TuringMesh_clear(TuringMesh self) {
+    
+    _core_turing_mesh__clear(self);
+}
+
+float Core_TuringMesh_getBoundsMaxX(TuringMesh self) {
+    
+    return _core_turing_mesh__get_bounds_max_x(self);
+}
+
+float Core_TuringMesh_getBoundsMaxY(TuringMesh self) {
+    
+    return _core_turing_mesh__get_bounds_max_y(self);
+}
+
+float Core_TuringMesh_getBoundsMaxZ(TuringMesh self) {
+    
+    return _core_turing_mesh__get_bounds_max_z(self);
+}
+
+float Core_TuringMesh_getBoundsMinX(TuringMesh self) {
+    
+    return _core_turing_mesh__get_bounds_min_x(self);
+}
+
+float Core_TuringMesh_getBoundsMinY(TuringMesh self) {
+    
+    return _core_turing_mesh__get_bounds_min_y(self);
+}
+
+float Core_TuringMesh_getBoundsMinZ(TuringMesh self) {
+    
+    return _core_turing_mesh__get_bounds_min_z(self);
+}
+
+int32_t Core_TuringMesh_getInstanceId(TuringMesh self) {
+    
+    return _core_turing_mesh__get_instance_id(self);
+}
+
+U32Buffer Core_TuringMesh_getUVs(TuringMesh self
+, int32_t channel) {
+    
+    uint32_t turing_result = _core_turing_mesh__get_u_vs(self, channel);
+    uint32_t turing_buf = (uint32_t) malloc((size_t) turing_result * 4);
+    _host_bufcpy(turing_buf, turing_result);
+    return (U32Buffer){ .data=turing_buf, .length=turing_result };
+}
+
+U32Buffer Core_TuringMesh_getVertices(TuringMesh self) {
+    
+    uint32_t turing_result = _core_turing_mesh__get_vertices(self);
+    uint32_t turing_buf = (uint32_t) malloc((size_t) turing_result * 4);
+    _host_bufcpy(turing_buf, turing_result);
+    return (U32Buffer){ .data=turing_buf, .length=turing_result };
+}
+
+void Core_TuringMesh_hideFlagsGet(TuringMesh self) {
+    
+    _core_turing_mesh__hide_flags_get(self);
+}
+
+void Core_TuringMesh_hideFlagsSet(TuringMesh self) {
+    
+    _core_turing_mesh__hide_flags_set(self);
+}
+
+void Core_TuringMesh_markModified(TuringMesh self) {
+    
+    _core_turing_mesh__mark_modified(self);
+}
+
+char* Core_TuringMesh_nameGet(TuringMesh self) {
+    
+    uint32_t turing_result = _core_turing_mesh__name_get(self);
+    char* turing_str = (char*) malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+}
+
+void Core_TuringMesh_nameSet(TuringMesh self
+, const char* value) {
+    
+    _core_turing_mesh__name_set(self, value);
+}
+
+void Core_TuringMesh_optimize(TuringMesh self) {
+    
+    _core_turing_mesh__optimize(self);
+}
+
+void Core_TuringMesh_optimizeIndexBuffers(TuringMesh self) {
+    
+    _core_turing_mesh__optimize_index_buffers(self);
+}
+
+void Core_TuringMesh_recalculateBounds(TuringMesh self) {
+    
+    _core_turing_mesh__recalculate_bounds(self);
+}
+
+void Core_TuringMesh_recalculateNormals(TuringMesh self) {
+    
+    _core_turing_mesh__recalculate_normals(self);
+}
+
+void Core_TuringMesh_recalculateTangents(TuringMesh self) {
+    
+    _core_turing_mesh__recalculate_tangents(self);
+}
+
+void Core_TuringMesh_setBounds(TuringMesh self
+, float min_x
+, float min_y
+, float min_z
+, float max_x
+, float max_y
+, float max_z) {
+    
+    _core_turing_mesh__set_bounds(self, min_x, min_y, min_z, max_x, max_y, max_z);
+}
+
+void Core_TuringMesh_setTriangles(TuringMesh self
+, Int32 triangles
+, int32_t submesh
+, bool calculate_bounds
+, int32_t base_vertex) {
+    
+    _core_turing_mesh__set_triangles(self, triangles, submesh, calculate_bounds, base_vertex);
+}
+
+void Core_TuringMesh_setUVs(TuringMesh self
+, int32_t channel
+, U32Buffer uvs) {
+    _host_u32_enqueue(uvs.length);
+    _core_turing_mesh__set_u_vs(self, channel, uvs.data);
+}
+
+void Core_TuringMesh_setVertices(TuringMesh self
+, U32Buffer in_vertices) {
+    _host_u32_enqueue(in_vertices.length);
+    _core_turing_mesh__set_vertices(self, in_vertices.data);
+}
+
+void Core_TuringMesh_uploadMeshData(TuringMesh self
+, bool mark_no_longer_readable) {
+    
+    _core_turing_mesh__upload_mesh_data(self, mark_no_longer_readable);
+}
+
 bool Core_TuringerGameObject_activeGet(TuringerGameObject self) {
     
     return _core_turinger_game_object__active_get(self);
@@ -949,6 +1146,11 @@ Component Core_TuringerGameObject_addComponent(TuringerGameObject self
 , Type component_type) {
     
     return _core_turinger_game_object__add_component(self, component_type);
+}
+
+TuringMesh Core_TuringerGameObject_addOrGetMesh(TuringerGameObject self) {
+    
+    return _core_turinger_game_object__add_or_get_mesh(self);
 }
 
 void Core_TuringerGameObject_broadcastMessage(TuringerGameObject self
