@@ -248,6 +248,196 @@ Version Core_CustomObstacleData_versionGet(CustomObstacleData self) {
 
 
 
+Component Core_GameObject_addComponent(GameObject self
+, Type component_type) {
+    
+    return _core_game_object__add_component(self, component_type);
+}
+
+TuringMesh Core_GameObject_addOrGetMesh(GameObject self) {
+    
+    return _core_game_object__add_or_get_mesh(self);
+}
+
+void Core_GameObject_broadcastMessage(GameObject self
+, const char* method_name
+, int32_t options) {
+    
+    _core_game_object__broadcast_message(self, method_name, options);
+}
+
+bool Core_GameObject_compareTag(GameObject self
+, const char* tag) {
+    
+    return _core_game_object__compare_tag(self, tag);
+}
+
+bool Core_GameObject_getActive(GameObject self) {
+    
+    return _core_game_object__get_active(self);
+}
+
+bool Core_GameObject_getActiveInHierarchy(GameObject self) {
+    
+    return _core_game_object__get_active_in_hierarchy(self);
+}
+
+bool Core_GameObject_getActiveSelf(GameObject self) {
+    
+    return _core_game_object__get_active_self(self);
+}
+
+Component Core_GameObject_getComponentAtIndex(GameObject self
+, int32_t index) {
+    
+    return _core_game_object__get_component_at_index(self, index);
+}
+
+Component Core_GameObject_getComponentByName(GameObject self
+, const char* cs_type) {
+    
+    return _core_game_object__get_component_by_name(self, cs_type);
+}
+
+Component Core_GameObject_getComponentByType(GameObject self
+, Type cs_type) {
+    
+    return _core_game_object__get_component_by_type(self, cs_type);
+}
+
+int32_t Core_GameObject_getComponentCount(GameObject self) {
+    
+    return _core_game_object__get_component_count(self);
+}
+
+Component Core_GameObject_getComponentInChildrenByType(GameObject self
+, Type cs_type
+, bool include_inactive) {
+    
+    return _core_game_object__get_component_in_children_by_type(self, cs_type, include_inactive);
+}
+
+Component Core_GameObject_getComponentInParentByType(GameObject self
+, Type cs_type
+, bool include_inactive) {
+    
+    return _core_game_object__get_component_in_parent_by_type(self, cs_type, include_inactive);
+}
+
+int32_t Core_GameObject_getComponentIndex(GameObject self
+, Component component) {
+    
+    return _core_game_object__get_component_index(self, component);
+}
+
+int32_t Core_GameObject_getHideFlags(GameObject self) {
+    
+    return _core_game_object__get_hide_flags(self);
+}
+
+int32_t Core_GameObject_getInstanceId(GameObject self) {
+    
+    return _core_game_object__get_instance_id(self);
+}
+
+bool Core_GameObject_getIsStatic(GameObject self) {
+    
+    return _core_game_object__get_is_static(self);
+}
+
+int32_t Core_GameObject_getLayer(GameObject self) {
+    
+    return _core_game_object__get_layer(self);
+}
+
+char* Core_GameObject_getName(GameObject self) {
+    
+    uint32_t turing_result = _core_game_object__get_name(self);
+    char* turing_str = malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+}
+
+uint64_t Core_GameObject_getSceneCullingMask(GameObject self) {
+    
+    return _core_game_object__get_scene_culling_mask(self);
+}
+
+char* Core_GameObject_getTag(GameObject self) {
+    
+    uint32_t turing_result = _core_game_object__get_tag(self);
+    char* turing_str = malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+}
+
+Transform Core_GameObject_getTransform(GameObject self) {
+    
+    return _core_game_object__get_transform(self);
+}
+
+void Core_GameObject_sendMessage(GameObject self
+, const char* method_name
+, int32_t options) {
+    
+    _core_game_object__send_message(self, method_name, options);
+}
+
+void Core_GameObject_sendMessageUpwards(GameObject self
+, const char* method_name
+, int32_t options) {
+    
+    _core_game_object__send_message_upwards(self, method_name, options);
+}
+
+void Core_GameObject_setActive(GameObject self
+, bool value) {
+    
+    _core_game_object__set_active(self, value);
+}
+
+void Core_GameObject_setActiveProp(GameObject self
+, bool value) {
+    
+    _core_game_object__set_active_prop(self, value);
+}
+
+void Core_GameObject_setActiveRecursively(GameObject self
+, bool state) {
+    
+    _core_game_object__set_active_recursively(self, state);
+}
+
+void Core_GameObject_setHideFlags(GameObject self
+, int32_t value) {
+    
+    _core_game_object__set_hide_flags(self, value);
+}
+
+void Core_GameObject_setIsStatic(GameObject self
+, bool value) {
+    
+    _core_game_object__set_is_static(self, value);
+}
+
+void Core_GameObject_setLayer(GameObject self
+, int32_t value) {
+    
+    _core_game_object__set_layer(self, value);
+}
+
+void Core_GameObject_setName(GameObject self
+, const char* value) {
+    
+    _core_game_object__set_name(self, value);
+}
+
+void Core_GameObject_setTag(GameObject self
+, const char* value) {
+    
+    _core_game_object__set_tag(self, value);
+}
+
 
 GCHelper Core_GcHelper_create() {
     
@@ -300,6 +490,8 @@ void Core_Log_warn(const char* msg) {
     
     _core_log__warn(msg);
 }
+
+
 
 
 
@@ -835,7 +1027,7 @@ float Core_NoteJump_distanceToPlayerGet(NoteJump self) {
     return _core_note_jump__distance_to_player_get(self);
 }
 
-void Core_NoteJump_initNote(NoteJump self
+void Core_NoteJump_initJump(NoteJump self
 , float note_time
 , float world_rotation
 , vec3s move_end_offset
@@ -993,6 +1185,468 @@ void Core_TaskScheduler_dispose(TaskScheduler self) {
 }
 
 
+
+void Core_Transform_broadcastMessage(Transform self
+, const char* method_name
+, Object parameter
+, int32_t options) {
+    
+    _core_transform__broadcast_message(self, method_name, parameter, options);
+}
+
+bool Core_Transform_compareTag(Transform self
+, const char* tag) {
+    
+    return _core_transform__compare_tag(self, tag);
+}
+
+void Core_Transform_detachChildren(Transform self) {
+    
+    _core_transform__detach_children(self);
+}
+
+Transform Core_Transform_find(Transform self
+, const char* n) {
+    
+    return _core_transform__find(self, n);
+}
+
+Transform Core_Transform_findChild(Transform self
+, const char* n) {
+    
+    return _core_transform__find_child(self, n);
+}
+
+Transform Core_Transform_getChild(Transform self
+, int32_t index) {
+    
+    return _core_transform__get_child(self, index);
+}
+
+int32_t Core_Transform_getChildCount(Transform self) {
+    
+    return _core_transform__get_child_count(self);
+}
+
+int32_t Core_Transform_getChildCountProp(Transform self) {
+    
+    return _core_transform__get_child_count_prop(self);
+}
+
+Component Core_Transform_getComponentByName(Transform self
+, const char* cs_type) {
+    
+    return _core_transform__get_component_by_name(self, cs_type);
+}
+
+Component Core_Transform_getComponentByType(Transform self
+, Type cs_type) {
+    
+    return _core_transform__get_component_by_type(self, cs_type);
+}
+
+Component Core_Transform_getComponentInChildrenByType(Transform self
+, Type t
+, bool include_inactive) {
+    
+    return _core_transform__get_component_in_children_by_type(self, t, include_inactive);
+}
+
+Component Core_Transform_getComponentInParentByType(Transform self
+, Type t
+, bool include_inactive) {
+    
+    return _core_transform__get_component_in_parent_by_type(self, t, include_inactive);
+}
+
+int32_t Core_Transform_getComponentIndex(Transform self) {
+    
+    return _core_transform__get_component_index(self);
+}
+
+IEnumerator Core_Transform_getEnumerator(Transform self) {
+    
+    return _core_transform__get_enumerator(self);
+}
+
+vec3s Core_Transform_getEulerAngles(Transform self) {
+    
+    _core_transform__get_euler_angles(self);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_getForward(Transform self) {
+    
+    _core_transform__get_forward(self);
+    return __dequeue_vec3();
+}
+
+GameObject Core_Transform_getGameObject(Transform self) {
+    
+    return _core_transform__get_game_object(self);
+}
+
+bool Core_Transform_getHasChanged(Transform self) {
+    
+    return _core_transform__get_has_changed(self);
+}
+
+int32_t Core_Transform_getHideFlags(Transform self) {
+    
+    return _core_transform__get_hide_flags(self);
+}
+
+int32_t Core_Transform_getHierarchyCapacity(Transform self) {
+    
+    return _core_transform__get_hierarchy_capacity(self);
+}
+
+int32_t Core_Transform_getHierarchyCount(Transform self) {
+    
+    return _core_transform__get_hierarchy_count(self);
+}
+
+int32_t Core_Transform_getInstanceId(Transform self) {
+    
+    return _core_transform__get_instance_id(self);
+}
+
+vec3s Core_Transform_getLocalEulerAngles(Transform self) {
+    
+    _core_transform__get_local_euler_angles(self);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_getLocalPosition(Transform self) {
+    
+    _core_transform__get_local_position(self);
+    return __dequeue_vec3();
+}
+
+versors Core_Transform_getLocalRotation(Transform self) {
+    
+    _core_transform__get_local_rotation(self);
+    return __dequeue_quat();
+}
+
+vec3s Core_Transform_getLocalScale(Transform self) {
+    
+    _core_transform__get_local_scale(self);
+    return __dequeue_vec3();
+}
+
+mat4s Core_Transform_getLocalToWorldMatrix(Transform self) {
+    
+    _core_transform__get_local_to_world_matrix(self);
+    return __dequeue_mat4();
+}
+
+vec3s Core_Transform_getLossyScale(Transform self) {
+    
+    _core_transform__get_lossy_scale(self);
+    return __dequeue_vec3();
+}
+
+char* Core_Transform_getName(Transform self) {
+    
+    uint32_t turing_result = _core_transform__get_name(self);
+    char* turing_str = malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+}
+
+Transform Core_Transform_getParent(Transform self) {
+    
+    return _core_transform__get_parent(self);
+}
+
+vec3s Core_Transform_getPosition(Transform self) {
+    
+    _core_transform__get_position(self);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_getRight(Transform self) {
+    
+    _core_transform__get_right(self);
+    return __dequeue_vec3();
+}
+
+Transform Core_Transform_getRoot(Transform self) {
+    
+    return _core_transform__get_root(self);
+}
+
+versors Core_Transform_getRotation(Transform self) {
+    
+    _core_transform__get_rotation(self);
+    return __dequeue_quat();
+}
+
+int32_t Core_Transform_getSiblingIndex(Transform self) {
+    
+    return _core_transform__get_sibling_index(self);
+}
+
+char* Core_Transform_getTag(Transform self) {
+    
+    uint32_t turing_result = _core_transform__get_tag(self);
+    char* turing_str = malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+}
+
+vec3s Core_Transform_getUp(Transform self) {
+    
+    _core_transform__get_up(self);
+    return __dequeue_vec3();
+}
+
+mat4s Core_Transform_getWorldToLocalMatrix(Transform self) {
+    
+    _core_transform__get_world_to_local_matrix(self);
+    return __dequeue_mat4();
+}
+
+vec3s Core_Transform_inverseTransformDirection(Transform self
+, vec3s direction) {
+    uint32_t turing_handle_direction = __enqueue_vec3(direction);
+    _core_transform__inverse_transform_direction(self, turing_handle_direction);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_inverseTransformPoint(Transform self
+, vec3s position) {
+    uint32_t turing_handle_position = __enqueue_vec3(position);
+    _core_transform__inverse_transform_point(self, turing_handle_position);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_inverseTransformVector(Transform self
+, vec3s vector) {
+    uint32_t turing_handle_vector = __enqueue_vec3(vector);
+    _core_transform__inverse_transform_vector(self, turing_handle_vector);
+    return __dequeue_vec3();
+}
+
+bool Core_Transform_isChildOf(Transform self
+, Transform parent) {
+    
+    return _core_transform__is_child_of(self, parent);
+}
+
+void Core_Transform_lookAt(Transform self
+, Transform target
+, vec3s world_up) {
+    uint32_t turing_handle_world_up = __enqueue_vec3(world_up);
+    _core_transform__look_at(self, target, turing_handle_world_up);
+}
+
+void Core_Transform_rotate(Transform self
+, vec3s eulers) {
+    uint32_t turing_handle_eulers = __enqueue_vec3(eulers);
+    _core_transform__rotate(self, turing_handle_eulers);
+}
+
+void Core_Transform_rotateAround(Transform self
+, vec3s point
+, vec3s axis
+, float angle) {
+    uint32_t turing_handle_point = __enqueue_vec3(point);uint32_t turing_handle_axis = __enqueue_vec3(axis);
+    _core_transform__rotate_around(self, turing_handle_point, turing_handle_axis, angle);
+}
+
+void Core_Transform_rotateAroundLocal(Transform self
+, vec3s axis
+, float angle) {
+    uint32_t turing_handle_axis = __enqueue_vec3(axis);
+    _core_transform__rotate_around_local(self, turing_handle_axis, angle);
+}
+
+void Core_Transform_rotateRelative(Transform self
+, vec3s eulers
+, int32_t relative_to) {
+    uint32_t turing_handle_eulers = __enqueue_vec3(eulers);
+    _core_transform__rotate_relative(self, turing_handle_eulers, relative_to);
+}
+
+void Core_Transform_sendMessage(Transform self
+, const char* method_name
+, Object value
+, int32_t options) {
+    
+    _core_transform__send_message(self, method_name, value, options);
+}
+
+void Core_Transform_sendMessageUpwards(Transform self
+, const char* method_name
+, Object value
+, int32_t options) {
+    
+    _core_transform__send_message_upwards(self, method_name, value, options);
+}
+
+void Core_Transform_setAsFirstSibling(Transform self) {
+    
+    _core_transform__set_as_first_sibling(self);
+}
+
+void Core_Transform_setAsLastSibling(Transform self) {
+    
+    _core_transform__set_as_last_sibling(self);
+}
+
+void Core_Transform_setEulerAngles(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_euler_angles(self, turing_handle_value);
+}
+
+void Core_Transform_setForward(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_forward(self, turing_handle_value);
+}
+
+void Core_Transform_setHasChanged(Transform self
+, bool value) {
+    
+    _core_transform__set_has_changed(self, value);
+}
+
+void Core_Transform_setHideFlags(Transform self
+, int32_t value) {
+    
+    _core_transform__set_hide_flags(self, value);
+}
+
+void Core_Transform_setHierarchyCapacity(Transform self
+, int32_t value) {
+    
+    _core_transform__set_hierarchy_capacity(self, value);
+}
+
+void Core_Transform_setLocalEulerAngles(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_local_euler_angles(self, turing_handle_value);
+}
+
+void Core_Transform_setLocalPosition(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_local_position(self, turing_handle_value);
+}
+
+void Core_Transform_setLocalPositionAndRotation(Transform self
+, vec3s local_position
+, versors local_rotation) {
+    uint32_t turing_handle_local_position = __enqueue_vec3(local_position);uint32_t turing_handle_local_rotation = __enqueue_quat(local_rotation);
+    _core_transform__set_local_position_and_rotation(self, turing_handle_local_position, turing_handle_local_rotation);
+}
+
+void Core_Transform_setLocalRotation(Transform self
+, versors value) {
+    uint32_t turing_handle_value = __enqueue_quat(value);
+    _core_transform__set_local_rotation(self, turing_handle_value);
+}
+
+void Core_Transform_setLocalScale(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_local_scale(self, turing_handle_value);
+}
+
+void Core_Transform_setName(Transform self
+, const char* value) {
+    
+    _core_transform__set_name(self, value);
+}
+
+void Core_Transform_setParent(Transform self
+, Transform parent
+, bool world_position_stays) {
+    
+    _core_transform__set_parent(self, parent, world_position_stays);
+}
+
+void Core_Transform_setPosition(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_position(self, turing_handle_value);
+}
+
+void Core_Transform_setPositionAndRotation(Transform self
+, vec3s position
+, versors rotation) {
+    uint32_t turing_handle_position = __enqueue_vec3(position);uint32_t turing_handle_rotation = __enqueue_quat(rotation);
+    _core_transform__set_position_and_rotation(self, turing_handle_position, turing_handle_rotation);
+}
+
+void Core_Transform_setRight(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_right(self, turing_handle_value);
+}
+
+void Core_Transform_setRotation(Transform self
+, versors value) {
+    uint32_t turing_handle_value = __enqueue_quat(value);
+    _core_transform__set_rotation(self, turing_handle_value);
+}
+
+void Core_Transform_setSiblingIndex(Transform self
+, int32_t index) {
+    
+    _core_transform__set_sibling_index(self, index);
+}
+
+void Core_Transform_setTag(Transform self
+, const char* value) {
+    
+    _core_transform__set_tag(self, value);
+}
+
+void Core_Transform_setUp(Transform self
+, vec3s value) {
+    uint32_t turing_handle_value = __enqueue_vec3(value);
+    _core_transform__set_up(self, turing_handle_value);
+}
+
+vec3s Core_Transform_transformDirection(Transform self
+, vec3s direction) {
+    uint32_t turing_handle_direction = __enqueue_vec3(direction);
+    _core_transform__transform_direction(self, turing_handle_direction);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_transformPoint(Transform self
+, vec3s position) {
+    uint32_t turing_handle_position = __enqueue_vec3(position);
+    _core_transform__transform_point(self, turing_handle_position);
+    return __dequeue_vec3();
+}
+
+vec3s Core_Transform_transformVector(Transform self
+, vec3s vector) {
+    uint32_t turing_handle_vector = __enqueue_vec3(vector);
+    _core_transform__transform_vector(self, turing_handle_vector);
+    return __dequeue_vec3();
+}
+
+void Core_Transform_translate(Transform self
+, vec3s translation
+, int32_t relative_to) {
+    uint32_t turing_handle_translation = __enqueue_vec3(translation);
+    _core_transform__translate(self, turing_handle_translation, relative_to);
+}
+
+void Core_Transform_translateRelative(Transform self
+, vec3s translation
+, Transform relative_to) {
+    uint32_t turing_handle_translation = __enqueue_vec3(translation);
+    _core_transform__translate_relative(self, turing_handle_translation, relative_to);
+}
 
 
 
@@ -1158,216 +1812,31 @@ void Core_TuringMesh_uploadMeshData(TuringMesh self
 }
 
 
-
-
-
-bool Core_TuringerGameObject_activeGet(TuringerGameObject self) {
+NoteFloorMovement Core_TuringNoteExtensions_getNoteFloorMovement(NoteController note_controller) {
     
-    return _core_turinger_game_object__active_get(self);
+    return _core_turing_note_extensions__get_note_floor_movement(note_controller);
 }
 
-bool Core_TuringerGameObject_activeInHierarchyGet(TuringerGameObject self) {
+NoteJump Core_TuringNoteExtensions_getNoteJump(NoteController note_controller) {
     
-    return _core_turinger_game_object__active_in_hierarchy_get(self);
-}
-
-bool Core_TuringerGameObject_activeSelfGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__active_self_get(self);
-}
-
-void Core_TuringerGameObject_activeSet(TuringerGameObject self
-, bool value) {
-    
-    _core_turinger_game_object__active_set(self, value);
-}
-
-Component Core_TuringerGameObject_addComponent(TuringerGameObject self
-, Type component_type) {
-    
-    return _core_turinger_game_object__add_component(self, component_type);
-}
-
-TuringMesh Core_TuringerGameObject_addOrGetMesh(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__add_or_get_mesh(self);
-}
-
-void Core_TuringerGameObject_broadcastMessage(TuringerGameObject self
-, const char* method_name
-, int32_t options) {
-    
-    _core_turinger_game_object__broadcast_message(self, method_name, options);
-}
-
-bool Core_TuringerGameObject_compareTag(TuringerGameObject self
-, const char* tag) {
-    
-    return _core_turinger_game_object__compare_tag(self, tag);
-}
-
-GameObject Core_TuringerGameObject_gameObjectGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__game_object_get(self);
-}
-
-Component Core_TuringerGameObject_getComponentAtIndex(TuringerGameObject self
-, int32_t index) {
-    
-    return _core_turinger_game_object__get_component_at_index(self, index);
-}
-
-Component Core_TuringerGameObject_getComponentByName(TuringerGameObject self
-, const char* cs_type) {
-    
-    return _core_turinger_game_object__get_component_by_name(self, cs_type);
-}
-
-Component Core_TuringerGameObject_getComponentByType(TuringerGameObject self
-, Type cs_type) {
-    
-    return _core_turinger_game_object__get_component_by_type(self, cs_type);
-}
-
-int32_t Core_TuringerGameObject_getComponentCount(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__get_component_count(self);
-}
-
-Component Core_TuringerGameObject_getComponentInChildrenByType(TuringerGameObject self
-, Type cs_type
-, bool include_inactive) {
-    
-    return _core_turinger_game_object__get_component_in_children_by_type(self, cs_type, include_inactive);
-}
-
-Component Core_TuringerGameObject_getComponentInParentByType(TuringerGameObject self
-, Type cs_type
-, bool include_inactive) {
-    
-    return _core_turinger_game_object__get_component_in_parent_by_type(self, cs_type, include_inactive);
-}
-
-int32_t Core_TuringerGameObject_getComponentIndex(TuringerGameObject self
-, Component component) {
-    
-    return _core_turinger_game_object__get_component_index(self, component);
-}
-
-int32_t Core_TuringerGameObject_getInstanceId(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__get_instance_id(self);
-}
-
-int32_t Core_TuringerGameObject_hideFlagsGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__hide_flags_get(self);
-}
-
-void Core_TuringerGameObject_hideFlagsSet(TuringerGameObject self
-, int32_t value) {
-    
-    _core_turinger_game_object__hide_flags_set(self, value);
-}
-
-bool Core_TuringerGameObject_isStaticGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__is_static_get(self);
-}
-
-void Core_TuringerGameObject_isStaticSet(TuringerGameObject self
-, bool value) {
-    
-    _core_turinger_game_object__is_static_set(self, value);
-}
-
-int32_t Core_TuringerGameObject_layerGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__layer_get(self);
-}
-
-void Core_TuringerGameObject_layerSet(TuringerGameObject self
-, int32_t value) {
-    
-    _core_turinger_game_object__layer_set(self, value);
-}
-
-char* Core_TuringerGameObject_nameGet(TuringerGameObject self) {
-    
-    uint32_t turing_result = _core_turinger_game_object__name_get(self);
-    char* turing_str = malloc((size_t) turing_result);
-    _host_strcpy(turing_str, turing_result);
-    return turing_str;
-}
-
-void Core_TuringerGameObject_nameSet(TuringerGameObject self
-, const char* value) {
-    
-    _core_turinger_game_object__name_set(self, value);
-}
-
-uint64_t Core_TuringerGameObject_sceneCullingMaskGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__scene_culling_mask_get(self);
-}
-
-void Core_TuringerGameObject_sendMessage(TuringerGameObject self
-, const char* method_name
-, int32_t options) {
-    
-    _core_turinger_game_object__send_message(self, method_name, options);
-}
-
-void Core_TuringerGameObject_sendMessageUpwards(TuringerGameObject self
-, const char* method_name
-, int32_t options) {
-    
-    _core_turinger_game_object__send_message_upwards(self, method_name, options);
-}
-
-void Core_TuringerGameObject_setActive(TuringerGameObject self
-, bool value) {
-    
-    _core_turinger_game_object__set_active(self, value);
-}
-
-void Core_TuringerGameObject_setActiveRecursively(TuringerGameObject self
-, bool state) {
-    
-    _core_turinger_game_object__set_active_recursively(self, state);
-}
-
-char* Core_TuringerGameObject_tagGet(TuringerGameObject self) {
-    
-    uint32_t turing_result = _core_turinger_game_object__tag_get(self);
-    char* turing_str = malloc((size_t) turing_result);
-    _host_strcpy(turing_str, turing_result);
-    return turing_str;
-}
-
-void Core_TuringerGameObject_tagSet(TuringerGameObject self
-, const char* value) {
-    
-    _core_turinger_game_object__tag_set(self, value);
-}
-
-TuringerTransform Core_TuringerGameObject_transformGet(TuringerGameObject self) {
-    
-    return _core_turinger_game_object__transform_get(self);
+    return _core_turing_note_extensions__get_note_jump(note_controller);
 }
 
 
-TuringerGameObject Core_TuringerGameObjectManager_createObject(const char* name) {
+
+
+
+GameObject Core_TuringerGameObjectManager_createObject(const char* name) {
     
     return _core_turinger_game_object_manager__create_object(name);
 }
 
-void Core_TuringerGameObjectManager_destroyObject(TuringerGameObject listener) {
+void Core_TuringerGameObjectManager_destroyObject(GameObject game_object) {
     
-    _core_turinger_game_object_manager__destroy_object(listener);
+    _core_turinger_game_object_manager__destroy_object(game_object);
 }
 
-TuringerGameObject Core_TuringerGameObjectManager_find(const char* name) {
+GameObject Core_TuringerGameObjectManager_find(const char* name) {
     
     return _core_turinger_game_object_manager__find(name);
 }
@@ -1376,481 +1845,6 @@ TuringerGameObject Core_TuringerGameObjectManager_find(const char* name) {
 TuringerGameObjectManager Core_TuringerGameObjectManager_instanceGet(TuringerGameObjectManager self) {
     
     return _core_turinger_game_object_manager__instance_get(self);
-}
-
-
-
-void Core_TuringerTransform_broadcastMessage(TuringerTransform self
-, const char* method_name
-, Object parameter
-, int32_t options) {
-    
-    _core_turinger_transform__broadcast_message(self, method_name, parameter, options);
-}
-
-int32_t Core_TuringerTransform_childCountGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__child_count_get(self);
-}
-
-bool Core_TuringerTransform_compareTag(TuringerTransform self
-, const char* tag) {
-    
-    return _core_turinger_transform__compare_tag(self, tag);
-}
-
-void Core_TuringerTransform_detachChildren(TuringerTransform self) {
-    
-    _core_turinger_transform__detach_children(self);
-}
-
-vec3s Core_TuringerTransform_eulerAnglesGet(TuringerTransform self) {
-    
-    _core_turinger_transform__euler_angles_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_eulerAnglesSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__euler_angles_set(self, turing_handle_value);
-}
-
-TuringerTransform Core_TuringerTransform_find(TuringerTransform self
-, const char* n) {
-    
-    return _core_turinger_transform__find(self, n);
-}
-
-TuringerTransform Core_TuringerTransform_findChild(TuringerTransform self
-, const char* n) {
-    
-    return _core_turinger_transform__find_child(self, n);
-}
-
-vec3s Core_TuringerTransform_forwardGet(TuringerTransform self) {
-    
-    _core_turinger_transform__forward_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_forwardSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__forward_set(self, turing_handle_value);
-}
-
-TuringerGameObject Core_TuringerTransform_gameObjectGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__game_object_get(self);
-}
-
-TuringerTransform Core_TuringerTransform_getChild(TuringerTransform self
-, int32_t index) {
-    
-    return _core_turinger_transform__get_child(self, index);
-}
-
-int32_t Core_TuringerTransform_getChildCount(TuringerTransform self) {
-    
-    return _core_turinger_transform__get_child_count(self);
-}
-
-Component Core_TuringerTransform_getComponentByName(TuringerTransform self
-, const char* cs_type) {
-    
-    return _core_turinger_transform__get_component_by_name(self, cs_type);
-}
-
-Component Core_TuringerTransform_getComponentByType(TuringerTransform self
-, Type cs_type) {
-    
-    return _core_turinger_transform__get_component_by_type(self, cs_type);
-}
-
-Component Core_TuringerTransform_getComponentInChildrenByType(TuringerTransform self
-, Type t
-, bool include_inactive) {
-    
-    return _core_turinger_transform__get_component_in_children_by_type(self, t, include_inactive);
-}
-
-Component Core_TuringerTransform_getComponentInParentByType(TuringerTransform self
-, Type t
-, bool include_inactive) {
-    
-    return _core_turinger_transform__get_component_in_parent_by_type(self, t, include_inactive);
-}
-
-int32_t Core_TuringerTransform_getComponentIndex(TuringerTransform self) {
-    
-    return _core_turinger_transform__get_component_index(self);
-}
-
-IEnumerator Core_TuringerTransform_getEnumerator(TuringerTransform self) {
-    
-    return _core_turinger_transform__get_enumerator(self);
-}
-
-int32_t Core_TuringerTransform_getInstanceId(TuringerTransform self) {
-    
-    return _core_turinger_transform__get_instance_id(self);
-}
-
-int32_t Core_TuringerTransform_getSiblingIndex(TuringerTransform self) {
-    
-    return _core_turinger_transform__get_sibling_index(self);
-}
-
-bool Core_TuringerTransform_hasChangedGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__has_changed_get(self);
-}
-
-void Core_TuringerTransform_hasChangedSet(TuringerTransform self
-, bool value) {
-    
-    _core_turinger_transform__has_changed_set(self, value);
-}
-
-int32_t Core_TuringerTransform_hideFlagsGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__hide_flags_get(self);
-}
-
-void Core_TuringerTransform_hideFlagsSet(TuringerTransform self
-, int32_t value) {
-    
-    _core_turinger_transform__hide_flags_set(self, value);
-}
-
-int32_t Core_TuringerTransform_hierarchyCapacityGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__hierarchy_capacity_get(self);
-}
-
-void Core_TuringerTransform_hierarchyCapacitySet(TuringerTransform self
-, int32_t value) {
-    
-    _core_turinger_transform__hierarchy_capacity_set(self, value);
-}
-
-int32_t Core_TuringerTransform_hierarchyCountGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__hierarchy_count_get(self);
-}
-
-vec3s Core_TuringerTransform_inverseTransformDirection(TuringerTransform self
-, vec3s direction) {
-    uint32_t turing_handle_direction = __enqueue_vec3(direction);
-    _core_turinger_transform__inverse_transform_direction(self, turing_handle_direction);
-    return __dequeue_vec3();
-}
-
-vec3s Core_TuringerTransform_inverseTransformPoint(TuringerTransform self
-, vec3s position) {
-    uint32_t turing_handle_position = __enqueue_vec3(position);
-    _core_turinger_transform__inverse_transform_point(self, turing_handle_position);
-    return __dequeue_vec3();
-}
-
-vec3s Core_TuringerTransform_inverseTransformVector(TuringerTransform self
-, vec3s vector) {
-    uint32_t turing_handle_vector = __enqueue_vec3(vector);
-    _core_turinger_transform__inverse_transform_vector(self, turing_handle_vector);
-    return __dequeue_vec3();
-}
-
-bool Core_TuringerTransform_isChildOf(TuringerTransform self
-, TuringerTransform parent) {
-    
-    return _core_turinger_transform__is_child_of(self, parent);
-}
-
-vec3s Core_TuringerTransform_localEulerAnglesGet(TuringerTransform self) {
-    
-    _core_turinger_transform__local_euler_angles_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_localEulerAnglesSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__local_euler_angles_set(self, turing_handle_value);
-}
-
-vec3s Core_TuringerTransform_localPositionGet(TuringerTransform self) {
-    
-    _core_turinger_transform__local_position_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_localPositionSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__local_position_set(self, turing_handle_value);
-}
-
-versors Core_TuringerTransform_localRotationGet(TuringerTransform self) {
-    
-    _core_turinger_transform__local_rotation_get(self);
-    return __dequeue_quat();
-}
-
-void Core_TuringerTransform_localRotationSet(TuringerTransform self
-, versors value) {
-    uint32_t turing_handle_value = __enqueue_quat(value);
-    _core_turinger_transform__local_rotation_set(self, turing_handle_value);
-}
-
-vec3s Core_TuringerTransform_localScaleGet(TuringerTransform self) {
-    
-    _core_turinger_transform__local_scale_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_localScaleSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__local_scale_set(self, turing_handle_value);
-}
-
-mat4s Core_TuringerTransform_localToWorldMatrixGet(TuringerTransform self) {
-    
-    _core_turinger_transform__local_to_world_matrix_get(self);
-    return __dequeue_mat4();
-}
-
-void Core_TuringerTransform_lookAt(TuringerTransform self
-, TuringerTransform target
-, vec3s world_up) {
-    uint32_t turing_handle_world_up = __enqueue_vec3(world_up);
-    _core_turinger_transform__look_at(self, target, turing_handle_world_up);
-}
-
-vec3s Core_TuringerTransform_lossyScaleGet(TuringerTransform self) {
-    
-    _core_turinger_transform__lossy_scale_get(self);
-    return __dequeue_vec3();
-}
-
-char* Core_TuringerTransform_nameGet(TuringerTransform self) {
-    
-    uint32_t turing_result = _core_turinger_transform__name_get(self);
-    char* turing_str = malloc((size_t) turing_result);
-    _host_strcpy(turing_str, turing_result);
-    return turing_str;
-}
-
-void Core_TuringerTransform_nameSet(TuringerTransform self
-, const char* value) {
-    
-    _core_turinger_transform__name_set(self, value);
-}
-
-TuringerTransform Core_TuringerTransform_parentGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__parent_get(self);
-}
-
-void Core_TuringerTransform_parentSet(TuringerTransform self
-, TuringerTransform value) {
-    
-    _core_turinger_transform__parent_set(self, value);
-}
-
-vec3s Core_TuringerTransform_positionGet(TuringerTransform self) {
-    
-    _core_turinger_transform__position_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_positionSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__position_set(self, turing_handle_value);
-}
-
-vec3s Core_TuringerTransform_rightGet(TuringerTransform self) {
-    
-    _core_turinger_transform__right_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_rightSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__right_set(self, turing_handle_value);
-}
-
-TuringerTransform Core_TuringerTransform_rootGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__root_get(self);
-}
-
-void Core_TuringerTransform_rotate(TuringerTransform self
-, vec3s eulers) {
-    uint32_t turing_handle_eulers = __enqueue_vec3(eulers);
-    _core_turinger_transform__rotate(self, turing_handle_eulers);
-}
-
-void Core_TuringerTransform_rotateAround(TuringerTransform self
-, vec3s point
-, vec3s axis
-, float angle) {
-    uint32_t turing_handle_point = __enqueue_vec3(point);uint32_t turing_handle_axis = __enqueue_vec3(axis);
-    _core_turinger_transform__rotate_around(self, turing_handle_point, turing_handle_axis, angle);
-}
-
-void Core_TuringerTransform_rotateAroundLocal(TuringerTransform self
-, vec3s axis
-, float angle) {
-    uint32_t turing_handle_axis = __enqueue_vec3(axis);
-    _core_turinger_transform__rotate_around_local(self, turing_handle_axis, angle);
-}
-
-void Core_TuringerTransform_rotateRelative(TuringerTransform self
-, vec3s eulers
-, int32_t relative_to) {
-    uint32_t turing_handle_eulers = __enqueue_vec3(eulers);
-    _core_turinger_transform__rotate_relative(self, turing_handle_eulers, relative_to);
-}
-
-versors Core_TuringerTransform_rotationGet(TuringerTransform self) {
-    
-    _core_turinger_transform__rotation_get(self);
-    return __dequeue_quat();
-}
-
-void Core_TuringerTransform_rotationSet(TuringerTransform self
-, versors value) {
-    uint32_t turing_handle_value = __enqueue_quat(value);
-    _core_turinger_transform__rotation_set(self, turing_handle_value);
-}
-
-void Core_TuringerTransform_sendMessage(TuringerTransform self
-, const char* method_name
-, Object value
-, int32_t options) {
-    
-    _core_turinger_transform__send_message(self, method_name, value, options);
-}
-
-void Core_TuringerTransform_sendMessageUpwards(TuringerTransform self
-, const char* method_name
-, Object value
-, int32_t options) {
-    
-    _core_turinger_transform__send_message_upwards(self, method_name, value, options);
-}
-
-void Core_TuringerTransform_setAsFirstSibling(TuringerTransform self) {
-    
-    _core_turinger_transform__set_as_first_sibling(self);
-}
-
-void Core_TuringerTransform_setAsLastSibling(TuringerTransform self) {
-    
-    _core_turinger_transform__set_as_last_sibling(self);
-}
-
-void Core_TuringerTransform_setLocalPositionAndRotation(TuringerTransform self
-, vec3s local_position
-, versors local_rotation) {
-    uint32_t turing_handle_local_position = __enqueue_vec3(local_position);uint32_t turing_handle_local_rotation = __enqueue_quat(local_rotation);
-    _core_turinger_transform__set_local_position_and_rotation(self, turing_handle_local_position, turing_handle_local_rotation);
-}
-
-void Core_TuringerTransform_setParent(TuringerTransform self
-, TuringerTransform parent
-, bool world_position_stays) {
-    
-    _core_turinger_transform__set_parent(self, parent, world_position_stays);
-}
-
-void Core_TuringerTransform_setPositionAndRotation(TuringerTransform self
-, vec3s position
-, versors rotation) {
-    uint32_t turing_handle_position = __enqueue_vec3(position);uint32_t turing_handle_rotation = __enqueue_quat(rotation);
-    _core_turinger_transform__set_position_and_rotation(self, turing_handle_position, turing_handle_rotation);
-}
-
-void Core_TuringerTransform_setSiblingIndex(TuringerTransform self
-, int32_t index) {
-    
-    _core_turinger_transform__set_sibling_index(self, index);
-}
-
-char* Core_TuringerTransform_tagGet(TuringerTransform self) {
-    
-    uint32_t turing_result = _core_turinger_transform__tag_get(self);
-    char* turing_str = malloc((size_t) turing_result);
-    _host_strcpy(turing_str, turing_result);
-    return turing_str;
-}
-
-void Core_TuringerTransform_tagSet(TuringerTransform self
-, const char* value) {
-    
-    _core_turinger_transform__tag_set(self, value);
-}
-
-vec3s Core_TuringerTransform_transformDirection(TuringerTransform self
-, vec3s direction) {
-    uint32_t turing_handle_direction = __enqueue_vec3(direction);
-    _core_turinger_transform__transform_direction(self, turing_handle_direction);
-    return __dequeue_vec3();
-}
-
-Transform Core_TuringerTransform_transformGet(TuringerTransform self) {
-    
-    return _core_turinger_transform__transform_get(self);
-}
-
-vec3s Core_TuringerTransform_transformPoint(TuringerTransform self
-, vec3s position) {
-    uint32_t turing_handle_position = __enqueue_vec3(position);
-    _core_turinger_transform__transform_point(self, turing_handle_position);
-    return __dequeue_vec3();
-}
-
-vec3s Core_TuringerTransform_transformVector(TuringerTransform self
-, vec3s vector) {
-    uint32_t turing_handle_vector = __enqueue_vec3(vector);
-    _core_turinger_transform__transform_vector(self, turing_handle_vector);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_translate(TuringerTransform self
-, vec3s translation
-, int32_t relative_to) {
-    uint32_t turing_handle_translation = __enqueue_vec3(translation);
-    _core_turinger_transform__translate(self, turing_handle_translation, relative_to);
-}
-
-void Core_TuringerTransform_translateRelative(TuringerTransform self
-, vec3s translation
-, TuringerTransform relative_to) {
-    uint32_t turing_handle_translation = __enqueue_vec3(translation);
-    _core_turinger_transform__translate_relative(self, turing_handle_translation, relative_to);
-}
-
-vec3s Core_TuringerTransform_upGet(TuringerTransform self) {
-    
-    _core_turinger_transform__up_get(self);
-    return __dequeue_vec3();
-}
-
-void Core_TuringerTransform_upSet(TuringerTransform self
-, vec3s value) {
-    uint32_t turing_handle_value = __enqueue_vec3(value);
-    _core_turinger_transform__up_set(self, turing_handle_value);
-}
-
-mat4s Core_TuringerTransform_worldToLocalMatrixGet(TuringerTransform self) {
-    
-    _core_turinger_transform__world_to_local_matrix_get(self);
-    return __dequeue_mat4();
 }
 
 

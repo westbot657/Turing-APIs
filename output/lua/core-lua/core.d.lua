@@ -236,6 +236,190 @@ core.GameObject = GameObject
 
 
 
+---@param self table
+---@param component_type Type
+---@return Component
+function core.GameObject.addComponent(self, component_type) end
+
+
+---@param self table
+---@return TuringMesh
+function core.GameObject.addOrGetMesh(self) end
+
+
+---@param self table
+---@param method_name string
+---@param options number
+---@return nil
+function core.GameObject.broadcastMessage(self, method_name, options) end
+
+
+---@param self table
+---@param tag string
+---@return boolean
+function core.GameObject.compareTag(self, tag) end
+
+
+---@param self table
+---@return boolean
+function core.GameObject.getActive(self) end
+
+
+---@param self table
+---@return boolean
+function core.GameObject.getActiveInHierarchy(self) end
+
+
+---@param self table
+---@return boolean
+function core.GameObject.getActiveSelf(self) end
+
+
+---@param self table
+---@param index number
+---@return Component
+function core.GameObject.getComponentAtIndex(self, index) end
+
+
+---@param self table
+---@param cs_type string
+---@return Component
+function core.GameObject.getComponentByName(self, cs_type) end
+
+
+---@param self table
+---@param cs_type Type
+---@return Component
+function core.GameObject.getComponentByType(self, cs_type) end
+
+
+---@param self table
+---@return number
+function core.GameObject.getComponentCount(self) end
+
+
+---@param self table
+---@param cs_type Type
+---@param include_inactive boolean
+---@return Component
+function core.GameObject.getComponentInChildrenByType(self, cs_type, include_inactive) end
+
+
+---@param self table
+---@param cs_type Type
+---@param include_inactive boolean
+---@return Component
+function core.GameObject.getComponentInParentByType(self, cs_type, include_inactive) end
+
+
+---@param self table
+---@param component Component
+---@return number
+function core.GameObject.getComponentIndex(self, component) end
+
+
+---@param self table
+---@return number
+function core.GameObject.getHideFlags(self) end
+
+
+---@param self table
+---@return number
+function core.GameObject.getInstanceId(self) end
+
+
+---@param self table
+---@return boolean
+function core.GameObject.getIsStatic(self) end
+
+
+---@param self table
+---@return number
+function core.GameObject.getLayer(self) end
+
+
+---@param self table
+---@return string
+function core.GameObject.getName(self) end
+
+
+---@param self table
+---@return number
+function core.GameObject.getSceneCullingMask(self) end
+
+
+---@param self table
+---@return string
+function core.GameObject.getTag(self) end
+
+
+---@param self table
+---@return Transform
+function core.GameObject.getTransform(self) end
+
+
+---@param self table
+---@param method_name string
+---@param options number
+---@return nil
+function core.GameObject.sendMessage(self, method_name, options) end
+
+
+---@param self table
+---@param method_name string
+---@param options number
+---@return nil
+function core.GameObject.sendMessageUpwards(self, method_name, options) end
+
+
+---@param self table
+---@param value boolean
+---@return nil
+function core.GameObject.setActive(self, value) end
+
+
+---@param self table
+---@param value boolean
+---@return nil
+function core.GameObject.setActiveProp(self, value) end
+
+
+---@param self table
+---@param state boolean
+---@return nil
+function core.GameObject.setActiveRecursively(self, state) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.GameObject.setHideFlags(self, value) end
+
+
+---@param self table
+---@param value boolean
+---@return nil
+function core.GameObject.setIsStatic(self, value) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.GameObject.setLayer(self, value) end
+
+
+---@param self table
+---@param value string
+---@return nil
+function core.GameObject.setName(self, value) end
+
+
+---@param self table
+---@param value string
+---@return nil
+function core.GameObject.setTag(self, value) end
+
+
 ---@class GcHelper
 local GcHelper = {}
 core.GcHelper = GcHelper
@@ -320,6 +504,12 @@ function core.Log.warn(msg) end
 ---@class Mesh
 local Mesh = {}
 core.Mesh = Mesh
+
+
+
+---@class NoteController
+local NoteController = {}
+core.NoteController = NoteController
 
 
 
@@ -854,7 +1044,7 @@ function core.NoteJump.distanceToPlayerGet(self) end
 ---@param rotate_towards_player boolean
 ---@param use_random_rotation boolean
 ---@return nil
-function core.NoteJump.initNote(self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) end
+function core.NoteJump.initJump(self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) end
 
 
 ---@param self table
@@ -1045,6 +1235,443 @@ core.Transform = Transform
 
 
 
+---@param self table
+---@param method_name string
+---@param parameter Object
+---@param options number
+---@return nil
+function core.Transform.broadcastMessage(self, method_name, parameter, options) end
+
+
+---@param self table
+---@param tag string
+---@return boolean
+function core.Transform.compareTag(self, tag) end
+
+
+---@param self table
+---@return nil
+function core.Transform.detachChildren(self) end
+
+
+---@param self table
+---@param n string
+---@return Transform
+function core.Transform.find(self, n) end
+
+
+---@param self table
+---@param n string
+---@return Transform
+function core.Transform.findChild(self, n) end
+
+
+---@param self table
+---@param index number
+---@return Transform
+function core.Transform.getChild(self, index) end
+
+
+---@param self table
+---@return number
+function core.Transform.getChildCount(self) end
+
+
+---@param self table
+---@return number
+function core.Transform.getChildCountProp(self) end
+
+
+---@param self table
+---@param cs_type string
+---@return Component
+function core.Transform.getComponentByName(self, cs_type) end
+
+
+---@param self table
+---@param cs_type Type
+---@return Component
+function core.Transform.getComponentByType(self, cs_type) end
+
+
+---@param self table
+---@param t Type
+---@param include_inactive boolean
+---@return Component
+function core.Transform.getComponentInChildrenByType(self, t, include_inactive) end
+
+
+---@param self table
+---@param t Type
+---@param include_inactive boolean
+---@return Component
+function core.Transform.getComponentInParentByType(self, t, include_inactive) end
+
+
+---@param self table
+---@return number
+function core.Transform.getComponentIndex(self) end
+
+
+---@param self table
+---@return IEnumerator
+function core.Transform.getEnumerator(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getEulerAngles(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getForward(self) end
+
+
+---@param self table
+---@return GameObject
+function core.Transform.getGameObject(self) end
+
+
+---@param self table
+---@return boolean
+function core.Transform.getHasChanged(self) end
+
+
+---@param self table
+---@return number
+function core.Transform.getHideFlags(self) end
+
+
+---@param self table
+---@return number
+function core.Transform.getHierarchyCapacity(self) end
+
+
+---@param self table
+---@return number
+function core.Transform.getHierarchyCount(self) end
+
+
+---@param self table
+---@return number
+function core.Transform.getInstanceId(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getLocalEulerAngles(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getLocalPosition(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getLocalRotation(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getLocalScale(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getLocalToWorldMatrix(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getLossyScale(self) end
+
+
+---@param self table
+---@return string
+function core.Transform.getName(self) end
+
+
+---@param self table
+---@return Transform
+function core.Transform.getParent(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getPosition(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getRight(self) end
+
+
+---@param self table
+---@return Transform
+function core.Transform.getRoot(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getRotation(self) end
+
+
+---@param self table
+---@return number
+function core.Transform.getSiblingIndex(self) end
+
+
+---@param self table
+---@return string
+function core.Transform.getTag(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getUp(self) end
+
+
+---@param self table
+---@return table
+function core.Transform.getWorldToLocalMatrix(self) end
+
+
+---@param self table
+---@param direction table
+---@return table
+function core.Transform.inverseTransformDirection(self, direction) end
+
+
+---@param self table
+---@param position table
+---@return table
+function core.Transform.inverseTransformPoint(self, position) end
+
+
+---@param self table
+---@param vector table
+---@return table
+function core.Transform.inverseTransformVector(self, vector) end
+
+
+---@param self table
+---@param parent Transform
+---@return boolean
+function core.Transform.isChildOf(self, parent) end
+
+
+---@param self table
+---@param target Transform
+---@param world_up table
+---@return nil
+function core.Transform.lookAt(self, target, world_up) end
+
+
+---@param self table
+---@param eulers table
+---@return nil
+function core.Transform.rotate(self, eulers) end
+
+
+---@param self table
+---@param point table
+---@param axis table
+---@param angle number
+---@return nil
+function core.Transform.rotateAround(self, point, axis, angle) end
+
+
+---@param self table
+---@param axis table
+---@param angle number
+---@return nil
+function core.Transform.rotateAroundLocal(self, axis, angle) end
+
+
+---@param self table
+---@param eulers table
+---@param relative_to number
+---@return nil
+function core.Transform.rotateRelative(self, eulers, relative_to) end
+
+
+---@param self table
+---@param method_name string
+---@param value Object
+---@param options number
+---@return nil
+function core.Transform.sendMessage(self, method_name, value, options) end
+
+
+---@param self table
+---@param method_name string
+---@param value Object
+---@param options number
+---@return nil
+function core.Transform.sendMessageUpwards(self, method_name, value, options) end
+
+
+---@param self table
+---@return nil
+function core.Transform.setAsFirstSibling(self) end
+
+
+---@param self table
+---@return nil
+function core.Transform.setAsLastSibling(self) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setEulerAngles(self, value) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setForward(self, value) end
+
+
+---@param self table
+---@param value boolean
+---@return nil
+function core.Transform.setHasChanged(self, value) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.Transform.setHideFlags(self, value) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.Transform.setHierarchyCapacity(self, value) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setLocalEulerAngles(self, value) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setLocalPosition(self, value) end
+
+
+---@param self table
+---@param local_position table
+---@param local_rotation table
+---@return nil
+function core.Transform.setLocalPositionAndRotation(self, local_position, local_rotation) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setLocalRotation(self, value) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setLocalScale(self, value) end
+
+
+---@param self table
+---@param value string
+---@return nil
+function core.Transform.setName(self, value) end
+
+
+---@param self table
+---@param parent Transform
+---@param world_position_stays boolean
+---@return nil
+function core.Transform.setParent(self, parent, world_position_stays) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setPosition(self, value) end
+
+
+---@param self table
+---@param position table
+---@param rotation table
+---@return nil
+function core.Transform.setPositionAndRotation(self, position, rotation) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setRight(self, value) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setRotation(self, value) end
+
+
+---@param self table
+---@param index number
+---@return nil
+function core.Transform.setSiblingIndex(self, index) end
+
+
+---@param self table
+---@param value string
+---@return nil
+function core.Transform.setTag(self, value) end
+
+
+---@param self table
+---@param value table
+---@return nil
+function core.Transform.setUp(self, value) end
+
+
+---@param self table
+---@param direction table
+---@return table
+function core.Transform.transformDirection(self, direction) end
+
+
+---@param self table
+---@param position table
+---@return table
+function core.Transform.transformPoint(self, position) end
+
+
+---@param self table
+---@param vector table
+---@return table
+function core.Transform.transformVector(self, vector) end
+
+
+---@param self table
+---@param translation table
+---@param relative_to number
+---@return nil
+function core.Transform.translate(self, translation, relative_to) end
+
+
+---@param self table
+---@param translation table
+---@param relative_to Transform
+---@return nil
+function core.Transform.translateRelative(self, translation, relative_to) end
+
+
 ---@class TuringMesh
 local TuringMesh = {}
 core.TuringMesh = TuringMesh
@@ -1203,205 +1830,26 @@ function core.TuringMesh.setVertices(self, in_vertices) end
 function core.TuringMesh.uploadMeshData(self, mark_no_longer_readable) end
 
 
+---@class TuringNoteExtensions
+local TuringNoteExtensions = {}
+core.TuringNoteExtensions = TuringNoteExtensions
+
+
+---@param note_controller NoteController
+---@return NoteFloorMovement
+function core.TuringNoteExtensions.getNoteFloorMovement(note_controller) end
+
+
+---@param note_controller NoteController
+---@return NoteJump
+function core.TuringNoteExtensions.getNoteJump(note_controller) end
+
+
+
 ---@class TuringScriptManager
 local TuringScriptManager = {}
 core.TuringScriptManager = TuringScriptManager
 
-
-
----@class TuringerGameObject
-local TuringerGameObject = {}
-core.TuringerGameObject = TuringerGameObject
-
-
-
----@param self table
----@return boolean
-function core.TuringerGameObject.activeGet(self) end
-
-
----@param self table
----@return boolean
-function core.TuringerGameObject.activeInHierarchyGet(self) end
-
-
----@param self table
----@return boolean
-function core.TuringerGameObject.activeSelfGet(self) end
-
-
----@param self table
----@param value boolean
----@return nil
-function core.TuringerGameObject.activeSet(self, value) end
-
-
----@param self table
----@param component_type Type
----@return Component
-function core.TuringerGameObject.addComponent(self, component_type) end
-
-
----@param self table
----@return TuringMesh
-function core.TuringerGameObject.addOrGetMesh(self) end
-
-
----@param self table
----@param method_name string
----@param options number
----@return nil
-function core.TuringerGameObject.broadcastMessage(self, method_name, options) end
-
-
----@param self table
----@param tag string
----@return boolean
-function core.TuringerGameObject.compareTag(self, tag) end
-
-
----@param self table
----@return GameObject
-function core.TuringerGameObject.gameObjectGet(self) end
-
-
----@param self table
----@param index number
----@return Component
-function core.TuringerGameObject.getComponentAtIndex(self, index) end
-
-
----@param self table
----@param cs_type string
----@return Component
-function core.TuringerGameObject.getComponentByName(self, cs_type) end
-
-
----@param self table
----@param cs_type Type
----@return Component
-function core.TuringerGameObject.getComponentByType(self, cs_type) end
-
-
----@param self table
----@return number
-function core.TuringerGameObject.getComponentCount(self) end
-
-
----@param self table
----@param cs_type Type
----@param include_inactive boolean
----@return Component
-function core.TuringerGameObject.getComponentInChildrenByType(self, cs_type, include_inactive) end
-
-
----@param self table
----@param cs_type Type
----@param include_inactive boolean
----@return Component
-function core.TuringerGameObject.getComponentInParentByType(self, cs_type, include_inactive) end
-
-
----@param self table
----@param component Component
----@return number
-function core.TuringerGameObject.getComponentIndex(self, component) end
-
-
----@param self table
----@return number
-function core.TuringerGameObject.getInstanceId(self) end
-
-
----@param self table
----@return number
-function core.TuringerGameObject.hideFlagsGet(self) end
-
-
----@param self table
----@param value number
----@return nil
-function core.TuringerGameObject.hideFlagsSet(self, value) end
-
-
----@param self table
----@return boolean
-function core.TuringerGameObject.isStaticGet(self) end
-
-
----@param self table
----@param value boolean
----@return nil
-function core.TuringerGameObject.isStaticSet(self, value) end
-
-
----@param self table
----@return number
-function core.TuringerGameObject.layerGet(self) end
-
-
----@param self table
----@param value number
----@return nil
-function core.TuringerGameObject.layerSet(self, value) end
-
-
----@param self table
----@return string
-function core.TuringerGameObject.nameGet(self) end
-
-
----@param self table
----@param value string
----@return nil
-function core.TuringerGameObject.nameSet(self, value) end
-
-
----@param self table
----@return number
-function core.TuringerGameObject.sceneCullingMaskGet(self) end
-
-
----@param self table
----@param method_name string
----@param options number
----@return nil
-function core.TuringerGameObject.sendMessage(self, method_name, options) end
-
-
----@param self table
----@param method_name string
----@param options number
----@return nil
-function core.TuringerGameObject.sendMessageUpwards(self, method_name, options) end
-
-
----@param self table
----@param value boolean
----@return nil
-function core.TuringerGameObject.setActive(self, value) end
-
-
----@param self table
----@param state boolean
----@return nil
-function core.TuringerGameObject.setActiveRecursively(self, state) end
-
-
----@param self table
----@return string
-function core.TuringerGameObject.tagGet(self) end
-
-
----@param self table
----@param value string
----@return nil
-function core.TuringerGameObject.tagSet(self, value) end
-
-
----@param self table
----@return TuringerTransform
-function core.TuringerGameObject.transformGet(self) end
 
 
 ---@class TuringerGameObjectManager
@@ -1410,17 +1858,17 @@ core.TuringerGameObjectManager = TuringerGameObjectManager
 
 
 ---@param name string
----@return TuringerGameObject
+---@return GameObject
 function core.TuringerGameObjectManager.createObject(name) end
 
 
----@param listener TuringerGameObject
+---@param game_object GameObject
 ---@return nil
-function core.TuringerGameObjectManager.destroyObject(listener) end
+function core.TuringerGameObjectManager.destroyObject(game_object) end
 
 
 ---@param name string
----@return TuringerGameObject
+---@return GameObject
 function core.TuringerGameObjectManager.find(name) end
 
 
@@ -1428,460 +1876,6 @@ function core.TuringerGameObjectManager.find(name) end
 ---@param self table
 ---@return TuringerGameObjectManager
 function core.TuringerGameObjectManager.instanceGet(self) end
-
-
----@class TuringerTransform
-local TuringerTransform = {}
-core.TuringerTransform = TuringerTransform
-
-
-
----@param self table
----@param method_name string
----@param parameter Object
----@param options number
----@return nil
-function core.TuringerTransform.broadcastMessage(self, method_name, parameter, options) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.childCountGet(self) end
-
-
----@param self table
----@param tag string
----@return boolean
-function core.TuringerTransform.compareTag(self, tag) end
-
-
----@param self table
----@return nil
-function core.TuringerTransform.detachChildren(self) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.eulerAnglesGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.eulerAnglesSet(self, value) end
-
-
----@param self table
----@param n string
----@return TuringerTransform
-function core.TuringerTransform.find(self, n) end
-
-
----@param self table
----@param n string
----@return TuringerTransform
-function core.TuringerTransform.findChild(self, n) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.forwardGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.forwardSet(self, value) end
-
-
----@param self table
----@return TuringerGameObject
-function core.TuringerTransform.gameObjectGet(self) end
-
-
----@param self table
----@param index number
----@return TuringerTransform
-function core.TuringerTransform.getChild(self, index) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.getChildCount(self) end
-
-
----@param self table
----@param cs_type string
----@return Component
-function core.TuringerTransform.getComponentByName(self, cs_type) end
-
-
----@param self table
----@param cs_type Type
----@return Component
-function core.TuringerTransform.getComponentByType(self, cs_type) end
-
-
----@param self table
----@param t Type
----@param include_inactive boolean
----@return Component
-function core.TuringerTransform.getComponentInChildrenByType(self, t, include_inactive) end
-
-
----@param self table
----@param t Type
----@param include_inactive boolean
----@return Component
-function core.TuringerTransform.getComponentInParentByType(self, t, include_inactive) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.getComponentIndex(self) end
-
-
----@param self table
----@return IEnumerator
-function core.TuringerTransform.getEnumerator(self) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.getInstanceId(self) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.getSiblingIndex(self) end
-
-
----@param self table
----@return boolean
-function core.TuringerTransform.hasChangedGet(self) end
-
-
----@param self table
----@param value boolean
----@return nil
-function core.TuringerTransform.hasChangedSet(self, value) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.hideFlagsGet(self) end
-
-
----@param self table
----@param value number
----@return nil
-function core.TuringerTransform.hideFlagsSet(self, value) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.hierarchyCapacityGet(self) end
-
-
----@param self table
----@param value number
----@return nil
-function core.TuringerTransform.hierarchyCapacitySet(self, value) end
-
-
----@param self table
----@return number
-function core.TuringerTransform.hierarchyCountGet(self) end
-
-
----@param self table
----@param direction table
----@return table
-function core.TuringerTransform.inverseTransformDirection(self, direction) end
-
-
----@param self table
----@param position table
----@return table
-function core.TuringerTransform.inverseTransformPoint(self, position) end
-
-
----@param self table
----@param vector table
----@return table
-function core.TuringerTransform.inverseTransformVector(self, vector) end
-
-
----@param self table
----@param parent TuringerTransform
----@return boolean
-function core.TuringerTransform.isChildOf(self, parent) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.localEulerAnglesGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.localEulerAnglesSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.localPositionGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.localPositionSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.localRotationGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.localRotationSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.localScaleGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.localScaleSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.localToWorldMatrixGet(self) end
-
-
----@param self table
----@param target TuringerTransform
----@param world_up table
----@return nil
-function core.TuringerTransform.lookAt(self, target, world_up) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.lossyScaleGet(self) end
-
-
----@param self table
----@return string
-function core.TuringerTransform.nameGet(self) end
-
-
----@param self table
----@param value string
----@return nil
-function core.TuringerTransform.nameSet(self, value) end
-
-
----@param self table
----@return TuringerTransform
-function core.TuringerTransform.parentGet(self) end
-
-
----@param self table
----@param value TuringerTransform
----@return nil
-function core.TuringerTransform.parentSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.positionGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.positionSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.rightGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.rightSet(self, value) end
-
-
----@param self table
----@return TuringerTransform
-function core.TuringerTransform.rootGet(self) end
-
-
----@param self table
----@param eulers table
----@return nil
-function core.TuringerTransform.rotate(self, eulers) end
-
-
----@param self table
----@param point table
----@param axis table
----@param angle number
----@return nil
-function core.TuringerTransform.rotateAround(self, point, axis, angle) end
-
-
----@param self table
----@param axis table
----@param angle number
----@return nil
-function core.TuringerTransform.rotateAroundLocal(self, axis, angle) end
-
-
----@param self table
----@param eulers table
----@param relative_to number
----@return nil
-function core.TuringerTransform.rotateRelative(self, eulers, relative_to) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.rotationGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.rotationSet(self, value) end
-
-
----@param self table
----@param method_name string
----@param value Object
----@param options number
----@return nil
-function core.TuringerTransform.sendMessage(self, method_name, value, options) end
-
-
----@param self table
----@param method_name string
----@param value Object
----@param options number
----@return nil
-function core.TuringerTransform.sendMessageUpwards(self, method_name, value, options) end
-
-
----@param self table
----@return nil
-function core.TuringerTransform.setAsFirstSibling(self) end
-
-
----@param self table
----@return nil
-function core.TuringerTransform.setAsLastSibling(self) end
-
-
----@param self table
----@param local_position table
----@param local_rotation table
----@return nil
-function core.TuringerTransform.setLocalPositionAndRotation(self, local_position, local_rotation) end
-
-
----@param self table
----@param parent TuringerTransform
----@param world_position_stays boolean
----@return nil
-function core.TuringerTransform.setParent(self, parent, world_position_stays) end
-
-
----@param self table
----@param position table
----@param rotation table
----@return nil
-function core.TuringerTransform.setPositionAndRotation(self, position, rotation) end
-
-
----@param self table
----@param index number
----@return nil
-function core.TuringerTransform.setSiblingIndex(self, index) end
-
-
----@param self table
----@return string
-function core.TuringerTransform.tagGet(self) end
-
-
----@param self table
----@param value string
----@return nil
-function core.TuringerTransform.tagSet(self, value) end
-
-
----@param self table
----@param direction table
----@return table
-function core.TuringerTransform.transformDirection(self, direction) end
-
-
----@param self table
----@return Transform
-function core.TuringerTransform.transformGet(self) end
-
-
----@param self table
----@param position table
----@return table
-function core.TuringerTransform.transformPoint(self, position) end
-
-
----@param self table
----@param vector table
----@return table
-function core.TuringerTransform.transformVector(self, vector) end
-
-
----@param self table
----@param translation table
----@param relative_to number
----@return nil
-function core.TuringerTransform.translate(self, translation, relative_to) end
-
-
----@param self table
----@param translation table
----@param relative_to TuringerTransform
----@return nil
-function core.TuringerTransform.translateRelative(self, translation, relative_to) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.upGet(self) end
-
-
----@param self table
----@param value table
----@return nil
-function core.TuringerTransform.upSet(self, value) end
-
-
----@param self table
----@return table
-function core.TuringerTransform.worldToLocalMatrixGet(self) end
 
 
 ---@class Type

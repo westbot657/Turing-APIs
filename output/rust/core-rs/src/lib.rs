@@ -197,6 +197,38 @@ unsafe extern "C" {
     fn _core_custom_obstacle_data__custom_data_get(handle: CustomObstacleData) -> CustomData;
     fn _core_custom_obstacle_data__get_copy(handle: CustomObstacleData) -> BeatmapDataItem;
     fn _core_custom_obstacle_data__version_get(handle: CustomObstacleData) -> Version;
+    fn _core_game_object__add_component(handle: GameObject, component_type: Type) -> Component;
+    fn _core_game_object__add_or_get_mesh(handle: GameObject) -> TuringMesh;
+    fn _core_game_object__broadcast_message(handle: GameObject, method_name: *const c_char, options: i32);
+    fn _core_game_object__compare_tag(handle: GameObject, tag: *const c_char) -> bool;
+    fn _core_game_object__get_active(handle: GameObject) -> bool;
+    fn _core_game_object__get_active_in_hierarchy(handle: GameObject) -> bool;
+    fn _core_game_object__get_active_self(handle: GameObject) -> bool;
+    fn _core_game_object__get_component_at_index(handle: GameObject, index: i32) -> Component;
+    fn _core_game_object__get_component_by_name(handle: GameObject, cs_type: *const c_char) -> Component;
+    fn _core_game_object__get_component_by_type(handle: GameObject, cs_type: Type) -> Component;
+    fn _core_game_object__get_component_count(handle: GameObject) -> i32;
+    fn _core_game_object__get_component_in_children_by_type(handle: GameObject, cs_type: Type, include_inactive: bool) -> Component;
+    fn _core_game_object__get_component_in_parent_by_type(handle: GameObject, cs_type: Type, include_inactive: bool) -> Component;
+    fn _core_game_object__get_component_index(handle: GameObject, component: Component) -> i32;
+    fn _core_game_object__get_hide_flags(handle: GameObject) -> i32;
+    fn _core_game_object__get_instance_id(handle: GameObject) -> i32;
+    fn _core_game_object__get_is_static(handle: GameObject) -> bool;
+    fn _core_game_object__get_layer(handle: GameObject) -> i32;
+    fn _core_game_object__get_name(handle: GameObject) -> u32;
+    fn _core_game_object__get_scene_culling_mask(handle: GameObject) -> u64;
+    fn _core_game_object__get_tag(handle: GameObject) -> u32;
+    fn _core_game_object__get_transform(handle: GameObject) -> Transform;
+    fn _core_game_object__send_message(handle: GameObject, method_name: *const c_char, options: i32);
+    fn _core_game_object__send_message_upwards(handle: GameObject, method_name: *const c_char, options: i32);
+    fn _core_game_object__set_active(handle: GameObject, value: bool);
+    fn _core_game_object__set_active_prop(handle: GameObject, value: bool);
+    fn _core_game_object__set_active_recursively(handle: GameObject, state: bool);
+    fn _core_game_object__set_hide_flags(handle: GameObject, value: i32);
+    fn _core_game_object__set_is_static(handle: GameObject, value: bool);
+    fn _core_game_object__set_layer(handle: GameObject, value: i32);
+    fn _core_game_object__set_name(handle: GameObject, value: *const c_char);
+    fn _core_game_object__set_tag(handle: GameObject, value: *const c_char);
     fn _core_gc_helper__create() -> GCHelper;
     fn _core_gc_helper__dispose(handle: GcHelper);
     fn _core_gc_helper__invalidate_all_handles(handle: GcHelper);
@@ -322,6 +354,81 @@ unsafe extern "C" {
     fn _core_note_manager__time_to_beat(time: f32) -> f32;
     fn _core_task_scheduler__schedule(task: Action);
     fn _core_task_scheduler__dispose(handle: TaskScheduler);
+    fn _core_transform__broadcast_message(handle: Transform, method_name: *const c_char, parameter: Object, options: i32);
+    fn _core_transform__compare_tag(handle: Transform, tag: *const c_char) -> bool;
+    fn _core_transform__detach_children(handle: Transform);
+    fn _core_transform__find(handle: Transform, n: *const c_char) -> Transform;
+    fn _core_transform__find_child(handle: Transform, n: *const c_char) -> Transform;
+    fn _core_transform__get_child(handle: Transform, index: i32) -> Transform;
+    fn _core_transform__get_child_count(handle: Transform) -> i32;
+    fn _core_transform__get_child_count_prop(handle: Transform) -> i32;
+    fn _core_transform__get_component_by_name(handle: Transform, cs_type: *const c_char) -> Component;
+    fn _core_transform__get_component_by_type(handle: Transform, cs_type: Type) -> Component;
+    fn _core_transform__get_component_in_children_by_type(handle: Transform, t: Type, include_inactive: bool) -> Component;
+    fn _core_transform__get_component_in_parent_by_type(handle: Transform, t: Type, include_inactive: bool) -> Component;
+    fn _core_transform__get_component_index(handle: Transform) -> i32;
+    fn _core_transform__get_enumerator(handle: Transform) -> IEnumerator;
+    fn _core_transform__get_euler_angles(handle: Transform) -> u32;
+    fn _core_transform__get_forward(handle: Transform) -> u32;
+    fn _core_transform__get_game_object(handle: Transform) -> GameObject;
+    fn _core_transform__get_has_changed(handle: Transform) -> bool;
+    fn _core_transform__get_hide_flags(handle: Transform) -> i32;
+    fn _core_transform__get_hierarchy_capacity(handle: Transform) -> i32;
+    fn _core_transform__get_hierarchy_count(handle: Transform) -> i32;
+    fn _core_transform__get_instance_id(handle: Transform) -> i32;
+    fn _core_transform__get_local_euler_angles(handle: Transform) -> u32;
+    fn _core_transform__get_local_position(handle: Transform) -> u32;
+    fn _core_transform__get_local_rotation(handle: Transform) -> u32;
+    fn _core_transform__get_local_scale(handle: Transform) -> u32;
+    fn _core_transform__get_local_to_world_matrix(handle: Transform) -> u32;
+    fn _core_transform__get_lossy_scale(handle: Transform) -> u32;
+    fn _core_transform__get_name(handle: Transform) -> u32;
+    fn _core_transform__get_parent(handle: Transform) -> Transform;
+    fn _core_transform__get_position(handle: Transform) -> u32;
+    fn _core_transform__get_right(handle: Transform) -> u32;
+    fn _core_transform__get_root(handle: Transform) -> Transform;
+    fn _core_transform__get_rotation(handle: Transform) -> u32;
+    fn _core_transform__get_sibling_index(handle: Transform) -> i32;
+    fn _core_transform__get_tag(handle: Transform) -> u32;
+    fn _core_transform__get_up(handle: Transform) -> u32;
+    fn _core_transform__get_world_to_local_matrix(handle: Transform) -> u32;
+    fn _core_transform__inverse_transform_direction(handle: Transform, direction: u32) -> u32;
+    fn _core_transform__inverse_transform_point(handle: Transform, position: u32) -> u32;
+    fn _core_transform__inverse_transform_vector(handle: Transform, vector: u32) -> u32;
+    fn _core_transform__is_child_of(handle: Transform, parent: Transform) -> bool;
+    fn _core_transform__look_at(handle: Transform, target: Transform, world_up: u32);
+    fn _core_transform__rotate(handle: Transform, eulers: u32);
+    fn _core_transform__rotate_around(handle: Transform, point: u32, axis: u32, angle: f32);
+    fn _core_transform__rotate_around_local(handle: Transform, axis: u32, angle: f32);
+    fn _core_transform__rotate_relative(handle: Transform, eulers: u32, relative_to: i32);
+    fn _core_transform__send_message(handle: Transform, method_name: *const c_char, value: Object, options: i32);
+    fn _core_transform__send_message_upwards(handle: Transform, method_name: *const c_char, value: Object, options: i32);
+    fn _core_transform__set_as_first_sibling(handle: Transform);
+    fn _core_transform__set_as_last_sibling(handle: Transform);
+    fn _core_transform__set_euler_angles(handle: Transform, value: u32);
+    fn _core_transform__set_forward(handle: Transform, value: u32);
+    fn _core_transform__set_has_changed(handle: Transform, value: bool);
+    fn _core_transform__set_hide_flags(handle: Transform, value: i32);
+    fn _core_transform__set_hierarchy_capacity(handle: Transform, value: i32);
+    fn _core_transform__set_local_euler_angles(handle: Transform, value: u32);
+    fn _core_transform__set_local_position(handle: Transform, value: u32);
+    fn _core_transform__set_local_position_and_rotation(handle: Transform, local_position: u32, local_rotation: u32);
+    fn _core_transform__set_local_rotation(handle: Transform, value: u32);
+    fn _core_transform__set_local_scale(handle: Transform, value: u32);
+    fn _core_transform__set_name(handle: Transform, value: *const c_char);
+    fn _core_transform__set_parent(handle: Transform, parent: Transform, world_position_stays: bool);
+    fn _core_transform__set_position(handle: Transform, value: u32);
+    fn _core_transform__set_position_and_rotation(handle: Transform, position: u32, rotation: u32);
+    fn _core_transform__set_right(handle: Transform, value: u32);
+    fn _core_transform__set_rotation(handle: Transform, value: u32);
+    fn _core_transform__set_sibling_index(handle: Transform, index: i32);
+    fn _core_transform__set_tag(handle: Transform, value: *const c_char);
+    fn _core_transform__set_up(handle: Transform, value: u32);
+    fn _core_transform__transform_direction(handle: Transform, direction: u32) -> u32;
+    fn _core_transform__transform_point(handle: Transform, position: u32) -> u32;
+    fn _core_transform__transform_vector(handle: Transform, vector: u32) -> u32;
+    fn _core_transform__translate(handle: Transform, translation: u32, relative_to: i32);
+    fn _core_transform__translate_relative(handle: Transform, translation: u32, relative_to: Transform);
     fn _core_turing_mesh___mesh_get(handle: TuringMesh) -> Mesh;
     fn _core_turing_mesh___mesh_set(handle: TuringMesh, value: Mesh);
     fn _core_turing_mesh__clear(handle: TuringMesh);
@@ -349,120 +456,12 @@ unsafe extern "C" {
     fn _core_turing_mesh__set_u_vs(handle: TuringMesh, channel: i32, uvs: *const c_void);
     fn _core_turing_mesh__set_vertices(handle: TuringMesh, in_vertices: *const c_void);
     fn _core_turing_mesh__upload_mesh_data(handle: TuringMesh, mark_no_longer_readable: bool);
-    fn _core_turinger_game_object__active_get(handle: TuringerGameObject) -> bool;
-    fn _core_turinger_game_object__active_in_hierarchy_get(handle: TuringerGameObject) -> bool;
-    fn _core_turinger_game_object__active_self_get(handle: TuringerGameObject) -> bool;
-    fn _core_turinger_game_object__active_set(handle: TuringerGameObject, value: bool);
-    fn _core_turinger_game_object__add_component(handle: TuringerGameObject, component_type: Type) -> Component;
-    fn _core_turinger_game_object__add_or_get_mesh(handle: TuringerGameObject) -> TuringMesh;
-    fn _core_turinger_game_object__broadcast_message(handle: TuringerGameObject, method_name: *const c_char, options: i32);
-    fn _core_turinger_game_object__compare_tag(handle: TuringerGameObject, tag: *const c_char) -> bool;
-    fn _core_turinger_game_object__game_object_get(handle: TuringerGameObject) -> GameObject;
-    fn _core_turinger_game_object__get_component_at_index(handle: TuringerGameObject, index: i32) -> Component;
-    fn _core_turinger_game_object__get_component_by_name(handle: TuringerGameObject, cs_type: *const c_char) -> Component;
-    fn _core_turinger_game_object__get_component_by_type(handle: TuringerGameObject, cs_type: Type) -> Component;
-    fn _core_turinger_game_object__get_component_count(handle: TuringerGameObject) -> i32;
-    fn _core_turinger_game_object__get_component_in_children_by_type(handle: TuringerGameObject, cs_type: Type, include_inactive: bool) -> Component;
-    fn _core_turinger_game_object__get_component_in_parent_by_type(handle: TuringerGameObject, cs_type: Type, include_inactive: bool) -> Component;
-    fn _core_turinger_game_object__get_component_index(handle: TuringerGameObject, component: Component) -> i32;
-    fn _core_turinger_game_object__get_instance_id(handle: TuringerGameObject) -> i32;
-    fn _core_turinger_game_object__hide_flags_get(handle: TuringerGameObject) -> i32;
-    fn _core_turinger_game_object__hide_flags_set(handle: TuringerGameObject, value: i32);
-    fn _core_turinger_game_object__is_static_get(handle: TuringerGameObject) -> bool;
-    fn _core_turinger_game_object__is_static_set(handle: TuringerGameObject, value: bool);
-    fn _core_turinger_game_object__layer_get(handle: TuringerGameObject) -> i32;
-    fn _core_turinger_game_object__layer_set(handle: TuringerGameObject, value: i32);
-    fn _core_turinger_game_object__name_get(handle: TuringerGameObject) -> u32;
-    fn _core_turinger_game_object__name_set(handle: TuringerGameObject, value: *const c_char);
-    fn _core_turinger_game_object__scene_culling_mask_get(handle: TuringerGameObject) -> u64;
-    fn _core_turinger_game_object__send_message(handle: TuringerGameObject, method_name: *const c_char, options: i32);
-    fn _core_turinger_game_object__send_message_upwards(handle: TuringerGameObject, method_name: *const c_char, options: i32);
-    fn _core_turinger_game_object__set_active(handle: TuringerGameObject, value: bool);
-    fn _core_turinger_game_object__set_active_recursively(handle: TuringerGameObject, state: bool);
-    fn _core_turinger_game_object__tag_get(handle: TuringerGameObject) -> u32;
-    fn _core_turinger_game_object__tag_set(handle: TuringerGameObject, value: *const c_char);
-    fn _core_turinger_game_object__transform_get(handle: TuringerGameObject) -> TuringerTransform;
-    fn _core_turinger_game_object_manager__create_object(name: *const c_char) -> TuringerGameObject;
-    fn _core_turinger_game_object_manager__destroy_object(listener: TuringerGameObject);
-    fn _core_turinger_game_object_manager__find(name: *const c_char) -> TuringerGameObject;
+    fn _core_turing_note_extensions__get_note_floor_movement(note_controller: NoteController) -> NoteFloorMovement;
+    fn _core_turing_note_extensions__get_note_jump(note_controller: NoteController) -> NoteJump;
+    fn _core_turinger_game_object_manager__create_object(name: *const c_char) -> GameObject;
+    fn _core_turinger_game_object_manager__destroy_object(game_object: GameObject);
+    fn _core_turinger_game_object_manager__find(name: *const c_char) -> GameObject;
     fn _core_turinger_game_object_manager__instance_get(handle: TuringerGameObjectManager) -> TuringerGameObjectManager;
-    fn _core_turinger_transform__broadcast_message(handle: TuringerTransform, method_name: *const c_char, parameter: Object, options: i32);
-    fn _core_turinger_transform__child_count_get(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__compare_tag(handle: TuringerTransform, tag: *const c_char) -> bool;
-    fn _core_turinger_transform__detach_children(handle: TuringerTransform);
-    fn _core_turinger_transform__euler_angles_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__euler_angles_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__find(handle: TuringerTransform, n: *const c_char) -> TuringerTransform;
-    fn _core_turinger_transform__find_child(handle: TuringerTransform, n: *const c_char) -> TuringerTransform;
-    fn _core_turinger_transform__forward_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__forward_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__game_object_get(handle: TuringerTransform) -> TuringerGameObject;
-    fn _core_turinger_transform__get_child(handle: TuringerTransform, index: i32) -> TuringerTransform;
-    fn _core_turinger_transform__get_child_count(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__get_component_by_name(handle: TuringerTransform, cs_type: *const c_char) -> Component;
-    fn _core_turinger_transform__get_component_by_type(handle: TuringerTransform, cs_type: Type) -> Component;
-    fn _core_turinger_transform__get_component_in_children_by_type(handle: TuringerTransform, t: Type, include_inactive: bool) -> Component;
-    fn _core_turinger_transform__get_component_in_parent_by_type(handle: TuringerTransform, t: Type, include_inactive: bool) -> Component;
-    fn _core_turinger_transform__get_component_index(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__get_enumerator(handle: TuringerTransform) -> IEnumerator;
-    fn _core_turinger_transform__get_instance_id(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__get_sibling_index(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__has_changed_get(handle: TuringerTransform) -> bool;
-    fn _core_turinger_transform__has_changed_set(handle: TuringerTransform, value: bool);
-    fn _core_turinger_transform__hide_flags_get(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__hide_flags_set(handle: TuringerTransform, value: i32);
-    fn _core_turinger_transform__hierarchy_capacity_get(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__hierarchy_capacity_set(handle: TuringerTransform, value: i32);
-    fn _core_turinger_transform__hierarchy_count_get(handle: TuringerTransform) -> i32;
-    fn _core_turinger_transform__inverse_transform_direction(handle: TuringerTransform, direction: u32) -> u32;
-    fn _core_turinger_transform__inverse_transform_point(handle: TuringerTransform, position: u32) -> u32;
-    fn _core_turinger_transform__inverse_transform_vector(handle: TuringerTransform, vector: u32) -> u32;
-    fn _core_turinger_transform__is_child_of(handle: TuringerTransform, parent: TuringerTransform) -> bool;
-    fn _core_turinger_transform__local_euler_angles_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__local_euler_angles_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__local_position_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__local_position_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__local_rotation_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__local_rotation_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__local_scale_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__local_scale_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__local_to_world_matrix_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__look_at(handle: TuringerTransform, target: TuringerTransform, world_up: u32);
-    fn _core_turinger_transform__lossy_scale_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__name_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__name_set(handle: TuringerTransform, value: *const c_char);
-    fn _core_turinger_transform__parent_get(handle: TuringerTransform) -> TuringerTransform;
-    fn _core_turinger_transform__parent_set(handle: TuringerTransform, value: TuringerTransform);
-    fn _core_turinger_transform__position_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__position_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__right_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__right_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__root_get(handle: TuringerTransform) -> TuringerTransform;
-    fn _core_turinger_transform__rotate(handle: TuringerTransform, eulers: u32);
-    fn _core_turinger_transform__rotate_around(handle: TuringerTransform, point: u32, axis: u32, angle: f32);
-    fn _core_turinger_transform__rotate_around_local(handle: TuringerTransform, axis: u32, angle: f32);
-    fn _core_turinger_transform__rotate_relative(handle: TuringerTransform, eulers: u32, relative_to: i32);
-    fn _core_turinger_transform__rotation_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__rotation_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__send_message(handle: TuringerTransform, method_name: *const c_char, value: Object, options: i32);
-    fn _core_turinger_transform__send_message_upwards(handle: TuringerTransform, method_name: *const c_char, value: Object, options: i32);
-    fn _core_turinger_transform__set_as_first_sibling(handle: TuringerTransform);
-    fn _core_turinger_transform__set_as_last_sibling(handle: TuringerTransform);
-    fn _core_turinger_transform__set_local_position_and_rotation(handle: TuringerTransform, local_position: u32, local_rotation: u32);
-    fn _core_turinger_transform__set_parent(handle: TuringerTransform, parent: TuringerTransform, world_position_stays: bool);
-    fn _core_turinger_transform__set_position_and_rotation(handle: TuringerTransform, position: u32, rotation: u32);
-    fn _core_turinger_transform__set_sibling_index(handle: TuringerTransform, index: i32);
-    fn _core_turinger_transform__tag_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__tag_set(handle: TuringerTransform, value: *const c_char);
-    fn _core_turinger_transform__transform_direction(handle: TuringerTransform, direction: u32) -> u32;
-    fn _core_turinger_transform__transform_get(handle: TuringerTransform) -> Transform;
-    fn _core_turinger_transform__transform_point(handle: TuringerTransform, position: u32) -> u32;
-    fn _core_turinger_transform__transform_vector(handle: TuringerTransform, vector: u32) -> u32;
-    fn _core_turinger_transform__translate(handle: TuringerTransform, translation: u32, relative_to: i32);
-    fn _core_turinger_transform__translate_relative(handle: TuringerTransform, translation: u32, relative_to: TuringerTransform);
-    fn _core_turinger_transform__up_get(handle: TuringerTransform) -> u32;
-    fn _core_turinger_transform__up_set(handle: TuringerTransform, value: u32);
-    fn _core_turinger_transform__world_to_local_matrix_get(handle: TuringerTransform) -> u32;
     fn _core_xr__get_device_battery_level(node_int: i32) -> f32;
     fn _core_xr__get_device_grip_value(node_int: i32) -> f32;
     fn _core_xr__get_device_name(node_int: i32) -> u32;
@@ -707,6 +706,160 @@ pub struct GcHelper {
 pub struct GameObject {
     handle: u64,
 }
+impl GameObject {
+
+    
+
+    pub fn add_component(&self, component_type: Type) -> Component {
+        unsafe { _core_game_object__add_component(*self, component_type) }
+    }
+
+    pub fn add_or_get_mesh(&self) -> TuringMesh {
+        unsafe { _core_game_object__add_or_get_mesh(*self) }
+    }
+
+    pub fn broadcast_message(&self, method_name: &str, options: i32) {
+        let turing_handle = CString::new(method_name).unwrap();
+        let method_name = turing_handle.as_ptr();
+        unsafe { _core_game_object__broadcast_message(*self, method_name, options) };
+    }
+
+    pub fn compare_tag(&self, tag: &str) -> bool {
+        let turing_handle = CString::new(tag).unwrap();
+        let tag = turing_handle.as_ptr();
+        unsafe { _core_game_object__compare_tag(*self, tag) }
+    }
+
+    pub fn get_active(&self) -> bool {
+        unsafe { _core_game_object__get_active(*self) }
+    }
+
+    pub fn get_active_in_hierarchy(&self) -> bool {
+        unsafe { _core_game_object__get_active_in_hierarchy(*self) }
+    }
+
+    pub fn get_active_self(&self) -> bool {
+        unsafe { _core_game_object__get_active_self(*self) }
+    }
+
+    pub fn get_component_at_index(&self, index: i32) -> Component {
+        unsafe { _core_game_object__get_component_at_index(*self, index) }
+    }
+
+    pub fn get_component_by_name(&self, cs_type: &str) -> Component {
+        let turing_handle = CString::new(cs_type).unwrap();
+        let cs_type = turing_handle.as_ptr();
+        unsafe { _core_game_object__get_component_by_name(*self, cs_type) }
+    }
+
+    pub fn get_component_by_type(&self, cs_type: Type) -> Component {
+        unsafe { _core_game_object__get_component_by_type(*self, cs_type) }
+    }
+
+    pub fn get_component_count(&self) -> i32 {
+        unsafe { _core_game_object__get_component_count(*self) }
+    }
+
+    pub fn get_component_in_children_by_type(&self, cs_type: Type, include_inactive: bool) -> Component {
+        unsafe { _core_game_object__get_component_in_children_by_type(*self, cs_type, include_inactive) }
+    }
+
+    pub fn get_component_in_parent_by_type(&self, cs_type: Type, include_inactive: bool) -> Component {
+        unsafe { _core_game_object__get_component_in_parent_by_type(*self, cs_type, include_inactive) }
+    }
+
+    pub fn get_component_index(&self, component: Component) -> i32 {
+        unsafe { _core_game_object__get_component_index(*self, component) }
+    }
+
+    pub fn get_hide_flags(&self) -> i32 {
+        unsafe { _core_game_object__get_hide_flags(*self) }
+    }
+
+    pub fn get_instance_id(&self) -> i32 {
+        unsafe { _core_game_object__get_instance_id(*self) }
+    }
+
+    pub fn get_is_static(&self) -> bool {
+        unsafe { _core_game_object__get_is_static(*self) }
+    }
+
+    pub fn get_layer(&self) -> i32 {
+        unsafe { _core_game_object__get_layer(*self) }
+    }
+
+    pub fn get_name(&self) -> String {
+        let turing_result = unsafe { _core_game_object__get_name(*self) };
+        let mut turing_str = vec![0u8; turing_result as usize];
+        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
+        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
+        turing_str.to_string_lossy().into_owned()
+    }
+
+    pub fn get_scene_culling_mask(&self) -> u64 {
+        unsafe { _core_game_object__get_scene_culling_mask(*self) }
+    }
+
+    pub fn get_tag(&self) -> String {
+        let turing_result = unsafe { _core_game_object__get_tag(*self) };
+        let mut turing_str = vec![0u8; turing_result as usize];
+        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
+        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
+        turing_str.to_string_lossy().into_owned()
+    }
+
+    pub fn get_transform(&self) -> Transform {
+        unsafe { _core_game_object__get_transform(*self) }
+    }
+
+    pub fn send_message(&self, method_name: &str, options: i32) {
+        let turing_handle = CString::new(method_name).unwrap();
+        let method_name = turing_handle.as_ptr();
+        unsafe { _core_game_object__send_message(*self, method_name, options) };
+    }
+
+    pub fn send_message_upwards(&self, method_name: &str, options: i32) {
+        let turing_handle = CString::new(method_name).unwrap();
+        let method_name = turing_handle.as_ptr();
+        unsafe { _core_game_object__send_message_upwards(*self, method_name, options) };
+    }
+
+    pub fn set_active(&self, value: bool) {
+        unsafe { _core_game_object__set_active(*self, value) };
+    }
+
+    pub fn set_active_prop(&self, value: bool) {
+        unsafe { _core_game_object__set_active_prop(*self, value) };
+    }
+
+    pub fn set_active_recursively(&self, state: bool) {
+        unsafe { _core_game_object__set_active_recursively(*self, state) };
+    }
+
+    pub fn set_hide_flags(&self, value: i32) {
+        unsafe { _core_game_object__set_hide_flags(*self, value) };
+    }
+
+    pub fn set_is_static(&self, value: bool) {
+        unsafe { _core_game_object__set_is_static(*self, value) };
+    }
+
+    pub fn set_layer(&self, value: i32) {
+        unsafe { _core_game_object__set_layer(*self, value) };
+    }
+
+    pub fn set_name(&self, value: &str) {
+        let turing_handle = CString::new(value).unwrap();
+        let value = turing_handle.as_ptr();
+        unsafe { _core_game_object__set_name(*self, value) };
+    }
+
+    pub fn set_tag(&self, value: &str) {
+        let turing_handle = CString::new(value).unwrap();
+        let value = turing_handle.as_ptr();
+        unsafe { _core_game_object__set_tag(*self, value) };
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
@@ -799,6 +952,12 @@ impl Log {
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
 pub struct Mesh {
+    handle: u64,
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
+pub struct NoteController {
     handle: u64,
 }
 #[repr(C)]
@@ -1234,7 +1393,7 @@ impl NoteJump {
         unsafe { _core_note_jump__distance_to_player_get(*self) }
     }
 
-    pub fn init_note(&self, note_time: f32, world_rotation: f32, move_end_offset: alg::Vec3, jump_end_offset: alg::Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) {
+    pub fn init_jump(&self, note_time: f32, world_rotation: f32, move_end_offset: alg::Vec3, jump_end_offset: alg::Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) {
          let move_end_offset = alg::enqueue_vec3(move_end_offset);
          let jump_end_offset = alg::enqueue_vec3(jump_end_offset);
         unsafe { _core_note_jump__init(*self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) };
@@ -1393,6 +1552,383 @@ impl TaskScheduler {
 pub struct Transform {
     handle: u64,
 }
+impl Transform {
+
+    
+
+    pub fn broadcast_message(&self, method_name: &str, parameter: Object, options: i32) {
+        let turing_handle = CString::new(method_name).unwrap();
+        let method_name = turing_handle.as_ptr();
+        unsafe { _core_transform__broadcast_message(*self, method_name, parameter, options) };
+    }
+
+    pub fn compare_tag(&self, tag: &str) -> bool {
+        let turing_handle = CString::new(tag).unwrap();
+        let tag = turing_handle.as_ptr();
+        unsafe { _core_transform__compare_tag(*self, tag) }
+    }
+
+    pub fn detach_children(&self) {
+        unsafe { _core_transform__detach_children(*self) };
+    }
+
+    pub fn find(&self, n: &str) -> Transform {
+        let turing_handle = CString::new(n).unwrap();
+        let n = turing_handle.as_ptr();
+        unsafe { _core_transform__find(*self, n) }
+    }
+
+    pub fn find_child(&self, n: &str) -> Transform {
+        let turing_handle = CString::new(n).unwrap();
+        let n = turing_handle.as_ptr();
+        unsafe { _core_transform__find_child(*self, n) }
+    }
+
+    pub fn get_child(&self, index: i32) -> Transform {
+        unsafe { _core_transform__get_child(*self, index) }
+    }
+
+    pub fn get_child_count(&self) -> i32 {
+        unsafe { _core_transform__get_child_count(*self) }
+    }
+
+    pub fn get_child_count_prop(&self) -> i32 {
+        unsafe { _core_transform__get_child_count_prop(*self) }
+    }
+
+    pub fn get_component_by_name(&self, cs_type: &str) -> Component {
+        let turing_handle = CString::new(cs_type).unwrap();
+        let cs_type = turing_handle.as_ptr();
+        unsafe { _core_transform__get_component_by_name(*self, cs_type) }
+    }
+
+    pub fn get_component_by_type(&self, cs_type: Type) -> Component {
+        unsafe { _core_transform__get_component_by_type(*self, cs_type) }
+    }
+
+    pub fn get_component_in_children_by_type(&self, t: Type, include_inactive: bool) -> Component {
+        unsafe { _core_transform__get_component_in_children_by_type(*self, t, include_inactive) }
+    }
+
+    pub fn get_component_in_parent_by_type(&self, t: Type, include_inactive: bool) -> Component {
+        unsafe { _core_transform__get_component_in_parent_by_type(*self, t, include_inactive) }
+    }
+
+    pub fn get_component_index(&self) -> i32 {
+        unsafe { _core_transform__get_component_index(*self) }
+    }
+
+    pub fn get_enumerator(&self) -> IEnumerator {
+        unsafe { _core_transform__get_enumerator(*self) }
+    }
+
+    pub fn get_euler_angles(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_euler_angles(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_forward(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_forward(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_game_object(&self) -> GameObject {
+        unsafe { _core_transform__get_game_object(*self) }
+    }
+
+    pub fn get_has_changed(&self) -> bool {
+        unsafe { _core_transform__get_has_changed(*self) }
+    }
+
+    pub fn get_hide_flags(&self) -> i32 {
+        unsafe { _core_transform__get_hide_flags(*self) }
+    }
+
+    pub fn get_hierarchy_capacity(&self) -> i32 {
+        unsafe { _core_transform__get_hierarchy_capacity(*self) }
+    }
+
+    pub fn get_hierarchy_count(&self) -> i32 {
+        unsafe { _core_transform__get_hierarchy_count(*self) }
+    }
+
+    pub fn get_instance_id(&self) -> i32 {
+        unsafe { _core_transform__get_instance_id(*self) }
+    }
+
+    pub fn get_local_euler_angles(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_local_euler_angles(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_local_position(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_local_position(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_local_rotation(&self) -> alg::Quat {
+        unsafe { _core_transform__get_local_rotation(*self) };
+        alg::dequeue_quat()
+    }
+
+    pub fn get_local_scale(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_local_scale(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_local_to_world_matrix(&self) -> alg::Mat4 {
+        unsafe { _core_transform__get_local_to_world_matrix(*self) };
+        alg::dequeue_mat4()
+    }
+
+    pub fn get_lossy_scale(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_lossy_scale(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_name(&self) -> String {
+        let turing_result = unsafe { _core_transform__get_name(*self) };
+        let mut turing_str = vec![0u8; turing_result as usize];
+        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
+        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
+        turing_str.to_string_lossy().into_owned()
+    }
+
+    pub fn get_parent(&self) -> Transform {
+        unsafe { _core_transform__get_parent(*self) }
+    }
+
+    pub fn get_position(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_position(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_right(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_right(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_root(&self) -> Transform {
+        unsafe { _core_transform__get_root(*self) }
+    }
+
+    pub fn get_rotation(&self) -> alg::Quat {
+        unsafe { _core_transform__get_rotation(*self) };
+        alg::dequeue_quat()
+    }
+
+    pub fn get_sibling_index(&self) -> i32 {
+        unsafe { _core_transform__get_sibling_index(*self) }
+    }
+
+    pub fn get_tag(&self) -> String {
+        let turing_result = unsafe { _core_transform__get_tag(*self) };
+        let mut turing_str = vec![0u8; turing_result as usize];
+        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
+        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
+        turing_str.to_string_lossy().into_owned()
+    }
+
+    pub fn get_up(&self) -> alg::Vec3 {
+        unsafe { _core_transform__get_up(*self) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn get_world_to_local_matrix(&self) -> alg::Mat4 {
+        unsafe { _core_transform__get_world_to_local_matrix(*self) };
+        alg::dequeue_mat4()
+    }
+
+    pub fn inverse_transform_direction(&self, direction: alg::Vec3) -> alg::Vec3 {
+         let direction = alg::enqueue_vec3(direction);
+        unsafe { _core_transform__inverse_transform_direction(*self, direction) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn inverse_transform_point(&self, position: alg::Vec3) -> alg::Vec3 {
+         let position = alg::enqueue_vec3(position);
+        unsafe { _core_transform__inverse_transform_point(*self, position) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn inverse_transform_vector(&self, vector: alg::Vec3) -> alg::Vec3 {
+         let vector = alg::enqueue_vec3(vector);
+        unsafe { _core_transform__inverse_transform_vector(*self, vector) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn is_child_of(&self, parent: Transform) -> bool {
+        unsafe { _core_transform__is_child_of(*self, parent) }
+    }
+
+    pub fn look_at(&self, target: Transform, world_up: alg::Vec3) {
+         let world_up = alg::enqueue_vec3(world_up);
+        unsafe { _core_transform__look_at(*self, target, world_up) };
+    }
+
+    pub fn rotate(&self, eulers: alg::Vec3) {
+         let eulers = alg::enqueue_vec3(eulers);
+        unsafe { _core_transform__rotate(*self, eulers) };
+    }
+
+    pub fn rotate_around(&self, point: alg::Vec3, axis: alg::Vec3, angle: f32) {
+         let point = alg::enqueue_vec3(point);
+         let axis = alg::enqueue_vec3(axis);
+        unsafe { _core_transform__rotate_around(*self, point, axis, angle) };
+    }
+
+    pub fn rotate_around_local(&self, axis: alg::Vec3, angle: f32) {
+         let axis = alg::enqueue_vec3(axis);
+        unsafe { _core_transform__rotate_around_local(*self, axis, angle) };
+    }
+
+    pub fn rotate_relative(&self, eulers: alg::Vec3, relative_to: i32) {
+         let eulers = alg::enqueue_vec3(eulers);
+        unsafe { _core_transform__rotate_relative(*self, eulers, relative_to) };
+    }
+
+    pub fn send_message(&self, method_name: &str, value: Object, options: i32) {
+        let turing_handle = CString::new(method_name).unwrap();
+        let method_name = turing_handle.as_ptr();
+        unsafe { _core_transform__send_message(*self, method_name, value, options) };
+    }
+
+    pub fn send_message_upwards(&self, method_name: &str, value: Object, options: i32) {
+        let turing_handle = CString::new(method_name).unwrap();
+        let method_name = turing_handle.as_ptr();
+        unsafe { _core_transform__send_message_upwards(*self, method_name, value, options) };
+    }
+
+    pub fn set_as_first_sibling(&self) {
+        unsafe { _core_transform__set_as_first_sibling(*self) };
+    }
+
+    pub fn set_as_last_sibling(&self) {
+        unsafe { _core_transform__set_as_last_sibling(*self) };
+    }
+
+    pub fn set_euler_angles(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_euler_angles(*self, value) };
+    }
+
+    pub fn set_forward(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_forward(*self, value) };
+    }
+
+    pub fn set_has_changed(&self, value: bool) {
+        unsafe { _core_transform__set_has_changed(*self, value) };
+    }
+
+    pub fn set_hide_flags(&self, value: i32) {
+        unsafe { _core_transform__set_hide_flags(*self, value) };
+    }
+
+    pub fn set_hierarchy_capacity(&self, value: i32) {
+        unsafe { _core_transform__set_hierarchy_capacity(*self, value) };
+    }
+
+    pub fn set_local_euler_angles(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_local_euler_angles(*self, value) };
+    }
+
+    pub fn set_local_position(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_local_position(*self, value) };
+    }
+
+    pub fn set_local_position_and_rotation(&self, local_position: alg::Vec3, local_rotation: alg::Quat) {
+         let local_position = alg::enqueue_vec3(local_position);
+         let local_rotation = alg::enqueue_quat(local_rotation);
+        unsafe { _core_transform__set_local_position_and_rotation(*self, local_position, local_rotation) };
+    }
+
+    pub fn set_local_rotation(&self, value: alg::Quat) {
+         let value = alg::enqueue_quat(value);
+        unsafe { _core_transform__set_local_rotation(*self, value) };
+    }
+
+    pub fn set_local_scale(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_local_scale(*self, value) };
+    }
+
+    pub fn set_name(&self, value: &str) {
+        let turing_handle = CString::new(value).unwrap();
+        let value = turing_handle.as_ptr();
+        unsafe { _core_transform__set_name(*self, value) };
+    }
+
+    pub fn set_parent(&self, parent: Transform, world_position_stays: bool) {
+        unsafe { _core_transform__set_parent(*self, parent, world_position_stays) };
+    }
+
+    pub fn set_position(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_position(*self, value) };
+    }
+
+    pub fn set_position_and_rotation(&self, position: alg::Vec3, rotation: alg::Quat) {
+         let position = alg::enqueue_vec3(position);
+         let rotation = alg::enqueue_quat(rotation);
+        unsafe { _core_transform__set_position_and_rotation(*self, position, rotation) };
+    }
+
+    pub fn set_right(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_right(*self, value) };
+    }
+
+    pub fn set_rotation(&self, value: alg::Quat) {
+         let value = alg::enqueue_quat(value);
+        unsafe { _core_transform__set_rotation(*self, value) };
+    }
+
+    pub fn set_sibling_index(&self, index: i32) {
+        unsafe { _core_transform__set_sibling_index(*self, index) };
+    }
+
+    pub fn set_tag(&self, value: &str) {
+        let turing_handle = CString::new(value).unwrap();
+        let value = turing_handle.as_ptr();
+        unsafe { _core_transform__set_tag(*self, value) };
+    }
+
+    pub fn set_up(&self, value: alg::Vec3) {
+         let value = alg::enqueue_vec3(value);
+        unsafe { _core_transform__set_up(*self, value) };
+    }
+
+    pub fn transform_direction(&self, direction: alg::Vec3) -> alg::Vec3 {
+         let direction = alg::enqueue_vec3(direction);
+        unsafe { _core_transform__transform_direction(*self, direction) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn transform_point(&self, position: alg::Vec3) -> alg::Vec3 {
+         let position = alg::enqueue_vec3(position);
+        unsafe { _core_transform__transform_point(*self, position) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn transform_vector(&self, vector: alg::Vec3) -> alg::Vec3 {
+         let vector = alg::enqueue_vec3(vector);
+        unsafe { _core_transform__transform_vector(*self, vector) };
+        alg::dequeue_vec3()
+    }
+
+    pub fn translate(&self, translation: alg::Vec3, relative_to: i32) {
+         let translation = alg::enqueue_vec3(translation);
+        unsafe { _core_transform__translate(*self, translation, relative_to) };
+    }
+
+    pub fn translate_relative(&self, translation: alg::Vec3, relative_to: Transform) {
+         let translation = alg::enqueue_vec3(translation);
+        unsafe { _core_transform__translate_relative(*self, translation, relative_to) };
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
@@ -1530,172 +2066,24 @@ impl TuringMesh {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct TuringScriptManager {
-    handle: u64,
+pub struct TuringNoteExtensions;
+impl TuringNoteExtensions {
+
+
+    pub fn get_note_floor_movement(note_controller: NoteController) -> NoteFloorMovement {
+        unsafe { _core_turing_note_extensions__get_note_floor_movement(note_controller) }
+    }
+
+    pub fn get_note_jump(note_controller: NoteController) -> NoteJump {
+        unsafe { _core_turing_note_extensions__get_note_jump(note_controller) }
+    }
+    
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct TuringerGameObject {
+pub struct TuringScriptManager {
     handle: u64,
-}
-impl TuringerGameObject {
-
-    
-
-    pub fn active_get(&self) -> bool {
-        unsafe { _core_turinger_game_object__active_get(*self) }
-    }
-
-    pub fn active_in_hierarchy_get(&self) -> bool {
-        unsafe { _core_turinger_game_object__active_in_hierarchy_get(*self) }
-    }
-
-    pub fn active_self_get(&self) -> bool {
-        unsafe { _core_turinger_game_object__active_self_get(*self) }
-    }
-
-    pub fn active_set(&self, value: bool) {
-        unsafe { _core_turinger_game_object__active_set(*self, value) };
-    }
-
-    pub fn add_component(&self, component_type: Type) -> Component {
-        unsafe { _core_turinger_game_object__add_component(*self, component_type) }
-    }
-
-    pub fn add_or_get_mesh(&self) -> TuringMesh {
-        unsafe { _core_turinger_game_object__add_or_get_mesh(*self) }
-    }
-
-    pub fn broadcast_message(&self, method_name: &str, options: i32) {
-        let turing_handle = CString::new(method_name).unwrap();
-        let method_name = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__broadcast_message(*self, method_name, options) };
-    }
-
-    pub fn compare_tag(&self, tag: &str) -> bool {
-        let turing_handle = CString::new(tag).unwrap();
-        let tag = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__compare_tag(*self, tag) }
-    }
-
-    pub fn game_object_get(&self) -> GameObject {
-        unsafe { _core_turinger_game_object__game_object_get(*self) }
-    }
-
-    pub fn get_component_at_index(&self, index: i32) -> Component {
-        unsafe { _core_turinger_game_object__get_component_at_index(*self, index) }
-    }
-
-    pub fn get_component_by_name(&self, cs_type: &str) -> Component {
-        let turing_handle = CString::new(cs_type).unwrap();
-        let cs_type = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__get_component_by_name(*self, cs_type) }
-    }
-
-    pub fn get_component_by_type(&self, cs_type: Type) -> Component {
-        unsafe { _core_turinger_game_object__get_component_by_type(*self, cs_type) }
-    }
-
-    pub fn get_component_count(&self) -> i32 {
-        unsafe { _core_turinger_game_object__get_component_count(*self) }
-    }
-
-    pub fn get_component_in_children_by_type(&self, cs_type: Type, include_inactive: bool) -> Component {
-        unsafe { _core_turinger_game_object__get_component_in_children_by_type(*self, cs_type, include_inactive) }
-    }
-
-    pub fn get_component_in_parent_by_type(&self, cs_type: Type, include_inactive: bool) -> Component {
-        unsafe { _core_turinger_game_object__get_component_in_parent_by_type(*self, cs_type, include_inactive) }
-    }
-
-    pub fn get_component_index(&self, component: Component) -> i32 {
-        unsafe { _core_turinger_game_object__get_component_index(*self, component) }
-    }
-
-    pub fn get_instance_id(&self) -> i32 {
-        unsafe { _core_turinger_game_object__get_instance_id(*self) }
-    }
-
-    pub fn hide_flags_get(&self) -> i32 {
-        unsafe { _core_turinger_game_object__hide_flags_get(*self) }
-    }
-
-    pub fn hide_flags_set(&self, value: i32) {
-        unsafe { _core_turinger_game_object__hide_flags_set(*self, value) };
-    }
-
-    pub fn is_static_get(&self) -> bool {
-        unsafe { _core_turinger_game_object__is_static_get(*self) }
-    }
-
-    pub fn is_static_set(&self, value: bool) {
-        unsafe { _core_turinger_game_object__is_static_set(*self, value) };
-    }
-
-    pub fn layer_get(&self) -> i32 {
-        unsafe { _core_turinger_game_object__layer_get(*self) }
-    }
-
-    pub fn layer_set(&self, value: i32) {
-        unsafe { _core_turinger_game_object__layer_set(*self, value) };
-    }
-
-    pub fn name_get(&self) -> String {
-        let turing_result = unsafe { _core_turinger_game_object__name_get(*self) };
-        let mut turing_str = vec![0u8; turing_result as usize];
-        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
-        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
-        turing_str.to_string_lossy().into_owned()
-    }
-
-    pub fn name_set(&self, value: &str) {
-        let turing_handle = CString::new(value).unwrap();
-        let value = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__name_set(*self, value) };
-    }
-
-    pub fn scene_culling_mask_get(&self) -> u64 {
-        unsafe { _core_turinger_game_object__scene_culling_mask_get(*self) }
-    }
-
-    pub fn send_message(&self, method_name: &str, options: i32) {
-        let turing_handle = CString::new(method_name).unwrap();
-        let method_name = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__send_message(*self, method_name, options) };
-    }
-
-    pub fn send_message_upwards(&self, method_name: &str, options: i32) {
-        let turing_handle = CString::new(method_name).unwrap();
-        let method_name = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__send_message_upwards(*self, method_name, options) };
-    }
-
-    pub fn set_active(&self, value: bool) {
-        unsafe { _core_turinger_game_object__set_active(*self, value) };
-    }
-
-    pub fn set_active_recursively(&self, state: bool) {
-        unsafe { _core_turinger_game_object__set_active_recursively(*self, state) };
-    }
-
-    pub fn tag_get(&self) -> String {
-        let turing_result = unsafe { _core_turinger_game_object__tag_get(*self) };
-        let mut turing_str = vec![0u8; turing_result as usize];
-        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
-        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
-        turing_str.to_string_lossy().into_owned()
-    }
-
-    pub fn tag_set(&self, value: &str) {
-        let turing_handle = CString::new(value).unwrap();
-        let value = turing_handle.as_ptr();
-        unsafe { _core_turinger_game_object__tag_set(*self, value) };
-    }
-
-    pub fn transform_get(&self) -> TuringerTransform {
-        unsafe { _core_turinger_game_object__transform_get(*self) }
-    }
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1706,17 +2094,17 @@ pub struct TuringerGameObjectManager {
 impl TuringerGameObjectManager {
 
 
-    pub fn create_object(name: &str) -> TuringerGameObject {
+    pub fn create_object(name: &str) -> GameObject {
         let turing_handle = CString::new(name).unwrap();
         let name = turing_handle.as_ptr();
         unsafe { _core_turinger_game_object_manager__create_object(name) }
     }
 
-    pub fn destroy_object(listener: TuringerGameObject) {
-        unsafe { _core_turinger_game_object_manager__destroy_object(listener) };
+    pub fn destroy_object(game_object: GameObject) {
+        unsafe { _core_turinger_game_object_manager__destroy_object(game_object) };
     }
 
-    pub fn find(name: &str) -> TuringerGameObject {
+    pub fn find(name: &str) -> GameObject {
         let turing_handle = CString::new(name).unwrap();
         let name = turing_handle.as_ptr();
         unsafe { _core_turinger_game_object_manager__find(name) }
@@ -1725,397 +2113,6 @@ impl TuringerGameObjectManager {
 
     pub fn instance_get(&self) -> TuringerGameObjectManager {
         unsafe { _core_turinger_game_object_manager__instance_get(*self) }
-    }
-}
-#[repr(C)]
-#[derive(Copy, Clone)]
-#[cfg_attr(feature = "debug", derive(Debug))]
-pub struct TuringerTransform {
-    handle: u64,
-}
-impl TuringerTransform {
-
-    
-
-    pub fn broadcast_message(&self, method_name: &str, parameter: Object, options: i32) {
-        let turing_handle = CString::new(method_name).unwrap();
-        let method_name = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__broadcast_message(*self, method_name, parameter, options) };
-    }
-
-    pub fn child_count_get(&self) -> i32 {
-        unsafe { _core_turinger_transform__child_count_get(*self) }
-    }
-
-    pub fn compare_tag(&self, tag: &str) -> bool {
-        let turing_handle = CString::new(tag).unwrap();
-        let tag = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__compare_tag(*self, tag) }
-    }
-
-    pub fn detach_children(&self) {
-        unsafe { _core_turinger_transform__detach_children(*self) };
-    }
-
-    pub fn euler_angles_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__euler_angles_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn euler_angles_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__euler_angles_set(*self, value) };
-    }
-
-    pub fn find(&self, n: &str) -> TuringerTransform {
-        let turing_handle = CString::new(n).unwrap();
-        let n = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__find(*self, n) }
-    }
-
-    pub fn find_child(&self, n: &str) -> TuringerTransform {
-        let turing_handle = CString::new(n).unwrap();
-        let n = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__find_child(*self, n) }
-    }
-
-    pub fn forward_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__forward_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn forward_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__forward_set(*self, value) };
-    }
-
-    pub fn game_object_get(&self) -> TuringerGameObject {
-        unsafe { _core_turinger_transform__game_object_get(*self) }
-    }
-
-    pub fn get_child(&self, index: i32) -> TuringerTransform {
-        unsafe { _core_turinger_transform__get_child(*self, index) }
-    }
-
-    pub fn get_child_count(&self) -> i32 {
-        unsafe { _core_turinger_transform__get_child_count(*self) }
-    }
-
-    pub fn get_component_by_name(&self, cs_type: &str) -> Component {
-        let turing_handle = CString::new(cs_type).unwrap();
-        let cs_type = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__get_component_by_name(*self, cs_type) }
-    }
-
-    pub fn get_component_by_type(&self, cs_type: Type) -> Component {
-        unsafe { _core_turinger_transform__get_component_by_type(*self, cs_type) }
-    }
-
-    pub fn get_component_in_children_by_type(&self, t: Type, include_inactive: bool) -> Component {
-        unsafe { _core_turinger_transform__get_component_in_children_by_type(*self, t, include_inactive) }
-    }
-
-    pub fn get_component_in_parent_by_type(&self, t: Type, include_inactive: bool) -> Component {
-        unsafe { _core_turinger_transform__get_component_in_parent_by_type(*self, t, include_inactive) }
-    }
-
-    pub fn get_component_index(&self) -> i32 {
-        unsafe { _core_turinger_transform__get_component_index(*self) }
-    }
-
-    pub fn get_enumerator(&self) -> IEnumerator {
-        unsafe { _core_turinger_transform__get_enumerator(*self) }
-    }
-
-    pub fn get_instance_id(&self) -> i32 {
-        unsafe { _core_turinger_transform__get_instance_id(*self) }
-    }
-
-    pub fn get_sibling_index(&self) -> i32 {
-        unsafe { _core_turinger_transform__get_sibling_index(*self) }
-    }
-
-    pub fn has_changed_get(&self) -> bool {
-        unsafe { _core_turinger_transform__has_changed_get(*self) }
-    }
-
-    pub fn has_changed_set(&self, value: bool) {
-        unsafe { _core_turinger_transform__has_changed_set(*self, value) };
-    }
-
-    pub fn hide_flags_get(&self) -> i32 {
-        unsafe { _core_turinger_transform__hide_flags_get(*self) }
-    }
-
-    pub fn hide_flags_set(&self, value: i32) {
-        unsafe { _core_turinger_transform__hide_flags_set(*self, value) };
-    }
-
-    pub fn hierarchy_capacity_get(&self) -> i32 {
-        unsafe { _core_turinger_transform__hierarchy_capacity_get(*self) }
-    }
-
-    pub fn hierarchy_capacity_set(&self, value: i32) {
-        unsafe { _core_turinger_transform__hierarchy_capacity_set(*self, value) };
-    }
-
-    pub fn hierarchy_count_get(&self) -> i32 {
-        unsafe { _core_turinger_transform__hierarchy_count_get(*self) }
-    }
-
-    pub fn inverse_transform_direction(&self, direction: alg::Vec3) -> alg::Vec3 {
-         let direction = alg::enqueue_vec3(direction);
-        unsafe { _core_turinger_transform__inverse_transform_direction(*self, direction) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn inverse_transform_point(&self, position: alg::Vec3) -> alg::Vec3 {
-         let position = alg::enqueue_vec3(position);
-        unsafe { _core_turinger_transform__inverse_transform_point(*self, position) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn inverse_transform_vector(&self, vector: alg::Vec3) -> alg::Vec3 {
-         let vector = alg::enqueue_vec3(vector);
-        unsafe { _core_turinger_transform__inverse_transform_vector(*self, vector) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn is_child_of(&self, parent: TuringerTransform) -> bool {
-        unsafe { _core_turinger_transform__is_child_of(*self, parent) }
-    }
-
-    pub fn local_euler_angles_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__local_euler_angles_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn local_euler_angles_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__local_euler_angles_set(*self, value) };
-    }
-
-    pub fn local_position_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__local_position_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn local_position_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__local_position_set(*self, value) };
-    }
-
-    pub fn local_rotation_get(&self) -> alg::Quat {
-        unsafe { _core_turinger_transform__local_rotation_get(*self) };
-        alg::dequeue_quat()
-    }
-
-    pub fn local_rotation_set(&self, value: alg::Quat) {
-         let value = alg::enqueue_quat(value);
-        unsafe { _core_turinger_transform__local_rotation_set(*self, value) };
-    }
-
-    pub fn local_scale_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__local_scale_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn local_scale_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__local_scale_set(*self, value) };
-    }
-
-    pub fn local_to_world_matrix_get(&self) -> alg::Mat4 {
-        unsafe { _core_turinger_transform__local_to_world_matrix_get(*self) };
-        alg::dequeue_mat4()
-    }
-
-    pub fn look_at(&self, target: TuringerTransform, world_up: alg::Vec3) {
-         let world_up = alg::enqueue_vec3(world_up);
-        unsafe { _core_turinger_transform__look_at(*self, target, world_up) };
-    }
-
-    pub fn lossy_scale_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__lossy_scale_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn name_get(&self) -> String {
-        let turing_result = unsafe { _core_turinger_transform__name_get(*self) };
-        let mut turing_str = vec![0u8; turing_result as usize];
-        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
-        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
-        turing_str.to_string_lossy().into_owned()
-    }
-
-    pub fn name_set(&self, value: &str) {
-        let turing_handle = CString::new(value).unwrap();
-        let value = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__name_set(*self, value) };
-    }
-
-    pub fn parent_get(&self) -> TuringerTransform {
-        unsafe { _core_turinger_transform__parent_get(*self) }
-    }
-
-    pub fn parent_set(&self, value: TuringerTransform) {
-        unsafe { _core_turinger_transform__parent_set(*self, value) };
-    }
-
-    pub fn position_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__position_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn position_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__position_set(*self, value) };
-    }
-
-    pub fn right_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__right_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn right_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__right_set(*self, value) };
-    }
-
-    pub fn root_get(&self) -> TuringerTransform {
-        unsafe { _core_turinger_transform__root_get(*self) }
-    }
-
-    pub fn rotate(&self, eulers: alg::Vec3) {
-         let eulers = alg::enqueue_vec3(eulers);
-        unsafe { _core_turinger_transform__rotate(*self, eulers) };
-    }
-
-    pub fn rotate_around(&self, point: alg::Vec3, axis: alg::Vec3, angle: f32) {
-         let point = alg::enqueue_vec3(point);
-         let axis = alg::enqueue_vec3(axis);
-        unsafe { _core_turinger_transform__rotate_around(*self, point, axis, angle) };
-    }
-
-    pub fn rotate_around_local(&self, axis: alg::Vec3, angle: f32) {
-         let axis = alg::enqueue_vec3(axis);
-        unsafe { _core_turinger_transform__rotate_around_local(*self, axis, angle) };
-    }
-
-    pub fn rotate_relative(&self, eulers: alg::Vec3, relative_to: i32) {
-         let eulers = alg::enqueue_vec3(eulers);
-        unsafe { _core_turinger_transform__rotate_relative(*self, eulers, relative_to) };
-    }
-
-    pub fn rotation_get(&self) -> alg::Quat {
-        unsafe { _core_turinger_transform__rotation_get(*self) };
-        alg::dequeue_quat()
-    }
-
-    pub fn rotation_set(&self, value: alg::Quat) {
-         let value = alg::enqueue_quat(value);
-        unsafe { _core_turinger_transform__rotation_set(*self, value) };
-    }
-
-    pub fn send_message(&self, method_name: &str, value: Object, options: i32) {
-        let turing_handle = CString::new(method_name).unwrap();
-        let method_name = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__send_message(*self, method_name, value, options) };
-    }
-
-    pub fn send_message_upwards(&self, method_name: &str, value: Object, options: i32) {
-        let turing_handle = CString::new(method_name).unwrap();
-        let method_name = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__send_message_upwards(*self, method_name, value, options) };
-    }
-
-    pub fn set_as_first_sibling(&self) {
-        unsafe { _core_turinger_transform__set_as_first_sibling(*self) };
-    }
-
-    pub fn set_as_last_sibling(&self) {
-        unsafe { _core_turinger_transform__set_as_last_sibling(*self) };
-    }
-
-    pub fn set_local_position_and_rotation(&self, local_position: alg::Vec3, local_rotation: alg::Quat) {
-         let local_position = alg::enqueue_vec3(local_position);
-         let local_rotation = alg::enqueue_quat(local_rotation);
-        unsafe { _core_turinger_transform__set_local_position_and_rotation(*self, local_position, local_rotation) };
-    }
-
-    pub fn set_parent(&self, parent: TuringerTransform, world_position_stays: bool) {
-        unsafe { _core_turinger_transform__set_parent(*self, parent, world_position_stays) };
-    }
-
-    pub fn set_position_and_rotation(&self, position: alg::Vec3, rotation: alg::Quat) {
-         let position = alg::enqueue_vec3(position);
-         let rotation = alg::enqueue_quat(rotation);
-        unsafe { _core_turinger_transform__set_position_and_rotation(*self, position, rotation) };
-    }
-
-    pub fn set_sibling_index(&self, index: i32) {
-        unsafe { _core_turinger_transform__set_sibling_index(*self, index) };
-    }
-
-    pub fn tag_get(&self) -> String {
-        let turing_result = unsafe { _core_turinger_transform__tag_get(*self) };
-        let mut turing_str = vec![0u8; turing_result as usize];
-        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
-        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
-        turing_str.to_string_lossy().into_owned()
-    }
-
-    pub fn tag_set(&self, value: &str) {
-        let turing_handle = CString::new(value).unwrap();
-        let value = turing_handle.as_ptr();
-        unsafe { _core_turinger_transform__tag_set(*self, value) };
-    }
-
-    pub fn transform_direction(&self, direction: alg::Vec3) -> alg::Vec3 {
-         let direction = alg::enqueue_vec3(direction);
-        unsafe { _core_turinger_transform__transform_direction(*self, direction) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn transform_get(&self) -> Transform {
-        unsafe { _core_turinger_transform__transform_get(*self) }
-    }
-
-    pub fn transform_point(&self, position: alg::Vec3) -> alg::Vec3 {
-         let position = alg::enqueue_vec3(position);
-        unsafe { _core_turinger_transform__transform_point(*self, position) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn transform_vector(&self, vector: alg::Vec3) -> alg::Vec3 {
-         let vector = alg::enqueue_vec3(vector);
-        unsafe { _core_turinger_transform__transform_vector(*self, vector) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn translate(&self, translation: alg::Vec3, relative_to: i32) {
-         let translation = alg::enqueue_vec3(translation);
-        unsafe { _core_turinger_transform__translate(*self, translation, relative_to) };
-    }
-
-    pub fn translate_relative(&self, translation: alg::Vec3, relative_to: TuringerTransform) {
-         let translation = alg::enqueue_vec3(translation);
-        unsafe { _core_turinger_transform__translate_relative(*self, translation, relative_to) };
-    }
-
-    pub fn up_get(&self) -> alg::Vec3 {
-        unsafe { _core_turinger_transform__up_get(*self) };
-        alg::dequeue_vec3()
-    }
-
-    pub fn up_set(&self, value: alg::Vec3) {
-         let value = alg::enqueue_vec3(value);
-        unsafe { _core_turinger_transform__up_set(*self, value) };
-    }
-
-    pub fn world_to_local_matrix_get(&self) -> alg::Mat4 {
-        unsafe { _core_turinger_transform__world_to_local_matrix_get(*self) };
-        alg::dequeue_mat4()
     }
 }
 #[repr(C)]

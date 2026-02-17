@@ -75,6 +75,70 @@ declare function _core_custom_obstacle_data__custom_data_get(handle: u64): u64;
 declare function _core_custom_obstacle_data__get_copy(handle: u64): u64;
 @external("env", "_core_custom_obstacle_data__version_get")
 declare function _core_custom_obstacle_data__version_get(handle: u64): u64;
+@external("env", "_core_game_object__add_component")
+declare function _core_game_object__add_component(handle: u64, component_type: u64): u64;
+@external("env", "_core_game_object__add_or_get_mesh")
+declare function _core_game_object__add_or_get_mesh(handle: u64): u64;
+@external("env", "_core_game_object__broadcast_message")
+declare function _core_game_object__broadcast_message(handle: u64, method_name: u32, options: i32): void;
+@external("env", "_core_game_object__compare_tag")
+declare function _core_game_object__compare_tag(handle: u64, tag: u32): bool;
+@external("env", "_core_game_object__get_active")
+declare function _core_game_object__get_active(handle: u64): bool;
+@external("env", "_core_game_object__get_active_in_hierarchy")
+declare function _core_game_object__get_active_in_hierarchy(handle: u64): bool;
+@external("env", "_core_game_object__get_active_self")
+declare function _core_game_object__get_active_self(handle: u64): bool;
+@external("env", "_core_game_object__get_component_at_index")
+declare function _core_game_object__get_component_at_index(handle: u64, index: i32): u64;
+@external("env", "_core_game_object__get_component_by_name")
+declare function _core_game_object__get_component_by_name(handle: u64, cs_type: u32): u64;
+@external("env", "_core_game_object__get_component_by_type")
+declare function _core_game_object__get_component_by_type(handle: u64, cs_type: u64): u64;
+@external("env", "_core_game_object__get_component_count")
+declare function _core_game_object__get_component_count(handle: u64): i32;
+@external("env", "_core_game_object__get_component_in_children_by_type")
+declare function _core_game_object__get_component_in_children_by_type(handle: u64, cs_type: u64, include_inactive: bool): u64;
+@external("env", "_core_game_object__get_component_in_parent_by_type")
+declare function _core_game_object__get_component_in_parent_by_type(handle: u64, cs_type: u64, include_inactive: bool): u64;
+@external("env", "_core_game_object__get_component_index")
+declare function _core_game_object__get_component_index(handle: u64, component: u64): i32;
+@external("env", "_core_game_object__get_hide_flags")
+declare function _core_game_object__get_hide_flags(handle: u64): i32;
+@external("env", "_core_game_object__get_instance_id")
+declare function _core_game_object__get_instance_id(handle: u64): i32;
+@external("env", "_core_game_object__get_is_static")
+declare function _core_game_object__get_is_static(handle: u64): bool;
+@external("env", "_core_game_object__get_layer")
+declare function _core_game_object__get_layer(handle: u64): i32;
+@external("env", "_core_game_object__get_name")
+declare function _core_game_object__get_name(handle: u64): u32;
+@external("env", "_core_game_object__get_scene_culling_mask")
+declare function _core_game_object__get_scene_culling_mask(handle: u64): u64;
+@external("env", "_core_game_object__get_tag")
+declare function _core_game_object__get_tag(handle: u64): u32;
+@external("env", "_core_game_object__get_transform")
+declare function _core_game_object__get_transform(handle: u64): u64;
+@external("env", "_core_game_object__send_message")
+declare function _core_game_object__send_message(handle: u64, method_name: u32, options: i32): void;
+@external("env", "_core_game_object__send_message_upwards")
+declare function _core_game_object__send_message_upwards(handle: u64, method_name: u32, options: i32): void;
+@external("env", "_core_game_object__set_active")
+declare function _core_game_object__set_active(handle: u64, value: bool): void;
+@external("env", "_core_game_object__set_active_prop")
+declare function _core_game_object__set_active_prop(handle: u64, value: bool): void;
+@external("env", "_core_game_object__set_active_recursively")
+declare function _core_game_object__set_active_recursively(handle: u64, state: bool): void;
+@external("env", "_core_game_object__set_hide_flags")
+declare function _core_game_object__set_hide_flags(handle: u64, value: i32): void;
+@external("env", "_core_game_object__set_is_static")
+declare function _core_game_object__set_is_static(handle: u64, value: bool): void;
+@external("env", "_core_game_object__set_layer")
+declare function _core_game_object__set_layer(handle: u64, value: i32): void;
+@external("env", "_core_game_object__set_name")
+declare function _core_game_object__set_name(handle: u64, value: u32): void;
+@external("env", "_core_game_object__set_tag")
+declare function _core_game_object__set_tag(handle: u64, value: u32): void;
 @external("env", "_core_gc_helper__create")
 declare function _core_gc_helper__create(): u64;
 @external("env", "_core_gc_helper__dispose")
@@ -325,6 +389,156 @@ declare function _core_note_manager__time_to_beat(time: f32): f32;
 declare function _core_task_scheduler__schedule(task: u64): void;
 @external("env", "_core_task_scheduler__dispose")
 declare function _core_task_scheduler__dispose(handle: u64): void;
+@external("env", "_core_transform__broadcast_message")
+declare function _core_transform__broadcast_message(handle: u64, method_name: u32, parameter: u64, options: i32): void;
+@external("env", "_core_transform__compare_tag")
+declare function _core_transform__compare_tag(handle: u64, tag: u32): bool;
+@external("env", "_core_transform__detach_children")
+declare function _core_transform__detach_children(handle: u64): void;
+@external("env", "_core_transform__find")
+declare function _core_transform__find(handle: u64, n: u32): u64;
+@external("env", "_core_transform__find_child")
+declare function _core_transform__find_child(handle: u64, n: u32): u64;
+@external("env", "_core_transform__get_child")
+declare function _core_transform__get_child(handle: u64, index: i32): u64;
+@external("env", "_core_transform__get_child_count")
+declare function _core_transform__get_child_count(handle: u64): i32;
+@external("env", "_core_transform__get_child_count_prop")
+declare function _core_transform__get_child_count_prop(handle: u64): i32;
+@external("env", "_core_transform__get_component_by_name")
+declare function _core_transform__get_component_by_name(handle: u64, cs_type: u32): u64;
+@external("env", "_core_transform__get_component_by_type")
+declare function _core_transform__get_component_by_type(handle: u64, cs_type: u64): u64;
+@external("env", "_core_transform__get_component_in_children_by_type")
+declare function _core_transform__get_component_in_children_by_type(handle: u64, t: u64, include_inactive: bool): u64;
+@external("env", "_core_transform__get_component_in_parent_by_type")
+declare function _core_transform__get_component_in_parent_by_type(handle: u64, t: u64, include_inactive: bool): u64;
+@external("env", "_core_transform__get_component_index")
+declare function _core_transform__get_component_index(handle: u64): i32;
+@external("env", "_core_transform__get_enumerator")
+declare function _core_transform__get_enumerator(handle: u64): u64;
+@external("env", "_core_transform__get_euler_angles")
+declare function _core_transform__get_euler_angles(handle: u64): u32;
+@external("env", "_core_transform__get_forward")
+declare function _core_transform__get_forward(handle: u64): u32;
+@external("env", "_core_transform__get_game_object")
+declare function _core_transform__get_game_object(handle: u64): u64;
+@external("env", "_core_transform__get_has_changed")
+declare function _core_transform__get_has_changed(handle: u64): bool;
+@external("env", "_core_transform__get_hide_flags")
+declare function _core_transform__get_hide_flags(handle: u64): i32;
+@external("env", "_core_transform__get_hierarchy_capacity")
+declare function _core_transform__get_hierarchy_capacity(handle: u64): i32;
+@external("env", "_core_transform__get_hierarchy_count")
+declare function _core_transform__get_hierarchy_count(handle: u64): i32;
+@external("env", "_core_transform__get_instance_id")
+declare function _core_transform__get_instance_id(handle: u64): i32;
+@external("env", "_core_transform__get_local_euler_angles")
+declare function _core_transform__get_local_euler_angles(handle: u64): u32;
+@external("env", "_core_transform__get_local_position")
+declare function _core_transform__get_local_position(handle: u64): u32;
+@external("env", "_core_transform__get_local_rotation")
+declare function _core_transform__get_local_rotation(handle: u64): u32;
+@external("env", "_core_transform__get_local_scale")
+declare function _core_transform__get_local_scale(handle: u64): u32;
+@external("env", "_core_transform__get_local_to_world_matrix")
+declare function _core_transform__get_local_to_world_matrix(handle: u64): u32;
+@external("env", "_core_transform__get_lossy_scale")
+declare function _core_transform__get_lossy_scale(handle: u64): u32;
+@external("env", "_core_transform__get_name")
+declare function _core_transform__get_name(handle: u64): u32;
+@external("env", "_core_transform__get_parent")
+declare function _core_transform__get_parent(handle: u64): u64;
+@external("env", "_core_transform__get_position")
+declare function _core_transform__get_position(handle: u64): u32;
+@external("env", "_core_transform__get_right")
+declare function _core_transform__get_right(handle: u64): u32;
+@external("env", "_core_transform__get_root")
+declare function _core_transform__get_root(handle: u64): u64;
+@external("env", "_core_transform__get_rotation")
+declare function _core_transform__get_rotation(handle: u64): u32;
+@external("env", "_core_transform__get_sibling_index")
+declare function _core_transform__get_sibling_index(handle: u64): i32;
+@external("env", "_core_transform__get_tag")
+declare function _core_transform__get_tag(handle: u64): u32;
+@external("env", "_core_transform__get_up")
+declare function _core_transform__get_up(handle: u64): u32;
+@external("env", "_core_transform__get_world_to_local_matrix")
+declare function _core_transform__get_world_to_local_matrix(handle: u64): u32;
+@external("env", "_core_transform__inverse_transform_direction")
+declare function _core_transform__inverse_transform_direction(handle: u64, direction: u32): u32;
+@external("env", "_core_transform__inverse_transform_point")
+declare function _core_transform__inverse_transform_point(handle: u64, position: u32): u32;
+@external("env", "_core_transform__inverse_transform_vector")
+declare function _core_transform__inverse_transform_vector(handle: u64, vector: u32): u32;
+@external("env", "_core_transform__is_child_of")
+declare function _core_transform__is_child_of(handle: u64, parent: u64): bool;
+@external("env", "_core_transform__look_at")
+declare function _core_transform__look_at(handle: u64, target: u64, world_up: u32): void;
+@external("env", "_core_transform__rotate")
+declare function _core_transform__rotate(handle: u64, eulers: u32): void;
+@external("env", "_core_transform__rotate_around")
+declare function _core_transform__rotate_around(handle: u64, point: u32, axis: u32, angle: f32): void;
+@external("env", "_core_transform__rotate_around_local")
+declare function _core_transform__rotate_around_local(handle: u64, axis: u32, angle: f32): void;
+@external("env", "_core_transform__rotate_relative")
+declare function _core_transform__rotate_relative(handle: u64, eulers: u32, relative_to: i32): void;
+@external("env", "_core_transform__send_message")
+declare function _core_transform__send_message(handle: u64, method_name: u32, value: u64, options: i32): void;
+@external("env", "_core_transform__send_message_upwards")
+declare function _core_transform__send_message_upwards(handle: u64, method_name: u32, value: u64, options: i32): void;
+@external("env", "_core_transform__set_as_first_sibling")
+declare function _core_transform__set_as_first_sibling(handle: u64): void;
+@external("env", "_core_transform__set_as_last_sibling")
+declare function _core_transform__set_as_last_sibling(handle: u64): void;
+@external("env", "_core_transform__set_euler_angles")
+declare function _core_transform__set_euler_angles(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_forward")
+declare function _core_transform__set_forward(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_has_changed")
+declare function _core_transform__set_has_changed(handle: u64, value: bool): void;
+@external("env", "_core_transform__set_hide_flags")
+declare function _core_transform__set_hide_flags(handle: u64, value: i32): void;
+@external("env", "_core_transform__set_hierarchy_capacity")
+declare function _core_transform__set_hierarchy_capacity(handle: u64, value: i32): void;
+@external("env", "_core_transform__set_local_euler_angles")
+declare function _core_transform__set_local_euler_angles(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_local_position")
+declare function _core_transform__set_local_position(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_local_position_and_rotation")
+declare function _core_transform__set_local_position_and_rotation(handle: u64, local_position: u32, local_rotation: u32): void;
+@external("env", "_core_transform__set_local_rotation")
+declare function _core_transform__set_local_rotation(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_local_scale")
+declare function _core_transform__set_local_scale(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_name")
+declare function _core_transform__set_name(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_parent")
+declare function _core_transform__set_parent(handle: u64, parent: u64, world_position_stays: bool): void;
+@external("env", "_core_transform__set_position")
+declare function _core_transform__set_position(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_position_and_rotation")
+declare function _core_transform__set_position_and_rotation(handle: u64, position: u32, rotation: u32): void;
+@external("env", "_core_transform__set_right")
+declare function _core_transform__set_right(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_rotation")
+declare function _core_transform__set_rotation(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_sibling_index")
+declare function _core_transform__set_sibling_index(handle: u64, index: i32): void;
+@external("env", "_core_transform__set_tag")
+declare function _core_transform__set_tag(handle: u64, value: u32): void;
+@external("env", "_core_transform__set_up")
+declare function _core_transform__set_up(handle: u64, value: u32): void;
+@external("env", "_core_transform__transform_direction")
+declare function _core_transform__transform_direction(handle: u64, direction: u32): u32;
+@external("env", "_core_transform__transform_point")
+declare function _core_transform__transform_point(handle: u64, position: u32): u32;
+@external("env", "_core_transform__transform_vector")
+declare function _core_transform__transform_vector(handle: u64, vector: u32): u32;
+@external("env", "_core_transform__translate")
+declare function _core_transform__translate(handle: u64, translation: u32, relative_to: i32): void;
+@external("env", "_core_transform__translate_relative")
+declare function _core_transform__translate_relative(handle: u64, translation: u32, relative_to: u64): void;
 @external("env", "_core_turing_mesh___mesh_get")
 declare function _core_turing_mesh___mesh_get(handle: u64): u64;
 @external("env", "_core_turing_mesh___mesh_set")
@@ -379,234 +593,18 @@ declare function _core_turing_mesh__set_u_vs(handle: u64, channel: i32, uvs: u32
 declare function _core_turing_mesh__set_vertices(handle: u64, in_vertices: u32): void;
 @external("env", "_core_turing_mesh__upload_mesh_data")
 declare function _core_turing_mesh__upload_mesh_data(handle: u64, mark_no_longer_readable: bool): void;
-@external("env", "_core_turinger_game_object__active_get")
-declare function _core_turinger_game_object__active_get(handle: u64): bool;
-@external("env", "_core_turinger_game_object__active_in_hierarchy_get")
-declare function _core_turinger_game_object__active_in_hierarchy_get(handle: u64): bool;
-@external("env", "_core_turinger_game_object__active_self_get")
-declare function _core_turinger_game_object__active_self_get(handle: u64): bool;
-@external("env", "_core_turinger_game_object__active_set")
-declare function _core_turinger_game_object__active_set(handle: u64, value: bool): void;
-@external("env", "_core_turinger_game_object__add_component")
-declare function _core_turinger_game_object__add_component(handle: u64, component_type: u64): u64;
-@external("env", "_core_turinger_game_object__add_or_get_mesh")
-declare function _core_turinger_game_object__add_or_get_mesh(handle: u64): u64;
-@external("env", "_core_turinger_game_object__broadcast_message")
-declare function _core_turinger_game_object__broadcast_message(handle: u64, method_name: u32, options: i32): void;
-@external("env", "_core_turinger_game_object__compare_tag")
-declare function _core_turinger_game_object__compare_tag(handle: u64, tag: u32): bool;
-@external("env", "_core_turinger_game_object__game_object_get")
-declare function _core_turinger_game_object__game_object_get(handle: u64): u64;
-@external("env", "_core_turinger_game_object__get_component_at_index")
-declare function _core_turinger_game_object__get_component_at_index(handle: u64, index: i32): u64;
-@external("env", "_core_turinger_game_object__get_component_by_name")
-declare function _core_turinger_game_object__get_component_by_name(handle: u64, cs_type: u32): u64;
-@external("env", "_core_turinger_game_object__get_component_by_type")
-declare function _core_turinger_game_object__get_component_by_type(handle: u64, cs_type: u64): u64;
-@external("env", "_core_turinger_game_object__get_component_count")
-declare function _core_turinger_game_object__get_component_count(handle: u64): i32;
-@external("env", "_core_turinger_game_object__get_component_in_children_by_type")
-declare function _core_turinger_game_object__get_component_in_children_by_type(handle: u64, cs_type: u64, include_inactive: bool): u64;
-@external("env", "_core_turinger_game_object__get_component_in_parent_by_type")
-declare function _core_turinger_game_object__get_component_in_parent_by_type(handle: u64, cs_type: u64, include_inactive: bool): u64;
-@external("env", "_core_turinger_game_object__get_component_index")
-declare function _core_turinger_game_object__get_component_index(handle: u64, component: u64): i32;
-@external("env", "_core_turinger_game_object__get_instance_id")
-declare function _core_turinger_game_object__get_instance_id(handle: u64): i32;
-@external("env", "_core_turinger_game_object__hide_flags_get")
-declare function _core_turinger_game_object__hide_flags_get(handle: u64): i32;
-@external("env", "_core_turinger_game_object__hide_flags_set")
-declare function _core_turinger_game_object__hide_flags_set(handle: u64, value: i32): void;
-@external("env", "_core_turinger_game_object__is_static_get")
-declare function _core_turinger_game_object__is_static_get(handle: u64): bool;
-@external("env", "_core_turinger_game_object__is_static_set")
-declare function _core_turinger_game_object__is_static_set(handle: u64, value: bool): void;
-@external("env", "_core_turinger_game_object__layer_get")
-declare function _core_turinger_game_object__layer_get(handle: u64): i32;
-@external("env", "_core_turinger_game_object__layer_set")
-declare function _core_turinger_game_object__layer_set(handle: u64, value: i32): void;
-@external("env", "_core_turinger_game_object__name_get")
-declare function _core_turinger_game_object__name_get(handle: u64): u32;
-@external("env", "_core_turinger_game_object__name_set")
-declare function _core_turinger_game_object__name_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_game_object__scene_culling_mask_get")
-declare function _core_turinger_game_object__scene_culling_mask_get(handle: u64): u64;
-@external("env", "_core_turinger_game_object__send_message")
-declare function _core_turinger_game_object__send_message(handle: u64, method_name: u32, options: i32): void;
-@external("env", "_core_turinger_game_object__send_message_upwards")
-declare function _core_turinger_game_object__send_message_upwards(handle: u64, method_name: u32, options: i32): void;
-@external("env", "_core_turinger_game_object__set_active")
-declare function _core_turinger_game_object__set_active(handle: u64, value: bool): void;
-@external("env", "_core_turinger_game_object__set_active_recursively")
-declare function _core_turinger_game_object__set_active_recursively(handle: u64, state: bool): void;
-@external("env", "_core_turinger_game_object__tag_get")
-declare function _core_turinger_game_object__tag_get(handle: u64): u32;
-@external("env", "_core_turinger_game_object__tag_set")
-declare function _core_turinger_game_object__tag_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_game_object__transform_get")
-declare function _core_turinger_game_object__transform_get(handle: u64): u64;
+@external("env", "_core_turing_note_extensions__get_note_floor_movement")
+declare function _core_turing_note_extensions__get_note_floor_movement(note_controller: u64): u64;
+@external("env", "_core_turing_note_extensions__get_note_jump")
+declare function _core_turing_note_extensions__get_note_jump(note_controller: u64): u64;
 @external("env", "_core_turinger_game_object_manager__create_object")
 declare function _core_turinger_game_object_manager__create_object(name: u32): u64;
 @external("env", "_core_turinger_game_object_manager__destroy_object")
-declare function _core_turinger_game_object_manager__destroy_object(listener: u64): void;
+declare function _core_turinger_game_object_manager__destroy_object(game_object: u64): void;
 @external("env", "_core_turinger_game_object_manager__find")
 declare function _core_turinger_game_object_manager__find(name: u32): u64;
 @external("env", "_core_turinger_game_object_manager__instance_get")
 declare function _core_turinger_game_object_manager__instance_get(handle: u64): u64;
-@external("env", "_core_turinger_transform__broadcast_message")
-declare function _core_turinger_transform__broadcast_message(handle: u64, method_name: u32, parameter: u64, options: i32): void;
-@external("env", "_core_turinger_transform__child_count_get")
-declare function _core_turinger_transform__child_count_get(handle: u64): i32;
-@external("env", "_core_turinger_transform__compare_tag")
-declare function _core_turinger_transform__compare_tag(handle: u64, tag: u32): bool;
-@external("env", "_core_turinger_transform__detach_children")
-declare function _core_turinger_transform__detach_children(handle: u64): void;
-@external("env", "_core_turinger_transform__euler_angles_get")
-declare function _core_turinger_transform__euler_angles_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__euler_angles_set")
-declare function _core_turinger_transform__euler_angles_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__find")
-declare function _core_turinger_transform__find(handle: u64, n: u32): u64;
-@external("env", "_core_turinger_transform__find_child")
-declare function _core_turinger_transform__find_child(handle: u64, n: u32): u64;
-@external("env", "_core_turinger_transform__forward_get")
-declare function _core_turinger_transform__forward_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__forward_set")
-declare function _core_turinger_transform__forward_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__game_object_get")
-declare function _core_turinger_transform__game_object_get(handle: u64): u64;
-@external("env", "_core_turinger_transform__get_child")
-declare function _core_turinger_transform__get_child(handle: u64, index: i32): u64;
-@external("env", "_core_turinger_transform__get_child_count")
-declare function _core_turinger_transform__get_child_count(handle: u64): i32;
-@external("env", "_core_turinger_transform__get_component_by_name")
-declare function _core_turinger_transform__get_component_by_name(handle: u64, cs_type: u32): u64;
-@external("env", "_core_turinger_transform__get_component_by_type")
-declare function _core_turinger_transform__get_component_by_type(handle: u64, cs_type: u64): u64;
-@external("env", "_core_turinger_transform__get_component_in_children_by_type")
-declare function _core_turinger_transform__get_component_in_children_by_type(handle: u64, t: u64, include_inactive: bool): u64;
-@external("env", "_core_turinger_transform__get_component_in_parent_by_type")
-declare function _core_turinger_transform__get_component_in_parent_by_type(handle: u64, t: u64, include_inactive: bool): u64;
-@external("env", "_core_turinger_transform__get_component_index")
-declare function _core_turinger_transform__get_component_index(handle: u64): i32;
-@external("env", "_core_turinger_transform__get_enumerator")
-declare function _core_turinger_transform__get_enumerator(handle: u64): u64;
-@external("env", "_core_turinger_transform__get_instance_id")
-declare function _core_turinger_transform__get_instance_id(handle: u64): i32;
-@external("env", "_core_turinger_transform__get_sibling_index")
-declare function _core_turinger_transform__get_sibling_index(handle: u64): i32;
-@external("env", "_core_turinger_transform__has_changed_get")
-declare function _core_turinger_transform__has_changed_get(handle: u64): bool;
-@external("env", "_core_turinger_transform__has_changed_set")
-declare function _core_turinger_transform__has_changed_set(handle: u64, value: bool): void;
-@external("env", "_core_turinger_transform__hide_flags_get")
-declare function _core_turinger_transform__hide_flags_get(handle: u64): i32;
-@external("env", "_core_turinger_transform__hide_flags_set")
-declare function _core_turinger_transform__hide_flags_set(handle: u64, value: i32): void;
-@external("env", "_core_turinger_transform__hierarchy_capacity_get")
-declare function _core_turinger_transform__hierarchy_capacity_get(handle: u64): i32;
-@external("env", "_core_turinger_transform__hierarchy_capacity_set")
-declare function _core_turinger_transform__hierarchy_capacity_set(handle: u64, value: i32): void;
-@external("env", "_core_turinger_transform__hierarchy_count_get")
-declare function _core_turinger_transform__hierarchy_count_get(handle: u64): i32;
-@external("env", "_core_turinger_transform__inverse_transform_direction")
-declare function _core_turinger_transform__inverse_transform_direction(handle: u64, direction: u32): u32;
-@external("env", "_core_turinger_transform__inverse_transform_point")
-declare function _core_turinger_transform__inverse_transform_point(handle: u64, position: u32): u32;
-@external("env", "_core_turinger_transform__inverse_transform_vector")
-declare function _core_turinger_transform__inverse_transform_vector(handle: u64, vector: u32): u32;
-@external("env", "_core_turinger_transform__is_child_of")
-declare function _core_turinger_transform__is_child_of(handle: u64, parent: u64): bool;
-@external("env", "_core_turinger_transform__local_euler_angles_get")
-declare function _core_turinger_transform__local_euler_angles_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__local_euler_angles_set")
-declare function _core_turinger_transform__local_euler_angles_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__local_position_get")
-declare function _core_turinger_transform__local_position_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__local_position_set")
-declare function _core_turinger_transform__local_position_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__local_rotation_get")
-declare function _core_turinger_transform__local_rotation_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__local_rotation_set")
-declare function _core_turinger_transform__local_rotation_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__local_scale_get")
-declare function _core_turinger_transform__local_scale_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__local_scale_set")
-declare function _core_turinger_transform__local_scale_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__local_to_world_matrix_get")
-declare function _core_turinger_transform__local_to_world_matrix_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__look_at")
-declare function _core_turinger_transform__look_at(handle: u64, target: u64, world_up: u32): void;
-@external("env", "_core_turinger_transform__lossy_scale_get")
-declare function _core_turinger_transform__lossy_scale_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__name_get")
-declare function _core_turinger_transform__name_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__name_set")
-declare function _core_turinger_transform__name_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__parent_get")
-declare function _core_turinger_transform__parent_get(handle: u64): u64;
-@external("env", "_core_turinger_transform__parent_set")
-declare function _core_turinger_transform__parent_set(handle: u64, value: u64): void;
-@external("env", "_core_turinger_transform__position_get")
-declare function _core_turinger_transform__position_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__position_set")
-declare function _core_turinger_transform__position_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__right_get")
-declare function _core_turinger_transform__right_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__right_set")
-declare function _core_turinger_transform__right_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__root_get")
-declare function _core_turinger_transform__root_get(handle: u64): u64;
-@external("env", "_core_turinger_transform__rotate")
-declare function _core_turinger_transform__rotate(handle: u64, eulers: u32): void;
-@external("env", "_core_turinger_transform__rotate_around")
-declare function _core_turinger_transform__rotate_around(handle: u64, point: u32, axis: u32, angle: f32): void;
-@external("env", "_core_turinger_transform__rotate_around_local")
-declare function _core_turinger_transform__rotate_around_local(handle: u64, axis: u32, angle: f32): void;
-@external("env", "_core_turinger_transform__rotate_relative")
-declare function _core_turinger_transform__rotate_relative(handle: u64, eulers: u32, relative_to: i32): void;
-@external("env", "_core_turinger_transform__rotation_get")
-declare function _core_turinger_transform__rotation_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__rotation_set")
-declare function _core_turinger_transform__rotation_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__send_message")
-declare function _core_turinger_transform__send_message(handle: u64, method_name: u32, value: u64, options: i32): void;
-@external("env", "_core_turinger_transform__send_message_upwards")
-declare function _core_turinger_transform__send_message_upwards(handle: u64, method_name: u32, value: u64, options: i32): void;
-@external("env", "_core_turinger_transform__set_as_first_sibling")
-declare function _core_turinger_transform__set_as_first_sibling(handle: u64): void;
-@external("env", "_core_turinger_transform__set_as_last_sibling")
-declare function _core_turinger_transform__set_as_last_sibling(handle: u64): void;
-@external("env", "_core_turinger_transform__set_local_position_and_rotation")
-declare function _core_turinger_transform__set_local_position_and_rotation(handle: u64, local_position: u32, local_rotation: u32): void;
-@external("env", "_core_turinger_transform__set_parent")
-declare function _core_turinger_transform__set_parent(handle: u64, parent: u64, world_position_stays: bool): void;
-@external("env", "_core_turinger_transform__set_position_and_rotation")
-declare function _core_turinger_transform__set_position_and_rotation(handle: u64, position: u32, rotation: u32): void;
-@external("env", "_core_turinger_transform__set_sibling_index")
-declare function _core_turinger_transform__set_sibling_index(handle: u64, index: i32): void;
-@external("env", "_core_turinger_transform__tag_get")
-declare function _core_turinger_transform__tag_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__tag_set")
-declare function _core_turinger_transform__tag_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__transform_direction")
-declare function _core_turinger_transform__transform_direction(handle: u64, direction: u32): u32;
-@external("env", "_core_turinger_transform__transform_get")
-declare function _core_turinger_transform__transform_get(handle: u64): u64;
-@external("env", "_core_turinger_transform__transform_point")
-declare function _core_turinger_transform__transform_point(handle: u64, position: u32): u32;
-@external("env", "_core_turinger_transform__transform_vector")
-declare function _core_turinger_transform__transform_vector(handle: u64, vector: u32): u32;
-@external("env", "_core_turinger_transform__translate")
-declare function _core_turinger_transform__translate(handle: u64, translation: u32, relative_to: i32): void;
-@external("env", "_core_turinger_transform__translate_relative")
-declare function _core_turinger_transform__translate_relative(handle: u64, translation: u32, relative_to: u64): void;
-@external("env", "_core_turinger_transform__up_get")
-declare function _core_turinger_transform__up_get(handle: u64): u32;
-@external("env", "_core_turinger_transform__up_set")
-declare function _core_turinger_transform__up_set(handle: u64, value: u32): void;
-@external("env", "_core_turinger_transform__world_to_local_matrix_get")
-declare function _core_turinger_transform__world_to_local_matrix_get(handle: u64): u32;
 @external("env", "_core_xr__get_device_battery_level")
 declare function _core_xr__get_device_battery_level(node_int: i32): f32;
 @external("env", "_core_xr__get_device_grip_value")
@@ -1001,6 +999,159 @@ export class GameObject {
     
 
 
+
+    public add_component(component_type: Type): Component {
+        let turing_result = _core_game_object__add_component(this.handle, component_type.handle);
+        return new Component(turing_result);
+    }
+
+    public add_or_get_mesh(): TuringMesh {
+        let turing_result = _core_game_object__add_or_get_mesh(this.handle);
+        return new TuringMesh(turing_result);
+    }
+
+    public broadcast_message(method_name: string, options: i32): void {
+        let turing_handle_method_name = String.UTF8.encode(method_name, true);
+        _core_game_object__broadcast_message(this.handle, turing_handle_method_name, options);
+    }
+
+    public compare_tag(tag: string): bool {
+        let turing_handle_tag = String.UTF8.encode(tag, true);
+        return _core_game_object__compare_tag(this.handle, turing_handle_tag);
+    }
+
+    public get_active(): bool {
+        return _core_game_object__get_active(this.handle);
+    }
+
+    public get_active_in_hierarchy(): bool {
+        return _core_game_object__get_active_in_hierarchy(this.handle);
+    }
+
+    public get_active_self(): bool {
+        return _core_game_object__get_active_self(this.handle);
+    }
+
+    public get_component_at_index(index: i32): Component {
+        let turing_result = _core_game_object__get_component_at_index(this.handle, index);
+        return new Component(turing_result);
+    }
+
+    public get_component_by_name(cs_type: string): Component {
+        let turing_handle_cs_type = String.UTF8.encode(cs_type, true);
+        let turing_result = _core_game_object__get_component_by_name(this.handle, turing_handle_cs_type);
+        return new Component(turing_result);
+    }
+
+    public get_component_by_type(cs_type: Type): Component {
+        let turing_result = _core_game_object__get_component_by_type(this.handle, cs_type.handle);
+        return new Component(turing_result);
+    }
+
+    public get_component_count(): i32 {
+        return _core_game_object__get_component_count(this.handle);
+    }
+
+    public get_component_in_children_by_type(cs_type: Type, include_inactive: bool): Component {
+        let turing_result = _core_game_object__get_component_in_children_by_type(this.handle, cs_type.handle, include_inactive);
+        return new Component(turing_result);
+    }
+
+    public get_component_in_parent_by_type(cs_type: Type, include_inactive: bool): Component {
+        let turing_result = _core_game_object__get_component_in_parent_by_type(this.handle, cs_type.handle, include_inactive);
+        return new Component(turing_result);
+    }
+
+    public get_component_index(component: Component): i32 {
+        return _core_game_object__get_component_index(this.handle, component.handle);
+    }
+
+    public get_hide_flags(): i32 {
+        return _core_game_object__get_hide_flags(this.handle);
+    }
+
+    public get_instance_id(): i32 {
+        return _core_game_object__get_instance_id(this.handle);
+    }
+
+    public get_is_static(): bool {
+        return _core_game_object__get_is_static(this.handle);
+    }
+
+    public get_layer(): i32 {
+        return _core_game_object__get_layer(this.handle);
+    }
+
+    public get_name(): string {
+        let turing_result = _core_game_object__get_name(this.handle);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
+    }
+
+    public get_scene_culling_mask(): u64 {
+        return _core_game_object__get_scene_culling_mask(this.handle);
+    }
+
+    public get_tag(): string {
+        let turing_result = _core_game_object__get_tag(this.handle);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
+    }
+
+    public get_transform(): Transform {
+        let turing_result = _core_game_object__get_transform(this.handle);
+        return new Transform(turing_result);
+    }
+
+    public send_message(method_name: string, options: i32): void {
+        let turing_handle_method_name = String.UTF8.encode(method_name, true);
+        _core_game_object__send_message(this.handle, turing_handle_method_name, options);
+    }
+
+    public send_message_upwards(method_name: string, options: i32): void {
+        let turing_handle_method_name = String.UTF8.encode(method_name, true);
+        _core_game_object__send_message_upwards(this.handle, turing_handle_method_name, options);
+    }
+
+    public set_active(value: bool): void {
+        _core_game_object__set_active(this.handle, value);
+    }
+
+    public set_active_prop(value: bool): void {
+        _core_game_object__set_active_prop(this.handle, value);
+    }
+
+    public set_active_recursively(state: bool): void {
+        _core_game_object__set_active_recursively(this.handle, state);
+    }
+
+    public set_hide_flags(value: i32): void {
+        _core_game_object__set_hide_flags(this.handle, value);
+    }
+
+    public set_is_static(value: bool): void {
+        _core_game_object__set_is_static(this.handle, value);
+    }
+
+    public set_layer(value: i32): void {
+        _core_game_object__set_layer(this.handle, value);
+    }
+
+    public set_name(value: string): void {
+        let turing_handle_value = String.UTF8.encode(value, true);
+        _core_game_object__set_name(this.handle, turing_handle_value);
+    }
+
+    public set_tag(value: string): void {
+        let turing_handle_value = String.UTF8.encode(value, true);
+        _core_game_object__set_tag(this.handle, turing_handle_value);
+    }
 }
 
 @final
@@ -1127,6 +1278,19 @@ export class Log {
 
 @final
 export class Mesh {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+}
+
+@final
+export class NoteController {
     
     handle: u64;
 
@@ -1592,7 +1756,7 @@ export class NoteJump {
         return _core_note_jump__distance_to_player_get(this.handle);
     }
 
-    public init_note(note_time: f32, world_rotation: f32, move_end_offset: Vec3, jump_end_offset: Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool): void {
+    public init_jump(note_time: f32, world_rotation: f32, move_end_offset: Vec3, jump_end_offset: Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool): void {
         let turing_handle_move_end_offset = __enqueue_vec3(move_end_offset);
         let turing_handle_jump_end_offset = __enqueue_vec3(jump_end_offset);
         _core_note_jump__init(this.handle, note_time, world_rotation, turing_handle_move_end_offset, turing_handle_jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation);
@@ -1805,6 +1969,383 @@ export class Transform {
     
 
 
+
+    public broadcast_message(method_name: string, parameter: Object, options: i32): void {
+        let turing_handle_method_name = String.UTF8.encode(method_name, true);
+        _core_transform__broadcast_message(this.handle, turing_handle_method_name, parameter.handle, options);
+    }
+
+    public compare_tag(tag: string): bool {
+        let turing_handle_tag = String.UTF8.encode(tag, true);
+        return _core_transform__compare_tag(this.handle, turing_handle_tag);
+    }
+
+    public detach_children(): void {
+        _core_transform__detach_children(this.handle);
+    }
+
+    public find(n: string): Transform {
+        let turing_handle_n = String.UTF8.encode(n, true);
+        let turing_result = _core_transform__find(this.handle, turing_handle_n);
+        return new Transform(turing_result);
+    }
+
+    public find_child(n: string): Transform {
+        let turing_handle_n = String.UTF8.encode(n, true);
+        let turing_result = _core_transform__find_child(this.handle, turing_handle_n);
+        return new Transform(turing_result);
+    }
+
+    public get_child(index: i32): Transform {
+        let turing_result = _core_transform__get_child(this.handle, index);
+        return new Transform(turing_result);
+    }
+
+    public get_child_count(): i32 {
+        return _core_transform__get_child_count(this.handle);
+    }
+
+    public get_child_count_prop(): i32 {
+        return _core_transform__get_child_count_prop(this.handle);
+    }
+
+    public get_component_by_name(cs_type: string): Component {
+        let turing_handle_cs_type = String.UTF8.encode(cs_type, true);
+        let turing_result = _core_transform__get_component_by_name(this.handle, turing_handle_cs_type);
+        return new Component(turing_result);
+    }
+
+    public get_component_by_type(cs_type: Type): Component {
+        let turing_result = _core_transform__get_component_by_type(this.handle, cs_type.handle);
+        return new Component(turing_result);
+    }
+
+    public get_component_in_children_by_type(t: Type, include_inactive: bool): Component {
+        let turing_result = _core_transform__get_component_in_children_by_type(this.handle, t.handle, include_inactive);
+        return new Component(turing_result);
+    }
+
+    public get_component_in_parent_by_type(t: Type, include_inactive: bool): Component {
+        let turing_result = _core_transform__get_component_in_parent_by_type(this.handle, t.handle, include_inactive);
+        return new Component(turing_result);
+    }
+
+    public get_component_index(): i32 {
+        return _core_transform__get_component_index(this.handle);
+    }
+
+    public get_enumerator(): IEnumerator {
+        let turing_result = _core_transform__get_enumerator(this.handle);
+        return new IEnumerator(turing_result);
+    }
+
+    public get_euler_angles(): Vec3 {
+        _core_transform__get_euler_angles(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_forward(): Vec3 {
+        _core_transform__get_forward(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_game_object(): GameObject {
+        let turing_result = _core_transform__get_game_object(this.handle);
+        return new GameObject(turing_result);
+    }
+
+    public get_has_changed(): bool {
+        return _core_transform__get_has_changed(this.handle);
+    }
+
+    public get_hide_flags(): i32 {
+        return _core_transform__get_hide_flags(this.handle);
+    }
+
+    public get_hierarchy_capacity(): i32 {
+        return _core_transform__get_hierarchy_capacity(this.handle);
+    }
+
+    public get_hierarchy_count(): i32 {
+        return _core_transform__get_hierarchy_count(this.handle);
+    }
+
+    public get_instance_id(): i32 {
+        return _core_transform__get_instance_id(this.handle);
+    }
+
+    public get_local_euler_angles(): Vec3 {
+        _core_transform__get_local_euler_angles(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_local_position(): Vec3 {
+        _core_transform__get_local_position(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_local_rotation(): Quat {
+        _core_transform__get_local_rotation(this.handle);
+        return __dequeue_quat();
+    }
+
+    public get_local_scale(): Vec3 {
+        _core_transform__get_local_scale(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_local_to_world_matrix(): Mat4 {
+        _core_transform__get_local_to_world_matrix(this.handle);
+        return __dequeue_mat4();
+    }
+
+    public get_lossy_scale(): Vec3 {
+        _core_transform__get_lossy_scale(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_name(): string {
+        let turing_result = _core_transform__get_name(this.handle);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
+    }
+
+    public get_parent(): Transform {
+        let turing_result = _core_transform__get_parent(this.handle);
+        return new Transform(turing_result);
+    }
+
+    public get_position(): Vec3 {
+        _core_transform__get_position(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_right(): Vec3 {
+        _core_transform__get_right(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_root(): Transform {
+        let turing_result = _core_transform__get_root(this.handle);
+        return new Transform(turing_result);
+    }
+
+    public get_rotation(): Quat {
+        _core_transform__get_rotation(this.handle);
+        return __dequeue_quat();
+    }
+
+    public get_sibling_index(): i32 {
+        return _core_transform__get_sibling_index(this.handle);
+    }
+
+    public get_tag(): string {
+        let turing_result = _core_transform__get_tag(this.handle);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
+    }
+
+    public get_up(): Vec3 {
+        _core_transform__get_up(this.handle);
+        return __dequeue_vec3();
+    }
+
+    public get_world_to_local_matrix(): Mat4 {
+        _core_transform__get_world_to_local_matrix(this.handle);
+        return __dequeue_mat4();
+    }
+
+    public inverse_transform_direction(direction: Vec3): Vec3 {
+        let turing_handle_direction = __enqueue_vec3(direction);
+        _core_transform__inverse_transform_direction(this.handle, turing_handle_direction);
+        return __dequeue_vec3();
+    }
+
+    public inverse_transform_point(position: Vec3): Vec3 {
+        let turing_handle_position = __enqueue_vec3(position);
+        _core_transform__inverse_transform_point(this.handle, turing_handle_position);
+        return __dequeue_vec3();
+    }
+
+    public inverse_transform_vector(vector: Vec3): Vec3 {
+        let turing_handle_vector = __enqueue_vec3(vector);
+        _core_transform__inverse_transform_vector(this.handle, turing_handle_vector);
+        return __dequeue_vec3();
+    }
+
+    public is_child_of(parent: Transform): bool {
+        return _core_transform__is_child_of(this.handle, parent.handle);
+    }
+
+    public look_at(target: Transform, world_up: Vec3): void {
+        let turing_handle_world_up = __enqueue_vec3(world_up);
+        _core_transform__look_at(this.handle, target.handle, turing_handle_world_up);
+    }
+
+    public rotate(eulers: Vec3): void {
+        let turing_handle_eulers = __enqueue_vec3(eulers);
+        _core_transform__rotate(this.handle, turing_handle_eulers);
+    }
+
+    public rotate_around(point: Vec3, axis: Vec3, angle: f32): void {
+        let turing_handle_point = __enqueue_vec3(point);
+        let turing_handle_axis = __enqueue_vec3(axis);
+        _core_transform__rotate_around(this.handle, turing_handle_point, turing_handle_axis, angle);
+    }
+
+    public rotate_around_local(axis: Vec3, angle: f32): void {
+        let turing_handle_axis = __enqueue_vec3(axis);
+        _core_transform__rotate_around_local(this.handle, turing_handle_axis, angle);
+    }
+
+    public rotate_relative(eulers: Vec3, relative_to: i32): void {
+        let turing_handle_eulers = __enqueue_vec3(eulers);
+        _core_transform__rotate_relative(this.handle, turing_handle_eulers, relative_to);
+    }
+
+    public send_message(method_name: string, value: Object, options: i32): void {
+        let turing_handle_method_name = String.UTF8.encode(method_name, true);
+        _core_transform__send_message(this.handle, turing_handle_method_name, value.handle, options);
+    }
+
+    public send_message_upwards(method_name: string, value: Object, options: i32): void {
+        let turing_handle_method_name = String.UTF8.encode(method_name, true);
+        _core_transform__send_message_upwards(this.handle, turing_handle_method_name, value.handle, options);
+    }
+
+    public set_as_first_sibling(): void {
+        _core_transform__set_as_first_sibling(this.handle);
+    }
+
+    public set_as_last_sibling(): void {
+        _core_transform__set_as_last_sibling(this.handle);
+    }
+
+    public set_euler_angles(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_euler_angles(this.handle, turing_handle_value);
+    }
+
+    public set_forward(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_forward(this.handle, turing_handle_value);
+    }
+
+    public set_has_changed(value: bool): void {
+        _core_transform__set_has_changed(this.handle, value);
+    }
+
+    public set_hide_flags(value: i32): void {
+        _core_transform__set_hide_flags(this.handle, value);
+    }
+
+    public set_hierarchy_capacity(value: i32): void {
+        _core_transform__set_hierarchy_capacity(this.handle, value);
+    }
+
+    public set_local_euler_angles(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_local_euler_angles(this.handle, turing_handle_value);
+    }
+
+    public set_local_position(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_local_position(this.handle, turing_handle_value);
+    }
+
+    public set_local_position_and_rotation(local_position: Vec3, local_rotation: Quat): void {
+        let turing_handle_local_position = __enqueue_vec3(local_position);
+        let turing_handle_local_rotation = __enqueue_quat(local_rotation);
+        _core_transform__set_local_position_and_rotation(this.handle, turing_handle_local_position, turing_handle_local_rotation);
+    }
+
+    public set_local_rotation(value: Quat): void {
+        let turing_handle_value = __enqueue_quat(value);
+        _core_transform__set_local_rotation(this.handle, turing_handle_value);
+    }
+
+    public set_local_scale(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_local_scale(this.handle, turing_handle_value);
+    }
+
+    public set_name(value: string): void {
+        let turing_handle_value = String.UTF8.encode(value, true);
+        _core_transform__set_name(this.handle, turing_handle_value);
+    }
+
+    public set_parent(parent: Transform, world_position_stays: bool): void {
+        _core_transform__set_parent(this.handle, parent.handle, world_position_stays);
+    }
+
+    public set_position(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_position(this.handle, turing_handle_value);
+    }
+
+    public set_position_and_rotation(position: Vec3, rotation: Quat): void {
+        let turing_handle_position = __enqueue_vec3(position);
+        let turing_handle_rotation = __enqueue_quat(rotation);
+        _core_transform__set_position_and_rotation(this.handle, turing_handle_position, turing_handle_rotation);
+    }
+
+    public set_right(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_right(this.handle, turing_handle_value);
+    }
+
+    public set_rotation(value: Quat): void {
+        let turing_handle_value = __enqueue_quat(value);
+        _core_transform__set_rotation(this.handle, turing_handle_value);
+    }
+
+    public set_sibling_index(index: i32): void {
+        _core_transform__set_sibling_index(this.handle, index);
+    }
+
+    public set_tag(value: string): void {
+        let turing_handle_value = String.UTF8.encode(value, true);
+        _core_transform__set_tag(this.handle, turing_handle_value);
+    }
+
+    public set_up(value: Vec3): void {
+        let turing_handle_value = __enqueue_vec3(value);
+        _core_transform__set_up(this.handle, turing_handle_value);
+    }
+
+    public transform_direction(direction: Vec3): Vec3 {
+        let turing_handle_direction = __enqueue_vec3(direction);
+        _core_transform__transform_direction(this.handle, turing_handle_direction);
+        return __dequeue_vec3();
+    }
+
+    public transform_point(position: Vec3): Vec3 {
+        let turing_handle_position = __enqueue_vec3(position);
+        _core_transform__transform_point(this.handle, turing_handle_position);
+        return __dequeue_vec3();
+    }
+
+    public transform_vector(vector: Vec3): Vec3 {
+        let turing_handle_vector = __enqueue_vec3(vector);
+        _core_transform__transform_vector(this.handle, turing_handle_vector);
+        return __dequeue_vec3();
+    }
+
+    public translate(translation: Vec3, relative_to: i32): void {
+        let turing_handle_translation = __enqueue_vec3(translation);
+        _core_transform__translate(this.handle, turing_handle_translation, relative_to);
+    }
+
+    public translate_relative(translation: Vec3, relative_to: Transform): void {
+        let turing_handle_translation = __enqueue_vec3(translation);
+        _core_transform__translate_relative(this.handle, turing_handle_translation, relative_to.handle);
+    }
 }
 
 @final
@@ -1954,6 +2495,23 @@ export class TuringMesh {
 }
 
 @final
+export class TuringNoteExtensions {
+    
+
+
+    public static get_note_floor_movement(note_controller: NoteController): NoteFloorMovement {
+        let turing_result = _core_turing_note_extensions__get_note_floor_movement(note_controller.handle);
+        return new NoteFloorMovement(turing_result);
+    }
+
+    public static get_note_jump(note_controller: NoteController): NoteJump {
+        let turing_result = _core_turing_note_extensions__get_note_jump(note_controller.handle);
+        return new NoteJump(turing_result);
+    }
+
+}
+
+@final
 export class TuringScriptManager {
     
     handle: u64;
@@ -1967,177 +2525,6 @@ export class TuringScriptManager {
 }
 
 @final
-export class TuringerGameObject {
-    
-    handle: u64;
-
-    constructor(handle: u64) {
-        this.handle = handle;
-    }
-    
-
-
-
-    public active_get(): bool {
-        return _core_turinger_game_object__active_get(this.handle);
-    }
-
-    public active_in_hierarchy_get(): bool {
-        return _core_turinger_game_object__active_in_hierarchy_get(this.handle);
-    }
-
-    public active_self_get(): bool {
-        return _core_turinger_game_object__active_self_get(this.handle);
-    }
-
-    public active_set(value: bool): void {
-        _core_turinger_game_object__active_set(this.handle, value);
-    }
-
-    public add_component(component_type: Type): Component {
-        let turing_result = _core_turinger_game_object__add_component(this.handle, component_type.handle);
-        return new Component(turing_result);
-    }
-
-    public add_or_get_mesh(): TuringMesh {
-        let turing_result = _core_turinger_game_object__add_or_get_mesh(this.handle);
-        return new TuringMesh(turing_result);
-    }
-
-    public broadcast_message(method_name: string, options: i32): void {
-        let turing_handle_method_name = String.UTF8.encode(method_name, true);
-        _core_turinger_game_object__broadcast_message(this.handle, turing_handle_method_name, options);
-    }
-
-    public compare_tag(tag: string): bool {
-        let turing_handle_tag = String.UTF8.encode(tag, true);
-        return _core_turinger_game_object__compare_tag(this.handle, turing_handle_tag);
-    }
-
-    public game_object_get(): GameObject {
-        let turing_result = _core_turinger_game_object__game_object_get(this.handle);
-        return new GameObject(turing_result);
-    }
-
-    public get_component_at_index(index: i32): Component {
-        let turing_result = _core_turinger_game_object__get_component_at_index(this.handle, index);
-        return new Component(turing_result);
-    }
-
-    public get_component_by_name(cs_type: string): Component {
-        let turing_handle_cs_type = String.UTF8.encode(cs_type, true);
-        let turing_result = _core_turinger_game_object__get_component_by_name(this.handle, turing_handle_cs_type);
-        return new Component(turing_result);
-    }
-
-    public get_component_by_type(cs_type: Type): Component {
-        let turing_result = _core_turinger_game_object__get_component_by_type(this.handle, cs_type.handle);
-        return new Component(turing_result);
-    }
-
-    public get_component_count(): i32 {
-        return _core_turinger_game_object__get_component_count(this.handle);
-    }
-
-    public get_component_in_children_by_type(cs_type: Type, include_inactive: bool): Component {
-        let turing_result = _core_turinger_game_object__get_component_in_children_by_type(this.handle, cs_type.handle, include_inactive);
-        return new Component(turing_result);
-    }
-
-    public get_component_in_parent_by_type(cs_type: Type, include_inactive: bool): Component {
-        let turing_result = _core_turinger_game_object__get_component_in_parent_by_type(this.handle, cs_type.handle, include_inactive);
-        return new Component(turing_result);
-    }
-
-    public get_component_index(component: Component): i32 {
-        return _core_turinger_game_object__get_component_index(this.handle, component.handle);
-    }
-
-    public get_instance_id(): i32 {
-        return _core_turinger_game_object__get_instance_id(this.handle);
-    }
-
-    public hide_flags_get(): i32 {
-        return _core_turinger_game_object__hide_flags_get(this.handle);
-    }
-
-    public hide_flags_set(value: i32): void {
-        _core_turinger_game_object__hide_flags_set(this.handle, value);
-    }
-
-    public is_static_get(): bool {
-        return _core_turinger_game_object__is_static_get(this.handle);
-    }
-
-    public is_static_set(value: bool): void {
-        _core_turinger_game_object__is_static_set(this.handle, value);
-    }
-
-    public layer_get(): i32 {
-        return _core_turinger_game_object__layer_get(this.handle);
-    }
-
-    public layer_set(value: i32): void {
-        _core_turinger_game_object__layer_set(this.handle, value);
-    }
-
-    public name_get(): string {
-        let turing_result = _core_turinger_game_object__name_get(this.handle);
-        let turing_str = heap.alloc(usize(turing_result));
-        _host_strcpy(u32(turing_str), turing_result);
-        let turing_output = String.UTF8.decode(turing_str, true);
-        heap.free(turing_str);
-        return turing_output;
-    }
-
-    public name_set(value: string): void {
-        let turing_handle_value = String.UTF8.encode(value, true);
-        _core_turinger_game_object__name_set(this.handle, turing_handle_value);
-    }
-
-    public scene_culling_mask_get(): u64 {
-        return _core_turinger_game_object__scene_culling_mask_get(this.handle);
-    }
-
-    public send_message(method_name: string, options: i32): void {
-        let turing_handle_method_name = String.UTF8.encode(method_name, true);
-        _core_turinger_game_object__send_message(this.handle, turing_handle_method_name, options);
-    }
-
-    public send_message_upwards(method_name: string, options: i32): void {
-        let turing_handle_method_name = String.UTF8.encode(method_name, true);
-        _core_turinger_game_object__send_message_upwards(this.handle, turing_handle_method_name, options);
-    }
-
-    public set_active(value: bool): void {
-        _core_turinger_game_object__set_active(this.handle, value);
-    }
-
-    public set_active_recursively(state: bool): void {
-        _core_turinger_game_object__set_active_recursively(this.handle, state);
-    }
-
-    public tag_get(): string {
-        let turing_result = _core_turinger_game_object__tag_get(this.handle);
-        let turing_str = heap.alloc(usize(turing_result));
-        _host_strcpy(u32(turing_str), turing_result);
-        let turing_output = String.UTF8.decode(turing_str, true);
-        heap.free(turing_str);
-        return turing_output;
-    }
-
-    public tag_set(value: string): void {
-        let turing_handle_value = String.UTF8.encode(value, true);
-        _core_turinger_game_object__tag_set(this.handle, turing_handle_value);
-    }
-
-    public transform_get(): TuringerTransform {
-        let turing_result = _core_turinger_game_object__transform_get(this.handle);
-        return new TuringerTransform(turing_result);
-    }
-}
-
-@final
 export class TuringerGameObjectManager {
     
     handle: u64;
@@ -2148,425 +2535,26 @@ export class TuringerGameObjectManager {
     
 
 
-    public static create_object(name: string): TuringerGameObject {
+    public static create_object(name: string): GameObject {
         let turing_handle_name = String.UTF8.encode(name, true);
         let turing_result = _core_turinger_game_object_manager__create_object(turing_handle_name);
-        return new TuringerGameObject(turing_result);
+        return new GameObject(turing_result);
     }
 
-    public static destroy_object(listener: TuringerGameObject): void {
-        _core_turinger_game_object_manager__destroy_object(listener.handle);
+    public static destroy_object(game_object: GameObject): void {
+        _core_turinger_game_object_manager__destroy_object(game_object.handle);
     }
 
-    public static find(name: string): TuringerGameObject {
+    public static find(name: string): GameObject {
         let turing_handle_name = String.UTF8.encode(name, true);
         let turing_result = _core_turinger_game_object_manager__find(turing_handle_name);
-        return new TuringerGameObject(turing_result);
+        return new GameObject(turing_result);
     }
 
 
     public instance_get(): TuringerGameObjectManager {
         let turing_result = _core_turinger_game_object_manager__instance_get(this.handle);
         return new TuringerGameObjectManager(turing_result);
-    }
-}
-
-@final
-export class TuringerTransform {
-    
-    handle: u64;
-
-    constructor(handle: u64) {
-        this.handle = handle;
-    }
-    
-
-
-
-    public broadcast_message(method_name: string, parameter: Object, options: i32): void {
-        let turing_handle_method_name = String.UTF8.encode(method_name, true);
-        _core_turinger_transform__broadcast_message(this.handle, turing_handle_method_name, parameter.handle, options);
-    }
-
-    public child_count_get(): i32 {
-        return _core_turinger_transform__child_count_get(this.handle);
-    }
-
-    public compare_tag(tag: string): bool {
-        let turing_handle_tag = String.UTF8.encode(tag, true);
-        return _core_turinger_transform__compare_tag(this.handle, turing_handle_tag);
-    }
-
-    public detach_children(): void {
-        _core_turinger_transform__detach_children(this.handle);
-    }
-
-    public euler_angles_get(): Vec3 {
-        _core_turinger_transform__euler_angles_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public euler_angles_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__euler_angles_set(this.handle, turing_handle_value);
-    }
-
-    public find(n: string): TuringerTransform {
-        let turing_handle_n = String.UTF8.encode(n, true);
-        let turing_result = _core_turinger_transform__find(this.handle, turing_handle_n);
-        return new TuringerTransform(turing_result);
-    }
-
-    public find_child(n: string): TuringerTransform {
-        let turing_handle_n = String.UTF8.encode(n, true);
-        let turing_result = _core_turinger_transform__find_child(this.handle, turing_handle_n);
-        return new TuringerTransform(turing_result);
-    }
-
-    public forward_get(): Vec3 {
-        _core_turinger_transform__forward_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public forward_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__forward_set(this.handle, turing_handle_value);
-    }
-
-    public game_object_get(): TuringerGameObject {
-        let turing_result = _core_turinger_transform__game_object_get(this.handle);
-        return new TuringerGameObject(turing_result);
-    }
-
-    public get_child(index: i32): TuringerTransform {
-        let turing_result = _core_turinger_transform__get_child(this.handle, index);
-        return new TuringerTransform(turing_result);
-    }
-
-    public get_child_count(): i32 {
-        return _core_turinger_transform__get_child_count(this.handle);
-    }
-
-    public get_component_by_name(cs_type: string): Component {
-        let turing_handle_cs_type = String.UTF8.encode(cs_type, true);
-        let turing_result = _core_turinger_transform__get_component_by_name(this.handle, turing_handle_cs_type);
-        return new Component(turing_result);
-    }
-
-    public get_component_by_type(cs_type: Type): Component {
-        let turing_result = _core_turinger_transform__get_component_by_type(this.handle, cs_type.handle);
-        return new Component(turing_result);
-    }
-
-    public get_component_in_children_by_type(t: Type, include_inactive: bool): Component {
-        let turing_result = _core_turinger_transform__get_component_in_children_by_type(this.handle, t.handle, include_inactive);
-        return new Component(turing_result);
-    }
-
-    public get_component_in_parent_by_type(t: Type, include_inactive: bool): Component {
-        let turing_result = _core_turinger_transform__get_component_in_parent_by_type(this.handle, t.handle, include_inactive);
-        return new Component(turing_result);
-    }
-
-    public get_component_index(): i32 {
-        return _core_turinger_transform__get_component_index(this.handle);
-    }
-
-    public get_enumerator(): IEnumerator {
-        let turing_result = _core_turinger_transform__get_enumerator(this.handle);
-        return new IEnumerator(turing_result);
-    }
-
-    public get_instance_id(): i32 {
-        return _core_turinger_transform__get_instance_id(this.handle);
-    }
-
-    public get_sibling_index(): i32 {
-        return _core_turinger_transform__get_sibling_index(this.handle);
-    }
-
-    public has_changed_get(): bool {
-        return _core_turinger_transform__has_changed_get(this.handle);
-    }
-
-    public has_changed_set(value: bool): void {
-        _core_turinger_transform__has_changed_set(this.handle, value);
-    }
-
-    public hide_flags_get(): i32 {
-        return _core_turinger_transform__hide_flags_get(this.handle);
-    }
-
-    public hide_flags_set(value: i32): void {
-        _core_turinger_transform__hide_flags_set(this.handle, value);
-    }
-
-    public hierarchy_capacity_get(): i32 {
-        return _core_turinger_transform__hierarchy_capacity_get(this.handle);
-    }
-
-    public hierarchy_capacity_set(value: i32): void {
-        _core_turinger_transform__hierarchy_capacity_set(this.handle, value);
-    }
-
-    public hierarchy_count_get(): i32 {
-        return _core_turinger_transform__hierarchy_count_get(this.handle);
-    }
-
-    public inverse_transform_direction(direction: Vec3): Vec3 {
-        let turing_handle_direction = __enqueue_vec3(direction);
-        _core_turinger_transform__inverse_transform_direction(this.handle, turing_handle_direction);
-        return __dequeue_vec3();
-    }
-
-    public inverse_transform_point(position: Vec3): Vec3 {
-        let turing_handle_position = __enqueue_vec3(position);
-        _core_turinger_transform__inverse_transform_point(this.handle, turing_handle_position);
-        return __dequeue_vec3();
-    }
-
-    public inverse_transform_vector(vector: Vec3): Vec3 {
-        let turing_handle_vector = __enqueue_vec3(vector);
-        _core_turinger_transform__inverse_transform_vector(this.handle, turing_handle_vector);
-        return __dequeue_vec3();
-    }
-
-    public is_child_of(parent: TuringerTransform): bool {
-        return _core_turinger_transform__is_child_of(this.handle, parent.handle);
-    }
-
-    public local_euler_angles_get(): Vec3 {
-        _core_turinger_transform__local_euler_angles_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public local_euler_angles_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__local_euler_angles_set(this.handle, turing_handle_value);
-    }
-
-    public local_position_get(): Vec3 {
-        _core_turinger_transform__local_position_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public local_position_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__local_position_set(this.handle, turing_handle_value);
-    }
-
-    public local_rotation_get(): Quat {
-        _core_turinger_transform__local_rotation_get(this.handle);
-        return __dequeue_quat();
-    }
-
-    public local_rotation_set(value: Quat): void {
-        let turing_handle_value = __enqueue_quat(value);
-        _core_turinger_transform__local_rotation_set(this.handle, turing_handle_value);
-    }
-
-    public local_scale_get(): Vec3 {
-        _core_turinger_transform__local_scale_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public local_scale_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__local_scale_set(this.handle, turing_handle_value);
-    }
-
-    public local_to_world_matrix_get(): Mat4 {
-        _core_turinger_transform__local_to_world_matrix_get(this.handle);
-        return __dequeue_mat4();
-    }
-
-    public look_at(target: TuringerTransform, world_up: Vec3): void {
-        let turing_handle_world_up = __enqueue_vec3(world_up);
-        _core_turinger_transform__look_at(this.handle, target.handle, turing_handle_world_up);
-    }
-
-    public lossy_scale_get(): Vec3 {
-        _core_turinger_transform__lossy_scale_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public name_get(): string {
-        let turing_result = _core_turinger_transform__name_get(this.handle);
-        let turing_str = heap.alloc(usize(turing_result));
-        _host_strcpy(u32(turing_str), turing_result);
-        let turing_output = String.UTF8.decode(turing_str, true);
-        heap.free(turing_str);
-        return turing_output;
-    }
-
-    public name_set(value: string): void {
-        let turing_handle_value = String.UTF8.encode(value, true);
-        _core_turinger_transform__name_set(this.handle, turing_handle_value);
-    }
-
-    public parent_get(): TuringerTransform {
-        let turing_result = _core_turinger_transform__parent_get(this.handle);
-        return new TuringerTransform(turing_result);
-    }
-
-    public parent_set(value: TuringerTransform): void {
-        _core_turinger_transform__parent_set(this.handle, value.handle);
-    }
-
-    public position_get(): Vec3 {
-        _core_turinger_transform__position_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public position_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__position_set(this.handle, turing_handle_value);
-    }
-
-    public right_get(): Vec3 {
-        _core_turinger_transform__right_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public right_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__right_set(this.handle, turing_handle_value);
-    }
-
-    public root_get(): TuringerTransform {
-        let turing_result = _core_turinger_transform__root_get(this.handle);
-        return new TuringerTransform(turing_result);
-    }
-
-    public rotate(eulers: Vec3): void {
-        let turing_handle_eulers = __enqueue_vec3(eulers);
-        _core_turinger_transform__rotate(this.handle, turing_handle_eulers);
-    }
-
-    public rotate_around(point: Vec3, axis: Vec3, angle: f32): void {
-        let turing_handle_point = __enqueue_vec3(point);
-        let turing_handle_axis = __enqueue_vec3(axis);
-        _core_turinger_transform__rotate_around(this.handle, turing_handle_point, turing_handle_axis, angle);
-    }
-
-    public rotate_around_local(axis: Vec3, angle: f32): void {
-        let turing_handle_axis = __enqueue_vec3(axis);
-        _core_turinger_transform__rotate_around_local(this.handle, turing_handle_axis, angle);
-    }
-
-    public rotate_relative(eulers: Vec3, relative_to: i32): void {
-        let turing_handle_eulers = __enqueue_vec3(eulers);
-        _core_turinger_transform__rotate_relative(this.handle, turing_handle_eulers, relative_to);
-    }
-
-    public rotation_get(): Quat {
-        _core_turinger_transform__rotation_get(this.handle);
-        return __dequeue_quat();
-    }
-
-    public rotation_set(value: Quat): void {
-        let turing_handle_value = __enqueue_quat(value);
-        _core_turinger_transform__rotation_set(this.handle, turing_handle_value);
-    }
-
-    public send_message(method_name: string, value: Object, options: i32): void {
-        let turing_handle_method_name = String.UTF8.encode(method_name, true);
-        _core_turinger_transform__send_message(this.handle, turing_handle_method_name, value.handle, options);
-    }
-
-    public send_message_upwards(method_name: string, value: Object, options: i32): void {
-        let turing_handle_method_name = String.UTF8.encode(method_name, true);
-        _core_turinger_transform__send_message_upwards(this.handle, turing_handle_method_name, value.handle, options);
-    }
-
-    public set_as_first_sibling(): void {
-        _core_turinger_transform__set_as_first_sibling(this.handle);
-    }
-
-    public set_as_last_sibling(): void {
-        _core_turinger_transform__set_as_last_sibling(this.handle);
-    }
-
-    public set_local_position_and_rotation(local_position: Vec3, local_rotation: Quat): void {
-        let turing_handle_local_position = __enqueue_vec3(local_position);
-        let turing_handle_local_rotation = __enqueue_quat(local_rotation);
-        _core_turinger_transform__set_local_position_and_rotation(this.handle, turing_handle_local_position, turing_handle_local_rotation);
-    }
-
-    public set_parent(parent: TuringerTransform, world_position_stays: bool): void {
-        _core_turinger_transform__set_parent(this.handle, parent.handle, world_position_stays);
-    }
-
-    public set_position_and_rotation(position: Vec3, rotation: Quat): void {
-        let turing_handle_position = __enqueue_vec3(position);
-        let turing_handle_rotation = __enqueue_quat(rotation);
-        _core_turinger_transform__set_position_and_rotation(this.handle, turing_handle_position, turing_handle_rotation);
-    }
-
-    public set_sibling_index(index: i32): void {
-        _core_turinger_transform__set_sibling_index(this.handle, index);
-    }
-
-    public tag_get(): string {
-        let turing_result = _core_turinger_transform__tag_get(this.handle);
-        let turing_str = heap.alloc(usize(turing_result));
-        _host_strcpy(u32(turing_str), turing_result);
-        let turing_output = String.UTF8.decode(turing_str, true);
-        heap.free(turing_str);
-        return turing_output;
-    }
-
-    public tag_set(value: string): void {
-        let turing_handle_value = String.UTF8.encode(value, true);
-        _core_turinger_transform__tag_set(this.handle, turing_handle_value);
-    }
-
-    public transform_direction(direction: Vec3): Vec3 {
-        let turing_handle_direction = __enqueue_vec3(direction);
-        _core_turinger_transform__transform_direction(this.handle, turing_handle_direction);
-        return __dequeue_vec3();
-    }
-
-    public transform_get(): Transform {
-        let turing_result = _core_turinger_transform__transform_get(this.handle);
-        return new Transform(turing_result);
-    }
-
-    public transform_point(position: Vec3): Vec3 {
-        let turing_handle_position = __enqueue_vec3(position);
-        _core_turinger_transform__transform_point(this.handle, turing_handle_position);
-        return __dequeue_vec3();
-    }
-
-    public transform_vector(vector: Vec3): Vec3 {
-        let turing_handle_vector = __enqueue_vec3(vector);
-        _core_turinger_transform__transform_vector(this.handle, turing_handle_vector);
-        return __dequeue_vec3();
-    }
-
-    public translate(translation: Vec3, relative_to: i32): void {
-        let turing_handle_translation = __enqueue_vec3(translation);
-        _core_turinger_transform__translate(this.handle, turing_handle_translation, relative_to);
-    }
-
-    public translate_relative(translation: Vec3, relative_to: TuringerTransform): void {
-        let turing_handle_translation = __enqueue_vec3(translation);
-        _core_turinger_transform__translate_relative(this.handle, turing_handle_translation, relative_to.handle);
-    }
-
-    public up_get(): Vec3 {
-        _core_turinger_transform__up_get(this.handle);
-        return __dequeue_vec3();
-    }
-
-    public up_set(value: Vec3): void {
-        let turing_handle_value = __enqueue_vec3(value);
-        _core_turinger_transform__up_set(this.handle, turing_handle_value);
-    }
-
-    public world_to_local_matrix_get(): Mat4 {
-        _core_turinger_transform__world_to_local_matrix_get(this.handle);
-        return __dequeue_mat4();
     }
 }
 

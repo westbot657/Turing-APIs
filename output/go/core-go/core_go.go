@@ -76,6 +76,70 @@ func _core_custom_obstacle_data__custom_data_get(handle CustomObstacleData) Cust
 func _core_custom_obstacle_data__get_copy(handle CustomObstacleData) BeatmapDataItem
 //go:wasmimport env _core_custom_obstacle_data__version_get
 func _core_custom_obstacle_data__version_get(handle CustomObstacleData) Version
+//go:wasmimport env _core_game_object__add_component
+func _core_game_object__add_component(handle GameObject, component_type Type) Component
+//go:wasmimport env _core_game_object__add_or_get_mesh
+func _core_game_object__add_or_get_mesh(handle GameObject) TuringMesh
+//go:wasmimport env _core_game_object__broadcast_message
+func _core_game_object__broadcast_message(handle GameObject, method_name uint32, options int32) void
+//go:wasmimport env _core_game_object__compare_tag
+func _core_game_object__compare_tag(handle GameObject, tag uint32) bool
+//go:wasmimport env _core_game_object__get_active
+func _core_game_object__get_active(handle GameObject) bool
+//go:wasmimport env _core_game_object__get_active_in_hierarchy
+func _core_game_object__get_active_in_hierarchy(handle GameObject) bool
+//go:wasmimport env _core_game_object__get_active_self
+func _core_game_object__get_active_self(handle GameObject) bool
+//go:wasmimport env _core_game_object__get_component_at_index
+func _core_game_object__get_component_at_index(handle GameObject, index int32) Component
+//go:wasmimport env _core_game_object__get_component_by_name
+func _core_game_object__get_component_by_name(handle GameObject, cs_type uint32) Component
+//go:wasmimport env _core_game_object__get_component_by_type
+func _core_game_object__get_component_by_type(handle GameObject, cs_type Type) Component
+//go:wasmimport env _core_game_object__get_component_count
+func _core_game_object__get_component_count(handle GameObject) int32
+//go:wasmimport env _core_game_object__get_component_in_children_by_type
+func _core_game_object__get_component_in_children_by_type(handle GameObject, cs_type Type, include_inactive bool) Component
+//go:wasmimport env _core_game_object__get_component_in_parent_by_type
+func _core_game_object__get_component_in_parent_by_type(handle GameObject, cs_type Type, include_inactive bool) Component
+//go:wasmimport env _core_game_object__get_component_index
+func _core_game_object__get_component_index(handle GameObject, component Component) int32
+//go:wasmimport env _core_game_object__get_hide_flags
+func _core_game_object__get_hide_flags(handle GameObject) int32
+//go:wasmimport env _core_game_object__get_instance_id
+func _core_game_object__get_instance_id(handle GameObject) int32
+//go:wasmimport env _core_game_object__get_is_static
+func _core_game_object__get_is_static(handle GameObject) bool
+//go:wasmimport env _core_game_object__get_layer
+func _core_game_object__get_layer(handle GameObject) int32
+//go:wasmimport env _core_game_object__get_name
+func _core_game_object__get_name(handle GameObject) uint32
+//go:wasmimport env _core_game_object__get_scene_culling_mask
+func _core_game_object__get_scene_culling_mask(handle GameObject) uint64
+//go:wasmimport env _core_game_object__get_tag
+func _core_game_object__get_tag(handle GameObject) uint32
+//go:wasmimport env _core_game_object__get_transform
+func _core_game_object__get_transform(handle GameObject) Transform
+//go:wasmimport env _core_game_object__send_message
+func _core_game_object__send_message(handle GameObject, method_name uint32, options int32) void
+//go:wasmimport env _core_game_object__send_message_upwards
+func _core_game_object__send_message_upwards(handle GameObject, method_name uint32, options int32) void
+//go:wasmimport env _core_game_object__set_active
+func _core_game_object__set_active(handle GameObject, value bool) void
+//go:wasmimport env _core_game_object__set_active_prop
+func _core_game_object__set_active_prop(handle GameObject, value bool) void
+//go:wasmimport env _core_game_object__set_active_recursively
+func _core_game_object__set_active_recursively(handle GameObject, state bool) void
+//go:wasmimport env _core_game_object__set_hide_flags
+func _core_game_object__set_hide_flags(handle GameObject, value int32) void
+//go:wasmimport env _core_game_object__set_is_static
+func _core_game_object__set_is_static(handle GameObject, value bool) void
+//go:wasmimport env _core_game_object__set_layer
+func _core_game_object__set_layer(handle GameObject, value int32) void
+//go:wasmimport env _core_game_object__set_name
+func _core_game_object__set_name(handle GameObject, value uint32) void
+//go:wasmimport env _core_game_object__set_tag
+func _core_game_object__set_tag(handle GameObject, value uint32) void
 //go:wasmimport env _core_gc_helper__create
 func _core_gc_helper__create() GCHelper
 //go:wasmimport env _core_gc_helper__dispose
@@ -326,6 +390,156 @@ func _core_note_manager__time_to_beat(time float32) float32
 func _core_task_scheduler__schedule(task Action) void
 //go:wasmimport env _core_task_scheduler__dispose
 func _core_task_scheduler__dispose(handle TaskScheduler) void
+//go:wasmimport env _core_transform__broadcast_message
+func _core_transform__broadcast_message(handle Transform, method_name uint32, parameter Object, options int32) void
+//go:wasmimport env _core_transform__compare_tag
+func _core_transform__compare_tag(handle Transform, tag uint32) bool
+//go:wasmimport env _core_transform__detach_children
+func _core_transform__detach_children(handle Transform) void
+//go:wasmimport env _core_transform__find
+func _core_transform__find(handle Transform, n uint32) Transform
+//go:wasmimport env _core_transform__find_child
+func _core_transform__find_child(handle Transform, n uint32) Transform
+//go:wasmimport env _core_transform__get_child
+func _core_transform__get_child(handle Transform, index int32) Transform
+//go:wasmimport env _core_transform__get_child_count
+func _core_transform__get_child_count(handle Transform) int32
+//go:wasmimport env _core_transform__get_child_count_prop
+func _core_transform__get_child_count_prop(handle Transform) int32
+//go:wasmimport env _core_transform__get_component_by_name
+func _core_transform__get_component_by_name(handle Transform, cs_type uint32) Component
+//go:wasmimport env _core_transform__get_component_by_type
+func _core_transform__get_component_by_type(handle Transform, cs_type Type) Component
+//go:wasmimport env _core_transform__get_component_in_children_by_type
+func _core_transform__get_component_in_children_by_type(handle Transform, t Type, include_inactive bool) Component
+//go:wasmimport env _core_transform__get_component_in_parent_by_type
+func _core_transform__get_component_in_parent_by_type(handle Transform, t Type, include_inactive bool) Component
+//go:wasmimport env _core_transform__get_component_index
+func _core_transform__get_component_index(handle Transform) int32
+//go:wasmimport env _core_transform__get_enumerator
+func _core_transform__get_enumerator(handle Transform) IEnumerator
+//go:wasmimport env _core_transform__get_euler_angles
+func _core_transform__get_euler_angles(handle Transform) uint32
+//go:wasmimport env _core_transform__get_forward
+func _core_transform__get_forward(handle Transform) uint32
+//go:wasmimport env _core_transform__get_game_object
+func _core_transform__get_game_object(handle Transform) GameObject
+//go:wasmimport env _core_transform__get_has_changed
+func _core_transform__get_has_changed(handle Transform) bool
+//go:wasmimport env _core_transform__get_hide_flags
+func _core_transform__get_hide_flags(handle Transform) int32
+//go:wasmimport env _core_transform__get_hierarchy_capacity
+func _core_transform__get_hierarchy_capacity(handle Transform) int32
+//go:wasmimport env _core_transform__get_hierarchy_count
+func _core_transform__get_hierarchy_count(handle Transform) int32
+//go:wasmimport env _core_transform__get_instance_id
+func _core_transform__get_instance_id(handle Transform) int32
+//go:wasmimport env _core_transform__get_local_euler_angles
+func _core_transform__get_local_euler_angles(handle Transform) uint32
+//go:wasmimport env _core_transform__get_local_position
+func _core_transform__get_local_position(handle Transform) uint32
+//go:wasmimport env _core_transform__get_local_rotation
+func _core_transform__get_local_rotation(handle Transform) uint32
+//go:wasmimport env _core_transform__get_local_scale
+func _core_transform__get_local_scale(handle Transform) uint32
+//go:wasmimport env _core_transform__get_local_to_world_matrix
+func _core_transform__get_local_to_world_matrix(handle Transform) uint32
+//go:wasmimport env _core_transform__get_lossy_scale
+func _core_transform__get_lossy_scale(handle Transform) uint32
+//go:wasmimport env _core_transform__get_name
+func _core_transform__get_name(handle Transform) uint32
+//go:wasmimport env _core_transform__get_parent
+func _core_transform__get_parent(handle Transform) Transform
+//go:wasmimport env _core_transform__get_position
+func _core_transform__get_position(handle Transform) uint32
+//go:wasmimport env _core_transform__get_right
+func _core_transform__get_right(handle Transform) uint32
+//go:wasmimport env _core_transform__get_root
+func _core_transform__get_root(handle Transform) Transform
+//go:wasmimport env _core_transform__get_rotation
+func _core_transform__get_rotation(handle Transform) uint32
+//go:wasmimport env _core_transform__get_sibling_index
+func _core_transform__get_sibling_index(handle Transform) int32
+//go:wasmimport env _core_transform__get_tag
+func _core_transform__get_tag(handle Transform) uint32
+//go:wasmimport env _core_transform__get_up
+func _core_transform__get_up(handle Transform) uint32
+//go:wasmimport env _core_transform__get_world_to_local_matrix
+func _core_transform__get_world_to_local_matrix(handle Transform) uint32
+//go:wasmimport env _core_transform__inverse_transform_direction
+func _core_transform__inverse_transform_direction(handle Transform, direction uint32) uint32
+//go:wasmimport env _core_transform__inverse_transform_point
+func _core_transform__inverse_transform_point(handle Transform, position uint32) uint32
+//go:wasmimport env _core_transform__inverse_transform_vector
+func _core_transform__inverse_transform_vector(handle Transform, vector uint32) uint32
+//go:wasmimport env _core_transform__is_child_of
+func _core_transform__is_child_of(handle Transform, parent Transform) bool
+//go:wasmimport env _core_transform__look_at
+func _core_transform__look_at(handle Transform, target Transform, world_up uint32) void
+//go:wasmimport env _core_transform__rotate
+func _core_transform__rotate(handle Transform, eulers uint32) void
+//go:wasmimport env _core_transform__rotate_around
+func _core_transform__rotate_around(handle Transform, point uint32, axis uint32, angle float32) void
+//go:wasmimport env _core_transform__rotate_around_local
+func _core_transform__rotate_around_local(handle Transform, axis uint32, angle float32) void
+//go:wasmimport env _core_transform__rotate_relative
+func _core_transform__rotate_relative(handle Transform, eulers uint32, relative_to int32) void
+//go:wasmimport env _core_transform__send_message
+func _core_transform__send_message(handle Transform, method_name uint32, value Object, options int32) void
+//go:wasmimport env _core_transform__send_message_upwards
+func _core_transform__send_message_upwards(handle Transform, method_name uint32, value Object, options int32) void
+//go:wasmimport env _core_transform__set_as_first_sibling
+func _core_transform__set_as_first_sibling(handle Transform) void
+//go:wasmimport env _core_transform__set_as_last_sibling
+func _core_transform__set_as_last_sibling(handle Transform) void
+//go:wasmimport env _core_transform__set_euler_angles
+func _core_transform__set_euler_angles(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_forward
+func _core_transform__set_forward(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_has_changed
+func _core_transform__set_has_changed(handle Transform, value bool) void
+//go:wasmimport env _core_transform__set_hide_flags
+func _core_transform__set_hide_flags(handle Transform, value int32) void
+//go:wasmimport env _core_transform__set_hierarchy_capacity
+func _core_transform__set_hierarchy_capacity(handle Transform, value int32) void
+//go:wasmimport env _core_transform__set_local_euler_angles
+func _core_transform__set_local_euler_angles(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_local_position
+func _core_transform__set_local_position(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_local_position_and_rotation
+func _core_transform__set_local_position_and_rotation(handle Transform, local_position uint32, local_rotation uint32) void
+//go:wasmimport env _core_transform__set_local_rotation
+func _core_transform__set_local_rotation(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_local_scale
+func _core_transform__set_local_scale(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_name
+func _core_transform__set_name(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_parent
+func _core_transform__set_parent(handle Transform, parent Transform, world_position_stays bool) void
+//go:wasmimport env _core_transform__set_position
+func _core_transform__set_position(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_position_and_rotation
+func _core_transform__set_position_and_rotation(handle Transform, position uint32, rotation uint32) void
+//go:wasmimport env _core_transform__set_right
+func _core_transform__set_right(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_rotation
+func _core_transform__set_rotation(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_sibling_index
+func _core_transform__set_sibling_index(handle Transform, index int32) void
+//go:wasmimport env _core_transform__set_tag
+func _core_transform__set_tag(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__set_up
+func _core_transform__set_up(handle Transform, value uint32) void
+//go:wasmimport env _core_transform__transform_direction
+func _core_transform__transform_direction(handle Transform, direction uint32) uint32
+//go:wasmimport env _core_transform__transform_point
+func _core_transform__transform_point(handle Transform, position uint32) uint32
+//go:wasmimport env _core_transform__transform_vector
+func _core_transform__transform_vector(handle Transform, vector uint32) uint32
+//go:wasmimport env _core_transform__translate
+func _core_transform__translate(handle Transform, translation uint32, relative_to int32) void
+//go:wasmimport env _core_transform__translate_relative
+func _core_transform__translate_relative(handle Transform, translation uint32, relative_to Transform) void
 //go:wasmimport env _core_turing_mesh___mesh_get
 func _core_turing_mesh___mesh_get(handle TuringMesh) Mesh
 //go:wasmimport env _core_turing_mesh___mesh_set
@@ -380,234 +594,18 @@ func _core_turing_mesh__set_u_vs(handle TuringMesh, channel int32, uvs *void) vo
 func _core_turing_mesh__set_vertices(handle TuringMesh, in_vertices *void) void
 //go:wasmimport env _core_turing_mesh__upload_mesh_data
 func _core_turing_mesh__upload_mesh_data(handle TuringMesh, mark_no_longer_readable bool) void
-//go:wasmimport env _core_turinger_game_object__active_get
-func _core_turinger_game_object__active_get(handle TuringerGameObject) bool
-//go:wasmimport env _core_turinger_game_object__active_in_hierarchy_get
-func _core_turinger_game_object__active_in_hierarchy_get(handle TuringerGameObject) bool
-//go:wasmimport env _core_turinger_game_object__active_self_get
-func _core_turinger_game_object__active_self_get(handle TuringerGameObject) bool
-//go:wasmimport env _core_turinger_game_object__active_set
-func _core_turinger_game_object__active_set(handle TuringerGameObject, value bool) void
-//go:wasmimport env _core_turinger_game_object__add_component
-func _core_turinger_game_object__add_component(handle TuringerGameObject, component_type Type) Component
-//go:wasmimport env _core_turinger_game_object__add_or_get_mesh
-func _core_turinger_game_object__add_or_get_mesh(handle TuringerGameObject) TuringMesh
-//go:wasmimport env _core_turinger_game_object__broadcast_message
-func _core_turinger_game_object__broadcast_message(handle TuringerGameObject, method_name uint32, options int32) void
-//go:wasmimport env _core_turinger_game_object__compare_tag
-func _core_turinger_game_object__compare_tag(handle TuringerGameObject, tag uint32) bool
-//go:wasmimport env _core_turinger_game_object__game_object_get
-func _core_turinger_game_object__game_object_get(handle TuringerGameObject) GameObject
-//go:wasmimport env _core_turinger_game_object__get_component_at_index
-func _core_turinger_game_object__get_component_at_index(handle TuringerGameObject, index int32) Component
-//go:wasmimport env _core_turinger_game_object__get_component_by_name
-func _core_turinger_game_object__get_component_by_name(handle TuringerGameObject, cs_type uint32) Component
-//go:wasmimport env _core_turinger_game_object__get_component_by_type
-func _core_turinger_game_object__get_component_by_type(handle TuringerGameObject, cs_type Type) Component
-//go:wasmimport env _core_turinger_game_object__get_component_count
-func _core_turinger_game_object__get_component_count(handle TuringerGameObject) int32
-//go:wasmimport env _core_turinger_game_object__get_component_in_children_by_type
-func _core_turinger_game_object__get_component_in_children_by_type(handle TuringerGameObject, cs_type Type, include_inactive bool) Component
-//go:wasmimport env _core_turinger_game_object__get_component_in_parent_by_type
-func _core_turinger_game_object__get_component_in_parent_by_type(handle TuringerGameObject, cs_type Type, include_inactive bool) Component
-//go:wasmimport env _core_turinger_game_object__get_component_index
-func _core_turinger_game_object__get_component_index(handle TuringerGameObject, component Component) int32
-//go:wasmimport env _core_turinger_game_object__get_instance_id
-func _core_turinger_game_object__get_instance_id(handle TuringerGameObject) int32
-//go:wasmimport env _core_turinger_game_object__hide_flags_get
-func _core_turinger_game_object__hide_flags_get(handle TuringerGameObject) int32
-//go:wasmimport env _core_turinger_game_object__hide_flags_set
-func _core_turinger_game_object__hide_flags_set(handle TuringerGameObject, value int32) void
-//go:wasmimport env _core_turinger_game_object__is_static_get
-func _core_turinger_game_object__is_static_get(handle TuringerGameObject) bool
-//go:wasmimport env _core_turinger_game_object__is_static_set
-func _core_turinger_game_object__is_static_set(handle TuringerGameObject, value bool) void
-//go:wasmimport env _core_turinger_game_object__layer_get
-func _core_turinger_game_object__layer_get(handle TuringerGameObject) int32
-//go:wasmimport env _core_turinger_game_object__layer_set
-func _core_turinger_game_object__layer_set(handle TuringerGameObject, value int32) void
-//go:wasmimport env _core_turinger_game_object__name_get
-func _core_turinger_game_object__name_get(handle TuringerGameObject) uint32
-//go:wasmimport env _core_turinger_game_object__name_set
-func _core_turinger_game_object__name_set(handle TuringerGameObject, value uint32) void
-//go:wasmimport env _core_turinger_game_object__scene_culling_mask_get
-func _core_turinger_game_object__scene_culling_mask_get(handle TuringerGameObject) uint64
-//go:wasmimport env _core_turinger_game_object__send_message
-func _core_turinger_game_object__send_message(handle TuringerGameObject, method_name uint32, options int32) void
-//go:wasmimport env _core_turinger_game_object__send_message_upwards
-func _core_turinger_game_object__send_message_upwards(handle TuringerGameObject, method_name uint32, options int32) void
-//go:wasmimport env _core_turinger_game_object__set_active
-func _core_turinger_game_object__set_active(handle TuringerGameObject, value bool) void
-//go:wasmimport env _core_turinger_game_object__set_active_recursively
-func _core_turinger_game_object__set_active_recursively(handle TuringerGameObject, state bool) void
-//go:wasmimport env _core_turinger_game_object__tag_get
-func _core_turinger_game_object__tag_get(handle TuringerGameObject) uint32
-//go:wasmimport env _core_turinger_game_object__tag_set
-func _core_turinger_game_object__tag_set(handle TuringerGameObject, value uint32) void
-//go:wasmimport env _core_turinger_game_object__transform_get
-func _core_turinger_game_object__transform_get(handle TuringerGameObject) TuringerTransform
+//go:wasmimport env _core_turing_note_extensions__get_note_floor_movement
+func _core_turing_note_extensions__get_note_floor_movement(note_controller NoteController) NoteFloorMovement
+//go:wasmimport env _core_turing_note_extensions__get_note_jump
+func _core_turing_note_extensions__get_note_jump(note_controller NoteController) NoteJump
 //go:wasmimport env _core_turinger_game_object_manager__create_object
-func _core_turinger_game_object_manager__create_object(name uint32) TuringerGameObject
+func _core_turinger_game_object_manager__create_object(name uint32) GameObject
 //go:wasmimport env _core_turinger_game_object_manager__destroy_object
-func _core_turinger_game_object_manager__destroy_object(listener TuringerGameObject) void
+func _core_turinger_game_object_manager__destroy_object(game_object GameObject) void
 //go:wasmimport env _core_turinger_game_object_manager__find
-func _core_turinger_game_object_manager__find(name uint32) TuringerGameObject
+func _core_turinger_game_object_manager__find(name uint32) GameObject
 //go:wasmimport env _core_turinger_game_object_manager__instance_get
 func _core_turinger_game_object_manager__instance_get(handle TuringerGameObjectManager) TuringerGameObjectManager
-//go:wasmimport env _core_turinger_transform__broadcast_message
-func _core_turinger_transform__broadcast_message(handle TuringerTransform, method_name uint32, parameter Object, options int32) void
-//go:wasmimport env _core_turinger_transform__child_count_get
-func _core_turinger_transform__child_count_get(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__compare_tag
-func _core_turinger_transform__compare_tag(handle TuringerTransform, tag uint32) bool
-//go:wasmimport env _core_turinger_transform__detach_children
-func _core_turinger_transform__detach_children(handle TuringerTransform) void
-//go:wasmimport env _core_turinger_transform__euler_angles_get
-func _core_turinger_transform__euler_angles_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__euler_angles_set
-func _core_turinger_transform__euler_angles_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__find
-func _core_turinger_transform__find(handle TuringerTransform, n uint32) TuringerTransform
-//go:wasmimport env _core_turinger_transform__find_child
-func _core_turinger_transform__find_child(handle TuringerTransform, n uint32) TuringerTransform
-//go:wasmimport env _core_turinger_transform__forward_get
-func _core_turinger_transform__forward_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__forward_set
-func _core_turinger_transform__forward_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__game_object_get
-func _core_turinger_transform__game_object_get(handle TuringerTransform) TuringerGameObject
-//go:wasmimport env _core_turinger_transform__get_child
-func _core_turinger_transform__get_child(handle TuringerTransform, index int32) TuringerTransform
-//go:wasmimport env _core_turinger_transform__get_child_count
-func _core_turinger_transform__get_child_count(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__get_component_by_name
-func _core_turinger_transform__get_component_by_name(handle TuringerTransform, cs_type uint32) Component
-//go:wasmimport env _core_turinger_transform__get_component_by_type
-func _core_turinger_transform__get_component_by_type(handle TuringerTransform, cs_type Type) Component
-//go:wasmimport env _core_turinger_transform__get_component_in_children_by_type
-func _core_turinger_transform__get_component_in_children_by_type(handle TuringerTransform, t Type, include_inactive bool) Component
-//go:wasmimport env _core_turinger_transform__get_component_in_parent_by_type
-func _core_turinger_transform__get_component_in_parent_by_type(handle TuringerTransform, t Type, include_inactive bool) Component
-//go:wasmimport env _core_turinger_transform__get_component_index
-func _core_turinger_transform__get_component_index(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__get_enumerator
-func _core_turinger_transform__get_enumerator(handle TuringerTransform) IEnumerator
-//go:wasmimport env _core_turinger_transform__get_instance_id
-func _core_turinger_transform__get_instance_id(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__get_sibling_index
-func _core_turinger_transform__get_sibling_index(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__has_changed_get
-func _core_turinger_transform__has_changed_get(handle TuringerTransform) bool
-//go:wasmimport env _core_turinger_transform__has_changed_set
-func _core_turinger_transform__has_changed_set(handle TuringerTransform, value bool) void
-//go:wasmimport env _core_turinger_transform__hide_flags_get
-func _core_turinger_transform__hide_flags_get(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__hide_flags_set
-func _core_turinger_transform__hide_flags_set(handle TuringerTransform, value int32) void
-//go:wasmimport env _core_turinger_transform__hierarchy_capacity_get
-func _core_turinger_transform__hierarchy_capacity_get(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__hierarchy_capacity_set
-func _core_turinger_transform__hierarchy_capacity_set(handle TuringerTransform, value int32) void
-//go:wasmimport env _core_turinger_transform__hierarchy_count_get
-func _core_turinger_transform__hierarchy_count_get(handle TuringerTransform) int32
-//go:wasmimport env _core_turinger_transform__inverse_transform_direction
-func _core_turinger_transform__inverse_transform_direction(handle TuringerTransform, direction uint32) uint32
-//go:wasmimport env _core_turinger_transform__inverse_transform_point
-func _core_turinger_transform__inverse_transform_point(handle TuringerTransform, position uint32) uint32
-//go:wasmimport env _core_turinger_transform__inverse_transform_vector
-func _core_turinger_transform__inverse_transform_vector(handle TuringerTransform, vector uint32) uint32
-//go:wasmimport env _core_turinger_transform__is_child_of
-func _core_turinger_transform__is_child_of(handle TuringerTransform, parent TuringerTransform) bool
-//go:wasmimport env _core_turinger_transform__local_euler_angles_get
-func _core_turinger_transform__local_euler_angles_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__local_euler_angles_set
-func _core_turinger_transform__local_euler_angles_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__local_position_get
-func _core_turinger_transform__local_position_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__local_position_set
-func _core_turinger_transform__local_position_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__local_rotation_get
-func _core_turinger_transform__local_rotation_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__local_rotation_set
-func _core_turinger_transform__local_rotation_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__local_scale_get
-func _core_turinger_transform__local_scale_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__local_scale_set
-func _core_turinger_transform__local_scale_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__local_to_world_matrix_get
-func _core_turinger_transform__local_to_world_matrix_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__look_at
-func _core_turinger_transform__look_at(handle TuringerTransform, target TuringerTransform, world_up uint32) void
-//go:wasmimport env _core_turinger_transform__lossy_scale_get
-func _core_turinger_transform__lossy_scale_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__name_get
-func _core_turinger_transform__name_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__name_set
-func _core_turinger_transform__name_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__parent_get
-func _core_turinger_transform__parent_get(handle TuringerTransform) TuringerTransform
-//go:wasmimport env _core_turinger_transform__parent_set
-func _core_turinger_transform__parent_set(handle TuringerTransform, value TuringerTransform) void
-//go:wasmimport env _core_turinger_transform__position_get
-func _core_turinger_transform__position_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__position_set
-func _core_turinger_transform__position_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__right_get
-func _core_turinger_transform__right_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__right_set
-func _core_turinger_transform__right_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__root_get
-func _core_turinger_transform__root_get(handle TuringerTransform) TuringerTransform
-//go:wasmimport env _core_turinger_transform__rotate
-func _core_turinger_transform__rotate(handle TuringerTransform, eulers uint32) void
-//go:wasmimport env _core_turinger_transform__rotate_around
-func _core_turinger_transform__rotate_around(handle TuringerTransform, point uint32, axis uint32, angle float32) void
-//go:wasmimport env _core_turinger_transform__rotate_around_local
-func _core_turinger_transform__rotate_around_local(handle TuringerTransform, axis uint32, angle float32) void
-//go:wasmimport env _core_turinger_transform__rotate_relative
-func _core_turinger_transform__rotate_relative(handle TuringerTransform, eulers uint32, relative_to int32) void
-//go:wasmimport env _core_turinger_transform__rotation_get
-func _core_turinger_transform__rotation_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__rotation_set
-func _core_turinger_transform__rotation_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__send_message
-func _core_turinger_transform__send_message(handle TuringerTransform, method_name uint32, value Object, options int32) void
-//go:wasmimport env _core_turinger_transform__send_message_upwards
-func _core_turinger_transform__send_message_upwards(handle TuringerTransform, method_name uint32, value Object, options int32) void
-//go:wasmimport env _core_turinger_transform__set_as_first_sibling
-func _core_turinger_transform__set_as_first_sibling(handle TuringerTransform) void
-//go:wasmimport env _core_turinger_transform__set_as_last_sibling
-func _core_turinger_transform__set_as_last_sibling(handle TuringerTransform) void
-//go:wasmimport env _core_turinger_transform__set_local_position_and_rotation
-func _core_turinger_transform__set_local_position_and_rotation(handle TuringerTransform, local_position uint32, local_rotation uint32) void
-//go:wasmimport env _core_turinger_transform__set_parent
-func _core_turinger_transform__set_parent(handle TuringerTransform, parent TuringerTransform, world_position_stays bool) void
-//go:wasmimport env _core_turinger_transform__set_position_and_rotation
-func _core_turinger_transform__set_position_and_rotation(handle TuringerTransform, position uint32, rotation uint32) void
-//go:wasmimport env _core_turinger_transform__set_sibling_index
-func _core_turinger_transform__set_sibling_index(handle TuringerTransform, index int32) void
-//go:wasmimport env _core_turinger_transform__tag_get
-func _core_turinger_transform__tag_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__tag_set
-func _core_turinger_transform__tag_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__transform_direction
-func _core_turinger_transform__transform_direction(handle TuringerTransform, direction uint32) uint32
-//go:wasmimport env _core_turinger_transform__transform_get
-func _core_turinger_transform__transform_get(handle TuringerTransform) Transform
-//go:wasmimport env _core_turinger_transform__transform_point
-func _core_turinger_transform__transform_point(handle TuringerTransform, position uint32) uint32
-//go:wasmimport env _core_turinger_transform__transform_vector
-func _core_turinger_transform__transform_vector(handle TuringerTransform, vector uint32) uint32
-//go:wasmimport env _core_turinger_transform__translate
-func _core_turinger_transform__translate(handle TuringerTransform, translation uint32, relative_to int32) void
-//go:wasmimport env _core_turinger_transform__translate_relative
-func _core_turinger_transform__translate_relative(handle TuringerTransform, translation uint32, relative_to TuringerTransform) void
-//go:wasmimport env _core_turinger_transform__up_get
-func _core_turinger_transform__up_get(handle TuringerTransform) uint32
-//go:wasmimport env _core_turinger_transform__up_set
-func _core_turinger_transform__up_set(handle TuringerTransform, value uint32) void
-//go:wasmimport env _core_turinger_transform__world_to_local_matrix_get
-func _core_turinger_transform__world_to_local_matrix_get(handle TuringerTransform) uint32
 //go:wasmimport env _core_xr__get_device_battery_level
 func _core_xr__get_device_battery_level(node_int int32) float32
 //go:wasmimport env _core_xr__get_device_grip_value
@@ -880,6 +878,193 @@ type GameObject struct {
 
 
 
+func (self *GameObject)addComponent(componentType Type) Component {
+    
+    return _core_game_object__add_component(self, componentType)
+}
+
+func (self *GameObject)addOrGetMesh() TuringMesh {
+    
+    return _core_game_object__add_or_get_mesh(self)
+}
+
+func (self *GameObject)broadcastMessage(methodName string, options int32) void {
+    
+    turingHMethodName := []byte(methodName)
+    turingHMethodName = append(turingHMethodName, 0)
+    turingHandleMethodName := &turingHMethodName[0]
+    _core_game_object__broadcast_message(self, turingHandleMethodName, options)
+}
+
+func (self *GameObject)compareTag(tag string) bool {
+    
+    turingHTag := []byte(tag)
+    turingHTag = append(turingHTag, 0)
+    turingHandleTag := &turingHTag[0]
+    return _core_game_object__compare_tag(self, turingHandleTag)
+}
+
+func (self *GameObject)getActive() bool {
+    
+    return _core_game_object__get_active(self)
+}
+
+func (self *GameObject)getActiveInHierarchy() bool {
+    
+    return _core_game_object__get_active_in_hierarchy(self)
+}
+
+func (self *GameObject)getActiveSelf() bool {
+    
+    return _core_game_object__get_active_self(self)
+}
+
+func (self *GameObject)getComponentAtIndex(index int32) Component {
+    
+    return _core_game_object__get_component_at_index(self, index)
+}
+
+func (self *GameObject)getComponentByName(csType string) Component {
+    
+    turingHCsType := []byte(csType)
+    turingHCsType = append(turingHCsType, 0)
+    turingHandleCsType := &turingHCsType[0]
+    return _core_game_object__get_component_by_name(self, turingHandleCsType)
+}
+
+func (self *GameObject)getComponentByType(csType Type) Component {
+    
+    return _core_game_object__get_component_by_type(self, csType)
+}
+
+func (self *GameObject)getComponentCount() int32 {
+    
+    return _core_game_object__get_component_count(self)
+}
+
+func (self *GameObject)getComponentInChildrenByType(csType Type, includeInactive bool) Component {
+    
+    return _core_game_object__get_component_in_children_by_type(self, csType, includeInactive)
+}
+
+func (self *GameObject)getComponentInParentByType(csType Type, includeInactive bool) Component {
+    
+    return _core_game_object__get_component_in_parent_by_type(self, csType, includeInactive)
+}
+
+func (self *GameObject)getComponentIndex(component Component) int32 {
+    
+    return _core_game_object__get_component_index(self, component)
+}
+
+func (self *GameObject)getHideFlags() int32 {
+    
+    return _core_game_object__get_hide_flags(self)
+}
+
+func (self *GameObject)getInstanceId() int32 {
+    
+    return _core_game_object__get_instance_id(self)
+}
+
+func (self *GameObject)getIsStatic() bool {
+    
+    return _core_game_object__get_is_static(self)
+}
+
+func (self *GameObject)getLayer() int32 {
+    
+    return _core_game_object__get_layer(self)
+}
+
+func (self *GameObject)getName() string {
+    
+    turingResult := _core_game_object__get_name(self)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
+}
+
+func (self *GameObject)getSceneCullingMask() uint64 {
+    
+    return _core_game_object__get_scene_culling_mask(self)
+}
+
+func (self *GameObject)getTag() string {
+    
+    turingResult := _core_game_object__get_tag(self)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
+}
+
+func (self *GameObject)getTransform() Transform {
+    
+    return _core_game_object__get_transform(self)
+}
+
+func (self *GameObject)sendMessage(methodName string, options int32) void {
+    
+    turingHMethodName := []byte(methodName)
+    turingHMethodName = append(turingHMethodName, 0)
+    turingHandleMethodName := &turingHMethodName[0]
+    _core_game_object__send_message(self, turingHandleMethodName, options)
+}
+
+func (self *GameObject)sendMessageUpwards(methodName string, options int32) void {
+    
+    turingHMethodName := []byte(methodName)
+    turingHMethodName = append(turingHMethodName, 0)
+    turingHandleMethodName := &turingHMethodName[0]
+    _core_game_object__send_message_upwards(self, turingHandleMethodName, options)
+}
+
+func (self *GameObject)setActive(value bool) void {
+    
+    _core_game_object__set_active(self, value)
+}
+
+func (self *GameObject)setActiveProp(value bool) void {
+    
+    _core_game_object__set_active_prop(self, value)
+}
+
+func (self *GameObject)setActiveRecursively(state bool) void {
+    
+    _core_game_object__set_active_recursively(self, state)
+}
+
+func (self *GameObject)setHideFlags(value int32) void {
+    
+    _core_game_object__set_hide_flags(self, value)
+}
+
+func (self *GameObject)setIsStatic(value bool) void {
+    
+    _core_game_object__set_is_static(self, value)
+}
+
+func (self *GameObject)setLayer(value int32) void {
+    
+    _core_game_object__set_layer(self, value)
+}
+
+func (self *GameObject)setName(value string) void {
+    
+    turingHValue := []byte(value)
+    turingHValue = append(turingHValue, 0)
+    turingHandleValue := &turingHValue[0]
+    _core_game_object__set_name(self, turingHandleValue)
+}
+
+func (self *GameObject)setTag(value string) void {
+    
+    turingHValue := []byte(value)
+    turingHValue = append(turingHValue, 0)
+    turingHandleValue := &turingHValue[0]
+    _core_game_object__set_tag(self, turingHandleValue)
+}
+
 type GcHelper struct {
     opaqu uint32
 }
@@ -975,6 +1160,12 @@ func Log_warn(msg string) void {
 
 
 type Mesh struct {
+    opaqu uint32
+}
+
+
+
+type NoteController struct {
     opaqu uint32
 }
 
@@ -1514,7 +1705,7 @@ func (self *NoteJump)distanceToPlayerGet() float32 {
     return _core_note_jump__distance_to_player_get(self)
 }
 
-func (self *NoteJump)initNote(noteTime float32, worldRotation float32, moveEndOffset Vec3, jumpEndOffset Vec3, gravityBase float32, flipYSide float32, endRotation float32, rotateTowardsPlayer bool, useRandomRotation bool) void {
+func (self *NoteJump)initJump(noteTime float32, worldRotation float32, moveEndOffset Vec3, jumpEndOffset Vec3, gravityBase float32, flipYSide float32, endRotation float32, rotateTowardsPlayer bool, useRandomRotation bool) void {
     
     turingHandleMoveEndOffset := enqueue_vec3(moveEndOffset)
 
@@ -1694,6 +1885,489 @@ type Transform struct {
 
 
 
+func (self *Transform)broadcastMessage(methodName string, parameter Object, options int32) void {
+    
+    turingHMethodName := []byte(methodName)
+    turingHMethodName = append(turingHMethodName, 0)
+    turingHandleMethodName := &turingHMethodName[0]
+    _core_transform__broadcast_message(self, turingHandleMethodName, parameter, options)
+}
+
+func (self *Transform)compareTag(tag string) bool {
+    
+    turingHTag := []byte(tag)
+    turingHTag = append(turingHTag, 0)
+    turingHandleTag := &turingHTag[0]
+    return _core_transform__compare_tag(self, turingHandleTag)
+}
+
+func (self *Transform)detachChildren() void {
+    
+    _core_transform__detach_children(self)
+}
+
+func (self *Transform)find(n string) Transform {
+    
+    turingHN := []byte(n)
+    turingHN = append(turingHN, 0)
+    turingHandleN := &turingHN[0]
+    return _core_transform__find(self, turingHandleN)
+}
+
+func (self *Transform)findChild(n string) Transform {
+    
+    turingHN := []byte(n)
+    turingHN = append(turingHN, 0)
+    turingHandleN := &turingHN[0]
+    return _core_transform__find_child(self, turingHandleN)
+}
+
+func (self *Transform)getChild(index int32) Transform {
+    
+    return _core_transform__get_child(self, index)
+}
+
+func (self *Transform)getChildCount() int32 {
+    
+    return _core_transform__get_child_count(self)
+}
+
+func (self *Transform)getChildCountProp() int32 {
+    
+    return _core_transform__get_child_count_prop(self)
+}
+
+func (self *Transform)getComponentByName(csType string) Component {
+    
+    turingHCsType := []byte(csType)
+    turingHCsType = append(turingHCsType, 0)
+    turingHandleCsType := &turingHCsType[0]
+    return _core_transform__get_component_by_name(self, turingHandleCsType)
+}
+
+func (self *Transform)getComponentByType(csType Type) Component {
+    
+    return _core_transform__get_component_by_type(self, csType)
+}
+
+func (self *Transform)getComponentInChildrenByType(t Type, includeInactive bool) Component {
+    
+    return _core_transform__get_component_in_children_by_type(self, t, includeInactive)
+}
+
+func (self *Transform)getComponentInParentByType(t Type, includeInactive bool) Component {
+    
+    return _core_transform__get_component_in_parent_by_type(self, t, includeInactive)
+}
+
+func (self *Transform)getComponentIndex() int32 {
+    
+    return _core_transform__get_component_index(self)
+}
+
+func (self *Transform)getEnumerator() IEnumerator {
+    
+    return _core_transform__get_enumerator(self)
+}
+
+func (self *Transform)getEulerAngles() Vec3 {
+    
+    _core_transform__get_euler_angles(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getForward() Vec3 {
+    
+    _core_transform__get_forward(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getGameObject() GameObject {
+    
+    return _core_transform__get_game_object(self)
+}
+
+func (self *Transform)getHasChanged() bool {
+    
+    return _core_transform__get_has_changed(self)
+}
+
+func (self *Transform)getHideFlags() int32 {
+    
+    return _core_transform__get_hide_flags(self)
+}
+
+func (self *Transform)getHierarchyCapacity() int32 {
+    
+    return _core_transform__get_hierarchy_capacity(self)
+}
+
+func (self *Transform)getHierarchyCount() int32 {
+    
+    return _core_transform__get_hierarchy_count(self)
+}
+
+func (self *Transform)getInstanceId() int32 {
+    
+    return _core_transform__get_instance_id(self)
+}
+
+func (self *Transform)getLocalEulerAngles() Vec3 {
+    
+    _core_transform__get_local_euler_angles(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getLocalPosition() Vec3 {
+    
+    _core_transform__get_local_position(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getLocalRotation() Quat {
+    
+    _core_transform__get_local_rotation(self)
+    return dequeue_quat()
+}
+
+func (self *Transform)getLocalScale() Vec3 {
+    
+    _core_transform__get_local_scale(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getLocalToWorldMatrix() Mat4 {
+    
+    _core_transform__get_local_to_world_matrix(self)
+    return dequeue_mat4()
+}
+
+func (self *Transform)getLossyScale() Vec3 {
+    
+    _core_transform__get_lossy_scale(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getName() string {
+    
+    turingResult := _core_transform__get_name(self)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
+}
+
+func (self *Transform)getParent() Transform {
+    
+    return _core_transform__get_parent(self)
+}
+
+func (self *Transform)getPosition() Vec3 {
+    
+    _core_transform__get_position(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getRight() Vec3 {
+    
+    _core_transform__get_right(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getRoot() Transform {
+    
+    return _core_transform__get_root(self)
+}
+
+func (self *Transform)getRotation() Quat {
+    
+    _core_transform__get_rotation(self)
+    return dequeue_quat()
+}
+
+func (self *Transform)getSiblingIndex() int32 {
+    
+    return _core_transform__get_sibling_index(self)
+}
+
+func (self *Transform)getTag() string {
+    
+    turingResult := _core_transform__get_tag(self)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
+}
+
+func (self *Transform)getUp() Vec3 {
+    
+    _core_transform__get_up(self)
+    return dequeue_vec3()
+}
+
+func (self *Transform)getWorldToLocalMatrix() Mat4 {
+    
+    _core_transform__get_world_to_local_matrix(self)
+    return dequeue_mat4()
+}
+
+func (self *Transform)inverseTransformDirection(direction Vec3) Vec3 {
+    
+    turingHandleDirection := enqueue_vec3(direction)
+
+    _core_transform__inverse_transform_direction(self, turingHandleDirection)
+    return dequeue_vec3()
+}
+
+func (self *Transform)inverseTransformPoint(position Vec3) Vec3 {
+    
+    turingHandlePosition := enqueue_vec3(position)
+
+    _core_transform__inverse_transform_point(self, turingHandlePosition)
+    return dequeue_vec3()
+}
+
+func (self *Transform)inverseTransformVector(vector Vec3) Vec3 {
+    
+    turingHandleVector := enqueue_vec3(vector)
+
+    _core_transform__inverse_transform_vector(self, turingHandleVector)
+    return dequeue_vec3()
+}
+
+func (self *Transform)isChildOf(parent Transform) bool {
+    
+    return _core_transform__is_child_of(self, parent)
+}
+
+func (self *Transform)lookAt(target Transform, worldUp Vec3) void {
+    
+    turingHandleWorldUp := enqueue_vec3(worldUp)
+
+    _core_transform__look_at(self, target, turingHandleWorldUp)
+}
+
+func (self *Transform)rotate(eulers Vec3) void {
+    
+    turingHandleEulers := enqueue_vec3(eulers)
+
+    _core_transform__rotate(self, turingHandleEulers)
+}
+
+func (self *Transform)rotateAround(point Vec3, axis Vec3, angle float32) void {
+    
+    turingHandlePoint := enqueue_vec3(point)
+
+    turingHandleAxis := enqueue_vec3(axis)
+
+    _core_transform__rotate_around(self, turingHandlePoint, turingHandleAxis, angle)
+}
+
+func (self *Transform)rotateAroundLocal(axis Vec3, angle float32) void {
+    
+    turingHandleAxis := enqueue_vec3(axis)
+
+    _core_transform__rotate_around_local(self, turingHandleAxis, angle)
+}
+
+func (self *Transform)rotateRelative(eulers Vec3, relativeTo int32) void {
+    
+    turingHandleEulers := enqueue_vec3(eulers)
+
+    _core_transform__rotate_relative(self, turingHandleEulers, relativeTo)
+}
+
+func (self *Transform)sendMessage(methodName string, value Object, options int32) void {
+    
+    turingHMethodName := []byte(methodName)
+    turingHMethodName = append(turingHMethodName, 0)
+    turingHandleMethodName := &turingHMethodName[0]
+    _core_transform__send_message(self, turingHandleMethodName, value, options)
+}
+
+func (self *Transform)sendMessageUpwards(methodName string, value Object, options int32) void {
+    
+    turingHMethodName := []byte(methodName)
+    turingHMethodName = append(turingHMethodName, 0)
+    turingHandleMethodName := &turingHMethodName[0]
+    _core_transform__send_message_upwards(self, turingHandleMethodName, value, options)
+}
+
+func (self *Transform)setAsFirstSibling() void {
+    
+    _core_transform__set_as_first_sibling(self)
+}
+
+func (self *Transform)setAsLastSibling() void {
+    
+    _core_transform__set_as_last_sibling(self)
+}
+
+func (self *Transform)setEulerAngles(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_euler_angles(self, turingHandleValue)
+}
+
+func (self *Transform)setForward(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_forward(self, turingHandleValue)
+}
+
+func (self *Transform)setHasChanged(value bool) void {
+    
+    _core_transform__set_has_changed(self, value)
+}
+
+func (self *Transform)setHideFlags(value int32) void {
+    
+    _core_transform__set_hide_flags(self, value)
+}
+
+func (self *Transform)setHierarchyCapacity(value int32) void {
+    
+    _core_transform__set_hierarchy_capacity(self, value)
+}
+
+func (self *Transform)setLocalEulerAngles(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_local_euler_angles(self, turingHandleValue)
+}
+
+func (self *Transform)setLocalPosition(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_local_position(self, turingHandleValue)
+}
+
+func (self *Transform)setLocalPositionAndRotation(localPosition Vec3, localRotation Quat) void {
+    
+    turingHandleLocalPosition := enqueue_vec3(localPosition)
+
+    turingHandleLocalRotation := enqueue_quat(localRotation)
+
+    _core_transform__set_local_position_and_rotation(self, turingHandleLocalPosition, turingHandleLocalRotation)
+}
+
+func (self *Transform)setLocalRotation(value Quat) void {
+    
+    turingHandleValue := enqueue_quat(value)
+
+    _core_transform__set_local_rotation(self, turingHandleValue)
+}
+
+func (self *Transform)setLocalScale(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_local_scale(self, turingHandleValue)
+}
+
+func (self *Transform)setName(value string) void {
+    
+    turingHValue := []byte(value)
+    turingHValue = append(turingHValue, 0)
+    turingHandleValue := &turingHValue[0]
+    _core_transform__set_name(self, turingHandleValue)
+}
+
+func (self *Transform)setParent(parent Transform, worldPositionStays bool) void {
+    
+    _core_transform__set_parent(self, parent, worldPositionStays)
+}
+
+func (self *Transform)setPosition(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_position(self, turingHandleValue)
+}
+
+func (self *Transform)setPositionAndRotation(position Vec3, rotation Quat) void {
+    
+    turingHandlePosition := enqueue_vec3(position)
+
+    turingHandleRotation := enqueue_quat(rotation)
+
+    _core_transform__set_position_and_rotation(self, turingHandlePosition, turingHandleRotation)
+}
+
+func (self *Transform)setRight(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_right(self, turingHandleValue)
+}
+
+func (self *Transform)setRotation(value Quat) void {
+    
+    turingHandleValue := enqueue_quat(value)
+
+    _core_transform__set_rotation(self, turingHandleValue)
+}
+
+func (self *Transform)setSiblingIndex(index int32) void {
+    
+    _core_transform__set_sibling_index(self, index)
+}
+
+func (self *Transform)setTag(value string) void {
+    
+    turingHValue := []byte(value)
+    turingHValue = append(turingHValue, 0)
+    turingHandleValue := &turingHValue[0]
+    _core_transform__set_tag(self, turingHandleValue)
+}
+
+func (self *Transform)setUp(value Vec3) void {
+    
+    turingHandleValue := enqueue_vec3(value)
+
+    _core_transform__set_up(self, turingHandleValue)
+}
+
+func (self *Transform)transformDirection(direction Vec3) Vec3 {
+    
+    turingHandleDirection := enqueue_vec3(direction)
+
+    _core_transform__transform_direction(self, turingHandleDirection)
+    return dequeue_vec3()
+}
+
+func (self *Transform)transformPoint(position Vec3) Vec3 {
+    
+    turingHandlePosition := enqueue_vec3(position)
+
+    _core_transform__transform_point(self, turingHandlePosition)
+    return dequeue_vec3()
+}
+
+func (self *Transform)transformVector(vector Vec3) Vec3 {
+    
+    turingHandleVector := enqueue_vec3(vector)
+
+    _core_transform__transform_vector(self, turingHandleVector)
+    return dequeue_vec3()
+}
+
+func (self *Transform)translate(translation Vec3, relativeTo int32) void {
+    
+    turingHandleTranslation := enqueue_vec3(translation)
+
+    _core_transform__translate(self, turingHandleTranslation, relativeTo)
+}
+
+func (self *Transform)translateRelative(translation Vec3, relativeTo Transform) void {
+    
+    turingHandleTranslation := enqueue_vec3(translation)
+
+    _core_transform__translate_relative(self, turingHandleTranslation, relativeTo)
+}
+
 type TuringMesh struct {
     opaqu uint32
 }
@@ -1853,216 +2527,34 @@ func (self *TuringMesh)uploadMeshData(markNoLongerReadable bool) void {
     _core_turing_mesh__upload_mesh_data(self, markNoLongerReadable)
 }
 
+type TuringNoteExtensions struct {
+    
+}
+
+
+func TuringNoteExtensions_getNoteFloorMovement(noteController NoteController) NoteFloorMovement {
+    
+    return _core_turing_note_extensions__get_note_floor_movement(noteController)
+}
+
+func TuringNoteExtensions_getNoteJump(noteController NoteController) NoteJump {
+    
+    return _core_turing_note_extensions__get_note_jump(noteController)
+}
+
+
 type TuringScriptManager struct {
     opaqu uint32
 }
 
 
 
-type TuringerGameObject struct {
-    opaqu uint32
-}
-
-
-
-func (self *TuringerGameObject)activeGet() bool {
-    
-    return _core_turinger_game_object__active_get(self)
-}
-
-func (self *TuringerGameObject)activeInHierarchyGet() bool {
-    
-    return _core_turinger_game_object__active_in_hierarchy_get(self)
-}
-
-func (self *TuringerGameObject)activeSelfGet() bool {
-    
-    return _core_turinger_game_object__active_self_get(self)
-}
-
-func (self *TuringerGameObject)activeSet(value bool) void {
-    
-    _core_turinger_game_object__active_set(self, value)
-}
-
-func (self *TuringerGameObject)addComponent(componentType Type) Component {
-    
-    return _core_turinger_game_object__add_component(self, componentType)
-}
-
-func (self *TuringerGameObject)addOrGetMesh() TuringMesh {
-    
-    return _core_turinger_game_object__add_or_get_mesh(self)
-}
-
-func (self *TuringerGameObject)broadcastMessage(methodName string, options int32) void {
-    
-    turingHMethodName := []byte(methodName)
-    turingHMethodName = append(turingHMethodName, 0)
-    turingHandleMethodName := &turingHMethodName[0]
-    _core_turinger_game_object__broadcast_message(self, turingHandleMethodName, options)
-}
-
-func (self *TuringerGameObject)compareTag(tag string) bool {
-    
-    turingHTag := []byte(tag)
-    turingHTag = append(turingHTag, 0)
-    turingHandleTag := &turingHTag[0]
-    return _core_turinger_game_object__compare_tag(self, turingHandleTag)
-}
-
-func (self *TuringerGameObject)gameObjectGet() GameObject {
-    
-    return _core_turinger_game_object__game_object_get(self)
-}
-
-func (self *TuringerGameObject)getComponentAtIndex(index int32) Component {
-    
-    return _core_turinger_game_object__get_component_at_index(self, index)
-}
-
-func (self *TuringerGameObject)getComponentByName(csType string) Component {
-    
-    turingHCsType := []byte(csType)
-    turingHCsType = append(turingHCsType, 0)
-    turingHandleCsType := &turingHCsType[0]
-    return _core_turinger_game_object__get_component_by_name(self, turingHandleCsType)
-}
-
-func (self *TuringerGameObject)getComponentByType(csType Type) Component {
-    
-    return _core_turinger_game_object__get_component_by_type(self, csType)
-}
-
-func (self *TuringerGameObject)getComponentCount() int32 {
-    
-    return _core_turinger_game_object__get_component_count(self)
-}
-
-func (self *TuringerGameObject)getComponentInChildrenByType(csType Type, includeInactive bool) Component {
-    
-    return _core_turinger_game_object__get_component_in_children_by_type(self, csType, includeInactive)
-}
-
-func (self *TuringerGameObject)getComponentInParentByType(csType Type, includeInactive bool) Component {
-    
-    return _core_turinger_game_object__get_component_in_parent_by_type(self, csType, includeInactive)
-}
-
-func (self *TuringerGameObject)getComponentIndex(component Component) int32 {
-    
-    return _core_turinger_game_object__get_component_index(self, component)
-}
-
-func (self *TuringerGameObject)getInstanceId() int32 {
-    
-    return _core_turinger_game_object__get_instance_id(self)
-}
-
-func (self *TuringerGameObject)hideFlagsGet() int32 {
-    
-    return _core_turinger_game_object__hide_flags_get(self)
-}
-
-func (self *TuringerGameObject)hideFlagsSet(value int32) void {
-    
-    _core_turinger_game_object__hide_flags_set(self, value)
-}
-
-func (self *TuringerGameObject)isStaticGet() bool {
-    
-    return _core_turinger_game_object__is_static_get(self)
-}
-
-func (self *TuringerGameObject)isStaticSet(value bool) void {
-    
-    _core_turinger_game_object__is_static_set(self, value)
-}
-
-func (self *TuringerGameObject)layerGet() int32 {
-    
-    return _core_turinger_game_object__layer_get(self)
-}
-
-func (self *TuringerGameObject)layerSet(value int32) void {
-    
-    _core_turinger_game_object__layer_set(self, value)
-}
-
-func (self *TuringerGameObject)nameGet() string {
-    
-    turingResult := _core_turinger_game_object__name_get(self)
-    turingStr := make([]byte, turingResult)
-    _host_strcpy(&turingStr[0], turingResult)
-    return string(turingStr[:len(turingStr)-1])
-}
-
-func (self *TuringerGameObject)nameSet(value string) void {
-    
-    turingHValue := []byte(value)
-    turingHValue = append(turingHValue, 0)
-    turingHandleValue := &turingHValue[0]
-    _core_turinger_game_object__name_set(self, turingHandleValue)
-}
-
-func (self *TuringerGameObject)sceneCullingMaskGet() uint64 {
-    
-    return _core_turinger_game_object__scene_culling_mask_get(self)
-}
-
-func (self *TuringerGameObject)sendMessage(methodName string, options int32) void {
-    
-    turingHMethodName := []byte(methodName)
-    turingHMethodName = append(turingHMethodName, 0)
-    turingHandleMethodName := &turingHMethodName[0]
-    _core_turinger_game_object__send_message(self, turingHandleMethodName, options)
-}
-
-func (self *TuringerGameObject)sendMessageUpwards(methodName string, options int32) void {
-    
-    turingHMethodName := []byte(methodName)
-    turingHMethodName = append(turingHMethodName, 0)
-    turingHandleMethodName := &turingHMethodName[0]
-    _core_turinger_game_object__send_message_upwards(self, turingHandleMethodName, options)
-}
-
-func (self *TuringerGameObject)setActive(value bool) void {
-    
-    _core_turinger_game_object__set_active(self, value)
-}
-
-func (self *TuringerGameObject)setActiveRecursively(state bool) void {
-    
-    _core_turinger_game_object__set_active_recursively(self, state)
-}
-
-func (self *TuringerGameObject)tagGet() string {
-    
-    turingResult := _core_turinger_game_object__tag_get(self)
-    turingStr := make([]byte, turingResult)
-    _host_strcpy(&turingStr[0], turingResult)
-    return string(turingStr[:len(turingStr)-1])
-}
-
-func (self *TuringerGameObject)tagSet(value string) void {
-    
-    turingHValue := []byte(value)
-    turingHValue = append(turingHValue, 0)
-    turingHandleValue := &turingHValue[0]
-    _core_turinger_game_object__tag_set(self, turingHandleValue)
-}
-
-func (self *TuringerGameObject)transformGet() TuringerTransform {
-    
-    return _core_turinger_game_object__transform_get(self)
-}
-
 type TuringerGameObjectManager struct {
     opaqu uint32
 }
 
 
-func TuringerGameObjectManager_createObject(name string) TuringerGameObject {
+func TuringerGameObjectManager_createObject(name string) GameObject {
     
     turingHName := []byte(name)
     turingHName = append(turingHName, 0)
@@ -2070,12 +2562,12 @@ func TuringerGameObjectManager_createObject(name string) TuringerGameObject {
     return _core_turinger_game_object_manager__create_object(turingHandleName)
 }
 
-func TuringerGameObjectManager_destroyObject(listener TuringerGameObject) void {
+func TuringerGameObjectManager_destroyObject(gameObject GameObject) void {
     
-    _core_turinger_game_object_manager__destroy_object(listener)
+    _core_turinger_game_object_manager__destroy_object(gameObject)
 }
 
-func TuringerGameObjectManager_find(name string) TuringerGameObject {
+func TuringerGameObjectManager_find(name string) GameObject {
     
     turingHName := []byte(name)
     turingHName = append(turingHName, 0)
@@ -2087,505 +2579,6 @@ func TuringerGameObjectManager_find(name string) TuringerGameObject {
 func (self *TuringerGameObjectManager)instanceGet() TuringerGameObjectManager {
     
     return _core_turinger_game_object_manager__instance_get(self)
-}
-
-type TuringerTransform struct {
-    opaqu uint32
-}
-
-
-
-func (self *TuringerTransform)broadcastMessage(methodName string, parameter Object, options int32) void {
-    
-    turingHMethodName := []byte(methodName)
-    turingHMethodName = append(turingHMethodName, 0)
-    turingHandleMethodName := &turingHMethodName[0]
-    _core_turinger_transform__broadcast_message(self, turingHandleMethodName, parameter, options)
-}
-
-func (self *TuringerTransform)childCountGet() int32 {
-    
-    return _core_turinger_transform__child_count_get(self)
-}
-
-func (self *TuringerTransform)compareTag(tag string) bool {
-    
-    turingHTag := []byte(tag)
-    turingHTag = append(turingHTag, 0)
-    turingHandleTag := &turingHTag[0]
-    return _core_turinger_transform__compare_tag(self, turingHandleTag)
-}
-
-func (self *TuringerTransform)detachChildren() void {
-    
-    _core_turinger_transform__detach_children(self)
-}
-
-func (self *TuringerTransform)eulerAnglesGet() Vec3 {
-    
-    _core_turinger_transform__euler_angles_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)eulerAnglesSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__euler_angles_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)find(n string) TuringerTransform {
-    
-    turingHN := []byte(n)
-    turingHN = append(turingHN, 0)
-    turingHandleN := &turingHN[0]
-    return _core_turinger_transform__find(self, turingHandleN)
-}
-
-func (self *TuringerTransform)findChild(n string) TuringerTransform {
-    
-    turingHN := []byte(n)
-    turingHN = append(turingHN, 0)
-    turingHandleN := &turingHN[0]
-    return _core_turinger_transform__find_child(self, turingHandleN)
-}
-
-func (self *TuringerTransform)forwardGet() Vec3 {
-    
-    _core_turinger_transform__forward_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)forwardSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__forward_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)gameObjectGet() TuringerGameObject {
-    
-    return _core_turinger_transform__game_object_get(self)
-}
-
-func (self *TuringerTransform)getChild(index int32) TuringerTransform {
-    
-    return _core_turinger_transform__get_child(self, index)
-}
-
-func (self *TuringerTransform)getChildCount() int32 {
-    
-    return _core_turinger_transform__get_child_count(self)
-}
-
-func (self *TuringerTransform)getComponentByName(csType string) Component {
-    
-    turingHCsType := []byte(csType)
-    turingHCsType = append(turingHCsType, 0)
-    turingHandleCsType := &turingHCsType[0]
-    return _core_turinger_transform__get_component_by_name(self, turingHandleCsType)
-}
-
-func (self *TuringerTransform)getComponentByType(csType Type) Component {
-    
-    return _core_turinger_transform__get_component_by_type(self, csType)
-}
-
-func (self *TuringerTransform)getComponentInChildrenByType(t Type, includeInactive bool) Component {
-    
-    return _core_turinger_transform__get_component_in_children_by_type(self, t, includeInactive)
-}
-
-func (self *TuringerTransform)getComponentInParentByType(t Type, includeInactive bool) Component {
-    
-    return _core_turinger_transform__get_component_in_parent_by_type(self, t, includeInactive)
-}
-
-func (self *TuringerTransform)getComponentIndex() int32 {
-    
-    return _core_turinger_transform__get_component_index(self)
-}
-
-func (self *TuringerTransform)getEnumerator() IEnumerator {
-    
-    return _core_turinger_transform__get_enumerator(self)
-}
-
-func (self *TuringerTransform)getInstanceId() int32 {
-    
-    return _core_turinger_transform__get_instance_id(self)
-}
-
-func (self *TuringerTransform)getSiblingIndex() int32 {
-    
-    return _core_turinger_transform__get_sibling_index(self)
-}
-
-func (self *TuringerTransform)hasChangedGet() bool {
-    
-    return _core_turinger_transform__has_changed_get(self)
-}
-
-func (self *TuringerTransform)hasChangedSet(value bool) void {
-    
-    _core_turinger_transform__has_changed_set(self, value)
-}
-
-func (self *TuringerTransform)hideFlagsGet() int32 {
-    
-    return _core_turinger_transform__hide_flags_get(self)
-}
-
-func (self *TuringerTransform)hideFlagsSet(value int32) void {
-    
-    _core_turinger_transform__hide_flags_set(self, value)
-}
-
-func (self *TuringerTransform)hierarchyCapacityGet() int32 {
-    
-    return _core_turinger_transform__hierarchy_capacity_get(self)
-}
-
-func (self *TuringerTransform)hierarchyCapacitySet(value int32) void {
-    
-    _core_turinger_transform__hierarchy_capacity_set(self, value)
-}
-
-func (self *TuringerTransform)hierarchyCountGet() int32 {
-    
-    return _core_turinger_transform__hierarchy_count_get(self)
-}
-
-func (self *TuringerTransform)inverseTransformDirection(direction Vec3) Vec3 {
-    
-    turingHandleDirection := enqueue_vec3(direction)
-
-    _core_turinger_transform__inverse_transform_direction(self, turingHandleDirection)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)inverseTransformPoint(position Vec3) Vec3 {
-    
-    turingHandlePosition := enqueue_vec3(position)
-
-    _core_turinger_transform__inverse_transform_point(self, turingHandlePosition)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)inverseTransformVector(vector Vec3) Vec3 {
-    
-    turingHandleVector := enqueue_vec3(vector)
-
-    _core_turinger_transform__inverse_transform_vector(self, turingHandleVector)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)isChildOf(parent TuringerTransform) bool {
-    
-    return _core_turinger_transform__is_child_of(self, parent)
-}
-
-func (self *TuringerTransform)localEulerAnglesGet() Vec3 {
-    
-    _core_turinger_transform__local_euler_angles_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)localEulerAnglesSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__local_euler_angles_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)localPositionGet() Vec3 {
-    
-    _core_turinger_transform__local_position_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)localPositionSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__local_position_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)localRotationGet() Quat {
-    
-    _core_turinger_transform__local_rotation_get(self)
-    return dequeue_quat()
-}
-
-func (self *TuringerTransform)localRotationSet(value Quat) void {
-    
-    turingHandleValue := enqueue_quat(value)
-
-    _core_turinger_transform__local_rotation_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)localScaleGet() Vec3 {
-    
-    _core_turinger_transform__local_scale_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)localScaleSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__local_scale_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)localToWorldMatrixGet() Mat4 {
-    
-    _core_turinger_transform__local_to_world_matrix_get(self)
-    return dequeue_mat4()
-}
-
-func (self *TuringerTransform)lookAt(target TuringerTransform, worldUp Vec3) void {
-    
-    turingHandleWorldUp := enqueue_vec3(worldUp)
-
-    _core_turinger_transform__look_at(self, target, turingHandleWorldUp)
-}
-
-func (self *TuringerTransform)lossyScaleGet() Vec3 {
-    
-    _core_turinger_transform__lossy_scale_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)nameGet() string {
-    
-    turingResult := _core_turinger_transform__name_get(self)
-    turingStr := make([]byte, turingResult)
-    _host_strcpy(&turingStr[0], turingResult)
-    return string(turingStr[:len(turingStr)-1])
-}
-
-func (self *TuringerTransform)nameSet(value string) void {
-    
-    turingHValue := []byte(value)
-    turingHValue = append(turingHValue, 0)
-    turingHandleValue := &turingHValue[0]
-    _core_turinger_transform__name_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)parentGet() TuringerTransform {
-    
-    return _core_turinger_transform__parent_get(self)
-}
-
-func (self *TuringerTransform)parentSet(value TuringerTransform) void {
-    
-    _core_turinger_transform__parent_set(self, value)
-}
-
-func (self *TuringerTransform)positionGet() Vec3 {
-    
-    _core_turinger_transform__position_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)positionSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__position_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)rightGet() Vec3 {
-    
-    _core_turinger_transform__right_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)rightSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__right_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)rootGet() TuringerTransform {
-    
-    return _core_turinger_transform__root_get(self)
-}
-
-func (self *TuringerTransform)rotate(eulers Vec3) void {
-    
-    turingHandleEulers := enqueue_vec3(eulers)
-
-    _core_turinger_transform__rotate(self, turingHandleEulers)
-}
-
-func (self *TuringerTransform)rotateAround(point Vec3, axis Vec3, angle float32) void {
-    
-    turingHandlePoint := enqueue_vec3(point)
-
-    turingHandleAxis := enqueue_vec3(axis)
-
-    _core_turinger_transform__rotate_around(self, turingHandlePoint, turingHandleAxis, angle)
-}
-
-func (self *TuringerTransform)rotateAroundLocal(axis Vec3, angle float32) void {
-    
-    turingHandleAxis := enqueue_vec3(axis)
-
-    _core_turinger_transform__rotate_around_local(self, turingHandleAxis, angle)
-}
-
-func (self *TuringerTransform)rotateRelative(eulers Vec3, relativeTo int32) void {
-    
-    turingHandleEulers := enqueue_vec3(eulers)
-
-    _core_turinger_transform__rotate_relative(self, turingHandleEulers, relativeTo)
-}
-
-func (self *TuringerTransform)rotationGet() Quat {
-    
-    _core_turinger_transform__rotation_get(self)
-    return dequeue_quat()
-}
-
-func (self *TuringerTransform)rotationSet(value Quat) void {
-    
-    turingHandleValue := enqueue_quat(value)
-
-    _core_turinger_transform__rotation_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)sendMessage(methodName string, value Object, options int32) void {
-    
-    turingHMethodName := []byte(methodName)
-    turingHMethodName = append(turingHMethodName, 0)
-    turingHandleMethodName := &turingHMethodName[0]
-    _core_turinger_transform__send_message(self, turingHandleMethodName, value, options)
-}
-
-func (self *TuringerTransform)sendMessageUpwards(methodName string, value Object, options int32) void {
-    
-    turingHMethodName := []byte(methodName)
-    turingHMethodName = append(turingHMethodName, 0)
-    turingHandleMethodName := &turingHMethodName[0]
-    _core_turinger_transform__send_message_upwards(self, turingHandleMethodName, value, options)
-}
-
-func (self *TuringerTransform)setAsFirstSibling() void {
-    
-    _core_turinger_transform__set_as_first_sibling(self)
-}
-
-func (self *TuringerTransform)setAsLastSibling() void {
-    
-    _core_turinger_transform__set_as_last_sibling(self)
-}
-
-func (self *TuringerTransform)setLocalPositionAndRotation(localPosition Vec3, localRotation Quat) void {
-    
-    turingHandleLocalPosition := enqueue_vec3(localPosition)
-
-    turingHandleLocalRotation := enqueue_quat(localRotation)
-
-    _core_turinger_transform__set_local_position_and_rotation(self, turingHandleLocalPosition, turingHandleLocalRotation)
-}
-
-func (self *TuringerTransform)setParent(parent TuringerTransform, worldPositionStays bool) void {
-    
-    _core_turinger_transform__set_parent(self, parent, worldPositionStays)
-}
-
-func (self *TuringerTransform)setPositionAndRotation(position Vec3, rotation Quat) void {
-    
-    turingHandlePosition := enqueue_vec3(position)
-
-    turingHandleRotation := enqueue_quat(rotation)
-
-    _core_turinger_transform__set_position_and_rotation(self, turingHandlePosition, turingHandleRotation)
-}
-
-func (self *TuringerTransform)setSiblingIndex(index int32) void {
-    
-    _core_turinger_transform__set_sibling_index(self, index)
-}
-
-func (self *TuringerTransform)tagGet() string {
-    
-    turingResult := _core_turinger_transform__tag_get(self)
-    turingStr := make([]byte, turingResult)
-    _host_strcpy(&turingStr[0], turingResult)
-    return string(turingStr[:len(turingStr)-1])
-}
-
-func (self *TuringerTransform)tagSet(value string) void {
-    
-    turingHValue := []byte(value)
-    turingHValue = append(turingHValue, 0)
-    turingHandleValue := &turingHValue[0]
-    _core_turinger_transform__tag_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)transformDirection(direction Vec3) Vec3 {
-    
-    turingHandleDirection := enqueue_vec3(direction)
-
-    _core_turinger_transform__transform_direction(self, turingHandleDirection)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)transformGet() Transform {
-    
-    return _core_turinger_transform__transform_get(self)
-}
-
-func (self *TuringerTransform)transformPoint(position Vec3) Vec3 {
-    
-    turingHandlePosition := enqueue_vec3(position)
-
-    _core_turinger_transform__transform_point(self, turingHandlePosition)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)transformVector(vector Vec3) Vec3 {
-    
-    turingHandleVector := enqueue_vec3(vector)
-
-    _core_turinger_transform__transform_vector(self, turingHandleVector)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)translate(translation Vec3, relativeTo int32) void {
-    
-    turingHandleTranslation := enqueue_vec3(translation)
-
-    _core_turinger_transform__translate(self, turingHandleTranslation, relativeTo)
-}
-
-func (self *TuringerTransform)translateRelative(translation Vec3, relativeTo TuringerTransform) void {
-    
-    turingHandleTranslation := enqueue_vec3(translation)
-
-    _core_turinger_transform__translate_relative(self, turingHandleTranslation, relativeTo)
-}
-
-func (self *TuringerTransform)upGet() Vec3 {
-    
-    _core_turinger_transform__up_get(self)
-    return dequeue_vec3()
-}
-
-func (self *TuringerTransform)upSet(value Vec3) void {
-    
-    turingHandleValue := enqueue_vec3(value)
-
-    _core_turinger_transform__up_set(self, turingHandleValue)
-}
-
-func (self *TuringerTransform)worldToLocalMatrixGet() Mat4 {
-    
-    _core_turinger_transform__world_to_local_matrix_get(self)
-    return dequeue_mat4()
 }
 
 type Type struct {

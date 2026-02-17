@@ -84,6 +84,8 @@ struct Log;
 
 struct Mesh;
 
+struct NoteController;
+
 struct NoteControllerBase;
 
 struct NoteFloorMovement;
@@ -108,13 +110,11 @@ struct Transform;
 
 struct TuringMesh;
 
+struct TuringNoteExtensions;
+
 struct TuringScriptManager;
 
-struct TuringerGameObject;
-
 struct TuringerGameObjectManager;
-
-struct TuringerTransform;
 
 struct Type;
 
@@ -259,6 +259,38 @@ struct GameObject {
     
     
     
+     Component add_component(Type component_type);
+     TuringMesh add_or_get_mesh();
+     void broadcast_message(std::string_view method_name, int32_t options);
+     bool compare_tag(std::string_view tag);
+     bool get_active();
+     bool get_active_in_hierarchy();
+     bool get_active_self();
+     Component get_component_at_index(int32_t index);
+     Component get_component_by_name(std::string_view cs_type);
+     Component get_component_by_type(Type cs_type);
+     int32_t get_component_count();
+     Component get_component_in_children_by_type(Type cs_type, bool include_inactive);
+     Component get_component_in_parent_by_type(Type cs_type, bool include_inactive);
+     int32_t get_component_index(Component component);
+     int32_t get_hide_flags();
+     int32_t get_instance_id();
+     bool get_is_static();
+     int32_t get_layer();
+     std::string get_name();
+     uint64_t get_scene_culling_mask();
+     std::string get_tag();
+     Transform get_transform();
+     void send_message(std::string_view method_name, int32_t options);
+     void send_message_upwards(std::string_view method_name, int32_t options);
+     void set_active(bool value);
+     void set_active_prop(bool value);
+     void set_active_recursively(bool state);
+     void set_hide_flags(int32_t value);
+     void set_is_static(bool value);
+     void set_layer(int32_t value);
+     void set_name(std::string_view value);
+     void set_tag(std::string_view value);
     
 };
 
@@ -349,6 +381,17 @@ struct Log {
 
 
 struct Mesh {
+
+    
+
+    
+    
+    
+    
+};
+
+
+struct NoteController {
 
     
 
@@ -480,7 +523,7 @@ struct NoteJump {
      void add_note_jump_did_update_progress_event(Action1 value);
      glm::vec3 beat_pos_get();
      float distance_to_player_get();
-     void init_note(float note_time, float world_rotation, glm::vec3 move_end_offset, glm::vec3 jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
+     void init_jump(float note_time, float world_rotation, glm::vec3 move_end_offset, glm::vec3 jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
      glm::vec3 local_position_get();
      glm::vec3 manual_update();
      glm::vec3 move_vec_get();
@@ -593,6 +636,81 @@ struct Transform {
     
     
     
+     void broadcast_message(std::string_view method_name, Object parameter, int32_t options);
+     bool compare_tag(std::string_view tag);
+     void detach_children();
+     Transform find(std::string_view n);
+     Transform find_child(std::string_view n);
+     Transform get_child(int32_t index);
+     int32_t get_child_count();
+     int32_t get_child_count_prop();
+     Component get_component_by_name(std::string_view cs_type);
+     Component get_component_by_type(Type cs_type);
+     Component get_component_in_children_by_type(Type t, bool include_inactive);
+     Component get_component_in_parent_by_type(Type t, bool include_inactive);
+     int32_t get_component_index();
+     IEnumerator get_enumerator();
+     glm::vec3 get_euler_angles();
+     glm::vec3 get_forward();
+     GameObject get_game_object();
+     bool get_has_changed();
+     int32_t get_hide_flags();
+     int32_t get_hierarchy_capacity();
+     int32_t get_hierarchy_count();
+     int32_t get_instance_id();
+     glm::vec3 get_local_euler_angles();
+     glm::vec3 get_local_position();
+     glm::quat get_local_rotation();
+     glm::vec3 get_local_scale();
+     glm::mat4 get_local_to_world_matrix();
+     glm::vec3 get_lossy_scale();
+     std::string get_name();
+     Transform get_parent();
+     glm::vec3 get_position();
+     glm::vec3 get_right();
+     Transform get_root();
+     glm::quat get_rotation();
+     int32_t get_sibling_index();
+     std::string get_tag();
+     glm::vec3 get_up();
+     glm::mat4 get_world_to_local_matrix();
+     glm::vec3 inverse_transform_direction(glm::vec3 direction);
+     glm::vec3 inverse_transform_point(glm::vec3 position);
+     glm::vec3 inverse_transform_vector(glm::vec3 vector);
+     bool is_child_of(Transform parent);
+     void look_at(Transform target, glm::vec3 world_up);
+     void rotate(glm::vec3 eulers);
+     void rotate_around(glm::vec3 point, glm::vec3 axis, float angle);
+     void rotate_around_local(glm::vec3 axis, float angle);
+     void rotate_relative(glm::vec3 eulers, int32_t relative_to);
+     void send_message(std::string_view method_name, Object value, int32_t options);
+     void send_message_upwards(std::string_view method_name, Object value, int32_t options);
+     void set_as_first_sibling();
+     void set_as_last_sibling();
+     void set_euler_angles(glm::vec3 value);
+     void set_forward(glm::vec3 value);
+     void set_has_changed(bool value);
+     void set_hide_flags(int32_t value);
+     void set_hierarchy_capacity(int32_t value);
+     void set_local_euler_angles(glm::vec3 value);
+     void set_local_position(glm::vec3 value);
+     void set_local_position_and_rotation(glm::vec3 local_position, glm::quat local_rotation);
+     void set_local_rotation(glm::quat value);
+     void set_local_scale(glm::vec3 value);
+     void set_name(std::string_view value);
+     void set_parent(Transform parent, bool world_position_stays);
+     void set_position(glm::vec3 value);
+     void set_position_and_rotation(glm::vec3 position, glm::quat rotation);
+     void set_right(glm::vec3 value);
+     void set_rotation(glm::quat value);
+     void set_sibling_index(int32_t index);
+     void set_tag(std::string_view value);
+     void set_up(glm::vec3 value);
+     glm::vec3 transform_direction(glm::vec3 direction);
+     glm::vec3 transform_point(glm::vec3 position);
+     glm::vec3 transform_vector(glm::vec3 vector);
+     void translate(glm::vec3 translation, int32_t relative_to);
+     void translate_relative(glm::vec3 translation, Transform relative_to);
     
 };
 
@@ -635,6 +753,19 @@ struct TuringMesh {
 };
 
 
+struct TuringNoteExtensions {
+
+    
+     static NoteFloorMovement get_note_floor_movement(NoteController note_controller);
+     static NoteJump get_note_jump(NoteController note_controller);
+
+    
+    
+    
+    
+};
+
+
 struct TuringScriptManager {
 
     
@@ -646,149 +777,17 @@ struct TuringScriptManager {
 };
 
 
-struct TuringerGameObject {
-
-    
-
-    
-    
-    
-     bool active_get();
-     bool active_in_hierarchy_get();
-     bool active_self_get();
-     void active_set(bool value);
-     Component add_component(Type component_type);
-     TuringMesh add_or_get_mesh();
-     void broadcast_message(std::string_view method_name, int32_t options);
-     bool compare_tag(std::string_view tag);
-     GameObject game_object_get();
-     Component get_component_at_index(int32_t index);
-     Component get_component_by_name(std::string_view cs_type);
-     Component get_component_by_type(Type cs_type);
-     int32_t get_component_count();
-     Component get_component_in_children_by_type(Type cs_type, bool include_inactive);
-     Component get_component_in_parent_by_type(Type cs_type, bool include_inactive);
-     int32_t get_component_index(Component component);
-     int32_t get_instance_id();
-     int32_t hide_flags_get();
-     void hide_flags_set(int32_t value);
-     bool is_static_get();
-     void is_static_set(bool value);
-     int32_t layer_get();
-     void layer_set(int32_t value);
-     std::string name_get();
-     void name_set(std::string_view value);
-     uint64_t scene_culling_mask_get();
-     void send_message(std::string_view method_name, int32_t options);
-     void send_message_upwards(std::string_view method_name, int32_t options);
-     void set_active(bool value);
-     void set_active_recursively(bool state);
-     std::string tag_get();
-     void tag_set(std::string_view value);
-     TuringerTransform transform_get();
-    
-};
-
-
 struct TuringerGameObjectManager {
 
     
-     static TuringerGameObject create_object(std::string_view name);
-     static void destroy_object(TuringerGameObject listener);
-     static TuringerGameObject find(std::string_view name);
+     static GameObject create_object(std::string_view name);
+     static void destroy_object(GameObject game_object);
+     static GameObject find(std::string_view name);
 
     
     
     
      TuringerGameObjectManager instance_get();
-    
-};
-
-
-struct TuringerTransform {
-
-    
-
-    
-    
-    
-     void broadcast_message(std::string_view method_name, Object parameter, int32_t options);
-     int32_t child_count_get();
-     bool compare_tag(std::string_view tag);
-     void detach_children();
-     glm::vec3 euler_angles_get();
-     void euler_angles_set(glm::vec3 value);
-     TuringerTransform find(std::string_view n);
-     TuringerTransform find_child(std::string_view n);
-     glm::vec3 forward_get();
-     void forward_set(glm::vec3 value);
-     TuringerGameObject game_object_get();
-     TuringerTransform get_child(int32_t index);
-     int32_t get_child_count();
-     Component get_component_by_name(std::string_view cs_type);
-     Component get_component_by_type(Type cs_type);
-     Component get_component_in_children_by_type(Type t, bool include_inactive);
-     Component get_component_in_parent_by_type(Type t, bool include_inactive);
-     int32_t get_component_index();
-     IEnumerator get_enumerator();
-     int32_t get_instance_id();
-     int32_t get_sibling_index();
-     bool has_changed_get();
-     void has_changed_set(bool value);
-     int32_t hide_flags_get();
-     void hide_flags_set(int32_t value);
-     int32_t hierarchy_capacity_get();
-     void hierarchy_capacity_set(int32_t value);
-     int32_t hierarchy_count_get();
-     glm::vec3 inverse_transform_direction(glm::vec3 direction);
-     glm::vec3 inverse_transform_point(glm::vec3 position);
-     glm::vec3 inverse_transform_vector(glm::vec3 vector);
-     bool is_child_of(TuringerTransform parent);
-     glm::vec3 local_euler_angles_get();
-     void local_euler_angles_set(glm::vec3 value);
-     glm::vec3 local_position_get();
-     void local_position_set(glm::vec3 value);
-     glm::quat local_rotation_get();
-     void local_rotation_set(glm::quat value);
-     glm::vec3 local_scale_get();
-     void local_scale_set(glm::vec3 value);
-     glm::mat4 local_to_world_matrix_get();
-     void look_at(TuringerTransform target, glm::vec3 world_up);
-     glm::vec3 lossy_scale_get();
-     std::string name_get();
-     void name_set(std::string_view value);
-     TuringerTransform parent_get();
-     void parent_set(TuringerTransform value);
-     glm::vec3 position_get();
-     void position_set(glm::vec3 value);
-     glm::vec3 right_get();
-     void right_set(glm::vec3 value);
-     TuringerTransform root_get();
-     void rotate(glm::vec3 eulers);
-     void rotate_around(glm::vec3 point, glm::vec3 axis, float angle);
-     void rotate_around_local(glm::vec3 axis, float angle);
-     void rotate_relative(glm::vec3 eulers, int32_t relative_to);
-     glm::quat rotation_get();
-     void rotation_set(glm::quat value);
-     void send_message(std::string_view method_name, Object value, int32_t options);
-     void send_message_upwards(std::string_view method_name, Object value, int32_t options);
-     void set_as_first_sibling();
-     void set_as_last_sibling();
-     void set_local_position_and_rotation(glm::vec3 local_position, glm::quat local_rotation);
-     void set_parent(TuringerTransform parent, bool world_position_stays);
-     void set_position_and_rotation(glm::vec3 position, glm::quat rotation);
-     void set_sibling_index(int32_t index);
-     std::string tag_get();
-     void tag_set(std::string_view value);
-     glm::vec3 transform_direction(glm::vec3 direction);
-     Transform transform_get();
-     glm::vec3 transform_point(glm::vec3 position);
-     glm::vec3 transform_vector(glm::vec3 vector);
-     void translate(glm::vec3 translation, int32_t relative_to);
-     void translate_relative(glm::vec3 translation, TuringerTransform relative_to);
-     glm::vec3 up_get();
-     void up_set(glm::vec3 value);
-     glm::mat4 world_to_local_matrix_get();
     
 };
 
@@ -879,6 +878,38 @@ extern "C" {
     TURING_API_EXPORT Version Core_CustomObstacleData_versionGet(uint64_t opaqu);
     
     
+    TURING_API_EXPORT Component Core_GameObject_addComponent(uint64_t opaqu, Type component_type);
+    TURING_API_EXPORT TuringMesh Core_GameObject_addOrGetMesh(uint64_t opaqu);
+    TURING_API_EXPORT void Core_GameObject_broadcastMessage(uint64_t opaqu, const char* method_name, int32_t options);
+    TURING_API_EXPORT bool Core_GameObject_compareTag(uint64_t opaqu, const char* tag);
+    TURING_API_EXPORT bool Core_GameObject_getActive(uint64_t opaqu);
+    TURING_API_EXPORT bool Core_GameObject_getActiveInHierarchy(uint64_t opaqu);
+    TURING_API_EXPORT bool Core_GameObject_getActiveSelf(uint64_t opaqu);
+    TURING_API_EXPORT Component Core_GameObject_getComponentAtIndex(uint64_t opaqu, int32_t index);
+    TURING_API_EXPORT Component Core_GameObject_getComponentByName(uint64_t opaqu, const char* cs_type);
+    TURING_API_EXPORT Component Core_GameObject_getComponentByType(uint64_t opaqu, Type cs_type);
+    TURING_API_EXPORT int32_t Core_GameObject_getComponentCount(uint64_t opaqu);
+    TURING_API_EXPORT Component Core_GameObject_getComponentInChildrenByType(uint64_t opaqu, Type cs_type, bool include_inactive);
+    TURING_API_EXPORT Component Core_GameObject_getComponentInParentByType(uint64_t opaqu, Type cs_type, bool include_inactive);
+    TURING_API_EXPORT int32_t Core_GameObject_getComponentIndex(uint64_t opaqu, Component component);
+    TURING_API_EXPORT int32_t Core_GameObject_getHideFlags(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_GameObject_getInstanceId(uint64_t opaqu);
+    TURING_API_EXPORT bool Core_GameObject_getIsStatic(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_GameObject_getLayer(uint64_t opaqu);
+    TURING_API_EXPORT char* Core_GameObject_getName(uint64_t opaqu);
+    TURING_API_EXPORT uint64_t Core_GameObject_getSceneCullingMask(uint64_t opaqu);
+    TURING_API_EXPORT char* Core_GameObject_getTag(uint64_t opaqu);
+    TURING_API_EXPORT Transform Core_GameObject_getTransform(uint64_t opaqu);
+    TURING_API_EXPORT void Core_GameObject_sendMessage(uint64_t opaqu, const char* method_name, int32_t options);
+    TURING_API_EXPORT void Core_GameObject_sendMessageUpwards(uint64_t opaqu, const char* method_name, int32_t options);
+    TURING_API_EXPORT void Core_GameObject_setActive(uint64_t opaqu, bool value);
+    TURING_API_EXPORT void Core_GameObject_setActiveProp(uint64_t opaqu, bool value);
+    TURING_API_EXPORT void Core_GameObject_setActiveRecursively(uint64_t opaqu, bool state);
+    TURING_API_EXPORT void Core_GameObject_setHideFlags(uint64_t opaqu, int32_t value);
+    TURING_API_EXPORT void Core_GameObject_setIsStatic(uint64_t opaqu, bool value);
+    TURING_API_EXPORT void Core_GameObject_setLayer(uint64_t opaqu, int32_t value);
+    TURING_API_EXPORT void Core_GameObject_setName(uint64_t opaqu, const char* value);
+    TURING_API_EXPORT void Core_GameObject_setTag(uint64_t opaqu, const char* value);
     
     TURING_API_EXPORT GCHelper Core_GcHelper_create();
     TURING_API_EXPORT void Core_GcHelper_dispose(uint64_t opaqu);
@@ -894,6 +925,7 @@ extern "C" {
     TURING_API_EXPORT void Core_Log_debug(const char* msg);
     TURING_API_EXPORT void Core_Log_info(const char* msg);
     TURING_API_EXPORT void Core_Log_warn(const char* msg);
+    
     
     
     
@@ -990,7 +1022,7 @@ extern "C" {
     TURING_API_EXPORT void Core_NoteJump_addNoteJumpDidUpdateProgressEvent(uint64_t opaqu, Action1 value);
     TURING_API_EXPORT vec3s Core_NoteJump_beatPosGet(uint64_t opaqu);
     TURING_API_EXPORT float Core_NoteJump_distanceToPlayerGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_NoteJump_initNote(uint64_t opaqu, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
+    TURING_API_EXPORT void Core_NoteJump_initJump(uint64_t opaqu, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
     TURING_API_EXPORT vec3s Core_NoteJump_localPositionGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteJump_manualUpdate(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteJump_moveVecGet(uint64_t opaqu);
@@ -1023,6 +1055,81 @@ extern "C" {
     TURING_API_EXPORT void Core_TaskScheduler_schedule(Action task);
     TURING_API_EXPORT void Core_TaskScheduler_dispose(uint64_t opaqu);
     
+    TURING_API_EXPORT void Core_Transform_broadcastMessage(uint64_t opaqu, const char* method_name, Object parameter, int32_t options);
+    TURING_API_EXPORT bool Core_Transform_compareTag(uint64_t opaqu, const char* tag);
+    TURING_API_EXPORT void Core_Transform_detachChildren(uint64_t opaqu);
+    TURING_API_EXPORT Transform Core_Transform_find(uint64_t opaqu, const char* n);
+    TURING_API_EXPORT Transform Core_Transform_findChild(uint64_t opaqu, const char* n);
+    TURING_API_EXPORT Transform Core_Transform_getChild(uint64_t opaqu, int32_t index);
+    TURING_API_EXPORT int32_t Core_Transform_getChildCount(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Transform_getChildCountProp(uint64_t opaqu);
+    TURING_API_EXPORT Component Core_Transform_getComponentByName(uint64_t opaqu, const char* cs_type);
+    TURING_API_EXPORT Component Core_Transform_getComponentByType(uint64_t opaqu, Type cs_type);
+    TURING_API_EXPORT Component Core_Transform_getComponentInChildrenByType(uint64_t opaqu, Type t, bool include_inactive);
+    TURING_API_EXPORT Component Core_Transform_getComponentInParentByType(uint64_t opaqu, Type t, bool include_inactive);
+    TURING_API_EXPORT int32_t Core_Transform_getComponentIndex(uint64_t opaqu);
+    TURING_API_EXPORT IEnumerator Core_Transform_getEnumerator(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getEulerAngles(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getForward(uint64_t opaqu);
+    TURING_API_EXPORT GameObject Core_Transform_getGameObject(uint64_t opaqu);
+    TURING_API_EXPORT bool Core_Transform_getHasChanged(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Transform_getHideFlags(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Transform_getHierarchyCapacity(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Transform_getHierarchyCount(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Transform_getInstanceId(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getLocalEulerAngles(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getLocalPosition(uint64_t opaqu);
+    TURING_API_EXPORT versors Core_Transform_getLocalRotation(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getLocalScale(uint64_t opaqu);
+    TURING_API_EXPORT mat4s Core_Transform_getLocalToWorldMatrix(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getLossyScale(uint64_t opaqu);
+    TURING_API_EXPORT char* Core_Transform_getName(uint64_t opaqu);
+    TURING_API_EXPORT Transform Core_Transform_getParent(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getPosition(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getRight(uint64_t opaqu);
+    TURING_API_EXPORT Transform Core_Transform_getRoot(uint64_t opaqu);
+    TURING_API_EXPORT versors Core_Transform_getRotation(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Transform_getSiblingIndex(uint64_t opaqu);
+    TURING_API_EXPORT char* Core_Transform_getTag(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_getUp(uint64_t opaqu);
+    TURING_API_EXPORT mat4s Core_Transform_getWorldToLocalMatrix(uint64_t opaqu);
+    TURING_API_EXPORT vec3s Core_Transform_inverseTransformDirection(uint64_t opaqu, vec3s direction);
+    TURING_API_EXPORT vec3s Core_Transform_inverseTransformPoint(uint64_t opaqu, vec3s position);
+    TURING_API_EXPORT vec3s Core_Transform_inverseTransformVector(uint64_t opaqu, vec3s vector);
+    TURING_API_EXPORT bool Core_Transform_isChildOf(uint64_t opaqu, Transform parent);
+    TURING_API_EXPORT void Core_Transform_lookAt(uint64_t opaqu, Transform target, vec3s world_up);
+    TURING_API_EXPORT void Core_Transform_rotate(uint64_t opaqu, vec3s eulers);
+    TURING_API_EXPORT void Core_Transform_rotateAround(uint64_t opaqu, vec3s point, vec3s axis, float angle);
+    TURING_API_EXPORT void Core_Transform_rotateAroundLocal(uint64_t opaqu, vec3s axis, float angle);
+    TURING_API_EXPORT void Core_Transform_rotateRelative(uint64_t opaqu, vec3s eulers, int32_t relative_to);
+    TURING_API_EXPORT void Core_Transform_sendMessage(uint64_t opaqu, const char* method_name, Object value, int32_t options);
+    TURING_API_EXPORT void Core_Transform_sendMessageUpwards(uint64_t opaqu, const char* method_name, Object value, int32_t options);
+    TURING_API_EXPORT void Core_Transform_setAsFirstSibling(uint64_t opaqu);
+    TURING_API_EXPORT void Core_Transform_setAsLastSibling(uint64_t opaqu);
+    TURING_API_EXPORT void Core_Transform_setEulerAngles(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setForward(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setHasChanged(uint64_t opaqu, bool value);
+    TURING_API_EXPORT void Core_Transform_setHideFlags(uint64_t opaqu, int32_t value);
+    TURING_API_EXPORT void Core_Transform_setHierarchyCapacity(uint64_t opaqu, int32_t value);
+    TURING_API_EXPORT void Core_Transform_setLocalEulerAngles(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setLocalPosition(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setLocalPositionAndRotation(uint64_t opaqu, vec3s local_position, versors local_rotation);
+    TURING_API_EXPORT void Core_Transform_setLocalRotation(uint64_t opaqu, versors value);
+    TURING_API_EXPORT void Core_Transform_setLocalScale(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setName(uint64_t opaqu, const char* value);
+    TURING_API_EXPORT void Core_Transform_setParent(uint64_t opaqu, Transform parent, bool world_position_stays);
+    TURING_API_EXPORT void Core_Transform_setPosition(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setPositionAndRotation(uint64_t opaqu, vec3s position, versors rotation);
+    TURING_API_EXPORT void Core_Transform_setRight(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT void Core_Transform_setRotation(uint64_t opaqu, versors value);
+    TURING_API_EXPORT void Core_Transform_setSiblingIndex(uint64_t opaqu, int32_t index);
+    TURING_API_EXPORT void Core_Transform_setTag(uint64_t opaqu, const char* value);
+    TURING_API_EXPORT void Core_Transform_setUp(uint64_t opaqu, vec3s value);
+    TURING_API_EXPORT vec3s Core_Transform_transformDirection(uint64_t opaqu, vec3s direction);
+    TURING_API_EXPORT vec3s Core_Transform_transformPoint(uint64_t opaqu, vec3s position);
+    TURING_API_EXPORT vec3s Core_Transform_transformVector(uint64_t opaqu, vec3s vector);
+    TURING_API_EXPORT void Core_Transform_translate(uint64_t opaqu, vec3s translation, int32_t relative_to);
+    TURING_API_EXPORT void Core_Transform_translateRelative(uint64_t opaqu, vec3s translation, Transform relative_to);
     
     TURING_API_EXPORT Mesh Core_TuringMesh_MeshGet(uint64_t opaqu);
     TURING_API_EXPORT void Core_TuringMesh_MeshSet(uint64_t opaqu, Mesh value);
@@ -1052,123 +1159,14 @@ extern "C" {
     TURING_API_EXPORT void Core_TuringMesh_setVertices(uint64_t opaqu, U32Buffer in_vertices);
     TURING_API_EXPORT void Core_TuringMesh_uploadMeshData(uint64_t opaqu, bool mark_no_longer_readable);
     
+    TURING_API_EXPORT NoteFloorMovement Core_TuringNoteExtensions_getNoteFloorMovement(NoteController note_controller);
+    TURING_API_EXPORT NoteJump Core_TuringNoteExtensions_getNoteJump(NoteController note_controller);
     
-    TURING_API_EXPORT bool Core_TuringerGameObject_activeGet(uint64_t opaqu);
-    TURING_API_EXPORT bool Core_TuringerGameObject_activeInHierarchyGet(uint64_t opaqu);
-    TURING_API_EXPORT bool Core_TuringerGameObject_activeSelfGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_activeSet(uint64_t opaqu, bool value);
-    TURING_API_EXPORT Component Core_TuringerGameObject_addComponent(uint64_t opaqu, Type component_type);
-    TURING_API_EXPORT TuringMesh Core_TuringerGameObject_addOrGetMesh(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_broadcastMessage(uint64_t opaqu, const char* method_name, int32_t options);
-    TURING_API_EXPORT bool Core_TuringerGameObject_compareTag(uint64_t opaqu, const char* tag);
-    TURING_API_EXPORT GameObject Core_TuringerGameObject_gameObjectGet(uint64_t opaqu);
-    TURING_API_EXPORT Component Core_TuringerGameObject_getComponentAtIndex(uint64_t opaqu, int32_t index);
-    TURING_API_EXPORT Component Core_TuringerGameObject_getComponentByName(uint64_t opaqu, const char* cs_type);
-    TURING_API_EXPORT Component Core_TuringerGameObject_getComponentByType(uint64_t opaqu, Type cs_type);
-    TURING_API_EXPORT int32_t Core_TuringerGameObject_getComponentCount(uint64_t opaqu);
-    TURING_API_EXPORT Component Core_TuringerGameObject_getComponentInChildrenByType(uint64_t opaqu, Type cs_type, bool include_inactive);
-    TURING_API_EXPORT Component Core_TuringerGameObject_getComponentInParentByType(uint64_t opaqu, Type cs_type, bool include_inactive);
-    TURING_API_EXPORT int32_t Core_TuringerGameObject_getComponentIndex(uint64_t opaqu, Component component);
-    TURING_API_EXPORT int32_t Core_TuringerGameObject_getInstanceId(uint64_t opaqu);
-    TURING_API_EXPORT int32_t Core_TuringerGameObject_hideFlagsGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_hideFlagsSet(uint64_t opaqu, int32_t value);
-    TURING_API_EXPORT bool Core_TuringerGameObject_isStaticGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_isStaticSet(uint64_t opaqu, bool value);
-    TURING_API_EXPORT int32_t Core_TuringerGameObject_layerGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_layerSet(uint64_t opaqu, int32_t value);
-    TURING_API_EXPORT char* Core_TuringerGameObject_nameGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_nameSet(uint64_t opaqu, const char* value);
-    TURING_API_EXPORT uint64_t Core_TuringerGameObject_sceneCullingMaskGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_sendMessage(uint64_t opaqu, const char* method_name, int32_t options);
-    TURING_API_EXPORT void Core_TuringerGameObject_sendMessageUpwards(uint64_t opaqu, const char* method_name, int32_t options);
-    TURING_API_EXPORT void Core_TuringerGameObject_setActive(uint64_t opaqu, bool value);
-    TURING_API_EXPORT void Core_TuringerGameObject_setActiveRecursively(uint64_t opaqu, bool state);
-    TURING_API_EXPORT char* Core_TuringerGameObject_tagGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerGameObject_tagSet(uint64_t opaqu, const char* value);
-    TURING_API_EXPORT TuringerTransform Core_TuringerGameObject_transformGet(uint64_t opaqu);
     
-    TURING_API_EXPORT TuringerGameObject Core_TuringerGameObjectManager_createObject(const char* name);
-    TURING_API_EXPORT void Core_TuringerGameObjectManager_destroyObject(TuringerGameObject listener);
-    TURING_API_EXPORT TuringerGameObject Core_TuringerGameObjectManager_find(const char* name);
+    TURING_API_EXPORT GameObject Core_TuringerGameObjectManager_createObject(const char* name);
+    TURING_API_EXPORT void Core_TuringerGameObjectManager_destroyObject(GameObject game_object);
+    TURING_API_EXPORT GameObject Core_TuringerGameObjectManager_find(const char* name);
     TURING_API_EXPORT TuringerGameObjectManager Core_TuringerGameObjectManager_instanceGet(uint64_t opaqu);
-    
-    TURING_API_EXPORT void Core_TuringerTransform_broadcastMessage(uint64_t opaqu, const char* method_name, Object parameter, int32_t options);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_childCountGet(uint64_t opaqu);
-    TURING_API_EXPORT bool Core_TuringerTransform_compareTag(uint64_t opaqu, const char* tag);
-    TURING_API_EXPORT void Core_TuringerTransform_detachChildren(uint64_t opaqu);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_eulerAnglesGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_eulerAnglesSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT TuringerTransform Core_TuringerTransform_find(uint64_t opaqu, const char* n);
-    TURING_API_EXPORT TuringerTransform Core_TuringerTransform_findChild(uint64_t opaqu, const char* n);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_forwardGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_forwardSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT TuringerGameObject Core_TuringerTransform_gameObjectGet(uint64_t opaqu);
-    TURING_API_EXPORT TuringerTransform Core_TuringerTransform_getChild(uint64_t opaqu, int32_t index);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_getChildCount(uint64_t opaqu);
-    TURING_API_EXPORT Component Core_TuringerTransform_getComponentByName(uint64_t opaqu, const char* cs_type);
-    TURING_API_EXPORT Component Core_TuringerTransform_getComponentByType(uint64_t opaqu, Type cs_type);
-    TURING_API_EXPORT Component Core_TuringerTransform_getComponentInChildrenByType(uint64_t opaqu, Type t, bool include_inactive);
-    TURING_API_EXPORT Component Core_TuringerTransform_getComponentInParentByType(uint64_t opaqu, Type t, bool include_inactive);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_getComponentIndex(uint64_t opaqu);
-    TURING_API_EXPORT IEnumerator Core_TuringerTransform_getEnumerator(uint64_t opaqu);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_getInstanceId(uint64_t opaqu);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_getSiblingIndex(uint64_t opaqu);
-    TURING_API_EXPORT bool Core_TuringerTransform_hasChangedGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_hasChangedSet(uint64_t opaqu, bool value);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_hideFlagsGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_hideFlagsSet(uint64_t opaqu, int32_t value);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_hierarchyCapacityGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_hierarchyCapacitySet(uint64_t opaqu, int32_t value);
-    TURING_API_EXPORT int32_t Core_TuringerTransform_hierarchyCountGet(uint64_t opaqu);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_inverseTransformDirection(uint64_t opaqu, vec3s direction);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_inverseTransformPoint(uint64_t opaqu, vec3s position);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_inverseTransformVector(uint64_t opaqu, vec3s vector);
-    TURING_API_EXPORT bool Core_TuringerTransform_isChildOf(uint64_t opaqu, TuringerTransform parent);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_localEulerAnglesGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_localEulerAnglesSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_localPositionGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_localPositionSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT versors Core_TuringerTransform_localRotationGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_localRotationSet(uint64_t opaqu, versors value);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_localScaleGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_localScaleSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT mat4s Core_TuringerTransform_localToWorldMatrixGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_lookAt(uint64_t opaqu, TuringerTransform target, vec3s world_up);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_lossyScaleGet(uint64_t opaqu);
-    TURING_API_EXPORT char* Core_TuringerTransform_nameGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_nameSet(uint64_t opaqu, const char* value);
-    TURING_API_EXPORT TuringerTransform Core_TuringerTransform_parentGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_parentSet(uint64_t opaqu, TuringerTransform value);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_positionGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_positionSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_rightGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_rightSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT TuringerTransform Core_TuringerTransform_rootGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_rotate(uint64_t opaqu, vec3s eulers);
-    TURING_API_EXPORT void Core_TuringerTransform_rotateAround(uint64_t opaqu, vec3s point, vec3s axis, float angle);
-    TURING_API_EXPORT void Core_TuringerTransform_rotateAroundLocal(uint64_t opaqu, vec3s axis, float angle);
-    TURING_API_EXPORT void Core_TuringerTransform_rotateRelative(uint64_t opaqu, vec3s eulers, int32_t relative_to);
-    TURING_API_EXPORT versors Core_TuringerTransform_rotationGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_rotationSet(uint64_t opaqu, versors value);
-    TURING_API_EXPORT void Core_TuringerTransform_sendMessage(uint64_t opaqu, const char* method_name, Object value, int32_t options);
-    TURING_API_EXPORT void Core_TuringerTransform_sendMessageUpwards(uint64_t opaqu, const char* method_name, Object value, int32_t options);
-    TURING_API_EXPORT void Core_TuringerTransform_setAsFirstSibling(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_setAsLastSibling(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_setLocalPositionAndRotation(uint64_t opaqu, vec3s local_position, versors local_rotation);
-    TURING_API_EXPORT void Core_TuringerTransform_setParent(uint64_t opaqu, TuringerTransform parent, bool world_position_stays);
-    TURING_API_EXPORT void Core_TuringerTransform_setPositionAndRotation(uint64_t opaqu, vec3s position, versors rotation);
-    TURING_API_EXPORT void Core_TuringerTransform_setSiblingIndex(uint64_t opaqu, int32_t index);
-    TURING_API_EXPORT char* Core_TuringerTransform_tagGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_tagSet(uint64_t opaqu, const char* value);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_transformDirection(uint64_t opaqu, vec3s direction);
-    TURING_API_EXPORT Transform Core_TuringerTransform_transformGet(uint64_t opaqu);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_transformPoint(uint64_t opaqu, vec3s position);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_transformVector(uint64_t opaqu, vec3s vector);
-    TURING_API_EXPORT void Core_TuringerTransform_translate(uint64_t opaqu, vec3s translation, int32_t relative_to);
-    TURING_API_EXPORT void Core_TuringerTransform_translateRelative(uint64_t opaqu, vec3s translation, TuringerTransform relative_to);
-    TURING_API_EXPORT vec3s Core_TuringerTransform_upGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringerTransform_upSet(uint64_t opaqu, vec3s value);
-    TURING_API_EXPORT mat4s Core_TuringerTransform_worldToLocalMatrixGet(uint64_t opaqu);
     
     
     
