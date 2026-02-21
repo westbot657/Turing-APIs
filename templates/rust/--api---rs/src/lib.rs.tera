@@ -157,7 +157,7 @@ pub mod alg {
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-handle: {{ func.class_name | case(style="pascal") }}
+handle: {{ func.class_name }}
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.rs) }}
 {%- endfor -%}
@@ -281,14 +281,14 @@ unsafe { {{ func.wasm -}}
 {{ docs(doc=class.doc, d="/// ") }}{% endif %}
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct {{ class.name | case(style="pascal") }}
+pub struct {{ class.name }}
 {%- if class.static %};
 {%- else %} {
     handle: {{ types.rs["op*"] }},
 }
 {%- endif %}
 {%- if class.functions or class.methods %}
-impl {{ class.name | case(style="pascal") }} {
+impl {{ class.name }} {
 {{ self::func_impls(funcs=class.functions, indent="    ") }}
     {{ self::func_impls(funcs=class.methods, indent="    ") }}
 }

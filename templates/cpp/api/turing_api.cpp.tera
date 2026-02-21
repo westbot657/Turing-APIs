@@ -144,7 +144,7 @@ self
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-{{ func.class_name | case(style="pascal") }} self
+{{ func.class_name }} self
 {%- for param in func.params %}
 , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
 {%- endfor -%}
@@ -178,7 +178,7 @@ self
 {%- macro func_impl(func) -%}
 {% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
-{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name }}_
 {%- endif %}{{ func.name | case(style="camel") -}}
 (
 {%- if func.static -%}
@@ -186,7 +186,7 @@ self
 {{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-{{ func.class_name | case(style="pascal") }} self
+{{ func.class_name }} self
 {%- for param in func.params -%}
 {{ self::convert_arg(param=param) }}
 {%- endfor -%}
@@ -208,7 +208,7 @@ self
 {%- for func in api.functions %}
 {% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
-{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name }}_
 {%- endif %}{{ func.name | case(style="camel") -}}
 (
 {%- if func.static -%}
@@ -216,7 +216,7 @@ self
 {{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-{{ func.class_name | case(style="pascal") }} self
+{{ func.class_name }} self
 {%- for param in func.params -%}
 , {{ self::convert_arg(param=param) }}
 {%- endfor -%}
@@ -233,7 +233,7 @@ self
 {%- for func in class.functions %}
 {% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
-{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name }}_
 {%- endif %}{{ func.name | case(style="camel") -}}
 (
 {%- if func.static -%}
@@ -241,7 +241,7 @@ self
 {{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-{{ func.class_name | case(style="pascal") }} self
+{{ func.class_name }} self
 {%- for param in func.params %}
 , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
 {%- endfor -%}
@@ -253,7 +253,7 @@ self
 {%- for func in class.methods %}
 {% if func.doc %}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ types.c[func.type] }} {{ api.name | case(style="pascal") }}_
-{%- if func.class_name %}{{ func.class_name | case(style="pascal") }}_
+{%- if func.class_name %}{{ func.class_name }}_
 {%- endif %}{{ func.name | case(style="camel") -}}
 (
 {%- if func.static -%}
@@ -261,7 +261,7 @@ self
 {{ types.c[param.type] }} {{ param.name | case(style="snake") }}{%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-{{ func.class_name | case(style="pascal") }} self
+{{ func.class_name }} self
 {%- for param in func.params %}
 , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
 {%- endfor -%}

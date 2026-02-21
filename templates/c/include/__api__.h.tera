@@ -36,7 +36,7 @@ mat4s __dequeue_mat4();
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-{{ func.class_name | case(style="pascal") }} self
+{{ func.class_name }} self
 {%- for param in func.params -%}
 , {{ types.c[param.type] }} {{ param.name | case(style="snake") }}
 {%- endfor -%}
@@ -56,7 +56,7 @@ mat4s __dequeue_mat4();
 {%- endmacro func_decls -%}
 
 {%- macro concat_name(class) -%}
-{{ api.name | case(style="pascal") }}_{{ class.name | case(style="pascal") }}
+{{ api.name | case(style="pascal") }}_{{ class.name }}
 {%- endmacro -%}
 
 
@@ -71,9 +71,9 @@ mat4s __dequeue_mat4();
 {%- macro class_typedef(class) -%}
 {%- if not class.static %}
 {% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
-typedef struct {{ class.name | case(style="pascal") }} {
+typedef struct {{ class.name }} {
     uint64_t handle;
-} {{ class.name | case(style="pascal") }};
+} {{ class.name }};
 {% endif -%}
 {%- endmacro class_typedef %}
 

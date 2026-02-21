@@ -246,7 +246,7 @@ export function {% else -%}
 {%- endif %}{{ func.name | case(style="snake") -}}
 (
     {{- self::asm_params(func=func) -}}
-): {% if func.type == "self" %}{{ func.class_name | case(style="pascal") }}
+): {% if func.type == "self" %}{{ func.class_name }}
 {%- else %}{{ types.asmscript[func.type] }}{% endif %} {
     {{- self::func_inner(func=func, indent=indent ~ "    ") }}
 {{ indent -}} }
@@ -263,7 +263,7 @@ export function {% else -%}
 {%- for class in api.classes %}
 {% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
 @final {#- @final disables sub-classing #}
-export class {{ class.name | case(style="pascal") }} {
+export class {{ class.name }} {
     {% if not class.static %}
     handle: {{ types.asmscript["op*"] }};
 

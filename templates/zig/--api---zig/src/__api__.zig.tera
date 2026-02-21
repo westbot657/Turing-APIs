@@ -114,7 +114,7 @@ pub const {{ api.name | case(style="upper_snake") }}_VERSION: []const u8 = "{{ a
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-handle: {{ func.class_name | case(style="pascal") }}
+handle: {{ func.class_name }}
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}: {{ param.type | ffi_type(map=types.zig) }}
 {%- endfor -%}
@@ -148,7 +148,7 @@ extern "C" fn {{ func.wasm -}}
 {%- endfor -%}
 {%- if self::needs_allocator(func=func) %}{% if func.params %}, {% endif %}allocator: std.mem.Allocator{% endif -%}
 {%- else -%}
-self: *const {{ func.class_name | case(style="pascal") }}
+self: *const {{ func.class_name }}
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }}: {{ types.zig[param.type] }}
 {%- endfor -%}
@@ -160,7 +160,7 @@ self: *const {{ func.class_name | case(style="pascal") }}
 {%- macro zig_return(func) -%}
 {%- if self::needs_allocator(func=func) %}!{% endif -%}
 {%- if func.type == "self" -%}
-*const {{ func.class_name | case(style="pascal") }}
+*const {{ func.class_name }}
 {%- else -%}
 {{ types.zig[func.type] }}
 {%- endif -%}
@@ -255,7 +255,7 @@ self
 
 {%- macro class_def(class) %}
 {% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
-pub const {{ class.name | case(style="pascal") }} = struct {
+pub const {{ class.name }} = struct {
     {% if not class.static %}opaqu: {{ types.zig["op*"] }},{% endif %}
 
 {{- self::func_impls(funcs=class.functions, indent="    ") }}

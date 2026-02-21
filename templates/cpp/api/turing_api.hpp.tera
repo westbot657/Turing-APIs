@@ -74,7 +74,7 @@ namespace alg {
 // Public API wrappers
 // Forward declarations for all classes (opaque or not)
 {% for class in api.classes %}
-struct {{ class.name | case(style="pascal") }};
+struct {{ class.name }};
 {% endfor %}
 {%- for func in api.functions %}
 {% if func.doc %}{{ docs(doc=func.doc, d="// ") }}{% endif %}
@@ -83,7 +83,7 @@ TURING_API_EXPORT {{ types.cpp[func.type] }} {{ func.name | case(style="snake") 
 
 {% for class in api.classes %}
 {% if class.doc %}{{ docs(doc=class.doc, d="// ") }}{% endif %}
-struct {{ class.name | case(style="pascal") }} {
+struct {{ class.name }} {
     {%- if class.variables is defined %}
     {% for var in class.variables %}
     {{ types.cpp[var.type] }} {{ var.name }};
@@ -121,12 +121,12 @@ extern "C" {
     {%- for class in api.classes -%}
     {%- if class.functions is defined %}
     {%- for func in class.functions %}
-    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {% if func.from is defined %}{{ func.from }}{% else %}{{ api.name | case(style="pascal") }}_{{ class.name | case(style="pascal") }}_{{ func.name | case(style="camel") }}{% endif %}({{ self::c_params(params=func.params, is_method=false, class=class) }});
+    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {% if func.from is defined %}{{ func.from }}{% else %}{{ api.name | case(style="pascal") }}_{{ class.name }}_{{ func.name | case(style="camel") }}{% endif %}({{ self::c_params(params=func.params, is_method=false, class=class) }});
     {%- endfor %}
     {%- endif %}
     {%- if class.methods is defined %}
     {%- for func in class.methods %}
-    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {% if func.from is defined %}{{ func.from }}{% else %}{{ api.name | case(style="pascal") }}_{{ class.name | case(style="pascal") }}_{{ func.name | case(style="camel") }}{% endif %}({{ self::c_params(params=func.params, is_method=true, class=class) }});
+    TURING_API_EXPORT {{ self::c_ret(type=func.type) }} {% if func.from is defined %}{{ func.from }}{% else %}{{ api.name | case(style="pascal") }}_{{ class.name }}_{{ func.name | case(style="camel") }}{% endif %}({{ self::c_params(params=func.params, is_method=true, class=class) }});
     {%- endfor %}
     {%- endif %}
     {% endfor %}

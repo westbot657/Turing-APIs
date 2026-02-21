@@ -30,7 +30,7 @@
 {%- if not loop.last %}, {% endif -%}
 {%- endfor -%}
 {%- else -%}
-handle {{ func.class_name | case(style="pascal") }}
+handle {{ func.class_name }}
 {%- for param in func.params -%}
 , {{ param.name | case(style="snake") }} {{ param.type | ffi_type(map=types.go) }}
 {%- endfor -%}
@@ -47,7 +47,7 @@ handle {{ func.class_name | case(style="pascal") }}
 
 
 {%- macro go_return(func) -%}
-{%- if func.type == "self" %} *{{ func.class_name | case(style="pascal") }}
+{%- if func.type == "self" %} *{{ func.class_name }}
 {%- else %} {{ types.go[func.type] }}
 {%- endif -%}
 {%- endmacro go_return -%}
@@ -111,8 +111,8 @@ func {{ func.wasm -}}
 {%- macro func_impl(func, indent="") -%}
 {% if func.doc %}{{ indent }}{{ docs(doc=func.doc, d="/// ") }}{% endif %}
 {{ indent }}func {% if not func.static -%}
-    (self *{{ func.class_name | case(style="pascal") }})
-{%- elif func.class_name %}{{ func.class_name | case(style="pascal") }}_
+    (self *{{ func.class_name }})
+{%- elif func.class_name %}{{ func.class_name }}_
 {%- endif %}{{ func.name | case(style="camel") -}}
     (
         {{- self::go_params(func=func) -}}
@@ -168,7 +168,7 @@ const {{ api.name | case(style="upper_snake") }}_VERSION = "{{ api.version }}"
 //// Classes ////
 {%- for class in api.classes %}
 {% if class.doc %}{{ docs(doc=class.doc, d="/// ") }}{% endif %}
-type {{ class.name | case(style="pascal") }} struct {
+type {{ class.name }} struct {
     {% if not class.static %}opaqu uint32{% endif %}
 }
 {{ self::func_impls(funcs=class.functions) }}
