@@ -131,11 +131,13 @@ impl ApiModel {
         for raw_p in raw.split(",") {
             let raw_p = raw_p.trim();
             if let Some((n, t)) = raw_p.split_once(":") {
-                let n = n.trim();
+                let mut n = n.trim().to_string();
                 let t = t.trim();
-                if let Some(langs) = reserved.get(n) {
+                while let Some(langs) = reserved.get(&n) {
                     eprintln!("Invalid param name '{n}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
-                    *invalid = true;
+
+                    n = format!("{}_", n);
+                    eprintln!("Renamed param to '{n}' to avoid conflict");
                 }
                 if is_opaque_maybe(t) {
                     if let Some(langs) = reserved.get(t) {
@@ -174,17 +176,20 @@ impl ApiModel {
         used_opaquely: &mut HashSet<String>,
     ) -> Option<()> {
         let is_static = capt.name("static").is_some();
-        let name = capt.name("name").unwrap().as_str();
+        let mut name = capt.name("name").unwrap().as_str().to_string();
         let raw_params = capt.name("params").unwrap().as_str();
         let ret = capt.name("ret").unwrap().as_str();
         let wasm = capt.name("wasm").unwrap().as_str();
 
-        if let Some(langs) = reserved.get(name) {
+        while let Some(langs) = reserved.get(&name) {
             eprintln!(
                 "Invalid function name '{name}' cannot be used, it is a keyword in language(s): {}",
                 langs.join(", ")
             );
-            *invalid = true;
+            name = format!("{}_", name);
+            eprintln!("Renamed function to '{name}' to avoid conflict");
+
+            // *invalid = true;
         }
         if let Some(langs) = reserved.get(wasm) {
             eprintln!("Invalid wasm binding name '{wasm}' cannot be used, it is a keyword in language(s): {}", langs.join(", "));
@@ -342,7 +347,7 @@ impl ApiModel {
             }
 
             if let Some(capt) = fn_re.captures(line) {
-                if let None = Self::parse_function(
+                if Self::parse_function(
                     capt,
                     &mut lines,
                     ln_num,
@@ -353,24 +358,27 @@ impl ApiModel {
                     current_class.as_ref(),
                     &mut seen_types,
                     &mut used_opaquely,
-                ) {
+                ).is_none() {
                     continue;
                 }
             }
         }
 
         for opaque in used_opaquely {
-            if let Some(cls) = classes.iter_mut().find(|c| c.name == opaque) {
-                cls.is_static = false;
-            } else {
-                println!("\x1b[38;2;200;200;20m[warning]: type '{opaque}' is used but not defined, a blank stub class will be generated.\x1b[0m");
-                classes.push(ClassDef {
-                    name: opaque,
-                    is_static: false,
-                    doc: None,
-                    functions: Vec::new(),
-                    methods: Vec::new(),
-                })
+            match classes.iter_mut().find(|c| c.name == opaque) {
+                Some(cls) => {
+                    cls.is_static = false;
+                }
+                None => {
+                    println!("\x1b[38;2;200;200;20m[warning]: type '{opaque}' is used but not defined, a blank stub class will be generated.\x1b[0m");
+                    classes.push(ClassDef {
+                        name: opaque,
+                        is_static: false,
+                        doc: None,
+                        functions: Vec::new(),
+                        methods: Vec::new(),
+                    })
+                }
             }
         }
 
