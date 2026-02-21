@@ -170,6 +170,11 @@ typedef struct TaskScheduler {
 } TaskScheduler;
 
 
+typedef struct Texture2D {
+    uint64_t handle;
+} Texture2D;
+
+
 typedef struct Transform {
     uint64_t handle;
 } Transform;
@@ -226,9 +231,9 @@ CustomData Core_CustomEventData_customDataGet(CustomEventData self);
 char* Core_CustomEventData_eventTypeGet(CustomEventData self);
 BeatmapDataItem Core_CustomEventData_getCopy(CustomEventData self);
 Version Core_CustomEventData_versionGet(CustomEventData self);
-CustomNoteData Core_CustomNoteData_createCustomBasicNoteData(float time, float beat, int32_t rotation, int32_t line_index);
-CustomNoteData Core_CustomNoteData_createCustomBombNoteData(float time, float beat, int32_t rotation, int32_t line_index);
-CustomNoteData Core_CustomNoteData_createCustomBurstSliderNoteData(float time, float beat, int32_t rotation, int32_t line_index);
+CustomNoteData Core_CustomNoteData_createCustomBasicNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t color_type, int32_t cut_direction, CustomData custom_data, Version version);
+CustomNoteData Core_CustomNoteData_createCustomBombNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, CustomData custom_data, Version version);
+CustomNoteData Core_CustomNoteData_createCustomBurstSliderNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t before_jump_note_line_layer, int32_t color_type, int32_t cut_direction, float cut_sfx_volume_multiplier, CustomData custom_data);
 CustomData Core_CustomNoteData_customDataGet(CustomNoteData self);
 BeatmapDataItem Core_CustomNoteData_getCopy(CustomNoteData self);
 Version Core_CustomNoteData_versionGet(CustomNoteData self);
@@ -275,6 +280,8 @@ void Core_Log_critical(const char* msg);
 void Core_Log_debug(const char* msg);
 void Core_Log_info(const char* msg);
 void Core_Log_warn(const char* msg);
+NoteFloorMovement Core_NoteController_getNoteFloorMovement(NoteController self);
+NoteJump Core_NoteController_getNoteJump(NoteController self);
 IAudioTimeSource Core_NoteFloorMovement_AudioTimeSyncControllerGet(NoteFloorMovement self);
 float Core_NoteFloorMovement_BeatTimeGet(NoteFloorMovement self);
 void Core_NoteFloorMovement_BeatTimeSet(NoteFloorMovement self, float value);
@@ -294,7 +301,7 @@ versors Core_NoteFloorMovement_WorldRotationGet(NoteFloorMovement self);
 void Core_NoteFloorMovement_WorldRotationSet(NoteFloorMovement self, versors value);
 float Core_NoteFloorMovement_distanceToPlayerGet(NoteFloorMovement self);
 vec3s Core_NoteFloorMovement_endPosGet(NoteFloorMovement self);
-void Core_NoteFloorMovement_initFloor(NoteFloorMovement self, float world_rotation, float beat_time, vec3s move_start_offset, vec3s move_end_offset);
+void Core_NoteFloorMovement_init(NoteFloorMovement self, float world_rotation, float beat_time, vec3s move_start_offset, vec3s move_end_offset);
 versors Core_NoteFloorMovement_inverseWorldRotationGet(NoteFloorMovement self);
 vec3s Core_NoteFloorMovement_localPositionGet(NoteFloorMovement self);
 vec3s Core_NoteFloorMovement_manualUpdate(NoteFloorMovement self);
@@ -367,7 +374,7 @@ void Core_NoteJump_addNoteJumpDidStartEvent(NoteJump self, Action value);
 void Core_NoteJump_addNoteJumpDidUpdateProgressEvent(NoteJump self, Action1 value);
 vec3s Core_NoteJump_beatPosGet(NoteJump self);
 float Core_NoteJump_distanceToPlayerGet(NoteJump self);
-void Core_NoteJump_initJump(NoteJump self, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
+void Core_NoteJump_init(NoteJump self, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
 vec3s Core_NoteJump_localPositionGet(NoteJump self);
 vec3s Core_NoteJump_manualUpdate(NoteJump self);
 vec3s Core_NoteJump_moveVecGet(NoteJump self);
@@ -392,6 +399,23 @@ ObstacleController Core_NoteManager_getObstacleControllerFromCustom(CustomObstac
 float Core_NoteManager_timeToBeat(float time);
 void Core_TaskScheduler_schedule(Action task);
 void Core_TaskScheduler_dispose(TaskScheduler self);
+void Core_Texture2D_apply(Texture2D self, bool update_mipmaps, bool make_no_longer_readable);
+int32_t Core_Texture2D_getFormat(Texture2D self);
+int32_t Core_Texture2D_getGraphicsFormat(Texture2D self);
+int32_t Core_Texture2D_getHeight(Texture2D self);
+int32_t Core_Texture2D_getHideFlags(Texture2D self);
+int32_t Core_Texture2D_getInstanceId(Texture2D self);
+bool Core_Texture2D_getIsReadable(Texture2D self);
+int32_t Core_Texture2D_getMipmapCount(Texture2D self);
+char* Core_Texture2D_getName(Texture2D self);
+U32Buffer Core_Texture2D_getRawTextureData(Texture2D self);
+int32_t Core_Texture2D_getWidth(Texture2D self);
+void Core_Texture2D_loadRawTextureData(Texture2D self, U32Buffer data_);
+bool Core_Texture2D_reinitialize(Texture2D self, int32_t width, int32_t height, int32_t format, bool has_mip_map);
+void Core_Texture2D_setHeight(Texture2D self, int32_t value);
+void Core_Texture2D_setHideFlags(Texture2D self, int32_t value);
+void Core_Texture2D_setName(Texture2D self, const char* value);
+void Core_Texture2D_setWidth(Texture2D self, int32_t value);
 void Core_Transform_broadcastMessage(Transform self, const char* method_name, Object parameter, int32_t options);
 bool Core_Transform_compareTag(Transform self, const char* tag);
 void Core_Transform_detachChildren(Transform self);
@@ -479,8 +503,8 @@ float Core_TuringMesh_getBoundsMinZ(TuringMesh self);
 int32_t Core_TuringMesh_getInstanceId(TuringMesh self);
 U32Buffer Core_TuringMesh_getUVs(TuringMesh self, int32_t channel);
 U32Buffer Core_TuringMesh_getVertices(TuringMesh self);
-void Core_TuringMesh_hideFlagsGet(TuringMesh self);
-void Core_TuringMesh_hideFlagsSet(TuringMesh self);
+int32_t Core_TuringMesh_hideFlagsGet(TuringMesh self);
+void Core_TuringMesh_hideFlagsSet(TuringMesh self, int32_t value);
 void Core_TuringMesh_markModified(TuringMesh self);
 char* Core_TuringMesh_nameGet(TuringMesh self);
 void Core_TuringMesh_nameSet(TuringMesh self, const char* value);
@@ -494,8 +518,9 @@ void Core_TuringMesh_setTriangles(TuringMesh self, Int32 triangles, int32_t subm
 void Core_TuringMesh_setUVs(TuringMesh self, int32_t channel, U32Buffer uvs);
 void Core_TuringMesh_setVertices(TuringMesh self, U32Buffer in_vertices);
 void Core_TuringMesh_uploadMeshData(TuringMesh self, bool mark_no_longer_readable);
-NoteFloorMovement Core_TuringNoteExtensions_getNoteFloorMovement(NoteController note_controller);
-NoteJump Core_TuringNoteExtensions_getNoteJump(NoteController note_controller);
+Texture2D Core_TuringTexture2D_create(int32_t width, int32_t height, int32_t format, bool mipmap);
+void Core_TuringTexture2D_destroy(Texture2D texture_2_d);
+Texture2D Core_TuringTexture2D_find(const char* name);
 GameObject Core_TuringerGameObjectManager_createObject(const char* name);
 void Core_TuringerGameObjectManager_destroyObject(GameObject game_object);
 GameObject Core_TuringerGameObjectManager_find(const char* name);

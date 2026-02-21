@@ -188,9 +188,9 @@ unsafe extern "C" {
     fn _core_custom_event_data__event_type_get(handle: CustomEventData) -> u32;
     fn _core_custom_event_data__get_copy(handle: CustomEventData) -> BeatmapDataItem;
     fn _core_custom_event_data__version_get(handle: CustomEventData) -> Version;
-    fn _core_custom_note_data__create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) -> CustomNoteData;
-    fn _core_custom_note_data__create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) -> CustomNoteData;
-    fn _core_custom_note_data__create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) -> CustomNoteData;
+    fn _core_custom_note_data__create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, color_type: i32, cut_direction: i32, custom_data: CustomData, version: Version) -> CustomNoteData;
+    fn _core_custom_note_data__create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, custom_data: CustomData, version: Version) -> CustomNoteData;
+    fn _core_custom_note_data__create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, before_jump_note_line_layer: i32, color_type: i32, cut_direction: i32, cut_sfx_volume_multiplier: f32, custom_data: CustomData) -> CustomNoteData;
     fn _core_custom_note_data__custom_data_get(handle: CustomNoteData) -> CustomData;
     fn _core_custom_note_data__get_copy(handle: CustomNoteData) -> BeatmapDataItem;
     fn _core_custom_note_data__version_get(handle: CustomNoteData) -> Version;
@@ -237,6 +237,8 @@ unsafe extern "C" {
     fn _core_log__debug(msg: *const c_char);
     fn _core_log__info(msg: *const c_char);
     fn _core_log__warn(msg: *const c_char);
+    fn _core_note_controller__get_note_floor_movement(handle: NoteController) -> NoteFloorMovement;
+    fn _core_note_controller__get_note_jump(handle: NoteController) -> NoteJump;
     fn _core_note_floor_movement___audio_time_sync_controller_get(handle: NoteFloorMovement) -> IAudioTimeSource;
     fn _core_note_floor_movement___beat_time_get(handle: NoteFloorMovement) -> f32;
     fn _core_note_floor_movement___beat_time_set(handle: NoteFloorMovement, value: f32);
@@ -354,6 +356,23 @@ unsafe extern "C" {
     fn _core_note_manager__time_to_beat(time: f32) -> f32;
     fn _core_task_scheduler__schedule(task: Action);
     fn _core_task_scheduler__dispose(handle: TaskScheduler);
+    fn _core_texture_2_d__apply(handle: Texture2D, update_mipmaps: bool, make_no_longer_readable: bool);
+    fn _core_texture_2_d__get_format(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__get_graphics_format(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__get_height(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__get_hide_flags(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__get_instance_id(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__get_is_readable(handle: Texture2D) -> bool;
+    fn _core_texture_2_d__get_mipmap_count(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__get_name(handle: Texture2D) -> u32;
+    fn _core_texture_2_d__get_raw_texture_data(handle: Texture2D) -> u32;
+    fn _core_texture_2_d__get_width(handle: Texture2D) -> i32;
+    fn _core_texture_2_d__load_raw_texture_data(handle: Texture2D, data_: *const c_void);
+    fn _core_texture_2_d__reinitialize(handle: Texture2D, width: i32, height: i32, format: i32, has_mip_map: bool) -> bool;
+    fn _core_texture_2_d__set_height(handle: Texture2D, value: i32);
+    fn _core_texture_2_d__set_hide_flags(handle: Texture2D, value: i32);
+    fn _core_texture_2_d__set_name(handle: Texture2D, value: *const c_char);
+    fn _core_texture_2_d__set_width(handle: Texture2D, value: i32);
     fn _core_transform__broadcast_message(handle: Transform, method_name: *const c_char, parameter: Object, options: i32);
     fn _core_transform__compare_tag(handle: Transform, tag: *const c_char) -> bool;
     fn _core_transform__detach_children(handle: Transform);
@@ -441,8 +460,8 @@ unsafe extern "C" {
     fn _core_turing_mesh__get_instance_id(handle: TuringMesh) -> i32;
     fn _core_turing_mesh__get_u_vs(handle: TuringMesh, channel: i32) -> u32;
     fn _core_turing_mesh__get_vertices(handle: TuringMesh) -> u32;
-    fn _core_turing_mesh__hide_flags_get(handle: TuringMesh);
-    fn _core_turing_mesh__hide_flags_set(handle: TuringMesh);
+    fn _core_turing_mesh__hide_flags_get(handle: TuringMesh) -> i32;
+    fn _core_turing_mesh__hide_flags_set(handle: TuringMesh, value: i32);
     fn _core_turing_mesh__mark_modified(handle: TuringMesh);
     fn _core_turing_mesh__name_get(handle: TuringMesh) -> u32;
     fn _core_turing_mesh__name_set(handle: TuringMesh, value: *const c_char);
@@ -456,8 +475,9 @@ unsafe extern "C" {
     fn _core_turing_mesh__set_u_vs(handle: TuringMesh, channel: i32, uvs: *const c_void);
     fn _core_turing_mesh__set_vertices(handle: TuringMesh, in_vertices: *const c_void);
     fn _core_turing_mesh__upload_mesh_data(handle: TuringMesh, mark_no_longer_readable: bool);
-    fn _core_turing_note_extensions__get_note_floor_movement(note_controller: NoteController) -> NoteFloorMovement;
-    fn _core_turing_note_extensions__get_note_jump(note_controller: NoteController) -> NoteJump;
+    fn _core_turing_texture_2_d__create(width: i32, height: i32, format: i32, mipmap: bool) -> Texture2D;
+    fn _core_turing_texture_2_d__destroy(texture_2_d: Texture2D);
+    fn _core_turing_texture_2_d__find(name: *const c_char) -> Texture2D;
     fn _core_turinger_game_object_manager__create_object(name: *const c_char) -> GameObject;
     fn _core_turinger_game_object_manager__destroy_object(game_object: GameObject);
     fn _core_turinger_game_object_manager__find(name: *const c_char) -> GameObject;
@@ -647,16 +667,16 @@ pub struct CustomNoteData {
 impl CustomNoteData {
 
 
-    pub fn create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) -> CustomNoteData {
-        unsafe { _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index) }
+    pub fn create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, color_type: i32, cut_direction: i32, custom_data: CustomData, version: Version) -> CustomNoteData {
+        unsafe { _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index, note_line_layer, color_type, cut_direction, custom_data, version) }
     }
 
-    pub fn create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) -> CustomNoteData {
-        unsafe { _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index) }
+    pub fn create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, custom_data: CustomData, version: Version) -> CustomNoteData {
+        unsafe { _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index, note_line_layer, custom_data, version) }
     }
 
-    pub fn create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) -> CustomNoteData {
-        unsafe { _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index) }
+    pub fn create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, before_jump_note_line_layer: i32, color_type: i32, cut_direction: i32, cut_sfx_volume_multiplier: f32, custom_data: CustomData) -> CustomNoteData {
+        unsafe { _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index, note_line_layer, before_jump_note_line_layer, color_type, cut_direction, cut_sfx_volume_multiplier, custom_data) }
     }
     
 
@@ -960,6 +980,18 @@ pub struct Mesh {
 pub struct NoteController {
     handle: u64,
 }
+impl NoteController {
+
+    
+
+    pub fn get_note_floor_movement(&self) -> NoteFloorMovement {
+        unsafe { _core_note_controller__get_note_floor_movement(*self) }
+    }
+
+    pub fn get_note_jump(&self) -> NoteJump {
+        unsafe { _core_note_controller__get_note_jump(*self) }
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
@@ -1063,7 +1095,7 @@ impl NoteFloorMovement {
         alg::dequeue_vec3()
     }
 
-    pub fn init_floor(&self, world_rotation: f32, beat_time: f32, move_start_offset: alg::Vec3, move_end_offset: alg::Vec3) {
+    pub fn init_(&self, world_rotation: f32, beat_time: f32, move_start_offset: alg::Vec3, move_end_offset: alg::Vec3) {
          let move_start_offset = alg::enqueue_vec3(move_start_offset);
          let move_end_offset = alg::enqueue_vec3(move_end_offset);
         unsafe { _core_note_floor_movement__init(*self, world_rotation, beat_time, move_start_offset, move_end_offset) };
@@ -1393,7 +1425,7 @@ impl NoteJump {
         unsafe { _core_note_jump__distance_to_player_get(*self) }
     }
 
-    pub fn init_jump(&self, note_time: f32, world_rotation: f32, move_end_offset: alg::Vec3, jump_end_offset: alg::Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) {
+    pub fn init_(&self, note_time: f32, world_rotation: f32, move_end_offset: alg::Vec3, jump_end_offset: alg::Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) {
          let move_end_offset = alg::enqueue_vec3(move_end_offset);
          let jump_end_offset = alg::enqueue_vec3(jump_end_offset);
         unsafe { _core_note_jump__init(*self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) };
@@ -1544,6 +1576,95 @@ impl TaskScheduler {
 
     pub fn dispose(&self) {
         unsafe { _core_task_scheduler__dispose(*self) };
+    }
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+#[cfg_attr(feature = "debug", derive(Debug))]
+pub struct Texture2D {
+    handle: u64,
+}
+impl Texture2D {
+
+    
+
+    pub fn apply(&self, update_mipmaps: bool, make_no_longer_readable: bool) {
+        unsafe { _core_texture_2_d__apply(*self, update_mipmaps, make_no_longer_readable) };
+    }
+
+    pub fn get_format(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_format(*self) }
+    }
+
+    pub fn get_graphics_format(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_graphics_format(*self) }
+    }
+
+    pub fn get_height(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_height(*self) }
+    }
+
+    pub fn get_hide_flags(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_hide_flags(*self) }
+    }
+
+    pub fn get_instance_id(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_instance_id(*self) }
+    }
+
+    pub fn get_is_readable(&self) -> bool {
+        unsafe { _core_texture_2_d__get_is_readable(*self) }
+    }
+
+    pub fn get_mipmap_count(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_mipmap_count(*self) }
+    }
+
+    pub fn get_name(&self) -> String {
+        let turing_result = unsafe { _core_texture_2_d__get_name(*self) };
+        let mut turing_str = vec![0u8; turing_result as usize];
+        unsafe { _host_strcpy(turing_str.as_mut_ptr() as *mut c_char, turing_result) };
+        let turing_str = unsafe { CStr::from_ptr(turing_str.as_ptr() as *const c_char) };
+        turing_str.to_string_lossy().into_owned()
+    }
+
+    pub fn get_raw_texture_data(&self) -> Vec<u32> {
+        let turing_result = unsafe { _core_texture_2_d__get_raw_texture_data(*self) };
+        let mut turing_buf = vec![0u32; turing_result as usize];
+        unsafe { _host_bufcpy(turing_buf.as_mut_ptr() as *mut c_void, turing_result) };
+        turing_buf
+    }
+
+    pub fn get_width(&self) -> i32 {
+        unsafe { _core_texture_2_d__get_width(*self) }
+    }
+
+    pub fn load_raw_texture_data(&self, data_: &[u32]) {
+        unsafe { _host_u32_enqueue(data_.len() as u32) };
+        let data_ = data_.as_ptr() as *mut c_void;
+        unsafe { _core_texture_2_d__load_raw_texture_data(*self, data_) };
+    }
+
+    pub fn reinitialize(&self, width: i32, height: i32, format: i32, has_mip_map: bool) -> bool {
+        unsafe { _core_texture_2_d__reinitialize(*self, width, height, format, has_mip_map) }
+    }
+
+    pub fn set_height(&self, value: i32) {
+        unsafe { _core_texture_2_d__set_height(*self, value) };
+    }
+
+    pub fn set_hide_flags(&self, value: i32) {
+        unsafe { _core_texture_2_d__set_hide_flags(*self, value) };
+    }
+
+    pub fn set_name(&self, value: &str) {
+        let turing_handle = CString::new(value).unwrap();
+        let value = turing_handle.as_ptr();
+        unsafe { _core_texture_2_d__set_name(*self, value) };
+    }
+
+    pub fn set_width(&self, value: i32) {
+        unsafe { _core_texture_2_d__set_width(*self, value) };
     }
 }
 #[repr(C)]
@@ -1993,12 +2114,12 @@ impl TuringMesh {
         turing_buf
     }
 
-    pub fn hide_flags_get(&self) {
-        unsafe { _core_turing_mesh__hide_flags_get(*self) };
+    pub fn hide_flags_get(&self) -> i32 {
+        unsafe { _core_turing_mesh__hide_flags_get(*self) }
     }
 
-    pub fn hide_flags_set(&self) {
-        unsafe { _core_turing_mesh__hide_flags_set(*self) };
+    pub fn hide_flags_set(&self, value: i32) {
+        unsafe { _core_turing_mesh__hide_flags_set(*self, value) };
     }
 
     pub fn mark_modified(&self) {
@@ -2066,24 +2187,30 @@ impl TuringMesh {
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct TuringNoteExtensions;
-impl TuringNoteExtensions {
-
-
-    pub fn get_note_floor_movement(note_controller: NoteController) -> NoteFloorMovement {
-        unsafe { _core_turing_note_extensions__get_note_floor_movement(note_controller) }
-    }
-
-    pub fn get_note_jump(note_controller: NoteController) -> NoteJump {
-        unsafe { _core_turing_note_extensions__get_note_jump(note_controller) }
-    }
-    
+pub struct TuringScriptManager {
+    handle: u64,
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
 #[cfg_attr(feature = "debug", derive(Debug))]
-pub struct TuringScriptManager {
-    handle: u64,
+pub struct TuringTexture2D;
+impl TuringTexture2D {
+
+
+    pub fn create(width: i32, height: i32, format: i32, mipmap: bool) -> Texture2D {
+        unsafe { _core_turing_texture_2_d__create(width, height, format, mipmap) }
+    }
+
+    pub fn destroy(texture_2_d: Texture2D) {
+        unsafe { _core_turing_texture_2_d__destroy(texture_2_d) };
+    }
+
+    pub fn find(name: &str) -> Texture2D {
+        let turing_handle = CString::new(name).unwrap();
+        let name = turing_handle.as_ptr();
+        unsafe { _core_turing_texture_2_d__find(name) }
+    }
+    
 }
 #[repr(C)]
 #[derive(Copy, Clone)]

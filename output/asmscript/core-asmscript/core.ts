@@ -58,11 +58,11 @@ declare function _core_custom_event_data__get_copy(handle: u64): u64;
 @external("env", "_core_custom_event_data__version_get")
 declare function _core_custom_event_data__version_get(handle: u64): u64;
 @external("env", "_core_custom_note_data__create_custom_basic_note_data")
-declare function _core_custom_note_data__create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32): u64;
+declare function _core_custom_note_data__create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, color_type: i32, cut_direction: i32, custom_data: u64, version: u64): u64;
 @external("env", "_core_custom_note_data__create_custom_bomb_note_data")
-declare function _core_custom_note_data__create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32): u64;
+declare function _core_custom_note_data__create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, custom_data: u64, version: u64): u64;
 @external("env", "_core_custom_note_data__create_custom_burst_slider_note_data")
-declare function _core_custom_note_data__create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32): u64;
+declare function _core_custom_note_data__create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, before_jump_note_line_layer: i32, color_type: i32, cut_direction: i32, cut_sfx_volume_multiplier: f32, custom_data: u64): u64;
 @external("env", "_core_custom_note_data__custom_data_get")
 declare function _core_custom_note_data__custom_data_get(handle: u64): u64;
 @external("env", "_core_custom_note_data__get_copy")
@@ -155,6 +155,10 @@ declare function _core_log__debug(msg: u32): void;
 declare function _core_log__info(msg: u32): void;
 @external("env", "_core_log__warn")
 declare function _core_log__warn(msg: u32): void;
+@external("env", "_core_note_controller__get_note_floor_movement")
+declare function _core_note_controller__get_note_floor_movement(handle: u64): u64;
+@external("env", "_core_note_controller__get_note_jump")
+declare function _core_note_controller__get_note_jump(handle: u64): u64;
 @external("env", "_core_note_floor_movement___audio_time_sync_controller_get")
 declare function _core_note_floor_movement___audio_time_sync_controller_get(handle: u64): u64;
 @external("env", "_core_note_floor_movement___beat_time_get")
@@ -389,6 +393,40 @@ declare function _core_note_manager__time_to_beat(time: f32): f32;
 declare function _core_task_scheduler__schedule(task: u64): void;
 @external("env", "_core_task_scheduler__dispose")
 declare function _core_task_scheduler__dispose(handle: u64): void;
+@external("env", "_core_texture_2_d__apply")
+declare function _core_texture_2_d__apply(handle: u64, update_mipmaps: bool, make_no_longer_readable: bool): void;
+@external("env", "_core_texture_2_d__get_format")
+declare function _core_texture_2_d__get_format(handle: u64): i32;
+@external("env", "_core_texture_2_d__get_graphics_format")
+declare function _core_texture_2_d__get_graphics_format(handle: u64): i32;
+@external("env", "_core_texture_2_d__get_height")
+declare function _core_texture_2_d__get_height(handle: u64): i32;
+@external("env", "_core_texture_2_d__get_hide_flags")
+declare function _core_texture_2_d__get_hide_flags(handle: u64): i32;
+@external("env", "_core_texture_2_d__get_instance_id")
+declare function _core_texture_2_d__get_instance_id(handle: u64): i32;
+@external("env", "_core_texture_2_d__get_is_readable")
+declare function _core_texture_2_d__get_is_readable(handle: u64): bool;
+@external("env", "_core_texture_2_d__get_mipmap_count")
+declare function _core_texture_2_d__get_mipmap_count(handle: u64): i32;
+@external("env", "_core_texture_2_d__get_name")
+declare function _core_texture_2_d__get_name(handle: u64): u32;
+@external("env", "_core_texture_2_d__get_raw_texture_data")
+declare function _core_texture_2_d__get_raw_texture_data(handle: u64): u32;
+@external("env", "_core_texture_2_d__get_width")
+declare function _core_texture_2_d__get_width(handle: u64): i32;
+@external("env", "_core_texture_2_d__load_raw_texture_data")
+declare function _core_texture_2_d__load_raw_texture_data(handle: u64, data_: u32): void;
+@external("env", "_core_texture_2_d__reinitialize")
+declare function _core_texture_2_d__reinitialize(handle: u64, width: i32, height: i32, format: i32, has_mip_map: bool): bool;
+@external("env", "_core_texture_2_d__set_height")
+declare function _core_texture_2_d__set_height(handle: u64, value: i32): void;
+@external("env", "_core_texture_2_d__set_hide_flags")
+declare function _core_texture_2_d__set_hide_flags(handle: u64, value: i32): void;
+@external("env", "_core_texture_2_d__set_name")
+declare function _core_texture_2_d__set_name(handle: u64, value: u32): void;
+@external("env", "_core_texture_2_d__set_width")
+declare function _core_texture_2_d__set_width(handle: u64, value: i32): void;
 @external("env", "_core_transform__broadcast_message")
 declare function _core_transform__broadcast_message(handle: u64, method_name: u32, parameter: u64, options: i32): void;
 @external("env", "_core_transform__compare_tag")
@@ -564,9 +602,9 @@ declare function _core_turing_mesh__get_u_vs(handle: u64, channel: i32): u32;
 @external("env", "_core_turing_mesh__get_vertices")
 declare function _core_turing_mesh__get_vertices(handle: u64): u32;
 @external("env", "_core_turing_mesh__hide_flags_get")
-declare function _core_turing_mesh__hide_flags_get(handle: u64): void;
+declare function _core_turing_mesh__hide_flags_get(handle: u64): i32;
 @external("env", "_core_turing_mesh__hide_flags_set")
-declare function _core_turing_mesh__hide_flags_set(handle: u64): void;
+declare function _core_turing_mesh__hide_flags_set(handle: u64, value: i32): void;
 @external("env", "_core_turing_mesh__mark_modified")
 declare function _core_turing_mesh__mark_modified(handle: u64): void;
 @external("env", "_core_turing_mesh__name_get")
@@ -593,10 +631,12 @@ declare function _core_turing_mesh__set_u_vs(handle: u64, channel: i32, uvs: u32
 declare function _core_turing_mesh__set_vertices(handle: u64, in_vertices: u32): void;
 @external("env", "_core_turing_mesh__upload_mesh_data")
 declare function _core_turing_mesh__upload_mesh_data(handle: u64, mark_no_longer_readable: bool): void;
-@external("env", "_core_turing_note_extensions__get_note_floor_movement")
-declare function _core_turing_note_extensions__get_note_floor_movement(note_controller: u64): u64;
-@external("env", "_core_turing_note_extensions__get_note_jump")
-declare function _core_turing_note_extensions__get_note_jump(note_controller: u64): u64;
+@external("env", "_core_turing_texture_2_d__create")
+declare function _core_turing_texture_2_d__create(width: i32, height: i32, format: i32, mipmap: bool): u64;
+@external("env", "_core_turing_texture_2_d__destroy")
+declare function _core_turing_texture_2_d__destroy(texture_2_d: u64): void;
+@external("env", "_core_turing_texture_2_d__find")
+declare function _core_turing_texture_2_d__find(name: u32): u64;
 @external("env", "_core_turinger_game_object_manager__create_object")
 declare function _core_turinger_game_object_manager__create_object(name: u32): u64;
 @external("env", "_core_turinger_game_object_manager__destroy_object")
@@ -915,18 +955,18 @@ export class CustomNoteData {
     
 
 
-    public static create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32): CustomNoteData {
-        let turing_result = _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index);
+    public static create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, color_type: i32, cut_direction: i32, custom_data: CustomData, version: Version): CustomNoteData {
+        let turing_result = _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index, note_line_layer, color_type, cut_direction, custom_data.handle, version.handle);
         return new CustomNoteData(turing_result);
     }
 
-    public static create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32): CustomNoteData {
-        let turing_result = _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index);
+    public static create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, custom_data: CustomData, version: Version): CustomNoteData {
+        let turing_result = _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index, note_line_layer, custom_data.handle, version.handle);
         return new CustomNoteData(turing_result);
     }
 
-    public static create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32): CustomNoteData {
-        let turing_result = _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index);
+    public static create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, before_jump_note_line_layer: i32, color_type: i32, cut_direction: i32, cut_sfx_volume_multiplier: f32, custom_data: CustomData): CustomNoteData {
+        let turing_result = _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index, note_line_layer, before_jump_note_line_layer, color_type, cut_direction, cut_sfx_volume_multiplier, custom_data.handle);
         return new CustomNoteData(turing_result);
     }
 
@@ -1300,6 +1340,16 @@ export class NoteController {
     
 
 
+
+    public get_note_floor_movement(): NoteFloorMovement {
+        let turing_result = _core_note_controller__get_note_floor_movement(this.handle);
+        return new NoteFloorMovement(turing_result);
+    }
+
+    public get_note_jump(): NoteJump {
+        let turing_result = _core_note_controller__get_note_jump(this.handle);
+        return new NoteJump(turing_result);
+    }
 }
 
 @final
@@ -1418,7 +1468,7 @@ export class NoteFloorMovement {
         return __dequeue_vec3();
     }
 
-    public init_floor(world_rotation: f32, beat_time: f32, move_start_offset: Vec3, move_end_offset: Vec3): void {
+    public init_(world_rotation: f32, beat_time: f32, move_start_offset: Vec3, move_end_offset: Vec3): void {
         let turing_handle_move_start_offset = __enqueue_vec3(move_start_offset);
         let turing_handle_move_end_offset = __enqueue_vec3(move_end_offset);
         _core_note_floor_movement__init(this.handle, world_rotation, beat_time, turing_handle_move_start_offset, turing_handle_move_end_offset);
@@ -1756,7 +1806,7 @@ export class NoteJump {
         return _core_note_jump__distance_to_player_get(this.handle);
     }
 
-    public init_jump(note_time: f32, world_rotation: f32, move_end_offset: Vec3, jump_end_offset: Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool): void {
+    public init_(note_time: f32, world_rotation: f32, move_end_offset: Vec3, jump_end_offset: Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool): void {
         let turing_handle_move_end_offset = __enqueue_vec3(move_end_offset);
         let turing_handle_jump_end_offset = __enqueue_vec3(jump_end_offset);
         _core_note_jump__init(this.handle, note_time, world_rotation, turing_handle_move_end_offset, turing_handle_jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation);
@@ -1955,6 +2005,102 @@ export class TaskScheduler {
 
     public dispose(): void {
         _core_task_scheduler__dispose(this.handle);
+    }
+}
+
+@final
+export class Texture2D {
+    
+    handle: u64;
+
+    constructor(handle: u64) {
+        this.handle = handle;
+    }
+    
+
+
+
+    public apply(update_mipmaps: bool, make_no_longer_readable: bool): void {
+        _core_texture_2_d__apply(this.handle, update_mipmaps, make_no_longer_readable);
+    }
+
+    public get_format(): i32 {
+        return _core_texture_2_d__get_format(this.handle);
+    }
+
+    public get_graphics_format(): i32 {
+        return _core_texture_2_d__get_graphics_format(this.handle);
+    }
+
+    public get_height(): i32 {
+        return _core_texture_2_d__get_height(this.handle);
+    }
+
+    public get_hide_flags(): i32 {
+        return _core_texture_2_d__get_hide_flags(this.handle);
+    }
+
+    public get_instance_id(): i32 {
+        return _core_texture_2_d__get_instance_id(this.handle);
+    }
+
+    public get_is_readable(): bool {
+        return _core_texture_2_d__get_is_readable(this.handle);
+    }
+
+    public get_mipmap_count(): i32 {
+        return _core_texture_2_d__get_mipmap_count(this.handle);
+    }
+
+    public get_name(): string {
+        let turing_result = _core_texture_2_d__get_name(this.handle);
+        let turing_str = heap.alloc(usize(turing_result));
+        _host_strcpy(u32(turing_str), turing_result);
+        let turing_output = String.UTF8.decode(turing_str, true);
+        heap.free(turing_str);
+        return turing_output;
+    }
+
+    public get_raw_texture_data(): Array<u32> {
+        let turing_result = _core_texture_2_d__get_raw_texture_data(this.handle);
+        let turing_buf = heap.alloc(usize(turing_result) * sizeof<u32>());
+        _host_bufcpy(u32(turing_buf), turing_result);
+        let view = Uint32Array.wrap(turing_buf, turing_result);
+        let arr = Array.from(view);
+        heap.free(turing_buf);
+        return arr;
+    }
+
+    public get_width(): i32 {
+        return _core_texture_2_d__get_width(this.handle);
+    }
+
+    public load_raw_texture_data(data_: Array<u32>): void {
+        _host_u32_enqueue(u32(data_.length));
+        let turing_view_data_ = Uint32Array.wrap(data_);
+        let turing_handle_data_ = turing_view_data_.dataStart;
+        _core_texture_2_d__load_raw_texture_data(this.handle, turing_handle_data_);
+    }
+
+    public reinitialize(width: i32, height: i32, format: i32, has_mip_map: bool): bool {
+        return _core_texture_2_d__reinitialize(this.handle, width, height, format, has_mip_map);
+    }
+
+    public set_height(value: i32): void {
+        _core_texture_2_d__set_height(this.handle, value);
+    }
+
+    public set_hide_flags(value: i32): void {
+        _core_texture_2_d__set_hide_flags(this.handle, value);
+    }
+
+    public set_name(value: string): void {
+        let turing_handle_value = String.UTF8.encode(value, true);
+        _core_texture_2_d__set_name(this.handle, turing_handle_value);
+    }
+
+    public set_width(value: i32): void {
+        _core_texture_2_d__set_width(this.handle, value);
     }
 }
 
@@ -2421,12 +2567,12 @@ export class TuringMesh {
         return arr;
     }
 
-    public hide_flags_get(): void {
-        _core_turing_mesh__hide_flags_get(this.handle);
+    public hide_flags_get(): i32 {
+        return _core_turing_mesh__hide_flags_get(this.handle);
     }
 
-    public hide_flags_set(): void {
-        _core_turing_mesh__hide_flags_set(this.handle);
+    public hide_flags_set(value: i32): void {
+        _core_turing_mesh__hide_flags_set(this.handle, value);
     }
 
     public mark_modified(): void {
@@ -2495,23 +2641,6 @@ export class TuringMesh {
 }
 
 @final
-export class TuringNoteExtensions {
-    
-
-
-    public static get_note_floor_movement(note_controller: NoteController): NoteFloorMovement {
-        let turing_result = _core_turing_note_extensions__get_note_floor_movement(note_controller.handle);
-        return new NoteFloorMovement(turing_result);
-    }
-
-    public static get_note_jump(note_controller: NoteController): NoteJump {
-        let turing_result = _core_turing_note_extensions__get_note_jump(note_controller.handle);
-        return new NoteJump(turing_result);
-    }
-
-}
-
-@final
 export class TuringScriptManager {
     
     handle: u64;
@@ -2521,6 +2650,28 @@ export class TuringScriptManager {
     }
     
 
+
+}
+
+@final
+export class TuringTexture2D {
+    
+
+
+    public static create(width: i32, height: i32, format: i32, mipmap: bool): Texture2D {
+        let turing_result = _core_turing_texture_2_d__create(width, height, format, mipmap);
+        return new Texture2D(turing_result);
+    }
+
+    public static destroy(texture_2_d: Texture2D): void {
+        _core_turing_texture_2_d__destroy(texture_2_d.handle);
+    }
+
+    public static find(name: string): Texture2D {
+        let turing_handle_name = String.UTF8.encode(name, true);
+        let turing_result = _core_turing_texture_2_d__find(turing_handle_name);
+        return new Texture2D(turing_result);
+    }
 
 }
 

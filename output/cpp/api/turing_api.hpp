@@ -106,13 +106,15 @@ struct PlayerTransforms;
 
 struct TaskScheduler;
 
+struct Texture2D;
+
 struct Transform;
 
 struct TuringMesh;
 
-struct TuringNoteExtensions;
-
 struct TuringScriptManager;
+
+struct TuringTexture2D;
 
 struct TuringerGameObjectManager;
 
@@ -213,9 +215,9 @@ struct CustomEventData {
 struct CustomNoteData {
 
     
-     static CustomNoteData create_custom_basic_note_data(float time, float beat, int32_t rotation, int32_t line_index);
-     static CustomNoteData create_custom_bomb_note_data(float time, float beat, int32_t rotation, int32_t line_index);
-     static CustomNoteData create_custom_burst_slider_note_data(float time, float beat, int32_t rotation, int32_t line_index);
+     static CustomNoteData create_custom_basic_note_data(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t color_type, int32_t cut_direction, CustomData custom_data, Version version);
+     static CustomNoteData create_custom_bomb_note_data(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, CustomData custom_data, Version version);
+     static CustomNoteData create_custom_burst_slider_note_data(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t before_jump_note_line_layer, int32_t color_type, int32_t cut_direction, float cut_sfx_volume_multiplier, CustomData custom_data);
 
     
     
@@ -398,6 +400,8 @@ struct NoteController {
     
     
     
+     NoteFloorMovement get_note_floor_movement();
+     NoteJump get_note_jump();
     
 };
 
@@ -439,7 +443,7 @@ struct NoteFloorMovement {
      void _world_rotation_set(glm::quat value);
      float distance_to_player_get();
      glm::vec3 end_pos_get();
-     void init_floor(float world_rotation, float beat_time, glm::vec3 move_start_offset, glm::vec3 move_end_offset);
+     void init_(float world_rotation, float beat_time, glm::vec3 move_start_offset, glm::vec3 move_end_offset);
      glm::quat inverse_world_rotation_get();
      glm::vec3 local_position_get();
      glm::vec3 manual_update();
@@ -523,7 +527,7 @@ struct NoteJump {
      void add_note_jump_did_update_progress_event(Action1 value);
      glm::vec3 beat_pos_get();
      float distance_to_player_get();
-     void init_jump(float note_time, float world_rotation, glm::vec3 move_end_offset, glm::vec3 jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
+     void init_(float note_time, float world_rotation, glm::vec3 move_end_offset, glm::vec3 jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
      glm::vec3 local_position_get();
      glm::vec3 manual_update();
      glm::vec3 move_vec_get();
@@ -625,6 +629,34 @@ struct TaskScheduler {
     
     
      void dispose();
+    
+};
+
+
+struct Texture2D {
+
+    
+
+    
+    
+    
+     void apply(bool update_mipmaps, bool make_no_longer_readable);
+     int32_t get_format();
+     int32_t get_graphics_format();
+     int32_t get_height();
+     int32_t get_hide_flags();
+     int32_t get_instance_id();
+     bool get_is_readable();
+     int32_t get_mipmap_count();
+     std::string get_name();
+     std::vector<uint32_t> get_raw_texture_data();
+     int32_t get_width();
+     void load_raw_texture_data(std::span<const uint32_t> data_);
+     bool reinitialize(int32_t width, int32_t height, int32_t format, bool has_mip_map);
+     void set_height(int32_t value);
+     void set_hide_flags(int32_t value);
+     void set_name(std::string_view value);
+     void set_width(int32_t value);
     
 };
 
@@ -734,8 +766,8 @@ struct TuringMesh {
      int32_t get_instance_id();
      std::vector<uint32_t> get_u_vs(int32_t channel);
      std::vector<uint32_t> get_vertices();
-     void hide_flags_get();
-     void hide_flags_set();
+     int32_t hide_flags_get();
+     void hide_flags_set(int32_t value);
      void mark_modified();
      std::string name_get();
      void name_set(std::string_view value);
@@ -753,11 +785,9 @@ struct TuringMesh {
 };
 
 
-struct TuringNoteExtensions {
+struct TuringScriptManager {
 
     
-     static NoteFloorMovement get_note_floor_movement(NoteController note_controller);
-     static NoteJump get_note_jump(NoteController note_controller);
 
     
     
@@ -766,9 +796,12 @@ struct TuringNoteExtensions {
 };
 
 
-struct TuringScriptManager {
+struct TuringTexture2D {
 
     
+     static Texture2D create(int32_t width, int32_t height, int32_t format, bool mipmap);
+     static void destroy(Texture2D texture_2_d);
+     static Texture2D find(std::string_view name);
 
     
     
@@ -866,9 +899,9 @@ extern "C" {
     TURING_API_EXPORT BeatmapDataItem Core_CustomEventData_getCopy(uint64_t opaqu);
     TURING_API_EXPORT Version Core_CustomEventData_versionGet(uint64_t opaqu);
     
-    TURING_API_EXPORT CustomNoteData Core_CustomNoteData_createCustomBasicNoteData(float time, float beat, int32_t rotation, int32_t line_index);
-    TURING_API_EXPORT CustomNoteData Core_CustomNoteData_createCustomBombNoteData(float time, float beat, int32_t rotation, int32_t line_index);
-    TURING_API_EXPORT CustomNoteData Core_CustomNoteData_createCustomBurstSliderNoteData(float time, float beat, int32_t rotation, int32_t line_index);
+    TURING_API_EXPORT CustomNoteData Core_CustomNoteData_createCustomBasicNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t color_type, int32_t cut_direction, CustomData custom_data, Version version);
+    TURING_API_EXPORT CustomNoteData Core_CustomNoteData_createCustomBombNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, CustomData custom_data, Version version);
+    TURING_API_EXPORT CustomNoteData Core_CustomNoteData_createCustomBurstSliderNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t before_jump_note_line_layer, int32_t color_type, int32_t cut_direction, float cut_sfx_volume_multiplier, CustomData custom_data);
     TURING_API_EXPORT CustomData Core_CustomNoteData_customDataGet(uint64_t opaqu);
     TURING_API_EXPORT BeatmapDataItem Core_CustomNoteData_getCopy(uint64_t opaqu);
     TURING_API_EXPORT Version Core_CustomNoteData_versionGet(uint64_t opaqu);
@@ -927,6 +960,8 @@ extern "C" {
     TURING_API_EXPORT void Core_Log_warn(const char* msg);
     
     
+    TURING_API_EXPORT NoteFloorMovement Core_NoteController_getNoteFloorMovement(uint64_t opaqu);
+    TURING_API_EXPORT NoteJump Core_NoteController_getNoteJump(uint64_t opaqu);
     
     
     TURING_API_EXPORT IAudioTimeSource Core_NoteFloorMovement_AudioTimeSyncControllerGet(uint64_t opaqu);
@@ -948,7 +983,7 @@ extern "C" {
     TURING_API_EXPORT void Core_NoteFloorMovement_WorldRotationSet(uint64_t opaqu, versors value);
     TURING_API_EXPORT float Core_NoteFloorMovement_distanceToPlayerGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteFloorMovement_endPosGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_NoteFloorMovement_initFloor(uint64_t opaqu, float world_rotation, float beat_time, vec3s move_start_offset, vec3s move_end_offset);
+    TURING_API_EXPORT void Core_NoteFloorMovement_init(uint64_t opaqu, float world_rotation, float beat_time, vec3s move_start_offset, vec3s move_end_offset);
     TURING_API_EXPORT versors Core_NoteFloorMovement_inverseWorldRotationGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteFloorMovement_localPositionGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteFloorMovement_manualUpdate(uint64_t opaqu);
@@ -1022,7 +1057,7 @@ extern "C" {
     TURING_API_EXPORT void Core_NoteJump_addNoteJumpDidUpdateProgressEvent(uint64_t opaqu, Action1 value);
     TURING_API_EXPORT vec3s Core_NoteJump_beatPosGet(uint64_t opaqu);
     TURING_API_EXPORT float Core_NoteJump_distanceToPlayerGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_NoteJump_initJump(uint64_t opaqu, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
+    TURING_API_EXPORT void Core_NoteJump_init(uint64_t opaqu, float note_time, float world_rotation, vec3s move_end_offset, vec3s jump_end_offset, float gravity_base, float flip_y_side, float end_rotation, bool rotate_towards_player, bool use_random_rotation);
     TURING_API_EXPORT vec3s Core_NoteJump_localPositionGet(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteJump_manualUpdate(uint64_t opaqu);
     TURING_API_EXPORT vec3s Core_NoteJump_moveVecGet(uint64_t opaqu);
@@ -1054,6 +1089,24 @@ extern "C" {
     
     TURING_API_EXPORT void Core_TaskScheduler_schedule(Action task);
     TURING_API_EXPORT void Core_TaskScheduler_dispose(uint64_t opaqu);
+    
+    TURING_API_EXPORT void Core_Texture2D_apply(uint64_t opaqu, bool update_mipmaps, bool make_no_longer_readable);
+    TURING_API_EXPORT int32_t Core_Texture2D_getFormat(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Texture2D_getGraphicsFormat(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Texture2D_getHeight(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Texture2D_getHideFlags(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Texture2D_getInstanceId(uint64_t opaqu);
+    TURING_API_EXPORT bool Core_Texture2D_getIsReadable(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Texture2D_getMipmapCount(uint64_t opaqu);
+    TURING_API_EXPORT char* Core_Texture2D_getName(uint64_t opaqu);
+    TURING_API_EXPORT U32Buffer Core_Texture2D_getRawTextureData(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_Texture2D_getWidth(uint64_t opaqu);
+    TURING_API_EXPORT void Core_Texture2D_loadRawTextureData(uint64_t opaqu, U32Buffer data_);
+    TURING_API_EXPORT bool Core_Texture2D_reinitialize(uint64_t opaqu, int32_t width, int32_t height, int32_t format, bool has_mip_map);
+    TURING_API_EXPORT void Core_Texture2D_setHeight(uint64_t opaqu, int32_t value);
+    TURING_API_EXPORT void Core_Texture2D_setHideFlags(uint64_t opaqu, int32_t value);
+    TURING_API_EXPORT void Core_Texture2D_setName(uint64_t opaqu, const char* value);
+    TURING_API_EXPORT void Core_Texture2D_setWidth(uint64_t opaqu, int32_t value);
     
     TURING_API_EXPORT void Core_Transform_broadcastMessage(uint64_t opaqu, const char* method_name, Object parameter, int32_t options);
     TURING_API_EXPORT bool Core_Transform_compareTag(uint64_t opaqu, const char* tag);
@@ -1143,8 +1196,8 @@ extern "C" {
     TURING_API_EXPORT int32_t Core_TuringMesh_getInstanceId(uint64_t opaqu);
     TURING_API_EXPORT U32Buffer Core_TuringMesh_getUVs(uint64_t opaqu, int32_t channel);
     TURING_API_EXPORT U32Buffer Core_TuringMesh_getVertices(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringMesh_hideFlagsGet(uint64_t opaqu);
-    TURING_API_EXPORT void Core_TuringMesh_hideFlagsSet(uint64_t opaqu);
+    TURING_API_EXPORT int32_t Core_TuringMesh_hideFlagsGet(uint64_t opaqu);
+    TURING_API_EXPORT void Core_TuringMesh_hideFlagsSet(uint64_t opaqu, int32_t value);
     TURING_API_EXPORT void Core_TuringMesh_markModified(uint64_t opaqu);
     TURING_API_EXPORT char* Core_TuringMesh_nameGet(uint64_t opaqu);
     TURING_API_EXPORT void Core_TuringMesh_nameSet(uint64_t opaqu, const char* value);
@@ -1159,9 +1212,10 @@ extern "C" {
     TURING_API_EXPORT void Core_TuringMesh_setVertices(uint64_t opaqu, U32Buffer in_vertices);
     TURING_API_EXPORT void Core_TuringMesh_uploadMeshData(uint64_t opaqu, bool mark_no_longer_readable);
     
-    TURING_API_EXPORT NoteFloorMovement Core_TuringNoteExtensions_getNoteFloorMovement(NoteController note_controller);
-    TURING_API_EXPORT NoteJump Core_TuringNoteExtensions_getNoteJump(NoteController note_controller);
     
+    TURING_API_EXPORT Texture2D Core_TuringTexture2D_create(int32_t width, int32_t height, int32_t format, bool mipmap);
+    TURING_API_EXPORT void Core_TuringTexture2D_destroy(Texture2D texture_2_d);
+    TURING_API_EXPORT Texture2D Core_TuringTexture2D_find(const char* name);
     
     TURING_API_EXPORT GameObject Core_TuringerGameObjectManager_createObject(const char* name);
     TURING_API_EXPORT void Core_TuringerGameObjectManager_destroyObject(GameObject game_object);

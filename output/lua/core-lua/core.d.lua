@@ -167,24 +167,38 @@ core.CustomNoteData = CustomNoteData
 ---@param beat number
 ---@param rotation number
 ---@param line_index number
+---@param note_line_layer number
+---@param color_type number
+---@param cut_direction number
+---@param custom_data CustomData
+---@param version Version
 ---@return CustomNoteData
-function core.CustomNoteData.createCustomBasicNoteData(time, beat, rotation, line_index) end
+function core.CustomNoteData.createCustomBasicNoteData(time, beat, rotation, line_index, note_line_layer, color_type, cut_direction, custom_data, version) end
 
 
 ---@param time number
 ---@param beat number
 ---@param rotation number
 ---@param line_index number
+---@param note_line_layer number
+---@param custom_data CustomData
+---@param version Version
 ---@return CustomNoteData
-function core.CustomNoteData.createCustomBombNoteData(time, beat, rotation, line_index) end
+function core.CustomNoteData.createCustomBombNoteData(time, beat, rotation, line_index, note_line_layer, custom_data, version) end
 
 
 ---@param time number
 ---@param beat number
 ---@param rotation number
 ---@param line_index number
+---@param note_line_layer number
+---@param before_jump_note_line_layer number
+---@param color_type number
+---@param cut_direction number
+---@param cut_sfx_volume_multiplier number
+---@param custom_data CustomData
 ---@return CustomNoteData
-function core.CustomNoteData.createCustomBurstSliderNoteData(time, beat, rotation, line_index) end
+function core.CustomNoteData.createCustomBurstSliderNoteData(time, beat, rotation, line_index, note_line_layer, before_jump_note_line_layer, color_type, cut_direction, cut_sfx_volume_multiplier, custom_data) end
 
 
 
@@ -513,6 +527,16 @@ core.NoteController = NoteController
 
 
 
+---@param self table
+---@return NoteFloorMovement
+function core.NoteController.getNoteFloorMovement(self) end
+
+
+---@param self table
+---@return NoteJump
+function core.NoteController.getNoteJump(self) end
+
+
 ---@class NoteControllerBase
 local NoteControllerBase = {}
 core.NoteControllerBase = NoteControllerBase
@@ -633,7 +657,7 @@ function core.NoteFloorMovement.endPosGet(self) end
 ---@param move_start_offset table
 ---@param move_end_offset table
 ---@return nil
-function core.NoteFloorMovement.initFloor(self, world_rotation, beat_time, move_start_offset, move_end_offset) end
+function core.NoteFloorMovement.init(self, world_rotation, beat_time, move_start_offset, move_end_offset) end
 
 
 ---@param self table
@@ -1044,7 +1068,7 @@ function core.NoteJump.distanceToPlayerGet(self) end
 ---@param rotate_towards_player boolean
 ---@param use_random_rotation boolean
 ---@return nil
-function core.NoteJump.initJump(self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) end
+function core.NoteJump.init(self, note_time, world_rotation, move_end_offset, jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation) end
 
 
 ---@param self table
@@ -1227,6 +1251,108 @@ function core.TaskScheduler.schedule(task) end
 ---@param self table
 ---@return nil
 function core.TaskScheduler.dispose(self) end
+
+
+---@class Texture2D
+local Texture2D = {}
+core.Texture2D = Texture2D
+
+
+
+---@param self table
+---@param update_mipmaps boolean
+---@param make_no_longer_readable boolean
+---@return nil
+function core.Texture2D.apply(self, update_mipmaps, make_no_longer_readable) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getFormat(self) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getGraphicsFormat(self) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getHeight(self) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getHideFlags(self) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getInstanceId(self) end
+
+
+---@param self table
+---@return boolean
+function core.Texture2D.getIsReadable(self) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getMipmapCount(self) end
+
+
+---@param self table
+---@return string
+function core.Texture2D.getName(self) end
+
+
+---@param self table
+---@return table
+function core.Texture2D.getRawTextureData(self) end
+
+
+---@param self table
+---@return number
+function core.Texture2D.getWidth(self) end
+
+
+---@param self table
+---@param data_ table
+---@return nil
+function core.Texture2D.loadRawTextureData(self, data_) end
+
+
+---@param self table
+---@param width number
+---@param height number
+---@param format number
+---@param has_mip_map boolean
+---@return boolean
+function core.Texture2D.reinitialize(self, width, height, format, has_mip_map) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.Texture2D.setHeight(self, value) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.Texture2D.setHideFlags(self, value) end
+
+
+---@param self table
+---@param value string
+---@return nil
+function core.Texture2D.setName(self, value) end
+
+
+---@param self table
+---@param value number
+---@return nil
+function core.Texture2D.setWidth(self, value) end
 
 
 ---@class Transform
@@ -1741,13 +1867,14 @@ function core.TuringMesh.getVertices(self) end
 
 
 ---@param self table
----@return nil
+---@return number
 function core.TuringMesh.hideFlagsGet(self) end
 
 
 ---@param self table
+---@param value number
 ---@return nil
-function core.TuringMesh.hideFlagsSet(self) end
+function core.TuringMesh.hideFlagsSet(self, value) end
 
 
 ---@param self table
@@ -1830,25 +1957,33 @@ function core.TuringMesh.setVertices(self, in_vertices) end
 function core.TuringMesh.uploadMeshData(self, mark_no_longer_readable) end
 
 
----@class TuringNoteExtensions
-local TuringNoteExtensions = {}
-core.TuringNoteExtensions = TuringNoteExtensions
-
-
----@param note_controller NoteController
----@return NoteFloorMovement
-function core.TuringNoteExtensions.getNoteFloorMovement(note_controller) end
-
-
----@param note_controller NoteController
----@return NoteJump
-function core.TuringNoteExtensions.getNoteJump(note_controller) end
-
-
-
 ---@class TuringScriptManager
 local TuringScriptManager = {}
 core.TuringScriptManager = TuringScriptManager
+
+
+
+---@class TuringTexture2D
+local TuringTexture2D = {}
+core.TuringTexture2D = TuringTexture2D
+
+
+---@param width number
+---@param height number
+---@param format number
+---@param mipmap boolean
+---@return Texture2D
+function core.TuringTexture2D.create(width, height, format, mipmap) end
+
+
+---@param texture_2_d Texture2D
+---@return nil
+function core.TuringTexture2D.destroy(texture_2_d) end
+
+
+---@param name string
+---@return Texture2D
+function core.TuringTexture2D.find(name) end
 
 
 

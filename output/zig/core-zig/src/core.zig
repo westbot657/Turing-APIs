@@ -123,9 +123,9 @@ extern "C" fn _core_custom_event_data__custom_data_get(handle: CustomEventData) 
 extern "C" fn _core_custom_event_data__event_type_get(handle: CustomEventData) u32;
 extern "C" fn _core_custom_event_data__get_copy(handle: CustomEventData) BeatmapDataItem;
 extern "C" fn _core_custom_event_data__version_get(handle: CustomEventData) Version;
-extern "C" fn _core_custom_note_data__create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) CustomNoteData;
-extern "C" fn _core_custom_note_data__create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) CustomNoteData;
-extern "C" fn _core_custom_note_data__create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) CustomNoteData;
+extern "C" fn _core_custom_note_data__create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, color_type: i32, cut_direction: i32, custom_data: CustomData, version: Version) CustomNoteData;
+extern "C" fn _core_custom_note_data__create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, custom_data: CustomData, version: Version) CustomNoteData;
+extern "C" fn _core_custom_note_data__create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, before_jump_note_line_layer: i32, color_type: i32, cut_direction: i32, cut_sfx_volume_multiplier: f32, custom_data: CustomData) CustomNoteData;
 extern "C" fn _core_custom_note_data__custom_data_get(handle: CustomNoteData) CustomData;
 extern "C" fn _core_custom_note_data__get_copy(handle: CustomNoteData) BeatmapDataItem;
 extern "C" fn _core_custom_note_data__version_get(handle: CustomNoteData) Version;
@@ -172,6 +172,8 @@ extern "C" fn _core_log__critical(msg: [*c]const u8) void;
 extern "C" fn _core_log__debug(msg: [*c]const u8) void;
 extern "C" fn _core_log__info(msg: [*c]const u8) void;
 extern "C" fn _core_log__warn(msg: [*c]const u8) void;
+extern "C" fn _core_note_controller__get_note_floor_movement(handle: NoteController) NoteFloorMovement;
+extern "C" fn _core_note_controller__get_note_jump(handle: NoteController) NoteJump;
 extern "C" fn _core_note_floor_movement___audio_time_sync_controller_get(handle: NoteFloorMovement) IAudioTimeSource;
 extern "C" fn _core_note_floor_movement___beat_time_get(handle: NoteFloorMovement) f32;
 extern "C" fn _core_note_floor_movement___beat_time_set(handle: NoteFloorMovement, value: f32) void;
@@ -289,6 +291,23 @@ extern "C" fn _core_note_manager__get_obstacle_controller_from_custom(n: CustomO
 extern "C" fn _core_note_manager__time_to_beat(time: f32) f32;
 extern "C" fn _core_task_scheduler__schedule(task: Action) void;
 extern "C" fn _core_task_scheduler__dispose(handle: TaskScheduler) void;
+extern "C" fn _core_texture_2_d__apply(handle: Texture2D, update_mipmaps: bool, make_no_longer_readable: bool) void;
+extern "C" fn _core_texture_2_d__get_format(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__get_graphics_format(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__get_height(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__get_hide_flags(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__get_instance_id(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__get_is_readable(handle: Texture2D) bool;
+extern "C" fn _core_texture_2_d__get_mipmap_count(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__get_name(handle: Texture2D) u32;
+extern "C" fn _core_texture_2_d__get_raw_texture_data(handle: Texture2D) u32;
+extern "C" fn _core_texture_2_d__get_width(handle: Texture2D) i32;
+extern "C" fn _core_texture_2_d__load_raw_texture_data(handle: Texture2D, data_: *const anyopaque) void;
+extern "C" fn _core_texture_2_d__reinitialize(handle: Texture2D, width: i32, height: i32, format: i32, has_mip_map: bool) bool;
+extern "C" fn _core_texture_2_d__set_height(handle: Texture2D, value: i32) void;
+extern "C" fn _core_texture_2_d__set_hide_flags(handle: Texture2D, value: i32) void;
+extern "C" fn _core_texture_2_d__set_name(handle: Texture2D, value: [*c]const u8) void;
+extern "C" fn _core_texture_2_d__set_width(handle: Texture2D, value: i32) void;
 extern "C" fn _core_transform__broadcast_message(handle: Transform, method_name: [*c]const u8, parameter: Object, options: i32) void;
 extern "C" fn _core_transform__compare_tag(handle: Transform, tag: [*c]const u8) bool;
 extern "C" fn _core_transform__detach_children(handle: Transform) void;
@@ -376,8 +395,8 @@ extern "C" fn _core_turing_mesh__get_bounds_min_z(handle: TuringMesh) f32;
 extern "C" fn _core_turing_mesh__get_instance_id(handle: TuringMesh) i32;
 extern "C" fn _core_turing_mesh__get_u_vs(handle: TuringMesh, channel: i32) u32;
 extern "C" fn _core_turing_mesh__get_vertices(handle: TuringMesh) u32;
-extern "C" fn _core_turing_mesh__hide_flags_get(handle: TuringMesh) void;
-extern "C" fn _core_turing_mesh__hide_flags_set(handle: TuringMesh) void;
+extern "C" fn _core_turing_mesh__hide_flags_get(handle: TuringMesh) i32;
+extern "C" fn _core_turing_mesh__hide_flags_set(handle: TuringMesh, value: i32) void;
 extern "C" fn _core_turing_mesh__mark_modified(handle: TuringMesh) void;
 extern "C" fn _core_turing_mesh__name_get(handle: TuringMesh) u32;
 extern "C" fn _core_turing_mesh__name_set(handle: TuringMesh, value: [*c]const u8) void;
@@ -391,8 +410,9 @@ extern "C" fn _core_turing_mesh__set_triangles(handle: TuringMesh, triangles: In
 extern "C" fn _core_turing_mesh__set_u_vs(handle: TuringMesh, channel: i32, uvs: *const anyopaque) void;
 extern "C" fn _core_turing_mesh__set_vertices(handle: TuringMesh, in_vertices: *const anyopaque) void;
 extern "C" fn _core_turing_mesh__upload_mesh_data(handle: TuringMesh, mark_no_longer_readable: bool) void;
-extern "C" fn _core_turing_note_extensions__get_note_floor_movement(note_controller: NoteController) NoteFloorMovement;
-extern "C" fn _core_turing_note_extensions__get_note_jump(note_controller: NoteController) NoteJump;
+extern "C" fn _core_turing_texture_2_d__create(width: i32, height: i32, format: i32, mipmap: bool) Texture2D;
+extern "C" fn _core_turing_texture_2_d__destroy(texture_2_d: Texture2D) void;
+extern "C" fn _core_turing_texture_2_d__find(name: [*c]const u8) Texture2D;
 extern "C" fn _core_turinger_game_object_manager__create_object(name: [*c]const u8) GameObject;
 extern "C" fn _core_turinger_game_object_manager__destroy_object(game_object: GameObject) void;
 extern "C" fn _core_turinger_game_object_manager__find(name: [*c]const u8) GameObject;
@@ -544,16 +564,16 @@ pub const CustomEventData = struct {
 pub const CustomNoteData = struct {
     opaqu: u64,
 
-    pub fn create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) CustomNoteData {
-        return _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index);
+    pub fn create_custom_basic_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, color_type: i32, cut_direction: i32, custom_data: CustomData, version: Version) CustomNoteData {
+        return _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index, note_line_layer, color_type, cut_direction, custom_data, version);
     }
 
-    pub fn create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) CustomNoteData {
-        return _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index);
+    pub fn create_custom_bomb_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, custom_data: CustomData, version: Version) CustomNoteData {
+        return _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index, note_line_layer, custom_data, version);
     }
 
-    pub fn create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32) CustomNoteData {
-        return _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index);
+    pub fn create_custom_burst_slider_note_data(time: f32, beat: f32, rotation: i32, line_index: i32, note_line_layer: i32, before_jump_note_line_layer: i32, color_type: i32, cut_direction: i32, cut_sfx_volume_multiplier: f32, custom_data: CustomData) CustomNoteData {
+        return _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index, note_line_layer, before_jump_note_line_layer, color_type, cut_direction, cut_sfx_volume_multiplier, custom_data);
     }
 
     pub fn custom_data_get(self: *const CustomNoteData) CustomData {
@@ -815,6 +835,14 @@ pub const Mesh = struct {
 
 pub const NoteController = struct {
     opaqu: u64,
+
+    pub fn get_note_floor_movement(self: *const NoteController) NoteFloorMovement {
+        return _core_note_controller__get_note_floor_movement(self);
+    }
+
+    pub fn get_note_jump(self: *const NoteController) NoteJump {
+        return _core_note_controller__get_note_jump(self);
+    }
 };
 
 pub const NoteControllerBase = struct {
@@ -911,7 +939,7 @@ pub const NoteFloorMovement = struct {
         return dequeue_vec3();
     }
 
-    pub fn init_floor(self: *const NoteFloorMovement, world_rotation: f32, beat_time: f32, move_start_offset: zalg.Vec3, move_end_offset: zalg.Vec3) void {
+    pub fn init_(self: *const NoteFloorMovement, world_rotation: f32, beat_time: f32, move_start_offset: zalg.Vec3, move_end_offset: zalg.Vec3) void {
         const turing_handle_move_start_offset = enqueue_vec3(move_start_offset);
         const turing_handle_move_end_offset = enqueue_vec3(move_end_offset);
         _core_note_floor_movement__init(self, world_rotation, beat_time, turing_handle_move_start_offset, turing_handle_move_end_offset);
@@ -1235,7 +1263,7 @@ pub const NoteJump = struct {
         return _core_note_jump__distance_to_player_get(self);
     }
 
-    pub fn init_jump(self: *const NoteJump, note_time: f32, world_rotation: f32, move_end_offset: zalg.Vec3, jump_end_offset: zalg.Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) void {
+    pub fn init_(self: *const NoteJump, note_time: f32, world_rotation: f32, move_end_offset: zalg.Vec3, jump_end_offset: zalg.Vec3, gravity_base: f32, flip_y_side: f32, end_rotation: f32, rotate_towards_player: bool, use_random_rotation: bool) void {
         const turing_handle_move_end_offset = enqueue_vec3(move_end_offset);
         const turing_handle_jump_end_offset = enqueue_vec3(jump_end_offset);
         _core_note_jump__init(self, note_time, world_rotation, turing_handle_move_end_offset, turing_handle_jump_end_offset, gravity_base, flip_y_side, end_rotation, rotate_towards_player, use_random_rotation);
@@ -1366,6 +1394,87 @@ pub const TaskScheduler = struct {
 
     pub fn dispose(self: *const TaskScheduler) void {
         _core_task_scheduler__dispose(self);
+    }
+};
+
+pub const Texture2D = struct {
+    opaqu: u64,
+
+    pub fn apply(self: *const Texture2D, update_mipmaps: bool, make_no_longer_readable: bool) void {
+        _core_texture_2_d__apply(self, update_mipmaps, make_no_longer_readable);
+    }
+
+    pub fn get_format(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_format(self);
+    }
+
+    pub fn get_graphics_format(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_graphics_format(self);
+    }
+
+    pub fn get_height(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_height(self);
+    }
+
+    pub fn get_hide_flags(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_hide_flags(self);
+    }
+
+    pub fn get_instance_id(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_instance_id(self);
+    }
+
+    pub fn get_is_readable(self: *const Texture2D) bool {
+        return _core_texture_2_d__get_is_readable(self);
+    }
+
+    pub fn get_mipmap_count(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_mipmap_count(self);
+    }
+
+    pub fn get_name(self: *const Texture2D, allocator: std.mem.Allocator) ![]u8 {
+        const turing_result = _core_texture_2_d__get_name(self);
+        const turing_str = try allocator.alloc(u8, turing_result);
+        _host_strcpy(turing_str.ptr, turing_result);
+        return turing_str[0 .. turing_result - 1];
+    }
+
+    pub fn get_raw_texture_data(self: *const Texture2D, allocator: std.mem.Allocator) ![]u32 {
+        const turing_result = _core_texture_2_d__get_raw_texture_data(self);
+        const turing_buf = try allocator.alloc(u32, turing_result);
+        _host_bufcpy(turing_buf.ptr, turing_result);
+        return turing_buf;
+    }
+
+    pub fn get_width(self: *const Texture2D) i32 {
+        return _core_texture_2_d__get_width(self);
+    }
+
+    pub fn load_raw_texture_data(self: *const Texture2D, data_: []const u32) void {
+        _host_u32_enqueue(@intCast(data_.len));
+        _core_texture_2_d__load_raw_texture_data(self, data_.ptr);
+    }
+
+    pub fn reinitialize(self: *const Texture2D, width: i32, height: i32, format: i32, has_mip_map: bool) bool {
+        return _core_texture_2_d__reinitialize(self, width, height, format, has_mip_map);
+    }
+
+    pub fn set_height(self: *const Texture2D, value: i32) void {
+        _core_texture_2_d__set_height(self, value);
+    }
+
+    pub fn set_hide_flags(self: *const Texture2D, value: i32) void {
+        _core_texture_2_d__set_hide_flags(self, value);
+    }
+
+    pub fn set_name(self: *const Texture2D, value: []const u8, allocator: std.mem.Allocator) !void {
+        const turing_handle_value = try allocator.dupeZ(u8, value);
+        defer allocator.free(turing_handle_value);
+        _core_texture_2_d__set_name(self, turing_handle_value.ptr);
+    }
+
+    pub fn set_width(self: *const Texture2D, value: i32) void {
+        _core_texture_2_d__set_width(self, value);
     }
 };
 
@@ -1801,12 +1910,12 @@ pub const TuringMesh = struct {
         return turing_buf;
     }
 
-    pub fn hide_flags_get(self: *const TuringMesh) void {
-        _core_turing_mesh__hide_flags_get(self);
+    pub fn hide_flags_get(self: *const TuringMesh) i32 {
+        return _core_turing_mesh__hide_flags_get(self);
     }
 
-    pub fn hide_flags_set(self: *const TuringMesh) void {
-        _core_turing_mesh__hide_flags_set(self);
+    pub fn hide_flags_set(self: *const TuringMesh, value: i32) void {
+        _core_turing_mesh__hide_flags_set(self, value);
     }
 
     pub fn mark_modified(self: *const TuringMesh) void {
@@ -1869,20 +1978,26 @@ pub const TuringMesh = struct {
     }
 };
 
-pub const TuringNoteExtensions = struct {
-    
-
-    pub fn get_note_floor_movement(note_controller: NoteController) NoteFloorMovement {
-        return _core_turing_note_extensions__get_note_floor_movement(note_controller);
-    }
-
-    pub fn get_note_jump(note_controller: NoteController) NoteJump {
-        return _core_turing_note_extensions__get_note_jump(note_controller);
-    }
-};
-
 pub const TuringScriptManager = struct {
     opaqu: u64,
+};
+
+pub const TuringTexture2D = struct {
+    
+
+    pub fn create(width: i32, height: i32, format: i32, mipmap: bool) Texture2D {
+        return _core_turing_texture_2_d__create(width, height, format, mipmap);
+    }
+
+    pub fn destroy(texture_2_d: Texture2D) void {
+        _core_turing_texture_2_d__destroy(texture_2_d);
+    }
+
+    pub fn find(name: []const u8, allocator: std.mem.Allocator) !Texture2D {
+        const turing_handle_name = try allocator.dupeZ(u8, name);
+        defer allocator.free(turing_handle_name);
+        return _core_turing_texture_2_d__find(turing_handle_name.ptr);
+    }
 };
 
 pub const TuringerGameObjectManager = struct {

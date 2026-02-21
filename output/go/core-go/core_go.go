@@ -59,11 +59,11 @@ func _core_custom_event_data__get_copy(handle CustomEventData) BeatmapDataItem
 //go:wasmimport env _core_custom_event_data__version_get
 func _core_custom_event_data__version_get(handle CustomEventData) Version
 //go:wasmimport env _core_custom_note_data__create_custom_basic_note_data
-func _core_custom_note_data__create_custom_basic_note_data(time float32, beat float32, rotation int32, line_index int32) CustomNoteData
+func _core_custom_note_data__create_custom_basic_note_data(time float32, beat float32, rotation int32, line_index int32, note_line_layer int32, color_type int32, cut_direction int32, custom_data CustomData, version Version) CustomNoteData
 //go:wasmimport env _core_custom_note_data__create_custom_bomb_note_data
-func _core_custom_note_data__create_custom_bomb_note_data(time float32, beat float32, rotation int32, line_index int32) CustomNoteData
+func _core_custom_note_data__create_custom_bomb_note_data(time float32, beat float32, rotation int32, line_index int32, note_line_layer int32, custom_data CustomData, version Version) CustomNoteData
 //go:wasmimport env _core_custom_note_data__create_custom_burst_slider_note_data
-func _core_custom_note_data__create_custom_burst_slider_note_data(time float32, beat float32, rotation int32, line_index int32) CustomNoteData
+func _core_custom_note_data__create_custom_burst_slider_note_data(time float32, beat float32, rotation int32, line_index int32, note_line_layer int32, before_jump_note_line_layer int32, color_type int32, cut_direction int32, cut_sfx_volume_multiplier float32, custom_data CustomData) CustomNoteData
 //go:wasmimport env _core_custom_note_data__custom_data_get
 func _core_custom_note_data__custom_data_get(handle CustomNoteData) CustomData
 //go:wasmimport env _core_custom_note_data__get_copy
@@ -156,6 +156,10 @@ func _core_log__debug(msg uint32) void
 func _core_log__info(msg uint32) void
 //go:wasmimport env _core_log__warn
 func _core_log__warn(msg uint32) void
+//go:wasmimport env _core_note_controller__get_note_floor_movement
+func _core_note_controller__get_note_floor_movement(handle NoteController) NoteFloorMovement
+//go:wasmimport env _core_note_controller__get_note_jump
+func _core_note_controller__get_note_jump(handle NoteController) NoteJump
 //go:wasmimport env _core_note_floor_movement___audio_time_sync_controller_get
 func _core_note_floor_movement___audio_time_sync_controller_get(handle NoteFloorMovement) IAudioTimeSource
 //go:wasmimport env _core_note_floor_movement___beat_time_get
@@ -390,6 +394,40 @@ func _core_note_manager__time_to_beat(time float32) float32
 func _core_task_scheduler__schedule(task Action) void
 //go:wasmimport env _core_task_scheduler__dispose
 func _core_task_scheduler__dispose(handle TaskScheduler) void
+//go:wasmimport env _core_texture_2_d__apply
+func _core_texture_2_d__apply(handle Texture2D, update_mipmaps bool, make_no_longer_readable bool) void
+//go:wasmimport env _core_texture_2_d__get_format
+func _core_texture_2_d__get_format(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__get_graphics_format
+func _core_texture_2_d__get_graphics_format(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__get_height
+func _core_texture_2_d__get_height(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__get_hide_flags
+func _core_texture_2_d__get_hide_flags(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__get_instance_id
+func _core_texture_2_d__get_instance_id(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__get_is_readable
+func _core_texture_2_d__get_is_readable(handle Texture2D) bool
+//go:wasmimport env _core_texture_2_d__get_mipmap_count
+func _core_texture_2_d__get_mipmap_count(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__get_name
+func _core_texture_2_d__get_name(handle Texture2D) uint32
+//go:wasmimport env _core_texture_2_d__get_raw_texture_data
+func _core_texture_2_d__get_raw_texture_data(handle Texture2D) uint32
+//go:wasmimport env _core_texture_2_d__get_width
+func _core_texture_2_d__get_width(handle Texture2D) int32
+//go:wasmimport env _core_texture_2_d__load_raw_texture_data
+func _core_texture_2_d__load_raw_texture_data(handle Texture2D, data_ *void) void
+//go:wasmimport env _core_texture_2_d__reinitialize
+func _core_texture_2_d__reinitialize(handle Texture2D, width int32, height int32, format int32, has_mip_map bool) bool
+//go:wasmimport env _core_texture_2_d__set_height
+func _core_texture_2_d__set_height(handle Texture2D, value int32) void
+//go:wasmimport env _core_texture_2_d__set_hide_flags
+func _core_texture_2_d__set_hide_flags(handle Texture2D, value int32) void
+//go:wasmimport env _core_texture_2_d__set_name
+func _core_texture_2_d__set_name(handle Texture2D, value uint32) void
+//go:wasmimport env _core_texture_2_d__set_width
+func _core_texture_2_d__set_width(handle Texture2D, value int32) void
 //go:wasmimport env _core_transform__broadcast_message
 func _core_transform__broadcast_message(handle Transform, method_name uint32, parameter Object, options int32) void
 //go:wasmimport env _core_transform__compare_tag
@@ -565,9 +603,9 @@ func _core_turing_mesh__get_u_vs(handle TuringMesh, channel int32) uint32
 //go:wasmimport env _core_turing_mesh__get_vertices
 func _core_turing_mesh__get_vertices(handle TuringMesh) uint32
 //go:wasmimport env _core_turing_mesh__hide_flags_get
-func _core_turing_mesh__hide_flags_get(handle TuringMesh) void
+func _core_turing_mesh__hide_flags_get(handle TuringMesh) int32
 //go:wasmimport env _core_turing_mesh__hide_flags_set
-func _core_turing_mesh__hide_flags_set(handle TuringMesh) void
+func _core_turing_mesh__hide_flags_set(handle TuringMesh, value int32) void
 //go:wasmimport env _core_turing_mesh__mark_modified
 func _core_turing_mesh__mark_modified(handle TuringMesh) void
 //go:wasmimport env _core_turing_mesh__name_get
@@ -594,10 +632,12 @@ func _core_turing_mesh__set_u_vs(handle TuringMesh, channel int32, uvs *void) vo
 func _core_turing_mesh__set_vertices(handle TuringMesh, in_vertices *void) void
 //go:wasmimport env _core_turing_mesh__upload_mesh_data
 func _core_turing_mesh__upload_mesh_data(handle TuringMesh, mark_no_longer_readable bool) void
-//go:wasmimport env _core_turing_note_extensions__get_note_floor_movement
-func _core_turing_note_extensions__get_note_floor_movement(note_controller NoteController) NoteFloorMovement
-//go:wasmimport env _core_turing_note_extensions__get_note_jump
-func _core_turing_note_extensions__get_note_jump(note_controller NoteController) NoteJump
+//go:wasmimport env _core_turing_texture_2_d__create
+func _core_turing_texture_2_d__create(width int32, height int32, format int32, mipmap bool) Texture2D
+//go:wasmimport env _core_turing_texture_2_d__destroy
+func _core_turing_texture_2_d__destroy(texture_2_d Texture2D) void
+//go:wasmimport env _core_turing_texture_2_d__find
+func _core_turing_texture_2_d__find(name uint32) Texture2D
 //go:wasmimport env _core_turinger_game_object_manager__create_object
 func _core_turinger_game_object_manager__create_object(name uint32) GameObject
 //go:wasmimport env _core_turinger_game_object_manager__destroy_object
@@ -814,19 +854,19 @@ type CustomNoteData struct {
 }
 
 
-func CustomNoteData_createCustomBasicNoteData(time float32, beat float32, rotation int32, lineIndex int32) CustomNoteData {
+func CustomNoteData_createCustomBasicNoteData(time float32, beat float32, rotation int32, lineIndex int32, noteLineLayer int32, colorType int32, cutDirection int32, customData CustomData, version Version) CustomNoteData {
     
-    return _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, lineIndex)
+    return _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, lineIndex, noteLineLayer, colorType, cutDirection, customData, version)
 }
 
-func CustomNoteData_createCustomBombNoteData(time float32, beat float32, rotation int32, lineIndex int32) CustomNoteData {
+func CustomNoteData_createCustomBombNoteData(time float32, beat float32, rotation int32, lineIndex int32, noteLineLayer int32, customData CustomData, version Version) CustomNoteData {
     
-    return _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, lineIndex)
+    return _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, lineIndex, noteLineLayer, customData, version)
 }
 
-func CustomNoteData_createCustomBurstSliderNoteData(time float32, beat float32, rotation int32, lineIndex int32) CustomNoteData {
+func CustomNoteData_createCustomBurstSliderNoteData(time float32, beat float32, rotation int32, lineIndex int32, noteLineLayer int32, beforeJumpNoteLineLayer int32, colorType int32, cutDirection int32, cutSfxVolumeMultiplier float32, customData CustomData) CustomNoteData {
     
-    return _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, lineIndex)
+    return _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, lineIndex, noteLineLayer, beforeJumpNoteLineLayer, colorType, cutDirection, cutSfxVolumeMultiplier, customData)
 }
 
 
@@ -1171,6 +1211,16 @@ type NoteController struct {
 
 
 
+func (self *NoteController)getNoteFloorMovement() NoteFloorMovement {
+    
+    return _core_note_controller__get_note_floor_movement(self)
+}
+
+func (self *NoteController)getNoteJump() NoteJump {
+    
+    return _core_note_controller__get_note_jump(self)
+}
+
 type NoteControllerBase struct {
     opaqu uint32
 }
@@ -1294,7 +1344,7 @@ func (self *NoteFloorMovement)endPosGet() Vec3 {
     return dequeue_vec3()
 }
 
-func (self *NoteFloorMovement)initFloor(worldRotation float32, beatTime float32, moveStartOffset Vec3, moveEndOffset Vec3) void {
+func (self *NoteFloorMovement)init(worldRotation float32, beatTime float32, moveStartOffset Vec3, moveEndOffset Vec3) void {
     
     turingHandleMoveStartOffset := enqueue_vec3(moveStartOffset)
 
@@ -1705,7 +1755,7 @@ func (self *NoteJump)distanceToPlayerGet() float32 {
     return _core_note_jump__distance_to_player_get(self)
 }
 
-func (self *NoteJump)initJump(noteTime float32, worldRotation float32, moveEndOffset Vec3, jumpEndOffset Vec3, gravityBase float32, flipYSide float32, endRotation float32, rotateTowardsPlayer bool, useRandomRotation bool) void {
+func (self *NoteJump)init(noteTime float32, worldRotation float32, moveEndOffset Vec3, jumpEndOffset Vec3, gravityBase float32, flipYSide float32, endRotation float32, rotateTowardsPlayer bool, useRandomRotation bool) void {
     
     turingHandleMoveEndOffset := enqueue_vec3(moveEndOffset)
 
@@ -1877,6 +1927,109 @@ func TaskScheduler_schedule(task Action) void {
 func (self *TaskScheduler)dispose() void {
     
     _core_task_scheduler__dispose(self)
+}
+
+type Texture2D struct {
+    opaqu uint32
+}
+
+
+
+func (self *Texture2D)apply(updateMipmaps bool, makeNoLongerReadable bool) void {
+    
+    _core_texture_2_d__apply(self, updateMipmaps, makeNoLongerReadable)
+}
+
+func (self *Texture2D)getFormat() int32 {
+    
+    return _core_texture_2_d__get_format(self)
+}
+
+func (self *Texture2D)getGraphicsFormat() int32 {
+    
+    return _core_texture_2_d__get_graphics_format(self)
+}
+
+func (self *Texture2D)getHeight() int32 {
+    
+    return _core_texture_2_d__get_height(self)
+}
+
+func (self *Texture2D)getHideFlags() int32 {
+    
+    return _core_texture_2_d__get_hide_flags(self)
+}
+
+func (self *Texture2D)getInstanceId() int32 {
+    
+    return _core_texture_2_d__get_instance_id(self)
+}
+
+func (self *Texture2D)getIsReadable() bool {
+    
+    return _core_texture_2_d__get_is_readable(self)
+}
+
+func (self *Texture2D)getMipmapCount() int32 {
+    
+    return _core_texture_2_d__get_mipmap_count(self)
+}
+
+func (self *Texture2D)getName() string {
+    
+    turingResult := _core_texture_2_d__get_name(self)
+    turingStr := make([]byte, turingResult)
+    _host_strcpy(&turingStr[0], turingResult)
+    return string(turingStr[:len(turingStr)-1])
+}
+
+func (self *Texture2D)getRawTextureData() []uint32 {
+    
+    turingResult := _core_texture_2_d__get_raw_texture_data(self)
+    turingBuf := make([]uint32, turingResult)
+    _host_bufcpy(&turingBuf[0], turingResult)
+    return turingBuf
+}
+
+func (self *Texture2D)getWidth() int32 {
+    
+    return _core_texture_2_d__get_width(self)
+}
+
+func (self *Texture2D)loadRawTextureData(data []uint32) void {
+    
+    _host_u32_enqueue(len(data))
+    turingHData := []uint32(data)
+    turingHandleData := &turingHData[0]
+    _core_texture_2_d__load_raw_texture_data(self, turingHandleData)
+}
+
+func (self *Texture2D)reinitialize(width int32, height int32, format int32, hasMipMap bool) bool {
+    
+    return _core_texture_2_d__reinitialize(self, width, height, format, hasMipMap)
+}
+
+func (self *Texture2D)setHeight(value int32) void {
+    
+    _core_texture_2_d__set_height(self, value)
+}
+
+func (self *Texture2D)setHideFlags(value int32) void {
+    
+    _core_texture_2_d__set_hide_flags(self, value)
+}
+
+func (self *Texture2D)setName(value string) void {
+    
+    turingHValue := []byte(value)
+    turingHValue = append(turingHValue, 0)
+    turingHandleValue := &turingHValue[0]
+    _core_texture_2_d__set_name(self, turingHandleValue)
+}
+
+func (self *Texture2D)setWidth(value int32) void {
+    
+    _core_texture_2_d__set_width(self, value)
 }
 
 type Transform struct {
@@ -2440,14 +2593,14 @@ func (self *TuringMesh)getVertices() []uint32 {
     return turingBuf
 }
 
-func (self *TuringMesh)hideFlagsGet() void {
+func (self *TuringMesh)hideFlagsGet() int32 {
     
-    _core_turing_mesh__hide_flags_get(self)
+    return _core_turing_mesh__hide_flags_get(self)
 }
 
-func (self *TuringMesh)hideFlagsSet() void {
+func (self *TuringMesh)hideFlagsSet(value int32) void {
     
-    _core_turing_mesh__hide_flags_set(self)
+    _core_turing_mesh__hide_flags_set(self, value)
 }
 
 func (self *TuringMesh)markModified() void {
@@ -2527,26 +2680,34 @@ func (self *TuringMesh)uploadMeshData(markNoLongerReadable bool) void {
     _core_turing_mesh__upload_mesh_data(self, markNoLongerReadable)
 }
 
-type TuringNoteExtensions struct {
-    
-}
-
-
-func TuringNoteExtensions_getNoteFloorMovement(noteController NoteController) NoteFloorMovement {
-    
-    return _core_turing_note_extensions__get_note_floor_movement(noteController)
-}
-
-func TuringNoteExtensions_getNoteJump(noteController NoteController) NoteJump {
-    
-    return _core_turing_note_extensions__get_note_jump(noteController)
-}
-
-
 type TuringScriptManager struct {
     opaqu uint32
 }
 
+
+
+type TuringTexture2D struct {
+    
+}
+
+
+func TuringTexture2D_create(width int32, height int32, format int32, mipmap bool) Texture2D {
+    
+    return _core_turing_texture_2_d__create(width, height, format, mipmap)
+}
+
+func TuringTexture2D_destroy(texture2D Texture2D) void {
+    
+    _core_turing_texture_2_d__destroy(texture2D)
+}
+
+func TuringTexture2D_find(name string) Texture2D {
+    
+    turingHName := []byte(name)
+    turingHName = append(turingHName, 0)
+    turingHandleName := &turingHName[0]
+    return _core_turing_texture_2_d__find(turingHandleName)
+}
 
 
 type TuringerGameObjectManager struct {

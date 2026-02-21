@@ -207,19 +207,19 @@ Version Core_CustomEventData_versionGet(CustomEventData self) {
     return _core_custom_event_data__version_get(self);
 }
 
-CustomNoteData Core_CustomNoteData_createCustomBasicNoteData(float time, float beat, int32_t rotation, int32_t line_index) {
+CustomNoteData Core_CustomNoteData_createCustomBasicNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t color_type, int32_t cut_direction, CustomData custom_data, Version version) {
     
-    return _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index);
+    return _core_custom_note_data__create_custom_basic_note_data(time, beat, rotation, line_index, note_line_layer, color_type, cut_direction, custom_data, version);
 }
 
-CustomNoteData Core_CustomNoteData_createCustomBombNoteData(float time, float beat, int32_t rotation, int32_t line_index) {
+CustomNoteData Core_CustomNoteData_createCustomBombNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, CustomData custom_data, Version version) {
     
-    return _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index);
+    return _core_custom_note_data__create_custom_bomb_note_data(time, beat, rotation, line_index, note_line_layer, custom_data, version);
 }
 
-CustomNoteData Core_CustomNoteData_createCustomBurstSliderNoteData(float time, float beat, int32_t rotation, int32_t line_index) {
+CustomNoteData Core_CustomNoteData_createCustomBurstSliderNoteData(float time, float beat, int32_t rotation, int32_t line_index, int32_t note_line_layer, int32_t before_jump_note_line_layer, int32_t color_type, int32_t cut_direction, float cut_sfx_volume_multiplier, CustomData custom_data) {
     
-    return _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index);
+    return _core_custom_note_data__create_custom_burst_slider_note_data(time, beat, rotation, line_index, note_line_layer, before_jump_note_line_layer, color_type, cut_direction, cut_sfx_volume_multiplier, custom_data);
 }
 
 CustomData Core_CustomNoteData_customDataGet(CustomNoteData self) {
@@ -482,6 +482,16 @@ void Core_Log_warn(const char* msg) {
     _core_log__warn(msg);
 }
 
+NoteFloorMovement Core_NoteController_getNoteFloorMovement(NoteController self) {
+    
+    return _core_note_controller__get_note_floor_movement(self);
+}
+
+NoteJump Core_NoteController_getNoteJump(NoteController self) {
+    
+    return _core_note_controller__get_note_jump(self);
+}
+
 IAudioTimeSource Core_NoteFloorMovement_AudioTimeSyncControllerGet(NoteFloorMovement self) {
     
     return _core_note_floor_movement___audio_time_sync_controller_get(self);
@@ -590,7 +600,7 @@ vec3s Core_NoteFloorMovement_endPosGet(NoteFloorMovement self) {
     return alg::__dequeue_vec3();
 }
 
-void Core_NoteFloorMovement_initFloor(NoteFloorMovement self
+void Core_NoteFloorMovement_init(NoteFloorMovement self
 , float world_rotation
 , float beat_time
 , vec3s move_start_offset
@@ -1007,7 +1017,7 @@ float Core_NoteJump_distanceToPlayerGet(NoteJump self) {
     return _core_note_jump__distance_to_player_get(self);
 }
 
-void Core_NoteJump_initJump(NoteJump self
+void Core_NoteJump_init(NoteJump self
 , float note_time
 , float world_rotation
 , vec3s move_end_offset
@@ -1148,6 +1158,108 @@ void Core_TaskScheduler_schedule(Action task) {
 void Core_TaskScheduler_dispose(TaskScheduler self) {
     
     _core_task_scheduler__dispose(self);
+}
+
+void Core_Texture2D_apply(Texture2D self
+, bool update_mipmaps
+, bool make_no_longer_readable) {
+    
+    _core_texture_2_d__apply(self, update_mipmaps, make_no_longer_readable);
+}
+
+int32_t Core_Texture2D_getFormat(Texture2D self) {
+    
+    return _core_texture_2_d__get_format(self);
+}
+
+int32_t Core_Texture2D_getGraphicsFormat(Texture2D self) {
+    
+    return _core_texture_2_d__get_graphics_format(self);
+}
+
+int32_t Core_Texture2D_getHeight(Texture2D self) {
+    
+    return _core_texture_2_d__get_height(self);
+}
+
+int32_t Core_Texture2D_getHideFlags(Texture2D self) {
+    
+    return _core_texture_2_d__get_hide_flags(self);
+}
+
+int32_t Core_Texture2D_getInstanceId(Texture2D self) {
+    
+    return _core_texture_2_d__get_instance_id(self);
+}
+
+bool Core_Texture2D_getIsReadable(Texture2D self) {
+    
+    return _core_texture_2_d__get_is_readable(self);
+}
+
+int32_t Core_Texture2D_getMipmapCount(Texture2D self) {
+    
+    return _core_texture_2_d__get_mipmap_count(self);
+}
+
+char* Core_Texture2D_getName(Texture2D self) {
+    
+    uint32_t turing_result = _core_texture_2_d__get_name(self);
+    char* turing_str = (char*) malloc((size_t) turing_result);
+    _host_strcpy(turing_str, turing_result);
+    return turing_str;
+}
+
+U32Buffer Core_Texture2D_getRawTextureData(Texture2D self) {
+    
+    uint32_t turing_result = _core_texture_2_d__get_raw_texture_data(self);
+    uint32_t turing_buf = (uint32_t) malloc((size_t) turing_result * 4);
+    _host_bufcpy(turing_buf, turing_result);
+    return (U32Buffer){ .data=turing_buf, .length=turing_result };
+}
+
+int32_t Core_Texture2D_getWidth(Texture2D self) {
+    
+    return _core_texture_2_d__get_width(self);
+}
+
+void Core_Texture2D_loadRawTextureData(Texture2D self
+, U32Buffer data_) {
+    _host_u32_enqueue(data_.length);
+    _core_texture_2_d__load_raw_texture_data(self, data_.data);
+}
+
+bool Core_Texture2D_reinitialize(Texture2D self
+, int32_t width
+, int32_t height
+, int32_t format
+, bool has_mip_map) {
+    
+    return _core_texture_2_d__reinitialize(self, width, height, format, has_mip_map);
+}
+
+void Core_Texture2D_setHeight(Texture2D self
+, int32_t value) {
+    
+    _core_texture_2_d__set_height(self, value);
+}
+
+void Core_Texture2D_setHideFlags(Texture2D self
+, int32_t value) {
+    
+    _core_texture_2_d__set_hide_flags(self, value);
+}
+
+void Core_Texture2D_setName(Texture2D self
+, const char* value) {
+    
+    _core_texture_2_d__set_name(self, value);
+}
+
+void Core_Texture2D_setWidth(Texture2D self
+, int32_t value) {
+    
+    _core_texture_2_d__set_width(self, value);
 }
 
 void Core_Transform_broadcastMessage(Transform self
@@ -1680,14 +1792,15 @@ U32Buffer Core_TuringMesh_getVertices(TuringMesh self) {
     return (U32Buffer){ .data=turing_buf, .length=turing_result };
 }
 
-void Core_TuringMesh_hideFlagsGet(TuringMesh self) {
+int32_t Core_TuringMesh_hideFlagsGet(TuringMesh self) {
     
-    _core_turing_mesh__hide_flags_get(self);
+    return _core_turing_mesh__hide_flags_get(self);
 }
 
-void Core_TuringMesh_hideFlagsSet(TuringMesh self) {
+void Core_TuringMesh_hideFlagsSet(TuringMesh self
+, int32_t value) {
     
-    _core_turing_mesh__hide_flags_set(self);
+    _core_turing_mesh__hide_flags_set(self, value);
 }
 
 void Core_TuringMesh_markModified(TuringMesh self) {
@@ -1773,14 +1886,19 @@ void Core_TuringMesh_uploadMeshData(TuringMesh self
     _core_turing_mesh__upload_mesh_data(self, mark_no_longer_readable);
 }
 
-NoteFloorMovement Core_TuringNoteExtensions_getNoteFloorMovement(NoteController note_controller) {
+Texture2D Core_TuringTexture2D_create(int32_t width, int32_t height, int32_t format, bool mipmap) {
     
-    return _core_turing_note_extensions__get_note_floor_movement(note_controller);
+    return _core_turing_texture_2_d__create(width, height, format, mipmap);
 }
 
-NoteJump Core_TuringNoteExtensions_getNoteJump(NoteController note_controller) {
+void Core_TuringTexture2D_destroy(Texture2D texture_2_d) {
     
-    return _core_turing_note_extensions__get_note_jump(note_controller);
+    _core_turing_texture_2_d__destroy(texture_2_d);
+}
+
+Texture2D Core_TuringTexture2D_find(const char* name) {
+    
+    return _core_turing_texture_2_d__find(name);
 }
 
 GameObject Core_TuringerGameObjectManager_createObject(const char* name) {
